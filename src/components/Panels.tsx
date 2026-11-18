@@ -330,23 +330,26 @@ function FlagsTab({ onPick, toast, replace }: { onPick: (src: string, name: stri
         toast(`"${name}" Bayraklarım'a eklendi.`);
         e.target.value = '';
       }} />
-      <Pager
-        items={[
+      {(() => {
+        const flagItems = [
           ...(ql || cont !== 'Tümü' || replace ? [] : [{ key: '__add', src: '', name: 'Bayrak ekle' }]),
           ...mine.filter((m) => !ql || m.name.toLocaleLowerCase('tr').includes(ql)).map((m) => ({ key: m.id, src: m.id, name: m.name })),
           ...list.map((f) => ({ key: f.code, src: `flags/${f.code}.svg`, name: f.name })),
-        ]}
-        cols={5}
-        keyOf={(f) => f.key}
-        empty={<p style={{ color: 'var(--d-text2)', fontSize: 13 }}>"{q}" için bayrak bulunamadı.</p>}
-        render={(f) => f.key === '__add' ? (
-          <button className="flag" onClick={() => fileRef.current?.click()}>
-            <span style={{ width: '100%', aspectRatio: '4/3', borderRadius: 4, border: '2px dashed var(--d-line)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--turq)' }}><Icon name="plus" /></span>Bayrak ekle
-          </button>
-        ) : (
-          <button className="flag" onClick={() => choose(f.src, f.name)}><Img src={f.src} alt="" /><span className="fname">{f.name}</span></button>
-        )}
-      />
+        ];
+        if (!flagItems.length) return <p style={{ color: 'var(--d-text2)', fontSize: 13 }}>"{q}" için bayrak bulunamadı.</p>;
+        // Bayraklar aşağı kaydırılarak gezilir (arama + kıta filtresi üstte sabit)
+        return (
+          <div className="flag-scroll">
+            {flagItems.map((f) => f.key === '__add' ? (
+              <button key={f.key} className="flag" onClick={() => fileRef.current?.click()}>
+                <span style={{ width: '100%', aspectRatio: '4/3', borderRadius: 4, border: '2px dashed var(--d-line)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--turq)' }}><Icon name="plus" /></span>Bayrak ekle
+              </button>
+            ) : (
+              <button key={f.key} className="flag" onClick={() => choose(f.src, f.name)}><Img src={f.src} alt="" /><span className="fname">{f.name}</span></button>
+            ))}
+          </div>
+        );
+      })()}
 
       {ask && (
         <div className="choice" onClick={() => setAsk(null)}>
