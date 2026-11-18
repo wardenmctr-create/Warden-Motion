@@ -48,6 +48,44 @@ const pushRecent = (src: string) => {
 };
 const getRecent = (): string[] => { try { return JSON.parse(localStorage.getItem(RECENT) || '[]'); } catch { return []; } };
 
+
+// ---------- Sayfalı ızgara: parmakla sağa-sola kaydırılır, altta sayfa noktaları ----------
+function Pager<T>({ items, cols, rows = 2, render, keyOf, empty }: { items: T[]; cols: number; rows?: number; render: (it: T) => React.ReactNode; keyOf: (it: T) => string; empty?: React.ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [page, setPage] = useState(0);
+  const per = cols * rows;
+  const pages: T[][] = [];
+  for (let i = 0; i < items.length; i += per) pages.push(items.slice(i, i + per));
+  const sig = items.length + ':' + (items[0] ? keyOf(items[0]) : '');
+  useEffect(() => { ref.current?.scrollTo({ left: 0 }); setPage(0); }, [sig]);
+  if (!items.length) return <>{empty}</>;
+  const go = (i: number) => ref.current?.scrollTo({ left: i * ref.current.clientWidth, behavior: 'smooth' });
+  return (
+    <div>
+      <div className="pager" ref={ref} onScroll={(e) => { const el = e.currentTarget; setPage(Math.round(el.scrollLeft / Math.max(1, el.clientWidth))); }}>
+        {pages.map((pg, i) => (
+          <div className="page" key={i} style={{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }} aria-label={`Sayfa ${i + 1}/${pages.length}`}>
+            {pg.map((it) => <div key={keyOf(it)} style={{ minWidth: 0 }}>{render(it)}</div>)}
+          </div>
+        ))}
+      </div>
+      {pages.length > 1 && pages.length <= 8 && (
+        <div className="dots">
+          {pages.map((_, i) => <button key={i} aria-label={`Sayfa ${i + 1}`} aria-current={i === page} onClick={() => go(i)}><span className={i === page ? 'on' : ''} /></button>)}
+          <span className="pcount">{page + 1}/{pages.length}</span>
+        </div>
+      )}
+      {pages.length > 8 && (
+        <div className="dots">
+          <button aria-label="Önceki sayfa" disabled={page === 0} onClick={() => go(page - 1)} style={{ width: 44, color: 'var(--d-text)' }}><Icon name="back" size={18} /></button>
+          <span style={{ fontSize: 12, color: 'var(--d-text2)', minWidth: 56, textAlign: 'center' }}>{page + 1} / {pages.length}</span>
+          <button aria-label="Sonraki sayfa" disabled={page === pages.length - 1} onClick={() => go(page + 1)} style={{ width: 44, color: 'var(--d-text)', transform: 'scaleX(-1)' }}><Icon name="back" size={18} /></button>
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ---------- Ekle paneli ----------
 export type AddTab = 'shape' | 'media' | 'text' | 'cb' | 'flags';
 
@@ -102,13 +140,11 @@ export function AddPanel({ tab, setTab, onClose, toast, replaceFlagOf }: { tab: 
       )}
       <div className="dbody">
         {tab === 'shape' && (
-          <div className="shape-grid">
-            {SHAPES.map((sh) => (
-              <button key={sh.kind} aria-label={sh.name} onClick={() => { s.addLayer(makeLayer(p, t, dur, { type: 'shape', name: sh.name, shape: sh.kind, w: sh.kind === 'rect' || sh.kind === 'roundrect' ? 260 : 240, h: 240 })); onClose(); }}>
-                <ShapeIcon kind={sh.kind} />
-              </button>
-            ))}
-          </div>
+          <Pager items={SHAPES} cols={5} keyOf={(sh) => sh.kind} render={(sh) => (
+            <button className="cell" aria-label={sh.name} onClick={() => { s.addLayer(makeLayer(p, t, dur, { type: 'shape', name: sh.name, shape: sh.kind, w: sh.kind === 'rect' || sh.kind === 'roundrect' ? 260 : 240, h: 240 })); onClose(); }}>
+              <ShapeIcon kind={sh.kind} />
+            </button>
+          )} />
         )}
         {tab === 'media' && <MediaTab onPick={(src, name) => addImage(src, name, 0.7)} />}
         {tab === 'text' && <TextTab onAdd={(text) => { s.addLayer(makeLayer(p, t, dur, { type: 'text', name: text.slice(0, 18) || 'Metin', text, fontSize: Math.round(p.height / 12), fill: '#0D1631', w: Math.round(p.width * 0.6), h: Math.round(p.height / 8) })); onClose(); }} />}
@@ -181,81 +217,75 @@ function CBTab({ onPick, onBody, toast }: { onPick: (src: string, name: string) 
   const nameOf = (src: string) => ready.flatMap((f) => f.items).find((i) => i.src === src)?.name ?? mine.find((m) => m.id === src)?.name ?? '';
 
   const folders = which === 'ready' ? ready.map((f) => f.name) : myFolders;
-  const items: { src: string; name: string; id?: string }[] = which === 'ready'
-    ? ready.filter((f) => folder === 'Tümü' || f.name === folder).flatMap((f) => f.items)
-    : mine.filter((m) => folder === 'Tümü' || m.folder === folder).map((m) => ({ src: m.id, name: m.name, id: m.id }));
+  const shown: { src: string; name: string; id?: string }[] = folder === 'Son'
+    ? recent.map((r) => ({ src: r, name: nameOf(r) }))
+    : which === 'ready'
+      ? ready.filter((f) => folder === 'Tümü' || f.name === folder).flatMap((f) => f.items)
+      : mine.filter((m) => folder === 'Tümü' || m.folder === folder).map((m) => ({ src: m.id, name: m.name, id: m.id }));
 
   return (
     <div>
-      <div className="seg" style={{ background: 'var(--d-panel2)', marginBottom: 12 }}>
+      <div className="seg" style={{ background: 'var(--d-panel2)', marginBottom: 8 }}>
         <button className={which === 'ready' ? 'on' : ''} style={{ color: which === 'ready' ? undefined : 'var(--d-text)' }} onClick={() => setWhich('ready')}>Hazır Pack</button>
         <button className={which === 'mine' ? 'on' : ''} style={{ color: which === 'mine' ? undefined : 'var(--d-text)' }} onClick={() => setWhich('mine')}>Yüklediğim Pack</button>
       </div>
 
-      {recent.length > 0 && (
-        <>
-          <div className="sub" style={{ marginTop: 0 }}>SON KULLANILANLAR</div>
-          <div className="chips" style={{ gap: 8 }}>
-            {recent.map((r) => (
-              <button key={r} className="thumb" style={{ width: 58, flexShrink: 0 }} aria-label={nameOf(r)} onClick={() => onPick(r, nameOf(r))}><Img src={r} alt="" /></button>
-            ))}
-          </div>
-        </>
-      )}
-
       <div className="chips">
+        {recent.length > 0 && <button className={'chip' + (folder === 'Son' ? ' on' : '')} onClick={() => setFolder('Son')}><Icon name="undo" size={14} />Son kullanılanlar</button>}
         {['Tümü', ...folders].map((f) => (
           <button key={f} className={'chip' + (folder === f ? ' on' : '')} onClick={() => setFolder(f)}>{f !== 'Tümü' && <Icon name="folder" size={14} />}{f}</button>
         ))}
         {which === 'mine' && (
-          <button className="chip" onClick={async () => {
-            const n = await askText('Yeni klasör adı', '', 'Oluştur');
-            if (n?.trim()) { await addUserFolder(n.trim()); refresh(); setFolder(n.trim()); }
-          }}><Icon name="plus" size={14} />Klasör</button>
+          <>
+            <button className="chip" onClick={async () => {
+              const n = await askText('Yeni klasör adı', '', 'Oluştur');
+              if (n?.trim()) { await addUserFolder(n.trim()); refresh(); setFolder(n.trim()); }
+            }}><Icon name="plus" size={14} />Klasör</button>
+            {mine.length > 0 && <button className={'chip' + (edit ? ' on' : '')} onClick={() => setEdit(!edit)}>{edit ? 'Bitti' : 'Düzenle'}</button>}
+          </>
         )}
       </div>
 
-      {which === 'ready' && (folder === 'Tümü' || folder === 'Gövdeler') && (
-        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 12 }}>
+      {which === 'ready' && folder === 'Gövdeler' && (
+        <div className="chips">
           {[['top', 'Top'], ['dikdortgen', 'Dikdörtgen'], ['kup', 'Küp'], ['ucgen', 'Üçgen']].map(([k, n]) => (
-            <button key={k} className="btn ghost" style={{ height: 36, fontSize: 13 }} onClick={() => onBody(k)}><Icon name="ball" size={16} />{n} gövdesi kur</button>
+            <button key={k} className="chip" style={{ color: 'var(--turq)' }} onClick={() => onBody(k)}><Icon name="ball" size={14} />{n} gövdesi kur</button>
           ))}
         </div>
       )}
 
-      {which === 'mine' && (
-        <div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
-          <button className="btn" onClick={() => fileRef.current?.click()}><Icon name="upload" size={18} />Galeriden PNG Yükle</button>
-          {mine.length > 0 && <button className="btn ghost" onClick={() => setEdit(!edit)}>{edit ? 'Bitti' : 'Düzenle'}</button>}
-          <input ref={fileRef} type="file" accept="image/png,image/*" multiple hidden onChange={async (e) => {
-            const files = [...(e.target.files ?? [])];
-            if (!files.length) return;
-            const ask = folder !== 'Tümü' ? folder : await askText('Hangi klasöre eklensin?', 'Genel', 'Ekle');
-            if (ask === null) { e.target.value = ''; return; }
-            const target = ask || 'Genel';
-            await addUserPackItems(files, target);
-            refresh(); setFolder(target);
-            toast(`${files.length} PNG "${target}" klasörüne eklendi.`);
-            e.target.value = '';
-          }} />
-        </div>
-      )}
+      <input ref={fileRef} type="file" accept="image/png,image/*" multiple hidden onChange={async (e) => {
+        const files = [...(e.target.files ?? [])];
+        if (!files.length) return;
+        const ask = folder !== 'Tümü' && folder !== 'Son' ? folder : await askText('Hangi klasöre eklensin?', 'Genel', 'Ekle');
+        if (ask === null) { e.target.value = ''; return; }
+        const target = ask || 'Genel';
+        await addUserPackItems(files, target);
+        refresh(); setFolder(target);
+        toast(`${files.length} PNG "${target}" klasörüne eklendi.`);
+        e.target.value = '';
+      }} />
 
-      {which === 'mine' && !mine.length ? (
-        <p style={{ color: 'var(--d-text2)', fontSize: 14 }}>Henüz kendi pack'in yok. Galeriden PNG'lerini yükle; klasörlere ayırıp burada hızlıca kullanabilirsin.</p>
-      ) : (
-        <div className="thumbs">
-          {items.map((it) => (
-            <div key={it.src}>
-              <button className="thumb" style={{ width: '100%' }} aria-label={it.name} onClick={() => !edit && onPick(it.src, it.name)}>
-                <Img src={it.src} alt="" />
-                {edit && it.id && <span className="x" role="button" aria-label={`${it.name} sil`} onClick={async (e) => { e.stopPropagation(); await removeUserPackItem(it.id!); refresh(); }}><Icon name="close" size={14} stroke={2.4} /></span>}
-              </button>
-              <div className="tlabel">{it.name}</div>
-            </div>
-          ))}
-        </div>
-      )}
+      <Pager
+        items={which === 'mine' ? [{ src: '__upload', name: 'PNG Yükle' }, ...shown] : shown}
+        cols={5}
+        keyOf={(it) => it.src}
+        render={(it) => it.src === '__upload' ? (
+          <>
+            <button className="thumb upl" style={{ width: '100%' }} onClick={() => fileRef.current?.click()}><Icon name="upload" size={22} /></button>
+            <div className="tlabel">Galeriden yükle</div>
+          </>
+        ) : (
+          <>
+            <button className="thumb" style={{ width: '100%' }} aria-label={it.name} onClick={() => !edit && onPick(it.src, it.name)}>
+              <Img src={it.src} alt="" />
+              {edit && it.id && <span className="x" role="button" aria-label={`${it.name} sil`} onClick={async (e) => { e.stopPropagation(); await removeUserPackItem(it.id!); refresh(); }}><Icon name="close" size={14} stroke={2.4} /></span>}
+            </button>
+            <div className="tlabel">{it.name}</div>
+          </>
+        )}
+      />
+      {which === 'mine' && !mine.length && <p style={{ color: 'var(--d-text2)', fontSize: 12, margin: '6px 0 0' }}>Kendi PNG'lerini yükle, klasörlere ayır; burada hızlıca kullan.</p>}
     </div>
   );
 }
@@ -284,20 +314,11 @@ function FlagsTab({ onPick, toast, replace }: { onPick: (src: string, name: stri
 
   return (
     <div>
-      <div style={{ display: 'flex', gap: 8, marginBottom: 10 }}>
-        <input className="dinput" placeholder="Bayrak ara (ör. Türkiye)" value={q} onChange={(e) => setQ(e.target.value)} />
-      </div>
+      <input className="dinput" style={{ height: 36, marginBottom: 8 }} placeholder="Bayrak ara (ör. Türkiye)" value={q} onChange={(e) => setQ(e.target.value)} />
       <div className="chips">
         {['Tümü', ...Object.values(CONT).filter((c) => c !== 'Antarktika')].map((c) => <button key={c} className={'chip' + (cont === c ? ' on' : '')} onClick={() => setCont(c)}>{c}</button>)}
       </div>
 
-      <div className="sub">BAYRAKLARIM</div>
-      <div className="flags">
-        <button className="flag" onClick={() => fileRef.current?.click()}>
-          <span style={{ width: '100%', aspectRatio: '4/3', borderRadius: 4, border: '2px dashed var(--d-line)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--turq)' }}><Icon name="plus" /></span>Bayrak ekle
-        </button>
-        {mine.map((f) => <button key={f.id} className="flag" onClick={() => choose(f.id, f.name)}><Img src={f.id} alt="" />{f.name}</button>)}
-      </div>
       <input ref={fileRef} type="file" accept="image/*" hidden onChange={async (e) => {
         const f = e.target.files?.[0];
         if (!f) return;
@@ -309,11 +330,23 @@ function FlagsTab({ onPick, toast, replace }: { onPick: (src: string, name: stri
         toast(`"${name}" Bayraklarım'a eklendi.`);
         e.target.value = '';
       }} />
-
-      <div className="sub">TÜM BAYRAKLAR · {list.length}</div>
-      <div className="flags">
-        {list.map((f) => <button key={f.code} className="flag" onClick={() => choose(`flags/${f.code}.svg`, f.name)}><img src={`flags/${f.code}.svg`} alt="" loading="lazy" />{f.name}</button>)}
-      </div>
+      <Pager
+        items={[
+          ...(ql || cont !== 'Tümü' || replace ? [] : [{ key: '__add', src: '', name: 'Bayrak ekle' }]),
+          ...mine.filter((m) => !ql || m.name.toLocaleLowerCase('tr').includes(ql)).map((m) => ({ key: m.id, src: m.id, name: m.name })),
+          ...list.map((f) => ({ key: f.code, src: `flags/${f.code}.svg`, name: f.name })),
+        ]}
+        cols={5}
+        keyOf={(f) => f.key}
+        empty={<p style={{ color: 'var(--d-text2)', fontSize: 13 }}>"{q}" için bayrak bulunamadı.</p>}
+        render={(f) => f.key === '__add' ? (
+          <button className="flag" onClick={() => fileRef.current?.click()}>
+            <span style={{ width: '100%', aspectRatio: '4/3', borderRadius: 4, border: '2px dashed var(--d-line)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--turq)' }}><Icon name="plus" /></span>Bayrak ekle
+          </button>
+        ) : (
+          <button className="flag" onClick={() => choose(f.src, f.name)}><Img src={f.src} alt="" /><span className="fname">{f.name}</span></button>
+        )}
+      />
 
       {ask && (
         <div className="choice" onClick={() => setAsk(null)}>
