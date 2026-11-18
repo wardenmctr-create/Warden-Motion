@@ -1,0 +1,9 @@
+{
+  "name": "Warden Motion",
+  "short_name": "Warden Motion",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#EEF1F5",
+  "theme_color": "#0B1430",
+  "icons": [{ "src": "logo.png", "sizes": "1000x1000", "type": "image/png", "purpose": "any" }]
+}

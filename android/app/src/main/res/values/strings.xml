@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Warden Motion</string>
+    <string name="title_activity_main">Warden Motion</string>
+    <string name="package_name">com.warden.motion</string>
+    <string name="custom_url_scheme">com.warden.motion</string>
+</resources>

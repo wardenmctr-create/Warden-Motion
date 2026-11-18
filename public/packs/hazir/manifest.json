@@ -1,0 +1,179 @@
+{
+ "name": "Hazır Pack",
+ "folders": [
+  {
+   "name": "Gövdeler",
+   "items": [
+    {
+     "name": "Top Çizgi",
+     "src": "packs/hazir/govdeler/top-cizgi.png"
+    },
+    {
+     "name": "Top İç",
+     "src": "packs/hazir/govdeler/top-ic.png"
+    },
+    {
+     "name": "Dikdörtgen Çizgi",
+     "src": "packs/hazir/govdeler/dikdortgen-cizgi.png"
+    },
+    {
+     "name": "Dikdörtgen İç",
+     "src": "packs/hazir/govdeler/dikdortgen-ic.png"
+    },
+    {
+     "name": "Küp Çizgi",
+     "src": "packs/hazir/govdeler/kup-cizgi.png"
+    },
+    {
+     "name": "Küp İç",
+     "src": "packs/hazir/govdeler/kup-ic.png"
+    },
+    {
+     "name": "Üçgen Çizgi",
+     "src": "packs/hazir/govdeler/ucgen-cizgi.png"
+    },
+    {
+     "name": "Üçgen İç",
+     "src": "packs/hazir/govdeler/ucgen-ic.png"
+    }
+   ]
+  },
+  {
+   "name": "Gözler",
+   "items": [
+    {
+     "name": "Normal",
+     "src": "packs/hazir/gozler/normal.png"
+    },
+    {
+     "name": "Mutlu",
+     "src": "packs/hazir/gozler/mutlu.png"
+    },
+    {
+     "name": "Kızgın",
+     "src": "packs/hazir/gozler/kizgin.png"
+    },
+    {
+     "name": "Üzgün",
+     "src": "packs/hazir/gozler/uzgun.png"
+    },
+    {
+     "name": "Şaşkın",
+     "src": "packs/hazir/gozler/saskin.png"
+    },
+    {
+     "name": "Kapalı",
+     "src": "packs/hazir/gozler/kapali.png"
+    },
+    {
+     "name": "Ağlayan",
+     "src": "packs/hazir/gozler/aglayan.png"
+    }
+   ]
+  },
+  {
+   "name": "Ağızlar",
+   "items": [
+    {
+     "name": "Gülümseme",
+     "src": "packs/hazir/agizlar/gulumseme.png"
+    },
+    {
+     "name": "Kahkaha",
+     "src": "packs/hazir/agizlar/kahkaha.png"
+    },
+    {
+     "name": "Düz",
+     "src": "packs/hazir/agizlar/duz.png"
+    },
+    {
+     "name": "Üzgün",
+     "src": "packs/hazir/agizlar/uzgun.png"
+    },
+    {
+     "name": "Şaşkın",
+     "src": "packs/hazir/agizlar/saskin.png"
+    }
+   ]
+  },
+  {
+   "name": "Şapkalar",
+   "items": [
+    {
+     "name": "Silindir",
+     "src": "packs/hazir/sapkalar/silindir.png"
+    },
+    {
+     "name": "Kep",
+     "src": "packs/hazir/sapkalar/kep.png"
+    },
+    {
+     "name": "Taç",
+     "src": "packs/hazir/sapkalar/tac.png"
+    },
+    {
+     "name": "Fes",
+     "src": "packs/hazir/sapkalar/fes.png"
+    },
+    {
+     "name": "Miğfer",
+     "src": "packs/hazir/sapkalar/migfer.png"
+    }
+   ]
+  },
+  {
+   "name": "Aksesuarlar",
+   "items": [
+    {
+     "name": "Gözlük",
+     "src": "packs/hazir/aksesuarlar/gozluk.png"
+    },
+    {
+     "name": "Güneş Gözlüğü",
+     "src": "packs/hazir/aksesuarlar/gunes-gozlugu.png"
+    },
+    {
+     "name": "Bıyık",
+     "src": "packs/hazir/aksesuarlar/biyik.png"
+    },
+    {
+     "name": "Papyon",
+     "src": "packs/hazir/aksesuarlar/papyon.png"
+    },
+    {
+     "name": "Monokl",
+     "src": "packs/hazir/aksesuarlar/monokl.png"
+    }
+   ]
+  },
+  {
+   "name": "Eşyalar",
+   "items": [
+    {
+     "name": "Konuşma Balonu",
+     "src": "packs/hazir/esyalar/konusma-balonu.png"
+    },
+    {
+     "name": "Soru İşareti",
+     "src": "packs/hazir/esyalar/soru-isareti.png"
+    },
+    {
+     "name": "Ünlem",
+     "src": "packs/hazir/esyalar/unlem.png"
+    },
+    {
+     "name": "Kalp",
+     "src": "packs/hazir/esyalar/kalp.png"
+    },
+    {
+     "name": "Ter Damlası",
+     "src": "packs/hazir/esyalar/ter-damlasi.png"
+    },
+    {
+     "name": "Patlama",
+     "src": "packs/hazir/esyalar/patlama.png"
+    }
+   ]
+  }
+ ]
+}
