@@ -5,6 +5,7 @@ import { newProject, TEMPLATES, TUTORIALS, type Tutorial } from '../factories';
 import { fmtTime, projectDuration } from '../anim';
 import { renderFrame, setImageLoadedHandler } from '../render';
 import { detectWeakDevice, useStore } from '../store';
+import { askConfirm } from '../dialog';
 import type { Project } from '../types';
 
 export function Thumb({ p, size = 80, t = 0.6, round = false }: { p: Project; size?: number; t?: number; round?: boolean }) {
@@ -110,7 +111,7 @@ export function Home() {
                       <span>{p.layers.length} katman · {new Date(p.updatedAt).toLocaleDateString('tr-TR')}</span>
                     </div>
                   </button>
-                  <button className="ib pdel" aria-label={`${p.name} projesini sil`} onClick={async () => { if (confirm(`"${p.name}" silinsin mi?`)) { await deleteProject(p.id); refresh(); } }}><Icon name="trash" size={18} /></button>
+                  <button className="ib pdel" aria-label={`${p.name} projesini sil`} onClick={async () => { if (await askConfirm('Proje silinsin mi?', `"${p.name}" kalıcı olarak silinecek.`, 'Sil')) { await deleteProject(p.id); refresh(); } }}><Icon name="trash" size={18} /></button>
                 </div>
               ))}
             </div>

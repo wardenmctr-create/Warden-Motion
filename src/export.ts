@@ -44,7 +44,19 @@ export async function exportVideo(p: Project, onProgress: (f: number) => void): 
   return { blob: new Blob(chunks, { type: mime.split(';')[0] || 'video/webm' }), ext };
 }
 
+type Downloads = { save: (r: { filename: string; data: Blob }) => Promise<{ status: string }> };
+type ClaudeHost = { use: (n: string) => Promise<unknown> };
+
 export async function saveFile(blob: Blob, filename: string): Promise<string> {
+  // Claude sayfası olarak açıldıysa: Claude'un izinli kaydetme özelliği
+  const host = (window as unknown as { claude?: ClaudeHost }).claude;
+  if (host?.use) {
+    const dl = (await host.use('downloads')) as Downloads | null;
+    if (dl) {
+      try { await dl.save({ filename, data: blob }); return 'Kaydedildi.'; }
+      catch (e) { const c = (e as { code?: string }).code; return c === 'declined' ? 'Kaydetme iptal edildi.' : 'Kaydedilemedi (' + (c ?? 'hata') + ').'; }
+    }
+  }
   if (Capacitor.isNativePlatform()) {
     const { Filesystem, Directory } = await import('@capacitor/filesystem');
     const { Share } = await import('@capacitor/share');

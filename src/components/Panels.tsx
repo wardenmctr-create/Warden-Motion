@@ -5,6 +5,7 @@ import { addUserFlag, addUserFolder, addUserPackItems, listUserFlags, listUserFo
 import { makeLayer, SHAPES } from '../factories';
 import { resolveSrc, shapePath } from '../render';
 import { useStore } from '../store';
+import { askText } from '../dialog';
 import type { AnimProp, Effect, Layer, Project } from '../types';
 
 // ---------- Ortak ----------
@@ -208,7 +209,7 @@ function CBTab({ onPick, onBody, toast }: { onPick: (src: string, name: string) 
         ))}
         {which === 'mine' && (
           <button className="chip" onClick={async () => {
-            const n = prompt('Yeni klasör adı');
+            const n = await askText('Yeni klasör adı', '', 'Oluştur');
             if (n?.trim()) { await addUserFolder(n.trim()); refresh(); setFolder(n.trim()); }
           }}><Icon name="plus" size={14} />Klasör</button>
         )}
@@ -229,7 +230,9 @@ function CBTab({ onPick, onBody, toast }: { onPick: (src: string, name: string) 
           <input ref={fileRef} type="file" accept="image/png,image/*" multiple hidden onChange={async (e) => {
             const files = [...(e.target.files ?? [])];
             if (!files.length) return;
-            const target = folder !== 'Tümü' ? folder : (prompt('Hangi klasöre? (boş bırakırsan "Genel")', 'Genel')?.trim() || 'Genel');
+            const ask = folder !== 'Tümü' ? folder : await askText('Hangi klasöre eklensin?', 'Genel', 'Ekle');
+            if (ask === null) { e.target.value = ''; return; }
+            const target = ask || 'Genel';
             await addUserPackItems(files, target);
             refresh(); setFolder(target);
             toast(`${files.length} PNG "${target}" klasörüne eklendi.`);
@@ -298,7 +301,9 @@ function FlagsTab({ onPick, toast, replace }: { onPick: (src: string, name: stri
       <input ref={fileRef} type="file" accept="image/*" hidden onChange={async (e) => {
         const f = e.target.files?.[0];
         if (!f) return;
-        const name = prompt('Bayrağın adı', f.name.replace(/\.[^.]+$/, ''))?.trim() || 'Bayrağım';
+        const asked = await askText('Bayrağın adı', f.name.replace(/\.[^.]+$/, ''), 'Ekle');
+        if (asked === null) { e.target.value = ''; return; }
+        const name = asked || 'Bayrağım';
         await addUserFlag(f, name);
         setMine(await listUserFlags());
         toast(`"${name}" Bayraklarım'a eklendi.`);
