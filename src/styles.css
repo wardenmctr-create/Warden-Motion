@@ -363,3 +363,52 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
 @keyframes fx-sway { 0%, 100% { transform: rotate(-12deg); } 50% { transform: rotate(12deg); } }
 @keyframes fx-shake { 0% { transform: translate(0, 0); } 33% { transform: translate(-3px, 2px); } 66% { transform: translate(3px, -2px); } }
 @media (prefers-reduced-motion: reduce) { .fxs { animation: none !important; } }
+
+/* ===== Alight Motion oranları (piksel ölçümünden, W = ekran genişliği) — sadece telefon ===== */
+:root { --W: min(100vw, 520px); }
+@media (max-width: 899px) {
+  /* Editör: dikey akış; ekran kısaysa sadece önizleme küçülür, paneller kesilmez */
+  .ed { display: flex; flex-direction: column; }
+  .ed-top { height: calc(var(--W) * 0.117); flex: none; }
+  .ed-top .ib { width: calc(var(--W) * 0.12); height: calc(var(--W) * 0.117); }
+  .ed-title, .ed-ptitle { font-size: calc(var(--W) * 0.044); }
+  .stage { flex: 0 1 calc(var(--W) * 1.042); height: auto; min-height: 26vh; }
+  .transport { flex: none; height: calc(var(--W) * 0.122); }
+  .transport .ib { width: calc(var(--W) * 0.11); height: calc(var(--W) * 0.11); }
+  .lower { flex: 1 1 0; min-height: calc(var(--W) * 0.22); }
+  .tl { flex: 1 1 auto; min-height: calc(var(--W) * 0.2); }
+  .track { height: calc(var(--W) * 0.0625); font-size: calc(var(--W) * 0.034); }
+  .timecode { font-size: calc(var(--W) * 0.042); top: calc(var(--W) * 0.05); }
+  .tools { flex: none; height: calc(var(--W) * 0.56); max-height: none; padding: calc(var(--W) * 0.028) calc(var(--W) * 0.028) calc(var(--W) * 0.028 + var(--safe-bottom)); display: flex; flex-direction: column; gap: calc(var(--W) * 0.012); }
+  .tsmall { flex: 0 0 calc(var(--W) * 0.11); margin: 0; gap: calc(var(--W) * 0.008); }
+  .tsmall button { height: 100%; }
+  .tbigs { flex: 1; gap: calc(var(--W) * 0.008); grid-auto-rows: 1fr; }
+  .tbig { height: auto; font-size: calc(var(--W) * 0.031); }
+  .fab-d { width: calc(var(--W) * 0.128); height: calc(var(--W) * 0.128); right: calc(var(--W) * 0.0375); bottom: calc(var(--W) * 0.044 + var(--safe-bottom)); }
+  .dpanel.side3, .dpanel.side2 { height: calc(var(--W) * 0.56); max-height: 60%; min-height: 0; }
+  .addcard { left: calc(var(--W) * 0.022); right: calc(var(--W) * 0.022); }
+
+  /* Ana sayfa */
+  .home-top { height: calc(var(--W) * 0.155); padding: 0 calc(var(--W) * 0.03); }
+  .brand { font-size: calc(var(--W) * 0.05); }
+  .home-body { padding: 0 calc(var(--W) * 0.055) calc(var(--W) * 0.25); }
+  .sec-head { margin: calc(var(--W) * 0.03) 0 calc(var(--W) * 0.03); }
+  .sec-head h2 { font-size: calc(var(--W) * 0.05); }
+  .sec-head span { font-size: calc(var(--W) * 0.037); }
+  .tpl { width: calc(var(--W) * 0.22); font-size: calc(var(--W) * 0.031); gap: calc(var(--W) * 0.025); }
+  .tpl .ring { width: calc(var(--W) * 0.2); height: calc(var(--W) * 0.2); border-width: calc(var(--W) * 0.007); }
+  .new-card { height: calc(var(--W) * 0.183); font-size: calc(var(--W) * 0.05); }
+  .dot-plus { width: calc(var(--W) * 0.088); height: calc(var(--W) * 0.088); }
+  .plist { grid-template-columns: 1fr; gap: calc(var(--W) * 0.033); margin-top: calc(var(--W) * 0.033); }
+  .pcard { height: calc(var(--W) * 0.267); padding: 0 calc(var(--W) * 0.022); gap: calc(var(--W) * 0.044); }
+  .pthumb { width: calc(var(--W) * 0.208); height: calc(var(--W) * 0.208); }
+  .pmeta { font-size: calc(var(--W) * 0.033); }
+  .pmeta b { font-size: calc(var(--W) * 0.042); }
+  .nav { height: calc(var(--W) * 0.2 + var(--safe-bottom)); }
+  .nav button { font-size: calc(var(--W) * 0.033); }
+  .fab { width: calc(var(--W) * 0.155) !important; height: calc(var(--W) * 0.155); margin-left: calc(var(--W) * -0.0775); top: calc(var(--W) * -0.044); }
+}
+@media (max-width: 899px) {
+  .lower { flex: 1 0 auto; min-height: 0; }
+  .stage { min-height: 120px; }
+}
