@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Icon } from '../components/Icon';
 import { AddPanel, type AddTab, ColorPanel, CBPanel, EffectsPanel, MovePanel, OpacityPanel, TextPanel } from '../components/Panels';
-import { fmtTime, layerKeyTimes, projectDuration, setAnim } from '../anim';
+import { fmtTime, layerKeyTimes, projectDuration, setAnim, valueAt } from '../anim';
 import { exportVideo, saveFile } from '../export';
 import { TUTORIALS } from '../factories';
 import { hitTest, parentWorld, renderFrame, setImageLoadedHandler, toLocal, worldTransform, type TR } from '../render';
@@ -11,6 +11,7 @@ import type { Project } from '../types';
 export type Panel = null | 'add' | 'move' | 'color' | 'opacity' | 'effects' | 'cb' | 'text';
 
 const PPS = 100; // zaman çizelgesi: saniye başına piksel
+const TOP = 44, ROW = 26; // katman şeritlerinin başladığı yer ve satır aralığı
 
 export function useWide() {
   const q = '(min-width: 900px)';
@@ -31,7 +32,8 @@ export function Editor() {
   const sel = p.layers.find((l) => l.id === s.selectedId) ?? null;
   const dur = projectDuration(p);
   const [panel, setPanel] = useState<Panel>(null);
-  const [addTab, setAddTab] = useState<AddTab>('shape');
+  const [addTab, setAddTab] = useState<AddTab | null>(null);
+  const [loop, setLoop] = useState(true);
   const [replaceFlagOf, setReplaceFlagOf] = useState<string | null>(null);
   const [menu, setMenu] = useState(false);
   const [pick, setPick] = useState<null | 'parent' | 'mask'>(null);
@@ -53,7 +55,7 @@ export function Editor() {
     ro.observe(el);
     return () => ro.disconnect();
   }, []);
-  const fit = Math.min((box.w - 16) / p.width, (box.h - 16) / p.height);
+  const fit = Math.min(box.w / p.width, box.h / p.height);
   const dispW = Math.max(10, Math.floor(p.width * fit)), dispH = Math.max(10, Math.floor(p.height * fit));
   const lite = s.settings.lite;
   const dpr = lite ? Math.min(1, window.devicePixelRatio || 1) * 0.75 : Math.min(2, window.devicePixelRatio || 1);
@@ -67,21 +69,23 @@ export function Editor() {
     if (!c) return;
     const W = Math.round(dispW * dpr), H = Math.round(dispH * dpr);
     if (c.width !== W || c.height !== H) { c.width = W; c.height = H; }
-    renderFrame(c.getContext('2d')!, p, timeRef.current, { selectedId: s.playing ? null : s.selectedId, quality: c.width / p.width, fast: s.playing && lite });
+    renderFrame(c.getContext('2d')!, p, timeRef.current, { selectedId: s.playing ? null : s.selectedId, quality: c.width / p.width, fast: s.playing && lite, gradHandles: panel === 'color' });
   });
 
+  const loopRef = useRef(loop);
+  loopRef.current = loop;
   // ---------- Oynatma ----------
   // Tuval, zaman çizelgesi ve zaman göstergesi doğrudan güncellenir; editörün geri kalanı yeniden çizilmez.
   useEffect(() => {
     if (!s.playing) return;
     let raf = 0, last = performance.now();
     const tick = (now: number) => {
-      const st = useStore.getState();
+      const st = { ...useStore.getState(), loopOn: loopRef.current };
       const pr = st.project!;
       const d = projectDuration(pr);
       let t = timeRef.current + (now - last) / 1000;
       last = now;
-      if (t >= d) t = 0;
+      if (t >= d) { if (st.loopOn) t = 0; else { timeRef.current = d; st.setPlaying(false); return; } }
       timeRef.current = t;
       const c = canvasRef.current;
       if (c) renderFrame(c.getContext('2d')!, pr, t, { quality: c.width / pr.width, fast: st.settings.lite });
@@ -96,30 +100,81 @@ export function Editor() {
 
   // ---------- Önizlemede sürükleme ----------
   const drag = useRef<{ id: string; px: number; py: number; w: TR; pw: TR } | null>(null);
-  const toProj = (e: React.PointerEvent) => {
+  const pts = useRef(new Map<number, { x: number; y: number }>());
+  const pinch = useRef<{ id: string; d0: number; a0: number; s0: number; r0: number } | null>(null);
+  const gdrag = useRef<{ id: string; which: 1 | 2 } | null>(null);
+  const toProj = (e: { clientX: number; clientY: number }) => {
     const r = canvasRef.current!.getBoundingClientRect();
     return { x: (e.clientX - r.left) / r.width * p.width, y: (e.clientY - r.top) / r.height * p.height };
   };
+  // Sahnedeki noktayı katmanın kendi (döndürülmemiş, ölçeksiz) koordinatına çevirir
+  const toLayerLocal = (l: typeof sel, pt: { x: number; y: number }) => {
+    const w = worldTransform(p, l!, s.time);
+    const a = -w.rot * Math.PI / 180, dx = pt.x - w.x, dy = pt.y - w.y;
+    return { x: (dx * Math.cos(a) - dy * Math.sin(a)) / w.scale, y: (dx * Math.sin(a) + dy * Math.cos(a)) / w.scale };
+  };
+  const pinchInfo = () => {
+    const [a, b] = [...pts.current.values()];
+    return { d: Math.hypot(b.x - a.x, b.y - a.y) || 1, a: Math.atan2(b.y - a.y, b.x - a.x) * 180 / Math.PI };
+  };
   const onDown = (e: React.PointerEvent) => {
     if (s.playing) s.setPlaying(false);
+    try { (e.target as HTMLElement).setPointerCapture(e.pointerId); } catch { /* bazı tarayıcılarda olmayabilir */ }
+    pts.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    // İkinci parmak: iki parmakla büyütme/döndürme
+    if (pts.current.size === 2) {
+      const id = drag.current?.id ?? s.selectedId;
+      const l = p.layers.find((x) => x.id === id);
+      drag.current = null;
+      if (l) { const pi = pinchInfo(); pinch.current = { id: l.id, d0: pi.d, a0: pi.a, s0: valueAt(l.scale, s.time), r0: valueAt(l.rotation, s.time) }; }
+      return;
+    }
     const pt = toProj(e);
+    // Renk panelinde: geçiş noktalarını sürükle
+    if (panel === 'color' && sel?.grad && sel.fill2) {
+      const lp = toLayerLocal(sel, pt);
+      const tol = 40 / worldTransform(p, sel, s.time).scale;
+      for (const which of [1, 2] as const) {
+        const gx = (which === 1 ? sel.grad.x1 : sel.grad.x2) * sel.w, gy = (which === 1 ? sel.grad.y1 : sel.grad.y2) * sel.h;
+        if (Math.hypot(lp.x - gx, lp.y - gy) < tol) { s.checkpoint(); gdrag.current = { id: sel.id, which }; return; }
+      }
+    }
     const hit = hitTest(p, s.time, pt.x, pt.y);
     const keepSel = !!sel && hitTest(p, s.time, pt.x, pt.y, sel.id) !== null;
     const target = keepSel ? sel : hit;
     s.select(target?.id ?? null);
-    if (!target) return;
-    (e.target as HTMLElement).setPointerCapture(e.pointerId);
+    if (!target) { if (panel && panel !== 'add') setPanel(null); return; }
     s.checkpoint();
     drag.current = { id: target.id, px: pt.x, py: pt.y, w: worldTransform(p, target, s.time), pw: parentWorld(p, target, s.time) };
   };
   const onMove = (e: React.PointerEvent) => {
+    if (pts.current.has(e.pointerId)) pts.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    const pc = pinch.current;
+    if (pc && pts.current.size >= 2) {
+      const pi = pinchInfo();
+      const sc = Math.max(0.02, Math.round(pc.s0 * pi.d / pc.d0 * 1000) / 1000);
+      const rot = Math.round((pc.r0 + pi.a - pc.a0) * 10) / 10;
+      s.updateLayer(pc.id, (l) => ({ ...l, scale: setAnim(l.scale, s.time, sc), rotation: setAnim(l.rotation, s.time, rot) }), false);
+      return;
+    }
+    const g = gdrag.current;
+    if (g && sel) {
+      const lp = toLayerLocal(sel, toProj(e));
+      const nx = Math.round(lp.x / sel.w * 1000) / 1000, ny = Math.round(lp.y / sel.h * 1000) / 1000;
+      s.updateLayer(g.id, (l) => ({ ...l, grad: g.which === 1 ? { ...l.grad!, x1: nx, y1: ny } : { ...l.grad!, x2: nx, y2: ny } }), false);
+      return;
+    }
     const d = drag.current;
     if (!d) return;
     const pt = toProj(e);
     const loc = toLocal(d.pw, { ...d.w, x: d.w.x + pt.x - d.px, y: d.w.y + pt.y - d.py });
     s.updateLayer(d.id, (l) => ({ ...l, x: setAnim(l.x, s.time, Math.round(loc.x)), y: setAnim(l.y, s.time, Math.round(loc.y)) }), false);
   };
-  const onUp = () => { drag.current = null; };
+  const onUp = (e: React.PointerEvent) => {
+    pts.current.delete(e.pointerId);
+    if (pts.current.size < 2) pinch.current = null;
+    if (!pts.current.size) { drag.current = null; gdrag.current = null; }
+  };
 
   // ---------- Zaman çizelgesi ----------
   const tlRef = useRef<HTMLDivElement>(null);
@@ -138,8 +193,10 @@ export function Editor() {
     const want = s.time * PPS;
     if (Math.abs(el.scrollLeft - want) > 1) { programmatic.current = true; el.scrollLeft = want; }
   }, [s.time, tlW, s.playing]);
+  const pillsRef = useRef<HTMLDivElement>(null);
   const onTlScroll = () => {
     const el = tlRef.current!;
+    if (pillsRef.current) pillsRef.current.style.transform = `translateY(${-el.scrollTop}px)`;
     if (programmatic.current) { programmatic.current = false; return; }
     if (s.playing) return;
     s.setTime(Math.min(el.scrollLeft / PPS, dur + 2));
@@ -209,7 +266,7 @@ export function Editor() {
     return false;
   };
 
-  const openAdd = (tab: AddTab) => { setAddTab(tab); setReplaceFlagOf(null); setPanel('add'); s.setPlaying(false); };
+  const openAdd = (tab: AddTab | null) => { setAddTab(tab); setReplaceFlagOf(null); setPanel('add'); s.setPlaying(false); };
 
   // ---------- Paneller ----------
   const panelEl = panel === 'add' ? (
@@ -240,21 +297,25 @@ export function Editor() {
     }
   };
 
+  const big = (icon: string, label: string, on: (() => void) | null) => (
+    <button className={'tbig' + (on ? '' : ' off')} disabled={!on} onClick={on ?? undefined}><Icon name={icon} size={24} />{label}</button>
+  );
   const tools = sel ? (
     <div className="tools">
-      <div className="trim-row">
-        <button className="tbtn" onClick={() => trim('start')}><Icon name="trimL" />Başı buraya</button>
-        <button className="tbtn" onClick={() => trim('split')}><Icon name="split" />Böl</button>
-        <button className="tbtn" onClick={() => trim('end')}><Icon name="trimR" />Sonu buraya</button>
-        <button className="tbtn" onClick={() => s.updateLayer(sel.id, (l) => ({ ...l, hidden: !l.hidden }))}><Icon name={sel.hidden ? 'eyeOff' : 'eye'} />{sel.hidden ? 'Göster' : 'Gizle'}</button>
+      <div className="tsmall">
+        <button aria-label="Başlangıcı oynatma çizgisine çek" onClick={() => trim('start')}><Icon name="trimL" size={20} /></button>
+        <button aria-label="Oynatma çizgisinden böl" onClick={() => trim('split')}><Icon name="split" size={20} /></button>
+        <button aria-label="Sonu oynatma çizgisine çek" onClick={() => trim('end')}><Icon name="trimR" size={20} /></button>
+        <button aria-label="Çoğalt" onClick={() => s.duplicateLayer(sel.id)}><Icon name="copy" size={20} /></button>
+        <button aria-label={sel.hidden ? 'Göster' : 'Gizle'} onClick={() => s.updateLayer(sel.id, (l) => ({ ...l, hidden: !l.hidden }))}><Icon name={sel.hidden ? 'eyeOff' : 'eye'} size={20} /></button>
       </div>
-      <div className="tgrid">
-        {sel.type === 'cb' && <button className="tbtn hl" onClick={() => setPanel('cb')}><Icon name="ball" size={26} />CB Ayarları</button>}
-        {sel.type === 'text' && <button className="tbtn hl" onClick={() => setPanel('text')}><Icon name="text" size={26} />Metni Düzenle</button>}
-        {(sel.type === 'shape' || sel.type === 'text') && <button className="tbtn" onClick={() => setPanel('color')}><Icon name="bucket" size={26} />Renk ve Dolgu</button>}
-        <button className="tbtn" onClick={() => setPanel('opacity')}><Icon name="opacity" size={26} />Karıştırma ve Opaklık</button>
-        <button className="tbtn" onClick={() => setPanel('move')}><Icon name="move" size={26} />Taşı ve Çevir</button>
-        <button className="tbtn" onClick={() => setPanel('effects')}><Icon name="sparkle" size={26} />Efektler</button>
+      <div className="tbigs">
+        {big('bucket', 'Renk ve Dolgu', sel.type === 'shape' || sel.type === 'text' ? () => setPanel('color') : null)}
+        {sel.type === 'cb' ? big('ball', 'CB Ayarları', () => setPanel('cb')) : big('border', 'Kenarlık ve Gölge', null)}
+        {big('layers', 'Karıştırma ve Opaklık', () => setPanel('opacity'))}
+        {big('move', 'Taşı ve Çevir', () => setPanel('move'))}
+        {sel.type === 'text' ? big('text', 'Metni Düzenle', () => setPanel('text')) : big('pen', 'Şekli Düzenle', null)}
+        {big('sparkle', 'Efektler', () => setPanel('effects'))}
       </div>
     </div>
   ) : null
@@ -268,7 +329,6 @@ export function Editor() {
           <>
             <button className="ib" aria-label="Seçimi kaldır" onClick={() => { s.select(null); setPanel(null); }}><Icon name="back" /></button>
             <input className="ed-title" aria-label="Katman adı" value={sel.name} onChange={(e) => s.updateLayer(sel.id, (l) => ({ ...l, name: e.target.value }), false)} />
-            <button className="ib" aria-label="Çoğalt" onClick={() => s.duplicateLayer(sel.id)}><Icon name="copy" /></button>
             <button className="ib" aria-label="Sil" onClick={() => { s.removeLayer(sel.id); setPanel(null); }}><Icon name="trash" /></button>
             <button className="ib" aria-label="Diğer" onClick={() => setMenu(!menu)}><Icon name="more" size={26} stroke={3} /></button>
           </>
@@ -289,10 +349,13 @@ export function Editor() {
       <div className="transport">
         <button className="ib" aria-label="Geri al" disabled={!s.past.length} onClick={s.undo}><Icon name="undo" /></button>
         <button className="ib" aria-label="Yinele" disabled={!s.future.length} onClick={s.redo}><Icon name="redo" /></button>
+        <span className="tsp" />
         <button className="ib" aria-label="Başa git" onClick={() => s.setTime(0)}><Icon name="toStart" /></button>
-        <button className="ib" aria-label={s.playing ? 'Duraklat' : 'Oynat'} onClick={() => s.setPlaying(!s.playing)} style={{ color: 'var(--turq)' }}><Icon name={s.playing ? 'pause' : 'play'} size={26} /></button>
+        <button className="ib" aria-label={s.playing ? 'Duraklat' : 'Oynat'} onClick={() => s.setPlaying(!s.playing)}><Icon name={s.playing ? 'pause' : 'play'} size={26} /></button>
         <button className="ib" aria-label="Sona git" onClick={() => s.setTime(dur)}><Icon name="toEnd" /></button>
-        <button className="ib" aria-label="Dışa aktar" onClick={doExport}><Icon name="export" /></button>
+        <span className="tsp" />
+        <button className="ib" aria-label="Tam ekran önizleme" onClick={() => { s.select(null); setPanel(null); s.setTime(0); s.setPlaying(true); }}><Icon name="fit" /></button>
+        <button className={'ib loop' + (loop ? ' on' : '')} aria-label="Tekrarla" aria-pressed={loop} onClick={() => setLoop(!loop)}><Icon name="loop" /></button>
       </div>
 
       <div className="lower">
@@ -307,16 +370,25 @@ export function Editor() {
               </div>
               {p.layers.map((l, i) => (
                 <button key={l.id} className={'track' + (l.id === s.selectedId ? '' : ' off')}
-                  style={{ left: half + l.start * PPS, width: Math.max(8, (l.end - l.start) * PPS), top: 56 + i * 34, opacity: l.hidden ? 0.45 : 1 }}
+                  style={{ left: half + l.start * PPS, width: Math.max(8, (l.end - l.start) * PPS), top: TOP + i * ROW, opacity: l.hidden ? 0.45 : 1 }}
                   onClick={() => { s.select(l.id); }}>
                   {l.name}
                   {l.id === s.selectedId && layerKeyTimes(l).map((kt) => <span key={kt} className="kf" style={{ left: (kt - l.start) * PPS }} />)}
                 </button>
               ))}
-              <div style={{ position: 'absolute', top: 56 + p.layers.length * 34 + 60, height: 1, width: 1 }} />
+              <div style={{ position: 'absolute', top: TOP + p.layers.length * ROW + 70, height: 1, width: 1 }} />
             </div>
           </div>
           {!p.layers.length && <div className="tl-empty">Katman eklemek için + butonuna bas.</div>}
+          {!sel && p.layers.length > 0 && (
+            <div className="pills" ref={pillsRef}>
+              {p.layers.map((l, i) => (
+                <button key={l.id} className="lpill" style={{ top: TOP + i * ROW }} aria-label={l.name} onClick={() => s.select(l.id)}>
+                  <LayerDot l={l} />
+                </button>
+              ))}
+            </div>
+          )}
           <div className="playhead" />
           <div className="timecode" ref={timecodeRef}>{fmtTime(s.time, p.fps)}</div>
         </div>
@@ -326,7 +398,7 @@ export function Editor() {
 
       {wide && <div className="side-col">{tools}{panelEl}</div>}
 
-      {!panel && <button className="fab-d" aria-label="Katman ekle" onClick={() => openAdd(sel?.type === 'cb' ? 'cb' : 'shape')}><Icon name="plus" size={28} stroke={2} /></button>}
+      {!panel && !sel && <button className="fab-d" aria-label="Katman ekle" onClick={() => openAdd(null)}><Icon name="plus" size={28} stroke={2.4} /></button>}
 
       {menu && sel && (
         <div className="menu" role="menu">
@@ -407,4 +479,12 @@ function TutorialBox({ title, steps, tips }: { title: string; steps: string[]; t
       </div>
     </div>
   );
+}
+
+/** Zaman çizelgesinin solundaki küçük katman simgesi */
+function LayerDot({ l }: { l: import('../types').Layer }) {
+  if (l.type === 'shape') return <span className="dot" style={{ background: l.fill2 ? `linear-gradient(135deg, ${l.fill}, ${l.fill2})` : l.fill }} />;
+  if (l.type === 'text') return <span className="dot txt">T</span>;
+  if (l.src && !l.src.startsWith('media:')) return <img className="dot" src={l.src} alt="" />;
+  return <span className="dot img"><Icon name="image" size={12} /></span>;
 }

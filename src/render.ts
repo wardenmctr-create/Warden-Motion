@@ -121,7 +121,7 @@ export function toLocal(pw: TR, w: TR): TR {
   return { x: dx * Math.cos(a) - dy * Math.sin(a), y: dx * Math.sin(a) + dy * Math.cos(a), rot: w.rot - pw.rot, scale: w.scale / pw.scale, opacity: w.opacity };
 }
 
-export interface RenderOpts { selectedId?: string | null; quality?: number; /** Lite oynatma: bulanıklık/parlama atlanır */ fast?: boolean }
+export interface RenderOpts { selectedId?: string | null; quality?: number; /** Lite oynatma: bulanıklık/parlama atlanır */ fast?: boolean; /** Renk panelinde geçiş tutamaçlarını göster */ gradHandles?: boolean }
 
 let bufA: HTMLCanvasElement | null = null, bufB: HTMLCanvasElement | null = null;
 const buf = (c: HTMLCanvasElement | null, w: number, h: number) => {
@@ -148,6 +148,7 @@ function paint(ctx: CanvasRenderingContext2D, p: Project, l: Layer, t: number, q
     if (e.type === 'glow' && e.amount > 0) filters.push(`drop-shadow(0 0 ${e.amount * q}px ${e.color})`);
   }
   ctx.filter = filters.length ? filters.join(' ') : 'none';
+  if (l.blend && l.blend !== 'normal' && !l.mask) ctx.globalCompositeOperation = l.blend as GlobalCompositeOperation;
   drawLayer(ctx, l);
   ctx.restore();
   return tr;
@@ -178,6 +179,7 @@ export function renderFrame(ctx: CanvasRenderingContext2D, p: Project, t: number
       a.drawImage(bufB, 0, 0);
       ctx.save();
       ctx.setTransform(1, 0, 0, 1, 0, 0);
+      if (l.blend && l.blend !== 'normal') ctx.globalCompositeOperation = l.blend as GlobalCompositeOperation;
       ctx.drawImage(bufA, 0, 0);
       ctx.restore();
     } else {
@@ -185,7 +187,7 @@ export function renderFrame(ctx: CanvasRenderingContext2D, p: Project, t: number
     }
   }
   const sel = opts.selectedId ? p.layers.find((l) => l.id === opts.selectedId) : undefined;
-  if (sel && visible(sel, t)) drawSelection(ctx, sel, worldTransform(p, sel, t), q);
+  if (sel && visible(sel, t)) drawSelection(ctx, sel, worldTransform(p, sel, t), q, !!opts.gradHandles);
 }
 
 function drawImageCover(ctx: CanvasRenderingContext2D, img: HTMLImageElement, w: number, h: number) {
@@ -194,13 +196,21 @@ function drawImageCover(ctx: CanvasRenderingContext2D, img: HTMLImageElement, w:
   ctx.drawImage(img, -iw / 2, -ih / 2, iw, ih);
 }
 
+function fillOf(ctx: CanvasRenderingContext2D, l: Layer): string | CanvasGradient {
+  if (!l.fill2 || !l.grad) return l.fill;
+  const g = ctx.createLinearGradient(l.grad.x1 * l.w, l.grad.y1 * l.h, l.grad.x2 * l.w, l.grad.y2 * l.h);
+  g.addColorStop(0, l.fill);
+  g.addColorStop(1, l.fill2);
+  return g;
+}
+
 function drawLayer(ctx: CanvasRenderingContext2D, l: Layer) {
   const { w, h } = l;
   if (l.type === 'shape' && l.shape) {
-    ctx.fillStyle = l.fill;
+    ctx.fillStyle = fillOf(ctx, l);
     ctx.fill(shapePath(l.shape, w, h));
   } else if (l.type === 'text') {
-    ctx.fillStyle = l.fill;
+    ctx.fillStyle = fillOf(ctx, l);
     ctx.font = `700 ${l.fontSize ?? 64}px Inter, system-ui, sans-serif`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
@@ -235,7 +245,7 @@ function drawLayer(ctx: CanvasRenderingContext2D, l: Layer) {
   }
 }
 
-function drawSelection(ctx: CanvasRenderingContext2D, l: Layer, tr: TR, q: number) {
+function drawSelection(ctx: CanvasRenderingContext2D, l: Layer, tr: TR, q: number, grad = false) {
   ctx.save();
   ctx.setTransform(q, 0, 0, q, 0, 0);
   ctx.translate(tr.x, tr.y);
@@ -252,6 +262,16 @@ function drawSelection(ctx: CanvasRenderingContext2D, l: Layer, tr: TR, q: numbe
     ctx.arc(hx * w / 2, hy * h / 2, hr, 0, Math.PI * 2);
     ctx.fill();
     ctx.stroke();
+  }
+  if (grad && l.grad && l.fill2) {
+    const k = tr.scale;
+    const a = [l.grad.x1 * l.w * k, l.grad.y1 * l.h * k], b = [l.grad.x2 * l.w * k, l.grad.y2 * l.h * k];
+    ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]);
+    ctx.strokeStyle = '#F7F8FA'; ctx.lineWidth = lw; ctx.stroke();
+    for (const [pt, c] of [[a, l.fill], [b, l.fill2]] as [number[], string][]) {
+      ctx.beginPath(); ctx.arc(pt[0], pt[1], hr * 1.6, 0, Math.PI * 2);
+      ctx.fillStyle = c; ctx.fill(); ctx.strokeStyle = '#0B1430'; ctx.lineWidth = lw * 1.5; ctx.stroke();
+    }
   }
   ctx.restore();
 }

@@ -91,7 +91,7 @@ export type AddTab = 'shape' | 'media' | 'text' | 'cb' | 'flags';
 
 interface PackFolder { name: string; items: { name: string; src: string }[] }
 
-export function AddPanel({ tab, setTab, onClose, toast, replaceFlagOf }: { tab: AddTab; setTab: (t: AddTab) => void; onClose: () => void; toast: (m: string) => void; replaceFlagOf: string | null }) {
+export function AddPanel({ tab, setTab, onClose, toast, replaceFlagOf }: { tab: AddTab | null; setTab: (t: AddTab) => void; onClose: () => void; toast: (m: string) => void; replaceFlagOf: string | null }) {
   const { s, p, t } = useNow();
   const dur = s.settings.defaultDuration;
 
@@ -123,24 +123,27 @@ export function AddPanel({ tab, setTab, onClose, toast, replaceFlagOf }: { tab: 
 
   const tabs: { id: AddTab; label: string; icon: string }[] = [
     { id: 'shape', label: 'Şekil', icon: 'shapes' }, { id: 'media', label: 'Medya', icon: 'image' },
-    { id: 'text', label: 'Metin', icon: 'text' }, { id: 'cb', label: 'CB Araçları', icon: 'ball' }, { id: 'flags', label: 'Bayraklar', icon: 'flag' },
+    { id: 'text', label: 'Metin', icon: 'text' }, { id: 'cb', label: 'CB', icon: 'ball' }, { id: 'flags', label: 'Bayrak', icon: 'flag' },
   ];
 
   return (
-    <div className="dpanel" role="dialog" aria-label="Katman ekle">
-      <Head title={replaceFlagOf ? 'Bayrağı Değiştir' : 'Ekle'} onClose={onClose} />
-      {!replaceFlagOf && (
-        <div className="cats" role="tablist">
+    <div className="addcard" role="dialog" aria-label="Katman ekle">
+      {replaceFlagOf ? (
+        <div className="addtabs"><span style={{ flex: 1, fontWeight: 700, padding: '0 10px' }}>Bayrağı Değiştir</span>
+          <button className="ib" aria-label="Kapat" onClick={onClose}><Icon name="close" size={20} stroke={2.2} /></button></div>
+      ) : (
+        <div className="addtabs" role="tablist">
           {tabs.map((x) => (
-            <button key={x.id} role="tab" aria-selected={tab === x.id} className={'cat' + (tab === x.id ? ' on' : '')} onClick={() => setTab(x.id)}>
-              <Icon name={x.icon} size={26} />{x.label}
+            <button key={x.id} role="tab" aria-selected={tab === x.id} className={'atab' + (tab === x.id ? ' on' : '')} onClick={() => setTab(x.id)}>
+              <Icon name={x.icon} size={22} />{x.label}
             </button>
           ))}
+          <button className="ib" aria-label="Kapat" onClick={onClose}><Icon name="close" size={20} stroke={2.2} /></button>
         </div>
       )}
-      <div className="dbody">
+      {tab && <div className="addbody">
         {tab === 'shape' && (
-          <Pager items={SHAPES} cols={5} keyOf={(sh) => sh.kind} render={(sh) => (
+          <Pager items={SHAPES} cols={7} keyOf={(sh) => sh.kind} render={(sh) => (
             <button className="cell" aria-label={sh.name} onClick={() => { s.addLayer(makeLayer(p, t, dur, { type: 'shape', name: sh.name, shape: sh.kind, w: sh.kind === 'rect' || sh.kind === 'roundrect' ? 260 : 240, h: 240 })); onClose(); }}>
               <ShapeIcon kind={sh.kind} />
             </button>
@@ -160,7 +163,7 @@ export function AddPanel({ tab, setTab, onClose, toast, replaceFlagOf }: { tab: 
             toast={toast}
           />
         )}
-      </div>
+      </div>}
     </div>
   );
 }
@@ -442,40 +445,90 @@ export function MovePanel({ layer, onClose }: { layer: Layer; onClose: () => voi
   );
 }
 
-// ---------- Renk ----------
-const SWATCHES = ['#8F7CF0', '#2F7BF6', '#22D3C5', '#3FD0F0', '#E8333F', '#FF8A1F', '#F2C230', '#2DBE60', '#0D1631', '#FFFFFF', '#000000', '#9AA6B8'];
+// ---------- Renk ve Dolgu (videodaki düzen: solda geri/keyframe, üstte sekmeler, kod çubuğu, renk ızgarası) ----------
+const SWATCHES = [
+  '#E8333F', '#FF8A1F', '#F2E230', '#8A5A2B', '#7ED957', '#A23BD6', '#2B3BE8',
+  '#4A90E2', '#22D3C5', '#B8F28A', '#000000', '#555E6E', '#9AA6B8', '#FFFFFF',
+  '#1B2A55', '#2F7BF6', '#0E5A63', '#3FD0F0', '#F5DCA0', '#E84393', '#8F7CF0',
+];
+const ink = (hex: string) => { const n = parseInt(hex.slice(1, 7), 16); const y = ((n >> 16) & 255) * .299 + ((n >> 8) & 255) * .587 + (n & 255) * .114; return y > 140 ? '#0D1631' : '#EEF4FF'; };
+
 export function ColorPanel({ layer, onClose }: { layer: Layer; onClose: () => void }) {
   const { s } = useNow();
+  const grad = !!(layer.fill2 && layer.grad);
+  const [slot, setSlot] = useState<1 | 2>(1);
+  const cur = slot === 2 && grad ? layer.fill2! : layer.fill;
+  const setColor = (c: string, commit = true) => s.updateLayer(layer.id, (l) => (slot === 2 && grad ? { ...l, fill2: c } : { ...l, fill: c }), commit);
+  const [hex, setHex] = useState(cur.toUpperCase());
+  useEffect(() => setHex(cur.toUpperCase()), [cur]);
   return (
-    <div className="dpanel" role="dialog" aria-label="Renk ve Dolgu">
-      <Head title="Renk ve Dolgu" onClose={onClose} back />
-      <div className="dbody">
-        <div className="swatches">
-          {SWATCHES.map((c) => <button key={c} aria-label={c} className={layer.fill.toUpperCase() === c ? 'on' : ''} style={{ background: c }} onClick={() => s.updateLayer(layer.id, (l) => ({ ...l, fill: c }))} />)}
+    <div className="dpanel side2" role="dialog" aria-label="Renk ve Dolgu">
+      <div className="lcol">
+        <button className="ib" aria-label="Geri" onClick={onClose}><Icon name="back" /></button>
+      </div>
+      <div className="dbody" style={{ paddingLeft: 4 }}>
+        <div className="seg dseg">
+          <button className={!grad ? 'on' : ''} onClick={() => { setSlot(1); s.updateLayer(layer.id, (l) => ({ ...l, fill2: undefined, grad: undefined })); }}>Düz Renk</button>
+          <button className={grad ? 'on' : ''} onClick={() => !grad && s.updateLayer(layer.id, (l) => ({ ...l, fill2: '#F5DCA0', grad: { x1: -0.35, y1: -0.35, x2: 0.35, y2: 0.35 } }))}>Geçiş</button>
         </div>
-        <label className="prop" style={{ marginTop: 16 }}><span className="top">Özel renk<input type="color" value={layer.fill} onFocus={() => s.checkpoint()} onChange={(e) => s.updateLayer(layer.id, (l) => ({ ...l, fill: e.target.value }), false)} /></span></label>
+        {grad && (
+          <div className="slots">
+            {([1, 2] as const).map((n) => (
+              <button key={n} className={slot === n ? 'on' : ''} onClick={() => setSlot(n)}>
+                <span style={{ background: n === 1 ? layer.fill : layer.fill2 }} />{n === 1 ? 'Başlangıç' : 'Bitiş'}
+              </button>
+            ))}
+            <span className="hint">Noktaları önizlemede sürükle</span>
+          </div>
+        )}
+        <div className="cgrid">
+          <input className="hexbar" aria-label="Renk kodu" value={hex} style={{ background: cur, color: ink(cur) }}
+            onChange={(e) => setHex(e.target.value.toUpperCase())}
+            onBlur={() => { if (/^#[0-9A-F]{6}$/.test(hex)) setColor(hex); else setHex(cur.toUpperCase()); }}
+            onKeyDown={(e) => e.key === 'Enter' && (e.target as HTMLInputElement).blur()} />
+          <div className="swgrid">
+            {SWATCHES.map((c) => <button key={c} aria-label={c} className={cur.toUpperCase() === c ? 'on' : ''} style={{ background: c }} onClick={() => setColor(c)} />)}
+          </div>
+          <label className="pal" aria-label="Özel renk seç">
+            <Icon name="bucket" size={20} />
+            <input type="color" value={cur.slice(0, 7)} onFocus={() => s.checkpoint()} onChange={(e) => setColor(e.target.value.toUpperCase(), false)} />
+          </label>
+        </div>
       </div>
     </div>
   );
 }
 
-// ---------- Opaklık ----------
+// ---------- Karıştırma ve Opaklık ----------
+const BLENDS: { id: import('../types').BlendMode; name: string }[] = [
+  { id: 'normal', name: 'Normal' }, { id: 'multiply', name: 'Çoğalt' }, { id: 'screen', name: 'Ekran' },
+  { id: 'overlay', name: 'Kaplama' }, { id: 'darken', name: 'Koyulaştır' }, { id: 'lighten', name: 'Açıklaştır' },
+  { id: 'color-dodge', name: 'Renk Soldurma' }, { id: 'difference', name: 'Fark' },
+];
 export function OpacityPanel({ layer, onClose }: { layer: Layer; onClose: () => void }) {
   const { s, t } = useNow();
   const v = valueAt(layer.opacity, t);
   const has = !!keyAt(layer.opacity, t);
+  const bm = layer.blend ?? 'normal';
   return (
-    <div className="dpanel" role="dialog" aria-label="Karıştırma ve Opaklık">
-      <Head title="Karıştırma ve Opaklık" onClose={onClose} back />
-      <div className="dbody">
-        <div className="prop">
-          <span className="top">Opaklık<b>%{Math.round(v * 100)}</b></span>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <button className="ib" aria-label="Opaklık keyframe" onClick={() => s.updateLayer(layer.id, (l) => ({ ...l, opacity: toggleKey(l.opacity, t) }))} style={{ color: has ? 'var(--turq)' : 'var(--d-text2)' }}><Icon name="key" fill={has} /></button>
-            <input className="slider" type="range" min={0} max={100} value={Math.round(v * 100)} onPointerDown={() => s.checkpoint()} onChange={(e) => s.updateLayer(layer.id, (l) => ({ ...l, opacity: setAnim(l.opacity, t, +e.target.value / 100) }), false)} />
-          </div>
+    <div className="dpanel side2" role="dialog" aria-label="Karıştırma ve Opaklık">
+      <div className="lcol">
+        <button className="ib" aria-label="Geri" onClick={onClose}><Icon name="back" /></button>
+        <button className="ib" aria-label="Opaklık keyframe" onClick={() => s.updateLayer(layer.id, (l) => ({ ...l, opacity: toggleKey(l.opacity, t) }))} style={{ color: has ? 'var(--turq)' : 'var(--d-text2)' }}><Icon name="key" size={18} fill={has} /></button>
+      </div>
+      <div className="dbody" style={{ paddingLeft: 4 }}>
+        <div className="blends">
+          {BLENDS.map((b) => (
+            <button key={b.id} className={bm === b.id ? 'on' : ''} onClick={() => s.updateLayer(layer.id, (l) => ({ ...l, blend: b.id }))}>
+              <span className={'bthumb ' + b.id} />{b.name}
+            </button>
+          ))}
         </div>
-        <p style={{ fontSize: 12, color: 'var(--d-text2)' }}>İpucu: ◆ ile iki farklı anda keyframe koyarak "belirme / kaybolma" animasyonu yapabilirsin.</p>
+        <div className="oprow">
+          <Icon name="opacity" size={18} />
+          <input className="slider" type="range" min={0} max={1000} value={Math.round(v * 1000)} aria-label="Opaklık" onPointerDown={() => s.checkpoint()} onChange={(e) => s.updateLayer(layer.id, (l) => ({ ...l, opacity: setAnim(l.opacity, t, +e.target.value / 1000) }), false)} />
+          <b>{v.toFixed(3)}</b>
+        </div>
       </div>
     </div>
   );

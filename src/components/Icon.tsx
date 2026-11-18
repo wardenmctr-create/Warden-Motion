@@ -42,6 +42,10 @@ const P: Record<string, string> = {
   check: 'M5 12l5 5 9-10',
   fit: 'M4 8V4h4M16 4h4v4M20 16v4h-4M8 20H4v-4',
   key: 'M12 3l9 9-9 9-9-9z',
+  border: 'M4 4h16v16H4zM8 8h8v8H8z',
+  loop: 'M17 2l4 4-4 4M3 11V9a3 3 0 0 1 3-3h15M7 22l-4-4 4-4M21 13v2a3 3 0 0 1-3 3H3',
+  pen: 'M4 20l4-1 11-11-3-3L5 16z',
+  layers: 'M12 3l9 5-9 5-9-5zM3 13l9 5 9-5',
 };
 
 export function Icon({ name, size = 22, fill = false, stroke = 1.8 }: { name: keyof typeof P | string; size?: number; fill?: boolean; stroke?: number }) {

@@ -38,7 +38,14 @@ export interface Layer {
   parent?: string;
   /** Kırpma maskesi: bu katman, maske katmanının şekline kırpılır */
   mask?: string;
+  /** Karıştırma modu (Normal, Çoğalt, Ekran…) */
+  blend?: BlendMode;
+  /** Geçişli renk: ikinci renk + katman kutusuna göre (-0.5..0.5) başlangıç/bitiş noktaları */
+  fill2?: string;
+  grad?: { x1: number; y1: number; x2: number; y2: number };
 }
+
+export type BlendMode = 'normal' | 'multiply' | 'screen' | 'overlay' | 'darken' | 'lighten' | 'color-dodge' | 'difference';
 
 export interface Project {
   id: string;
