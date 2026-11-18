@@ -412,3 +412,28 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
   .lower { flex: 1 0 auto; min-height: 0; }
   .stage { min-height: 120px; }
 }
+
+/* Çoklu seçim + kırpma tutamaçları */
+.mbar { display: flex; align-items: center; gap: 2px; width: 100%; height: 100%; margin: 0 -4px; padding: 0 4px; background: var(--turq); color: var(--d-deep); }
+.mbar .ib { color: var(--d-deep); }
+.lpill.on { background: var(--turq); width: 52px; }
+.track.msel { background: linear-gradient(90deg, #22D3C5, #3FB4DA); color: var(--d-deep); outline: 2px solid #DCE9FF; }
+.track .tname { position: relative; z-index: 1; overflow: hidden; text-overflow: ellipsis; }
+.track.sel::before { display: none; }
+.track.sel { padding-left: 20px; padding-right: 20px; overflow: visible; }
+.th { position: absolute; top: -4px; bottom: -4px; width: 18px; background: #2B3B6E; touch-action: none; cursor: ew-resize; display: flex; align-items: center; justify-content: center; z-index: 2; }
+.th::after { content: ""; width: 2px; height: 50%; background: var(--d-text); border-radius: 1px; }
+.th.l { left: 0; border-radius: 4px 0 0 4px; }
+.th.r { right: 0; border-radius: 0 4px 4px 0; }
+
+/* Medya sekmesi */
+.mediatab { display: flex; gap: 8px; }
+.mcol { display: flex; flex-direction: column; gap: 4px; border-right: 1px solid #2C3E78; padding-right: 6px; }
+.mcol .ib { width: 36px; height: 36px; color: var(--d-text2); }
+.mcol .ib.on { color: var(--turq); background: #2E3F7E; }
+.mstrip { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; }
+.mthumb { position: relative; flex-shrink: 0; width: 64px; height: 64px; border-radius: 6px; overflow: hidden; background: #26386C; color: var(--turq); display: flex; align-items: center; justify-content: center; }
+.mthumb.add { border: 2px dashed #3C5296; }
+.mthumb img, .mthumb video { width: 100%; height: 100%; object-fit: cover; }
+.vbadge { position: absolute; left: 3px; bottom: 3px; z-index: 1; width: 18px; height: 18px; border-radius: 50%; background: rgba(11,20,48,.8); color: var(--d-text); display: flex; align-items: center; justify-content: center; }
+.mall { height: 34px; border-radius: 8px; background: #2E3F7E; color: var(--d-text); font-size: 12.5px; display: flex; align-items: center; justify-content: center; gap: 6px; }

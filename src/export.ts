@@ -1,6 +1,6 @@
 import { Capacitor } from '@capacitor/core';
 import { projectDuration } from './anim';
-import { preloadImages, renderFrame } from './render';
+import { getVideo, pauseAllVideos, preloadImages, renderFrame } from './render';
 import type { Project } from './types';
 
 function pickMime(): { mime: string; ext: string } {
@@ -16,7 +16,11 @@ function pickMime(): { mime: string; ext: string } {
 /** Projeyi gerçek zamanlı oynatarak kaydeder. */
 export async function exportVideo(p: Project, onProgress: (f: number) => void): Promise<{ blob: Blob; ext: string }> {
   const srcs = p.layers.flatMap((l) => [l.src, l.cb?.eyes]).filter(Boolean) as string[];
-  await preloadImages(srcs);
+  await preloadImages(srcs.filter((s) => !p.layers.some((l) => l.type === 'video' && l.src === s)));
+  // Videoların ilk karesi hazır olana kadar bekle (en fazla 8 sn)
+  const vids = p.layers.filter((l) => l.type === 'video' && l.src).map((l) => l.src!);
+  const t0v = performance.now();
+  while (vids.some((v) => !getVideo(v)) && performance.now() - t0v < 8000) await new Promise((r) => setTimeout(r, 100));
   const canvas = document.createElement('canvas');
   canvas.width = p.width; canvas.height = p.height;
   const ctx = canvas.getContext('2d')!;
@@ -33,13 +37,14 @@ export async function exportVideo(p: Project, onProgress: (f: number) => void): 
   await new Promise<void>((res) => {
     const tick = () => {
       const t = (performance.now() - t0) / 1000;
-      renderFrame(ctx, p, Math.min(t, dur - 0.0001));
+      renderFrame(ctx, p, Math.min(t, dur - 0.0001), { playing: true });
       onProgress(Math.min(1, t / dur));
       if (t < dur) requestAnimationFrame(tick); else res();
     };
     requestAnimationFrame(tick);
   });
   rec.stop();
+  pauseAllVideos();
   await done;
   return { blob: new Blob(chunks, { type: mime.split(';')[0] || 'video/webm' }), ext };
 }

@@ -4,7 +4,7 @@ import { AddPanel, type AddTab, ColorPanel, CBPanel, EffectsPanel, MovePanel, Op
 import { fmtTime, layerKeyTimes, projectDuration, setAnim, valueAt } from '../anim';
 import { exportVideo, saveFile } from '../export';
 import { TUTORIALS } from '../factories';
-import { hitTest, parentWorld, renderFrame, setImageLoadedHandler, toLocal, worldTransform, type TR } from '../render';
+import { hitTest, parentWorld, pauseAllVideos, renderFrame, setImageLoadedHandler, toLocal, worldTransform, type TR } from '../render';
 import { useStore } from '../store';
 import type { Project } from '../types';
 
@@ -89,14 +89,14 @@ export function Editor() {
       if (t >= d) { if (st.loopOn) t = 0; else { timeRef.current = d; st.setPlaying(false); return; } }
       timeRef.current = t;
       const c = canvasRef.current;
-      if (c) renderFrame(c.getContext('2d')!, pr, t, { quality: c.width / pr.width, fast: st.settings.lite });
+      if (c) renderFrame(c.getContext('2d')!, pr, t, { quality: c.width / pr.width, fast: st.settings.lite, playing: true });
       const el = tlRef.current;
       if (el) { programmatic.current = true; el.scrollLeft = t * PPS; }
       if (timecodeRef.current) timecodeRef.current.textContent = fmtTime(t, pr.fps);
       raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
-    return () => { cancelAnimationFrame(raf); useStore.getState().setTime(timeRef.current); };
+    return () => { cancelAnimationFrame(raf); pauseAllVideos(); useStore.getState().setTime(timeRef.current); };
   }, [s.playing]);
 
   // ---------- Önizlemede sürükleme ----------
@@ -209,6 +209,8 @@ export function Editor() {
   const backRef = useRef<() => boolean>(() => false);
   backRef.current = () => {
     if (exporting !== null) return true;
+    if (mmenu) { setMmenu(false); return true; }
+    if (useStore.getState().multi) { useStore.getState().setMulti(null); return true; }
     if (pick) { setPick(null); return true; }
     if (menu || projMenu) { setMenu(false); setProjMenu(false); return true; }
     if (panel) { setPanel(null); return true; }
@@ -267,6 +269,86 @@ export function Editor() {
     return false;
   };
 
+  // Uzun basma: çoklu seçim modunu açar; mod açıkken dokunma seçime ekler/çıkarır
+  const press = useRef<{ t: ReturnType<typeof setTimeout>; long: boolean } | null>(null);
+  const pressHandlers = (id: string) => ({
+    onPointerDown: () => {
+      const pr = { long: false, t: setTimeout(() => { pr.long = true; useStore.getState().setMulti([id]); navigator.vibrate?.(20); }, 450) };
+      press.current = pr;
+    },
+    onPointerUp: () => { if (press.current) clearTimeout(press.current.t); },
+    onPointerLeave: () => { if (press.current) clearTimeout(press.current.t); },
+    onContextMenu: (e: React.MouseEvent) => e.preventDefault(),
+    onClick: () => {
+      if (press.current?.long) { press.current = null; return; }
+      const m = useStore.getState().multi;
+      if (m) { const n = m.includes(id) ? m.filter((x) => x !== id) : [...m, id]; s.setMulti(n.length ? n : null); }
+      else s.select(id);
+    },
+  });
+
+  // Seçili katmanların sahnedeki konumunu yazar (zaman t'de)
+  const placeWorld = (ids: string[], fn: (l: import('../types').Layer, i: number, w: TR) => { x?: number; y?: number }) => {
+    s.update((pp) => {
+      const ls = ids.map((id) => pp.layers.find((l) => l.id === id)!).filter(Boolean);
+      const ws = ls.map((l) => worldTransform(pp, l, s.time));
+      const out = new Map<string, { x?: number; y?: number }>();
+      ls.forEach((l, i) => out.set(l.id, fn(l, i, ws[i])));
+      return { ...pp, layers: pp.layers.map((l) => {
+        const o = out.get(l.id); if (!o) return l;
+        const w = worldTransform(pp, l, s.time), pw = parentWorld(pp, l, s.time);
+        const loc = toLocal(pw, { ...w, x: o.x ?? w.x, y: o.y ?? w.y });
+        return { ...l, x: setAnim(l.x, s.time, Math.round(loc.x)), y: setAnim(l.y, s.time, Math.round(loc.y)) };
+      }) };
+    });
+  };
+  const multiAction = (kind: string) => {
+    const ids = multi ?? [];
+    setMmenu(false);
+    if (kind === 'mask' || kind === 'exclude') {
+      if (ids.length < 2) { show('En az iki katman seç.'); return; }
+      // En üstteki seçili katman maske olur; diğerleri onun şekline kırpılır
+      const order = p.layers.map((l) => l.id).filter((id) => ids.includes(id));
+      const top = order[order.length - 1];
+      s.update((pp) => ({ ...pp, layers: pp.layers.map((l) => l.id === top ? { ...l, hidden: true, name: l.name.includes('Maske') ? l.name : `${l.name} (Maske)` } : ids.includes(l.id) ? { ...l, mask: top, maskInvert: kind === 'exclude' } : l) }));
+      s.setMulti(null);
+      show(kind === 'mask' ? 'Maskeleme grubu oluşturuldu.' : 'Hariç tutma grubu oluşturuldu.');
+    } else if (kind === 'cv') placeWorld(ids, () => ({ y: p.height / 2 }));
+    else if (kind === 'ch') placeWorld(ids, () => ({ x: p.width / 2 }));
+    else if (kind === 'dv' || kind === 'dh') {
+      const key = kind === 'dv' ? 'y' : 'x';
+      const ws = ids.map((id) => ({ id, w: worldTransform(p, p.layers.find((l) => l.id === id)!, s.time) })).sort((a, b) => a.w[key] - b.w[key]);
+      const lo = ws[0].w[key], hi = ws[ws.length - 1].w[key];
+      const pos = new Map(ws.map((x, i) => [x.id, lo + (hi - lo) * i / Math.max(1, ws.length - 1)]));
+      placeWorld(ids, (l) => ({ [key]: pos.get(l.id) }));
+    } else if (kind === 'dt') {
+      const order = rows.map((l) => l.id).filter((id) => ids.includes(id));
+      s.update((pp) => {
+        let t0 = Math.min(...order.map((id) => pp.layers.find((l) => l.id === id)!.start));
+        const starts = new Map<string, number>();
+        for (const id of order) { const l = pp.layers.find((x) => x.id === id)!; starts.set(id, t0); t0 += l.end - l.start; }
+        return { ...pp, layers: pp.layers.map((l) => (starts.has(l.id) ? { ...l, start: starts.get(l.id)!, end: starts.get(l.id)! + (l.end - l.start) } : l)) };
+      });
+    }
+  };
+
+  // Kırpma tutamaçları: seçili katmanın başını/sonunu sürükle
+  const trim0 = useRef<{ id: string; side: 'start' | 'end'; x: number; v: number } | null>(null);
+  const trimDown = (e: React.PointerEvent, id: string, side: 'start' | 'end') => {
+    e.stopPropagation();
+    try { (e.target as HTMLElement).setPointerCapture(e.pointerId); } catch { /* yok */ }
+    const l = p.layers.find((x) => x.id === id)!;
+    s.checkpoint();
+    trim0.current = { id, side, x: e.clientX, v: side === 'start' ? l.start : l.end };
+  };
+  const trimMove = (e: React.PointerEvent) => {
+    const d = trim0.current; if (!d) return;
+    e.stopPropagation();
+    const v = Math.round((d.v + (e.clientX - d.x) / PPS) * p.fps) / p.fps;
+    s.updateLayer(d.id, (l) => (d.side === 'start' ? { ...l, start: Math.max(0, Math.min(v, l.end - 0.1)) } : { ...l, end: Math.max(l.start + 0.1, v) }), false);
+  };
+  const trimUp = () => { trim0.current = null; };
+
   const openAdd = (tab: AddTab | null) => { setAddTab(tab); setReplaceFlagOf(null); setPanel('add'); s.setPlaying(false); };
 
   // ---------- Paneller ----------
@@ -322,11 +404,22 @@ export function Editor() {
   ) : null
 
   const tut = p.tutorial ? TUTORIALS.find((t) => t.id === p.tutorial) : undefined;
+  const rows = [...p.layers].reverse(); // en üstteki katman zaman çizelgesinde en üstte
+  const multi = s.multi;
+  const [mmenu, setMmenu] = useState(false);
 
   return (
     <div className="ed">
       <header className="ed-top">
-        {sel && panel && panel !== 'add' ? (
+        {multi ? (
+          <div className="mbar">
+            <button className="ib" aria-label="Seçimi bitir" onClick={() => s.setMulti(null)}><Icon name="close" /></button>
+            <span className="ed-ptitle">{multi.length} katman seçildi</span>
+            <button className="ib" aria-label="Seçilenleri çoğalt" onClick={() => { multi.forEach((id) => s.duplicateLayer(id)); s.setMulti(null); }}><Icon name="copy" /></button>
+            <button className="ib" aria-label="Seçilenleri sil" onClick={() => { s.update((pp) => ({ ...pp, layers: pp.layers.filter((l) => !multi.includes(l.id)) })); s.setMulti(null); }}><Icon name="trash" /></button>
+            <button className="ib" aria-label="Diğer" onClick={() => setMmenu(!mmenu)}><Icon name="more" size={26} stroke={3} /></button>
+          </div>
+        ) : sel && panel && panel !== 'add' ? (
           <>
             <button className="ib" aria-label="Geri" onClick={() => setPanel(null)}><Icon name="back" /></button>
             <span className="ed-ptitle">{PANEL_TITLE[panel]}</span>
@@ -374,22 +467,28 @@ export function Editor() {
                 ))}
                 {Array.from({ length: Math.ceil(dur + 2) }, (_, i) => <b key={i} style={{ left: i * PPS }}>{i}s</b>)}
               </div>
-              {(sel ? [sel] : p.layers).map((l, i) => (
-                <button key={l.id} className={'track' + (l.id === s.selectedId ? ' sel' : ' off')}
+              {(sel ? [sel] : rows).map((l, i) => (
+                <button key={l.id} className={'track' + (l.id === s.selectedId ? ' sel' : multi?.includes(l.id) ? ' msel' : ' off')}
                   style={{ left: half + l.start * PPS, width: Math.max(8, (l.end - l.start) * PPS), top: TOP + i * ROW, opacity: l.hidden ? 0.45 : 1 }}
-                  onClick={() => { s.select(l.id); }}>
-                  {l.name}
+                  {...pressHandlers(l.id)}>
+                  <span className="tname">{l.mask ? '◐ ' : ''}{l.name}</span>
                   {l.id === s.selectedId && layerKeyTimes(l).map((kt) => <span key={kt} className="kf" style={{ left: (kt - l.start) * PPS }} />)}
+                  {l.id === s.selectedId && (
+                    <>
+                      <span className="th l" role="slider" aria-label="Katmanın başlangıcı" aria-valuenow={l.start} onPointerDown={(e) => trimDown(e, l.id, 'start')} onPointerMove={trimMove} onPointerUp={trimUp} onClick={(e) => e.stopPropagation()} />
+                      <span className="th r" role="slider" aria-label="Katmanın sonu" aria-valuenow={l.end} onPointerDown={(e) => trimDown(e, l.id, 'end')} onPointerMove={trimMove} onPointerUp={trimUp} onClick={(e) => e.stopPropagation()} />
+                    </>
+                  )}
                 </button>
               ))}
-              <div style={{ position: 'absolute', top: TOP + p.layers.length * ROW + 70, height: 1, width: 1 }} />
+              <div style={{ position: 'absolute', top: TOP + rows.length * ROW + 70, height: 1, width: 1 }} />
             </div>
           </div>
           {!p.layers.length && <div className="tl-empty">Katman eklemek için + butonuna bas.</div>}
           {!sel && p.layers.length > 0 && (
             <div className="pills" ref={pillsRef}>
-              {p.layers.map((l, i) => (
-                <button key={l.id} className="lpill" style={{ top: TOP + i * ROW }} aria-label={l.name} onClick={() => s.select(l.id)}>
+              {rows.map((l, i) => (
+                <button key={l.id} className={'lpill' + (multi?.includes(l.id) ? ' on' : '')} style={{ top: TOP + i * ROW }} aria-label={l.name} {...pressHandlers(l.id)}>
                   <LayerDot l={l} />
                 </button>
               ))}
@@ -405,6 +504,19 @@ export function Editor() {
       {wide && <div className="side-col">{tools}{panelEl}</div>}
 
       {!panel && !sel && <button className="fab-d" aria-label="Katman ekle" onClick={() => openAdd(null)}><Icon name="plus" size={28} stroke={2.4} /></button>}
+
+      {mmenu && multi && (
+        <div className="menu" role="menu">
+          <button onClick={() => multiAction('mask')}>Maskeleme Grubu Oluştur</button>
+          <button onClick={() => multiAction('exclude')}>Hariç Tutma Grubu Oluştur</button>
+          <hr />
+          <button onClick={() => multiAction('cv')}>Dikey Ortala</button>
+          <button onClick={() => multiAction('ch')}>Yatay Ortala</button>
+          <button disabled={multi.length < 3} onClick={() => multiAction('dv')}>Dikey Dağıt</button>
+          <button disabled={multi.length < 3} onClick={() => multiAction('dh')}>Yatay Dağıt</button>
+          <button onClick={() => multiAction('dt')}>Zaman Çizelgesine Dağıt</button>
+        </div>
+      )}
 
       {menu && sel && (
         <div className="menu" role="menu">

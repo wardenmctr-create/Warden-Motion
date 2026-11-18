@@ -8,7 +8,7 @@ export type ShapeKind = 'circle' | 'roundrect' | 'rect' | 'triangle' | 'star' | 
 export type FxType = 'blur' | 'sway' | 'shake' | 'glow' | 'brightness' | 'contrast' | 'saturate' | 'hue' | 'grayscale' | 'invert' | 'sepia' | 'shadow' | 'mirror';
 export interface Effect { id: string; type: FxType; amount: number; speed?: number; color?: string }
 
-export type LayerType = 'shape' | 'text' | 'image' | 'cb';
+export type LayerType = 'shape' | 'text' | 'image' | 'cb' | 'video';
 
 export interface Layer {
   id: string;
@@ -36,6 +36,8 @@ export interface Layer {
   parent?: string;
   /** Kırpma maskesi: bu katman, maske katmanının şekline kırpılır */
   mask?: string;
+  /** true: maskenin şekli DIŞINDA kalan görünür (Hariç Tutma Grubu) */
+  maskInvert?: boolean;
   /** Karıştırma modu (Normal, Çoğalt, Ekran…) */
   blend?: BlendMode;
   /** Geçişli renk: ikinci renk + katman kutusuna göre (-0.5..0.5) başlangıç/bitiş noktaları */

@@ -48,6 +48,9 @@ interface State {
   past: Project[];
   future: Project[];
   selectedId: string | null;
+  /** Çoklu seçim modu (uzun basınca); null = kapalı */
+  multi: string[] | null;
+  setMulti: (ids: string[] | null) => void;
   time: number;
   playing: boolean;
   tutorialStep: number;
@@ -83,6 +86,8 @@ export const useStore = create<State>((set, get) => ({
   past: [],
   future: [],
   selectedId: null,
+  multi: null,
+  setMulti: (multi) => set({ multi, selectedId: null }),
   time: 0,
   playing: false,
   tutorialStep: 0,
@@ -92,7 +97,7 @@ export const useStore = create<State>((set, get) => ({
     localStorage.setItem('wm-settings', JSON.stringify(settings));
     set({ settings });
   },
-  open: (project) => set({ project, past: [], future: [], selectedId: null, time: 0, playing: false, tutorialStep: 0, screen: 'editor' }),
+  open: (project) => set({ project, past: [], future: [], selectedId: null, multi: null, time: 0, playing: false, tutorialStep: 0, screen: 'editor' }),
   close: () => {
     const p = get().project;
     if (p) saveProject(p);

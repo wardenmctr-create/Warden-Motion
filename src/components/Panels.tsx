@@ -105,6 +105,20 @@ export function AddPanel({ tab, setTab, onClose, toast, replaceFlagOf }: { tab: 
     onClose();
   };
 
+  const addVideo = async (src: string, name: string) => {
+    const url = await resolveSrc(src);
+    const meta = await new Promise<{ w: number; h: number; d: number }>((res) => {
+      const v = document.createElement('video');
+      v.preload = 'metadata'; v.muted = true;
+      v.onloadedmetadata = () => res({ w: v.videoWidth || 640, h: v.videoHeight || 360, d: isFinite(v.duration) ? v.duration : 5 });
+      v.onerror = () => res({ w: 640, h: 360, d: 5 });
+      v.src = url;
+    });
+    const k = Math.min(p.width / meta.w, p.height / meta.h); // proje alanına sığdır
+    s.addLayer(makeLayer(p, t, Math.round(meta.d * 100) / 100, { type: 'video', name, src, w: Math.round(meta.w * k), h: Math.round(meta.h * k) }));
+    onClose();
+  };
+
   /** Gövde kur: çizgi (ebeveyn) + beyaz iç (takip eder) [+ bayrak iç'e kırpılmış] [+ gözler] */
   const buildBody = (shape: string, flagSrc?: string, flagName?: string) => {
     const size = Math.round(Math.min(p.width, p.height) * 0.5);
@@ -150,7 +164,7 @@ export function AddPanel({ tab, setTab, onClose, toast, replaceFlagOf }: { tab: 
             </button>
           )} />
         )}
-        {tab === 'media' && <MediaTab onPick={(src, name) => addImage(src, name, 0.7)} />}
+        {tab === 'media' && <MediaTab onPick={(src, name, kind) => (kind === 'video' ? addVideo(src, name) : addImage(src, name, 0.7))} />}
         {tab === 'text' && <TextTab onAdd={(text) => { s.addLayer(makeLayer(p, t, dur, { type: 'text', name: text.slice(0, 18) || 'Metin', text, fontSize: Math.round(p.height / 12), fill: '#0D1631', w: Math.round(p.width * 0.6), h: Math.round(p.height / 8) })); onClose(); }} />}
         {tab === 'cb' && <CBTab onPick={(src, name) => addImage(src, name)} onBody={(shape) => buildBody(shape)} toast={toast} />}
         {tab === 'flags' && (
@@ -180,18 +194,49 @@ function ShapeIcon({ kind }: { kind: Parameters<typeof shapePath>[0] }) {
   return <canvas ref={ref} style={{ width: 40, height: 40 }} />;
 }
 
-function MediaTab({ onPick }: { onPick: (src: string, name: string) => void }) {
+const MEDIA_RECENT = 'wm-media-recent';
+type RecentMedia = { src: string; kind: 'image' | 'video'; name: string };
+const getRecentMedia = (): RecentMedia[] => { try { return JSON.parse(localStorage.getItem(MEDIA_RECENT) || '[]'); } catch { return []; } };
+const pushRecentMedia = (m: RecentMedia) => { try { localStorage.setItem(MEDIA_RECENT, JSON.stringify([m, ...getRecentMedia().filter((x) => x.src !== m.src)].slice(0, 20))); } catch { /* yok */ } };
+
+/** Videodaki Medya sekmesi: solda tür, ortada son eklenenler şeridi, altta "tümünü görüntüle" */
+function MediaTab({ onPick }: { onPick: (src: string, name: string, kind: 'image' | 'video') => void }) {
   const ref = useRef<HTMLInputElement>(null);
+  const [recent] = useState(getRecentMedia);
+  const pickFile = async (f: File) => {
+    const kind = f.type.startsWith('video/') ? 'video' : 'image';
+    const src = await putMedia(f);
+    const name = f.name.replace(/\.[^.]+$/, '');
+    pushRecentMedia({ src, kind, name });
+    onPick(src, name, kind);
+  };
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 12, alignItems: 'flex-start' }}>
-      <button className="btn" onClick={() => ref.current?.click()}><Icon name="image" size={18} />Galeriden Görsel Seç</button>
-      <span style={{ fontSize: 13, color: 'var(--d-text2)' }}>PNG, JPG ve GIF desteklenir. Video ve ses sonraki sürümde.</span>
-      <input ref={ref} type="file" accept="image/*" hidden onChange={async (e) => {
-        const f = e.target.files?.[0];
-        if (f) onPick(await putMedia(f), f.name.replace(/\.[^.]+$/, ''));
-      }} />
+    <div className="mediatab">
+      <div className="mcol">
+        <button className="ib on" aria-label="Görsel ve video"><Icon name="image" size={20} /></button>
+        <button className="ib" aria-label="Ses (yakında)" disabled><Icon name="music" size={20} /></button>
+      </div>
+      <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 6 }}>
+        <div className="mstrip">
+          <button className="mthumb add" aria-label="Galeriden seç" onClick={() => ref.current?.click()}><Icon name="plus" size={24} /></button>
+          {recent.map((m) => (
+            <button key={m.src} className="mthumb" aria-label={m.name} onClick={() => onPick(m.src, m.name, m.kind)}>
+              {m.kind === 'video' ? <span className="vbadge"><Icon name="play" size={12} /></span> : null}
+              {m.kind === 'image' ? <Img src={m.src} alt="" /> : <VideoThumb src={m.src} />}
+            </button>
+          ))}
+        </div>
+        <button className="mall" onClick={() => ref.current?.click()}><Icon name="grid" size={16} />Tüm fotoğraf ve videoları görüntüle</button>
+      </div>
+      <input ref={ref} type="file" accept="image/*,video/*" hidden onChange={async (e) => { const f = e.target.files?.[0]; if (f) await pickFile(f); e.target.value = ''; }} />
     </div>
   );
+}
+
+function VideoThumb({ src }: { src: string }) {
+  const [url, setUrl] = useState('');
+  useEffect(() => { resolveSrc(src).then(setUrl); }, [src]);
+  return url ? <video src={url + '#t=0.1'} muted playsInline preload="metadata" /> : null;
 }
 
 function TextTab({ onAdd }: { onAdd: (t: string) => void }) {

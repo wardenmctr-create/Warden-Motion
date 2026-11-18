@@ -30,6 +30,25 @@ export function getImage(src: string): HTMLImageElement | null {
   return null;
 }
 
+// ---------- Video önbelleği ----------
+const vcache = new Map<string, HTMLVideoElement | 'loading'>();
+export function getVideo(src: string): HTMLVideoElement | null {
+  const c = vcache.get(src);
+  if (c instanceof HTMLVideoElement) return c.readyState >= 2 ? c : null;
+  if (c) return null;
+  vcache.set(src, 'loading');
+  resolveSrc(src).then((url) => {
+    const v = document.createElement('video');
+    v.muted = true; v.playsInline = true; v.preload = 'auto'; v.crossOrigin = 'anonymous';
+    v.onloadeddata = () => { vcache.set(src, v); onLoaded(); };
+    v.onseeked = () => onLoaded();
+    v.src = url;
+  });
+  return null;
+}
+export const pauseAllVideos = () => vcache.forEach((v) => { if (v instanceof HTMLVideoElement && !v.paused) v.pause(); });
+let frameT = 0, framePlaying = false;
+
 export function preloadImages(srcs: string[]): Promise<void> {
   return Promise.all(srcs.map((s) => new Promise<void>((res) => {
     if (getImage(s)) return res();
@@ -123,7 +142,7 @@ export function toLocal(pw: TR, w: TR): TR {
   return { x: dx * Math.cos(a) - dy * Math.sin(a), y: dx * Math.sin(a) + dy * Math.cos(a), rot: w.rot - pw.rot, scale: w.scale / pw.scale, opacity: w.opacity };
 }
 
-export interface RenderOpts { selectedId?: string | null; quality?: number; /** Lite oynatma: bulanıklık/parlama atlanır */ fast?: boolean; /** Renk panelinde geçiş tutamaçlarını göster */ gradHandles?: boolean; /** Taşı ve Çevir açıkken seçili katmanın hareket yolu */ motionPath?: boolean }
+export interface RenderOpts { /** Oynatma/dışa aktarma sırasında videolar gerçekten oynar */ playing?: boolean; selectedId?: string | null; quality?: number; /** Lite oynatma: bulanıklık/parlama atlanır */ fast?: boolean; /** Renk panelinde geçiş tutamaçlarını göster */ gradHandles?: boolean; /** Taşı ve Çevir açıkken seçili katmanın hareket yolu */ motionPath?: boolean }
 
 let bufA: HTMLCanvasElement | null = null, bufB: HTMLCanvasElement | null = null;
 const buf = (c: HTMLCanvasElement | null, w: number, h: number) => {
@@ -163,6 +182,7 @@ const visible = (l: Layer, t: number) => !l.hidden && t >= l.start && t < l.end;
 export function renderFrame(ctx: CanvasRenderingContext2D, p: Project, t: number, opts: RenderOpts = {}) {
   const q = opts.quality ?? 1;
   const fast = !!opts.fast;
+  frameT = t; framePlaying = !!opts.playing;
   ctx.setTransform(q, 0, 0, q, 0, 0);
   ctx.globalAlpha = 1;
   ctx.filter = 'none';
@@ -179,7 +199,7 @@ export function renderFrame(ctx: CanvasRenderingContext2D, p: Project, t: number
       paint(bufA.getContext('2d')!, p, l, t, q, fast);
       if (visible(m, t) || m.hidden) paint(bufB.getContext('2d')!, p, { ...m, hidden: false, effects: [] }, t, q);
       const a = bufA.getContext('2d')!;
-      a.globalCompositeOperation = 'destination-in';
+      a.globalCompositeOperation = l.maskInvert ? 'destination-out' : 'destination-in';
       a.drawImage(bufB, 0, 0);
       ctx.save();
       ctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -225,6 +245,19 @@ function drawLayer(ctx: CanvasRenderingContext2D, l: Layer) {
   } else if (l.type === 'image' && l.src) {
     const img = getImage(l.src);
     if (img) ctx.drawImage(img, -w / 2, -h / 2, w, h);
+  } else if (l.type === 'video' && l.src) {
+    const v = getVideo(l.src);
+    if (v) {
+      const want = Math.max(0, Math.min(frameT - l.start, (v.duration || 1e9) - 0.05));
+      if (framePlaying) {
+        if (v.paused) v.play().catch(() => {});
+        if (Math.abs(v.currentTime - want) > 0.3) v.currentTime = want;
+      } else {
+        if (!v.paused) v.pause();
+        if (Math.abs(v.currentTime - want) > 0.02) v.currentTime = want;
+      }
+      ctx.drawImage(v, -w / 2, -h / 2, w, h);
+    } else { ctx.fillStyle = '#26386C'; ctx.fillRect(-w / 2, -h / 2, w, h); }
   } else if (l.type === 'cb' && l.src) {
     const r = Math.min(w, h) / 2;
     ctx.save();
