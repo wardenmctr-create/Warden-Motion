@@ -257,11 +257,7 @@ export function Editor() {
         <button className="tbtn" onClick={() => setPanel('effects')}><Icon name="sparkle" size={26} />Efektler</button>
       </div>
     </div>
-  ) : (
-    <div className="tools" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--d-text2)', fontSize: 14, textAlign: 'center' }}>
-      {p.layers.length ? 'Düzenlemek için önizlemede ya da zaman çizelgesinde bir katmana dokun.' : 'Katman eklemek için + butonuna bas.'}
-    </div>
-  );
+  ) : null
 
   const tut = p.tutorial ? TUTORIALS.find((t) => t.id === p.tutorial) : undefined;
 
@@ -320,6 +316,7 @@ export function Editor() {
               <div style={{ position: 'absolute', top: 56 + p.layers.length * 34 + 60, height: 1, width: 1 }} />
             </div>
           </div>
+          {!p.layers.length && <div className="tl-empty">Katman eklemek için + butonuna bas.</div>}
           <div className="playhead" />
           <div className="timecode" ref={timecodeRef}>{fmtTime(s.time, p.fps)}</div>
         </div>
