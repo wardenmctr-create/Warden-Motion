@@ -1,4 +1,4 @@
-import { uid } from './anim';
+import { EASE_INOUT, uid } from './anim';
 import type { Layer, Project, ShapeKind } from './types';
 
 export function newProject(name: string, width: number, height: number, fps: number, background: string): Project {
@@ -26,7 +26,12 @@ export const SHAPES: { kind: ShapeKind; name: string }[] = [
 // ---------- Şablonlar ----------
 export interface Template { id: string; name: string; make: () => Project }
 
-const withLayers = (p: Project, ls: Omit<Layer, 'id'>[]): Project => ({ ...p, layers: ls.map((l) => ({ ...l, id: uid() })) });
+// Şablon keyframe'lerine yumuşak geçiş ver (varsayılan artık doğrusal)
+const soft = (l: Omit<Layer, 'id'>): Omit<Layer, 'id'> => {
+  const f = (a: Layer['x']) => (a.k ? { ...a, k: a.k.map((k) => ({ ...k, e: EASE_INOUT })) } : a);
+  return { ...l, x: f(l.x), y: f(l.y), scale: f(l.scale), rotation: f(l.rotation), opacity: f(l.opacity) };
+};
+const withLayers = (p: Project, ls: Omit<Layer, 'id'>[]): Project => ({ ...p, layers: ls.map((l) => ({ ...soft(l), id: uid() })) });
 
 export const TEMPLATES: Template[] = [
   {

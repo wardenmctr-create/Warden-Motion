@@ -1,12 +1,13 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Icon } from './Icon';
-import { keyAt, setAnim, toggleKey, uid, valueAt } from '../anim';
+import { EASES, keyAt, segmentKey, setAnim, setEase, toggleKey, uid, valueAt } from '../anim';
 import { addUserFlag, addUserFolder, addUserPackItems, listUserFlags, listUserFolders, listUserPack, putMedia, removeUserPackItem, type UserFlag, type UserPackItem } from '../db';
 import { makeLayer, SHAPES } from '../factories';
 import { resolveSrc, shapePath } from '../render';
 import { useStore } from '../store';
 import { askText } from '../dialog';
-import type { AnimProp, Effect, Layer, Project } from '../types';
+import { FEATURED, FX, FX_CATS, fxMeta, makeEffect } from '../effects';
+import type { AnimProp, Effect, FxType, Layer, Project } from '../types';
 
 // ---------- Ortak ----------
 function Head({ title, onClose, back = false }: { title: string; onClose: () => void; back?: boolean }) {
@@ -369,17 +370,20 @@ function FlagsTab({ onPick, toast, replace }: { onPick: (src: string, name: stri
   );
 }
 
-// ---------- Taşı ve Çevir ----------
+// ---------- Taşı ve Çevir (videodaki düzen) ----------
 type Mode = 'move' | 'rotate' | 'scale';
 const MODE_PROPS: Record<Mode, AnimProp[]> = { move: ['x', 'y'], rotate: ['rotation'], scale: ['scale'] };
+const fmt2 = (n: number) => n.toFixed(2).replace('.', ',');
 
 export function MovePanel({ layer, onClose }: { layer: Layer; onClose: () => void }) {
   const { s, t } = useNow();
   const [mode, setMode] = useState<Mode>('move');
+  const [curve, setCurve] = useState(false);
   const props = MODE_PROPS[mode];
   const hasKey = props.some((pr) => keyAt(layer[pr], t));
-  const animated = props.some((pr) => layer[pr].k?.length);
-  const drag = useRef<{ x: number; y: number; v: number[] } | null>(null);
+  const animated = props.some((pr) => (layer[pr].k?.length ?? 0) > 0);
+  const drag = useRef<{ x: number; y: number; v: number[]; cx?: number; cy?: number } | null>(null);
+  const padRef = useRef<HTMLDivElement>(null);
 
   const set = (vals: Partial<Record<AnimProp, number>>, commit = true) =>
     s.updateLayer(layer.id, (l) => {
@@ -391,55 +395,120 @@ export function MovePanel({ layer, onClose }: { layer: Layer; onClose: () => voi
   const toggle = () => s.updateLayer(layer.id, (l) => {
     const n = { ...l };
     const any = props.some((pr) => keyAt(l[pr], t));
-    for (const pr of props) {
-      const has = !!keyAt(l[pr], t);
-      if (any ? has : !has) n[pr] = toggleKey(l[pr], t);
-    }
+    for (const pr of props) { const has = !!keyAt(l[pr], t); if (any ? has : !has) n[pr] = toggleKey(l[pr], t); }
     return n;
   });
 
-  const fields = mode === 'move'
-    ? [{ k: 'x' as AnimProp, label: 'X', step: 1 }, { k: 'y' as AnimProp, label: 'Y', step: 1 }]
-    : mode === 'rotate' ? [{ k: 'rotation' as AnimProp, label: 'DERECE', step: 1 }] : [{ k: 'scale' as AnimProp, label: 'ÖLÇEK %', step: 1 }];
-  const show = (k: AnimProp) => { const v = valueAt(layer[k], t); return k === 'scale' ? Math.round(v * 1000) / 10 : Math.round(v * 100) / 100; };
+  const rot = valueAt(layer.rotation, t), sc = valueAt(layer.scale, t);
+  const onPadDown = (e: React.PointerEvent) => {
+    try { (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId); } catch { /* yok */ }
+    s.checkpoint();
+    const r = padRef.current!.getBoundingClientRect();
+    drag.current = { x: e.clientX, y: e.clientY, v: props.map((pr) => valueAt(layer[pr], t)), cx: r.left + r.width / 2, cy: r.top + r.height / 2 };
+  };
+  const onPadMove = (e: React.PointerEvent) => {
+    const d = drag.current; if (!d) return;
+    const dx = e.clientX - d.x, dy = e.clientY - d.y;
+    if (mode === 'move') set({ x: Math.round((d.v[0] + dx * 1.5) * 100) / 100, y: Math.round((d.v[1] + dy * 1.5) * 100) / 100 }, false);
+    else if (mode === 'rotate') {
+      // Kadran: parmağın merkeze göre açısı (0° = sağ), mevcut tur sayısı korunur
+      const ang = Math.atan2(e.clientY - d.cy!, e.clientX - d.cx!) * 180 / Math.PI;
+      const turns = Math.round((d.v[0] - ang) / 360);
+      set({ rotation: Math.round((ang + turns * 360) * 10) / 10 }, false);
+    } else set({ scale: Math.max(0.01, Math.round((d.v[0] + dx * 0.004) * 1000) / 1000) }, false);
+  };
+  const onPadUp = () => { drag.current = null; };
+
+  // Yumuşatma eğrisi: bu modun özelliklerinin, t'deki geçişi
+  const segKey = segmentKey(layer[props[0]], t);
+  const ease: [number, number, number, number] = segKey?.e ?? [0.25, 0.25, 0.75, 0.75];
+  const applyEase = (e: [number, number, number, number] | undefined, commit = true) =>
+    s.updateLayer(layer.id, (l) => { const n = { ...l }; for (const pr of props) n[pr] = setEase(l[pr], t, e); return n; }, commit);
+  const gref = useRef<SVGSVGElement>(null);
+  const gdrag = useRef<0 | 1 | 2>(0);
+  const onGMove = (e: React.PointerEvent) => {
+    if (!gdrag.current) return;
+    const r = gref.current!.getBoundingClientRect();
+    const x = Math.min(1, Math.max(0, (e.clientX - r.left - 12) / (r.width - 24)));
+    const y = Math.min(1.6, Math.max(-0.6, 1 - (e.clientY - r.top - 12) / (r.height - 24)));
+    const n: [number, number, number, number] = [...ease];
+    if (gdrag.current === 1) { n[0] = +x.toFixed(3); n[1] = +y.toFixed(3); } else { n[2] = +x.toFixed(3); n[3] = +y.toFixed(3); }
+    applyEase(n, false);
+  };
+
+  const pos = (px: number, py: number) => [12 + px * 100, 12 + (1 - py) * 100];
+  const [p1x, p1y] = pos(ease[0], ease[1]), [p2x, p2y] = pos(ease[2], ease[3]);
 
   return (
-    <div className="dpanel" role="dialog" aria-label="Taşı ve Çevir">
-      <Head title="Taşı ve Çevir" onClose={onClose} back />
-      <div className="movep">
-        <div className="side">
-          <button className="ib" aria-label={hasKey ? 'Bu anki keyframe\'i sil' : 'Bu ana keyframe ekle'} onClick={toggle} style={{ color: hasKey ? 'var(--turq)' : animated ? 'var(--d-text)' : 'var(--d-text2)' }}>
-            <Icon name="key" size={22} fill={hasKey} />
+    <div className="dpanel side3" role="dialog" aria-label="Taşı ve Çevir">
+      <div className="lcol">
+        <button className="ib" aria-label={curve ? 'Eğriden çık' : 'Geri'} onClick={() => (curve ? setCurve(false) : onClose())}><Icon name="back" /></button>
+        {!curve && <button className="ib" aria-label={hasKey ? 'Bu anki keyframe\'i sil' : 'Bu ana keyframe ekle'} onClick={toggle} style={{ color: hasKey ? 'var(--turq)' : 'var(--d-text)' }}><Icon name="key" size={18} fill /></button>}
+        <span style={{ flex: 1 }} />
+        {!curve && <button className="ib" aria-label="Yumuşatma eğrisi" onClick={() => setCurve(true)} style={{ color: animated ? 'var(--d-text)' : 'var(--d-dim)' }}><Icon name="curve" size={20} /></button>}
+      </div>
+
+      {curve ? (
+        <div className="cpad">
+          {segKey ? (
+            <svg ref={gref} viewBox="0 0 124 124" className="graph" onPointerMove={onGMove} onPointerUp={() => { gdrag.current = 0; }} onPointerLeave={() => { gdrag.current = 0; }}>
+              {Array.from({ length: 11 }, (_, i) => <line key={'v' + i} x1={12 + i * 10} y1={12} x2={12 + i * 10} y2={112} className="gl" />)}
+              {Array.from({ length: 11 }, (_, i) => <line key={'h' + i} x1={12} y1={12 + i * 10} x2={112} y2={12 + i * 10} className="gl" />)}
+              <line x1={62} y1={12} x2={62} y2={112} className="gmid" />
+              <line x1={12} y1={112} x2={p1x} y2={p1y} className="garm" />
+              <line x1={112} y1={12} x2={p2x} y2={p2y} className="garm" />
+              <path d={`M12 112 C${p1x} ${p1y} ${p2x} ${p2y} 112 12`} className="gcurve" />
+              <circle cx={12} cy={112} r={2.5} className="gend" /><circle cx={112} cy={12} r={2.5} className="gend" />
+              {([1, 2] as const).map((n) => (
+                <circle key={n} cx={n === 1 ? p1x : p2x} cy={n === 1 ? p1y : p2y} r={6} className="ghandle"
+                  onPointerDown={(e) => { try { (e.currentTarget.ownerSVGElement as SVGSVGElement).setPointerCapture(e.pointerId); } catch { /* yok */ } s.checkpoint(); gdrag.current = n; }} />
+              ))}
+            </svg>
+          ) : (
+            <div className="padhint">Yumuşatma için bu özellikte en az iki keyframe olmalı.</div>
+          )}
+        </div>
+      ) : (
+        <div className="cpad" ref={padRef} onPointerDown={onPadDown} onPointerMove={onPadMove} onPointerUp={onPadUp} onPointerCancel={onPadUp}>
+          <span className="cnr tl" /><span className="cnr tr" /><span className="cnr bl" /><span className="cnr br" />
+          {mode === 'move' && (
+            <>
+              <div className="coords">{fmt2(valueAt(layer.x, t))}, {fmt2(valueAt(layer.y, t))}</div>
+              <div className="padhint">Taşımak için kaydırın</div>
+            </>
+          )}
+          {mode === 'rotate' && (
+            <div className="dial">
+              <div className="ring">
+                <span className="deg">{Math.round(rot)}°</span>
+                <span className="knob" style={{ transform: `rotate(${rot}deg) translateX(var(--r))` }} />
+              </div>
+            </div>
+          )}
+          {mode === 'scale' && (
+            <>
+              <div className="pxrow" onPointerDown={(e) => e.stopPropagation()}>
+                <span>{Math.round(layer.w * sc)}px</span><Icon name="link" size={14} /><span>{Math.round(layer.h * sc)}px</span>
+              </div>
+              <div className="ruler2" style={{ backgroundPositionX: `${(sc * 250) % 12}px` }}><i /></div>
+            </>
+          )}
+        </div>
+      )}
+
+      <div className="rcol">
+        {curve ? EASES.slice(1).map((x) => (
+          <button key={x.id} className="ib" aria-label={x.name} title={x.name} onClick={() => applyEase(x.e)}>
+            <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d={`M3 21 C${3 + x.e![0] * 18} ${21 - x.e![1] * 18} ${3 + x.e![2] * 18} ${21 - x.e![3] * 18} 21 3`} fill="none" stroke="currentColor" strokeWidth="1.8" /></svg>
           </button>
-          <span style={{ fontSize: 9, color: 'var(--d-text2)', textAlign: 'center' }}>{hasKey ? 'Keyframe' : animated ? 'Animasyonlu' : 'Sabit'}</span>
-        </div>
-        <div className="pad"
-          onPointerDown={(e) => { (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId); s.checkpoint(); drag.current = { x: e.clientX, y: e.clientY, v: props.map((pr) => valueAt(layer[pr], t)) }; }}
-          onPointerMove={(e) => {
-            const d = drag.current; if (!d) return;
-            const dx = e.clientX - d.x, dy = e.clientY - d.y;
-            if (mode === 'move') set({ x: Math.round(d.v[0] + dx * 1.5), y: Math.round(d.v[1] + dy * 1.5) }, false);
-            else if (mode === 'rotate') set({ rotation: Math.round(d.v[0] + dx * 0.6) }, false);
-            else set({ scale: Math.max(0.01, Math.round((d.v[0] + dx * 0.005) * 1000) / 1000) }, false);
-          }}
-          onPointerUp={() => { drag.current = null; }}>
-          <div className="vals" onPointerDown={(e) => e.stopPropagation()}>
-            {fields.map((f) => (
-              <label key={f.k} className="val">
-                <input className={animated ? '' : 'nk'} type="number" step={f.step} value={show(f.k)} onChange={(e) => {
-                  const v = parseFloat(e.target.value.replace(',', '.'));
-                  if (!Number.isNaN(v)) set({ [f.k]: f.k === 'scale' ? v / 100 : v });
-                }} />{f.label}
-              </label>
+        )) : (
+          <>
+            {([['move', 'move', 'Taşı'], ['rotate', 'rotate', 'Döndür'], ['scale', 'scale', 'Ölçek']] as [Mode, string, string][]).map(([m, ic, lb]) => (
+              <button key={m} className={'ib' + (mode === m ? ' on' : '')} aria-label={lb} aria-pressed={mode === m} onClick={() => setMode(m)}><Icon name={ic} size={22} /></button>
             ))}
-          </div>
-          <div className="padhint">{mode === 'move' ? 'Katmanı taşımak için buraya kaydırın' : mode === 'rotate' ? 'Döndürmek için sağa-sola kaydırın' : 'Ölçeklemek için sağa-sola kaydırın'}</div>
-        </div>
-        <div className="side">
-          {([['move', 'move', 'Taşı'], ['rotate', 'rotate', 'Döndür'], ['scale', 'scale', 'Ölçek']] as [Mode, string, string][]).map(([m, ic, lb]) => (
-            <button key={m} className={'ib' + (mode === m ? ' on' : '')} aria-label={lb} aria-pressed={mode === m} onClick={() => setMode(m)}><Icon name={ic} size={24} /></button>
-          ))}
-        </div>
+            <button className="ib" aria-label="Eğ (yakında)" disabled><Icon name="skew" size={22} /></button>
+          </>
+        )}
       </div>
     </div>
   );
@@ -534,48 +603,97 @@ export function OpacityPanel({ layer, onClose }: { layer: Layer; onClose: () => 
   );
 }
 
-// ---------- Efektler ----------
-const FX: { type: Effect['type']; name: string; make: () => Effect }[] = [
-  { type: 'blur', name: 'Gauss Bulanıklığı', make: () => ({ id: uid(), type: 'blur', amount: 8 }) },
-  { type: 'sway', name: 'Oto-Sallanma', make: () => ({ id: uid(), type: 'sway', amount: 6, speed: 0.8 }) },
-  { type: 'shake', name: 'Rastgele Titreşim', make: () => ({ id: uid(), type: 'shake', amount: 8, speed: 1.5 }) },
-  { type: 'glow', name: 'Parlama', make: () => ({ id: uid(), type: 'glow', amount: 16, color: '#3FD0F0' }) },
-];
-
+// ---------- Efektler: katmanın efekt listesi + "Efekt Ekle" ----------
 export function EffectsPanel({ layer, onClose }: { layer: Layer; onClose: () => void }) {
   const { s } = useNow();
-  const upd = (id: string, patch: Partial<Effect>, commit = false) =>
-    s.updateLayer(layer.id, (l) => ({ ...l, effects: l.effects.map((e) => (e.id === id ? ({ ...e, ...patch } as Effect) : e)) }), commit);
+  const [browse, setBrowse] = useState(false);
+  const upd = (id: string, patch: Partial<Effect>) =>
+    s.updateLayer(layer.id, (l) => ({ ...l, effects: l.effects.map((e) => (e.id === id ? { ...e, ...patch } : e)) }), false);
   return (
-    <div className="dpanel" role="dialog" aria-label="Efektler">
-      <Head title="Efektler" onClose={onClose} back />
-      <div className="dbody">
+    <div className="dpanel side2" role="dialog" aria-label="Efektler">
+      <div className="lcol"><button className="ib" aria-label="Geri" onClick={onClose}><Icon name="back" /></button></div>
+      <div className="dbody" style={{ paddingLeft: 6 }}>
+        <button className="addfx" onClick={() => setBrowse(true)}><Icon name="plus" size={18} stroke={2.2} />Efekt Ekle</button>
         {layer.effects.map((e) => {
-          const meta = FX.find((f) => f.type === e.type)!;
+          const m = fxMeta(e.type);
           return (
             <div key={e.id} className="fx" style={{ flexDirection: 'column', alignItems: 'stretch' }}>
               <div style={{ display: 'flex', alignItems: 'center' }}>
-                <span className="n">{meta.name}</span>
-                <button className="ib" aria-label={`${meta.name} kaldır`} onClick={() => s.updateLayer(layer.id, (l) => ({ ...l, effects: l.effects.filter((x) => x.id !== e.id) }))}><Icon name="trash" size={18} /></button>
+                <span className="n">{m.name}</span>
+                <button className="ib" aria-label={`${m.name} kaldır`} onClick={() => s.updateLayer(layer.id, (l) => ({ ...l, effects: l.effects.filter((x) => x.id !== e.id) }))}><Icon name="trash" size={18} /></button>
               </div>
-              <label className="prop"><span className="top">{e.type === 'sway' ? 'Açı (°)' : e.type === 'blur' || e.type === 'glow' ? 'Miktar' : 'Mesafe'}<b>{e.amount}</b></span>
-                <input className="slider" type="range" min={0} max={e.type === 'sway' ? 45 : 60} value={e.amount} onPointerDown={() => s.checkpoint()} onChange={(ev) => upd(e.id, { amount: +ev.target.value })} /></label>
-              {(e.type === 'sway' || e.type === 'shake') && (
+              {e.type !== 'mirror' && (
+                <label className="prop"><span className="top">{m.label}<b>{e.amount}</b></span>
+                  <input className="slider" type="range" min={m.min} max={m.max} step={m.step ?? 1} value={e.amount} onPointerDown={() => s.checkpoint()} onChange={(ev) => upd(e.id, { amount: +ev.target.value })} /></label>
+              )}
+              {m.speed && (
                 <label className="prop"><span className="top">Hız<b>{e.speed}</b></span>
                   <input className="slider" type="range" min={0.1} max={5} step={0.1} value={e.speed} onPointerDown={() => s.checkpoint()} onChange={(ev) => upd(e.id, { speed: +ev.target.value })} /></label>
               )}
-              {e.type === 'glow' && <label className="prop"><span className="top">Renk<input type="color" value={e.color} onChange={(ev) => upd(e.id, { color: ev.target.value })} /></span></label>}
+              {m.color && <label className="prop"><span className="top">Renk<input type="color" value={e.color} onChange={(ev) => upd(e.id, { color: ev.target.value })} /></span></label>}
             </div>
           );
         })}
-        <div className="sub">EFEKT EKLE</div>
-        <div className="fx-grid">
-          {FX.map((f) => (
-            <button key={f.type} className="fx-card" onClick={() => s.updateLayer(layer.id, (l) => ({ ...l, effects: [...l.effects, f.make()] }))}>
-              <Icon name="sparkle" size={26} />{f.name}
-            </button>
+        {!layer.effects.length && <p style={{ color: 'var(--d-text2)', fontSize: 13, margin: '10px 2px' }}>Bu katmanda efekt yok.</p>}
+      </div>
+      {browse && <EffectBrowser onClose={() => setBrowse(false)} onPick={(t) => { s.updateLayer(layer.id, (l) => ({ ...l, effects: [...l.effects, makeEffect(t)] })); setBrowse(false); }} />}
+    </div>
+  );
+}
+
+/** Efekt küçük resmi: örnek görsele efektin kendisi CSS ile uygulanır */
+function FxThumb({ t, big = false }: { t: FxType; big?: boolean }) {
+  return (
+    <span className={'fxthumb' + (big ? ' big' : '')}>
+      <span className="fxs" style={Object.fromEntries(fxMeta(t).css.split(';').filter(Boolean).map((d) => { const [k, ...v] = d.split(':'); return [k.trim().replace(/-([a-z])/g, (_, c) => c.toUpperCase()), v.join(':').trim()]; }))}>
+        <i className="c" /><i className="tri" />
+      </span>
+    </span>
+  );
+}
+
+/** Tam ekran Efekt Tarayıcısı (öne çıkanlar, efekt ızgarası, kategoriler) */
+export function EffectBrowser({ onClose, onPick }: { onClose: () => void; onPick: (t: FxType) => void }) {
+  const [q, setQ] = useState('');
+  const [search, setSearch] = useState(false);
+  const [cat, setCat] = useState<string | null>(null);
+  useEffect(() => {
+    const fn = (e: Event) => { e.preventDefault(); if (cat) setCat(null); else onClose(); };
+    addEventListener('wm-back', fn);
+    return () => removeEventListener('wm-back', fn);
+  }, [cat, onClose]);
+  const ql = q.toLocaleLowerCase('tr');
+  const list = FX.filter((f) => (!cat || f.cat === cat) && (!ql || f.name.toLocaleLowerCase('tr').includes(ql)));
+  return (
+    <div className="fxb" role="dialog" aria-label="Efekt Tarayıcısı">
+      <header className="fxb-top">
+        <button className="ib" aria-label={cat ? 'Kategorilerden çık' : 'Kapat'} onClick={() => (cat ? setCat(null) : onClose())}><Icon name={cat ? 'back' : 'close'} size={26} stroke={2} /></button>
+        {search
+          ? <input className="dinput" autoFocus placeholder="Efekt ara" value={q} onChange={(e) => setQ(e.target.value)} style={{ flex: 1, height: 38 }} />
+          : <h2>{cat ?? 'Efekt Tarayıcısı'}</h2>}
+        <button className="ib" aria-label="Efekt ara" onClick={() => { setSearch(!search); setQ(''); }}><Icon name={search ? 'close' : 'search'} size={24} stroke={2} /></button>
+      </header>
+      <div className="fxb-body">
+        {!cat && !q && (
+          <div className="fxb-feat">
+            {FEATURED.map((t) => (
+              <button key={t} onClick={() => onPick(t)}><FxThumb t={t} big /><span>{fxMeta(t).name}</span></button>
+            ))}
+          </div>
+        )}
+        <div className="fxb-grid">
+          {list.map((f) => (
+            <button key={f.type} onClick={() => onPick(f.type)}><FxThumb t={f.type} /><span>{f.name}</span></button>
           ))}
+          {!list.length && <p style={{ gridColumn: '1 / -1', color: 'var(--d-text2)' }}>"{q}" için efekt bulunamadı.</p>}
         </div>
+        {!cat && !q && (
+          <div className="fxb-cats">
+            {FX_CATS.map((c) => (
+              <button key={c.name} style={{ background: c.bg }} onClick={() => setCat(c.name)}>{c.name}</button>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

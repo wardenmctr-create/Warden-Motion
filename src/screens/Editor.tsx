@@ -9,6 +9,7 @@ import { useStore } from '../store';
 import type { Project } from '../types';
 
 export type Panel = null | 'add' | 'move' | 'color' | 'opacity' | 'effects' | 'cb' | 'text';
+const PANEL_TITLE: Record<string, string> = { move: 'Taşı ve Çevir', color: 'Renk ve Dolgu', opacity: 'Karıştırma ve Opaklık', effects: 'Efektler', text: 'Metni Düzenle', cb: 'CB Ayarları' };
 
 const PPS = 100; // zaman çizelgesi: saniye başına piksel
 const TOP = 44, ROW = 26; // katman şeritlerinin başladığı yer ve satır aralığı
@@ -69,7 +70,7 @@ export function Editor() {
     if (!c) return;
     const W = Math.round(dispW * dpr), H = Math.round(dispH * dpr);
     if (c.width !== W || c.height !== H) { c.width = W; c.height = H; }
-    renderFrame(c.getContext('2d')!, p, timeRef.current, { selectedId: s.playing ? null : s.selectedId, quality: c.width / p.width, fast: s.playing && lite, gradHandles: panel === 'color' });
+    renderFrame(c.getContext('2d')!, p, timeRef.current, { selectedId: s.playing ? null : s.selectedId, quality: c.width / p.width, fast: s.playing && lite, gradHandles: panel === 'color', motionPath: panel === 'move' });
   });
 
   const loopRef = useRef(loop);
@@ -325,7 +326,12 @@ export function Editor() {
   return (
     <div className="ed">
       <header className="ed-top">
-        {sel ? (
+        {sel && panel && panel !== 'add' ? (
+          <>
+            <button className="ib" aria-label="Geri" onClick={() => setPanel(null)}><Icon name="back" /></button>
+            <span className="ed-ptitle">{PANEL_TITLE[panel]}</span>
+          </>
+        ) : sel ? (
           <>
             <button className="ib" aria-label="Seçimi kaldır" onClick={() => { s.select(null); setPanel(null); }}><Icon name="back" /></button>
             <input className="ed-title" aria-label="Katman adı" value={sel.name} onChange={(e) => s.updateLayer(sel.id, (l) => ({ ...l, name: e.target.value }), false)} />
@@ -368,8 +374,8 @@ export function Editor() {
                 ))}
                 {Array.from({ length: Math.ceil(dur + 2) }, (_, i) => <b key={i} style={{ left: i * PPS }}>{i}s</b>)}
               </div>
-              {p.layers.map((l, i) => (
-                <button key={l.id} className={'track' + (l.id === s.selectedId ? '' : ' off')}
+              {(sel ? [sel] : p.layers).map((l, i) => (
+                <button key={l.id} className={'track' + (l.id === s.selectedId ? ' sel' : ' off')}
                   style={{ left: half + l.start * PPS, width: Math.max(8, (l.end - l.start) * PPS), top: TOP + i * ROW, opacity: l.hidden ? 0.45 : 1 }}
                   onClick={() => { s.select(l.id); }}>
                   {l.name}

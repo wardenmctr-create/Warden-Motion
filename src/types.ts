@@ -1,14 +1,12 @@
-export type Key = { t: number; v: number };
+/** e: bu keyframe'den sonrakine geçişin yumuşatma eğrisi (cubic-bezier x1,y1,x2,y2). Yoksa doğrusal. */
+export type Key = { t: number; v: number; e?: [number, number, number, number] };
 /** Canlandırılabilir değer: keyframe yoksa sabit `v`, varsa `k` üzerinden ara değer. */
 export type Anim = { v: number; k?: Key[] };
 
 export type ShapeKind = 'circle' | 'roundrect' | 'rect' | 'triangle' | 'star' | 'hexagon' | 'heart' | 'plus';
 
-export type Effect =
-  | { id: string; type: 'blur'; amount: number }
-  | { id: string; type: 'sway'; amount: number; speed: number }
-  | { id: string; type: 'shake'; amount: number; speed: number }
-  | { id: string; type: 'glow'; amount: number; color: string };
+export type FxType = 'blur' | 'sway' | 'shake' | 'glow' | 'brightness' | 'contrast' | 'saturate' | 'hue' | 'grayscale' | 'invert' | 'sepia' | 'shadow' | 'mirror';
+export interface Effect { id: string; type: FxType; amount: number; speed?: number; color?: string }
 
 export type LayerType = 'shape' | 'text' | 'image' | 'cb';
 

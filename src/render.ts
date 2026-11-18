@@ -1,6 +1,7 @@
 import { valueAt } from './anim';
 import { getMedia } from './db';
 import type { Layer, Project, ShapeKind } from './types';
+import { fxFilter } from './effects';
 
 // ---------- Görsel önbelleği ----------
 const cache = new Map<string, HTMLImageElement | 'loading' | 'error'>();
@@ -81,9 +82,10 @@ export function layerTransform(l: Layer, t: number) {
   let x = valueAt(l.x, t), y = valueAt(l.y, t), rot = valueAt(l.rotation, t);
   const local = t - l.start;
   for (const e of l.effects) {
-    if (e.type === 'sway') rot += Math.sin(local * e.speed * Math.PI * 2) * e.amount;
+    if (e.type === 'sway') rot += Math.sin(local * (e.speed ?? 0.8) * Math.PI * 2) * e.amount;
     if (e.type === 'shake') {
-      const tt = Math.floor(local * e.speed * 10) / (e.speed * 10 || 1);
+      const sp = e.speed ?? 1.5;
+      const tt = Math.floor(local * sp * 10) / (sp * 10 || 1);
       x += noise(tt, 1) * e.amount; y += noise(tt, 2) * e.amount;
     }
   }
@@ -121,7 +123,7 @@ export function toLocal(pw: TR, w: TR): TR {
   return { x: dx * Math.cos(a) - dy * Math.sin(a), y: dx * Math.sin(a) + dy * Math.cos(a), rot: w.rot - pw.rot, scale: w.scale / pw.scale, opacity: w.opacity };
 }
 
-export interface RenderOpts { selectedId?: string | null; quality?: number; /** Lite oynatma: bulanıklık/parlama atlanır */ fast?: boolean; /** Renk panelinde geçiş tutamaçlarını göster */ gradHandles?: boolean }
+export interface RenderOpts { selectedId?: string | null; quality?: number; /** Lite oynatma: bulanıklık/parlama atlanır */ fast?: boolean; /** Renk panelinde geçiş tutamaçlarını göster */ gradHandles?: boolean; /** Taşı ve Çevir açıkken seçili katmanın hareket yolu */ motionPath?: boolean }
 
 let bufA: HTMLCanvasElement | null = null, bufB: HTMLCanvasElement | null = null;
 const buf = (c: HTMLCanvasElement | null, w: number, h: number) => {
@@ -143,10 +145,12 @@ function paint(ctx: CanvasRenderingContext2D, p: Project, l: Layer, t: number, q
   ctx.scale(tr.scale, tr.scale);
   ctx.globalAlpha = Math.max(0, Math.min(1, tr.opacity));
   const filters: string[] = [];
-  for (const e of fast ? [] : l.effects) {
-    if (e.type === 'blur' && e.amount > 0) filters.push(`blur(${e.amount * q}px)`);
-    if (e.type === 'glow' && e.amount > 0) filters.push(`drop-shadow(0 0 ${e.amount * q}px ${e.color})`);
+  for (const e of l.effects) {
+    if (fast && (e.type === 'blur' || e.type === 'glow' || e.type === 'shadow')) continue;
+    const f = fxFilter(e, q);
+    if (f) filters.push(f);
   }
+  if (l.effects.some((e) => e.type === 'mirror' && e.amount >= 50)) ctx.scale(-1, 1);
   ctx.filter = filters.length ? filters.join(' ') : 'none';
   if (l.blend && l.blend !== 'normal' && !l.mask) ctx.globalCompositeOperation = l.blend as GlobalCompositeOperation;
   drawLayer(ctx, l);
@@ -187,6 +191,7 @@ export function renderFrame(ctx: CanvasRenderingContext2D, p: Project, t: number
     }
   }
   const sel = opts.selectedId ? p.layers.find((l) => l.id === opts.selectedId) : undefined;
+  if (sel && opts.motionPath) drawMotionPath(ctx, p, sel, q);
   if (sel && visible(sel, t)) drawSelection(ctx, sel, worldTransform(p, sel, t), q, !!opts.gradHandles);
 }
 
@@ -289,4 +294,30 @@ export function hitTest(p: Project, t: number, px: number, py: number, only?: st
     if (Math.abs(lx) <= l.w * tr.scale / 2 && Math.abs(ly) <= l.h * tr.scale / 2) return l;
   }
   return null;
+}
+
+/** Konum keyframe'leri arasındaki yolu çizgi, keyframe noktalarını nokta olarak çizer */
+function drawMotionPath(ctx: CanvasRenderingContext2D, p: Project, l: Layer, q: number) {
+  const ts = new Set<number>();
+  l.x.k?.forEach((k) => ts.add(k.t)); l.y.k?.forEach((k) => ts.add(k.t));
+  const keys = [...ts].sort((a, b) => a - b);
+  if (keys.length < 2) return;
+  const t0 = keys[0], t1 = keys[keys.length - 1];
+  const lw = 1.5 / q * Math.max(1, ctx.canvas.width / q / 700);
+  ctx.save();
+  ctx.setTransform(q, 0, 0, q, 0, 0);
+  ctx.beginPath();
+  const N = Math.max(24, Math.round((t1 - t0) * 30));
+  for (let i = 0; i <= N; i++) {
+    const w = worldTransform(p, l, t0 + (t1 - t0) * i / N);
+    i ? ctx.lineTo(w.x, w.y) : ctx.moveTo(w.x, w.y);
+  }
+  ctx.strokeStyle = '#0D1631'; ctx.lineWidth = lw * 2.2; ctx.globalAlpha = 0.5; ctx.stroke();
+  ctx.strokeStyle = '#F7F8FA'; ctx.lineWidth = lw; ctx.globalAlpha = 1; ctx.stroke();
+  for (const kt of keys) {
+    const w = worldTransform(p, l, kt);
+    ctx.beginPath(); ctx.arc(w.x, w.y, lw * 3, 0, Math.PI * 2);
+    ctx.fillStyle = '#22D3C5'; ctx.fill();
+  }
+  ctx.restore();
 }
