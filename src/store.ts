@@ -3,10 +3,40 @@ import type { Layer, Project } from './types';
 import { saveProject } from './db';
 import { uid } from './anim';
 
-export interface Settings { lowQuality: boolean; defaultDuration: number }
+export interface Settings {
+  /** Warden Motion Lite: zayıf cihazlar için hafif mod */
+  lite: boolean;
+  /** 'auto' = uygulama karar verdi, 'user' = kullanıcı ayarladı */
+  liteSource: 'auto' | 'user';
+  defaultDuration: number;
+}
+
+/** Zayıf cihaz tahmini: hafıza, çekirdek sayısı ve kısa bir çizim testi. */
+export function detectWeakDevice(): boolean {
+  const nav = navigator as Navigator & { deviceMemory?: number };
+  if (nav.deviceMemory !== undefined && nav.deviceMemory <= 3) return true;
+  if ((nav.hardwareConcurrency || 8) <= 4) return true;
+  try {
+    const c = document.createElement('canvas');
+    c.width = 720; c.height = 900;
+    const x = c.getContext('2d')!;
+    const t0 = performance.now();
+    for (let i = 0; i < 300; i++) {
+      x.save(); x.translate(360, 450); x.rotate(i); x.globalAlpha = 0.5;
+      x.fillStyle = i % 2 ? '#2F7BF6' : '#22D3C5'; x.fillRect(-200, -120, 400, 240); x.restore();
+    }
+    x.getImageData(0, 0, 1, 1);
+    return performance.now() - t0 > 40;
+  } catch { return false; }
+}
+
 const loadSettings = (): Settings => {
-  try { return { lowQuality: false, defaultDuration: 2, ...JSON.parse(localStorage.getItem('wm-settings') || '{}') }; }
-  catch { return { lowQuality: false, defaultDuration: 2 }; }
+  let saved: Partial<Settings> = {};
+  try { saved = JSON.parse(localStorage.getItem('wm-settings') || '{}'); } catch { /* yok */ }
+  const base: Settings = { lite: false, liteSource: 'auto', defaultDuration: 2, ...saved };
+  // Kullanıcı kendisi seçmediyse her açılışta cihaza göre karar ver
+  if (base.liteSource !== 'user') base.lite = detectWeakDevice();
+  return base;
 };
 
 type Screen = 'home' | 'editor' | 'tutorials';

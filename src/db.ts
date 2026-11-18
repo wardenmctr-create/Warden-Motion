@@ -15,10 +15,30 @@ export async function listProjects(): Promise<Project[]> {
 export const saveProject = (p: Project) => set(p.id, p, projectStore);
 export const deleteProject = (id: string) => del(id, projectStore);
 
+/** Büyük fotoğrafı en uzun kenarı `max` olacak şekilde küçültür (şeffaflık korunur). */
+export async function downscale(blob: Blob, max: number): Promise<Blob> {
+  if (!blob.type.startsWith('image/') || blob.type === 'image/gif' || blob.type === 'image/svg+xml') return blob;
+  try {
+    const bmp = await createImageBitmap(blob);
+    const k = max / Math.max(bmp.width, bmp.height);
+    if (k >= 1) { bmp.close(); return blob; }
+    const c = document.createElement('canvas');
+    c.width = Math.round(bmp.width * k); c.height = Math.round(bmp.height * k);
+    c.getContext('2d')!.drawImage(bmp, 0, 0, c.width, c.height);
+    bmp.close();
+    const png = blob.type === 'image/png' || blob.type === 'image/webp';
+    return await new Promise<Blob>((res) => c.toBlob((b) => res(b ?? blob), png ? 'image/png' : 'image/jpeg', 0.9));
+  } catch { return blob; }
+}
+
+let mediaMax = 2048;
+/** Lite modda içe aktarılan görseller daha çok küçültülür */
+export const setMediaMax = (n: number) => { mediaMax = n; };
+
 /** Galeriden eklenen görseller */
 export async function putMedia(blob: Blob): Promise<string> {
   const id = uid();
-  await set(id, blob, mediaStore);
+  await set(id, await downscale(blob, mediaMax), mediaStore);
   return 'media:' + id;
 }
 export const getMedia = (id: string) => get<Blob>(id, mediaStore);

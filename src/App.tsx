@@ -3,10 +3,13 @@ import { Capacitor } from '@capacitor/core';
 import { Editor } from './screens/Editor';
 import { Home } from './screens/Home';
 import { useStore } from './store';
+import { setMediaMax } from './db';
 
 export function App() {
   const screen = useStore((s) => s.screen);
   const hasProject = useStore((s) => !!s.project);
+  const lite = useStore((s) => s.settings.lite);
+  useEffect(() => setMediaMax(lite ? 1280 : 2048), [lite]);
 
   // Android geri tuşu: önce açık paneli/menüyü kapatır, sonra editörden çıkar, en son uygulamadan.
   useEffect(() => {

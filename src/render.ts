@@ -121,7 +121,7 @@ export function toLocal(pw: TR, w: TR): TR {
   return { x: dx * Math.cos(a) - dy * Math.sin(a), y: dx * Math.sin(a) + dy * Math.cos(a), rot: w.rot - pw.rot, scale: w.scale / pw.scale, opacity: w.opacity };
 }
 
-export interface RenderOpts { selectedId?: string | null; quality?: number }
+export interface RenderOpts { selectedId?: string | null; quality?: number; /** Lite oynatma: bulanıklık/parlama atlanır */ fast?: boolean }
 
 let bufA: HTMLCanvasElement | null = null, bufB: HTMLCanvasElement | null = null;
 const buf = (c: HTMLCanvasElement | null, w: number, h: number) => {
@@ -134,7 +134,7 @@ const buf = (c: HTMLCanvasElement | null, w: number, h: number) => {
   return b;
 };
 
-function paint(ctx: CanvasRenderingContext2D, p: Project, l: Layer, t: number, q: number) {
+function paint(ctx: CanvasRenderingContext2D, p: Project, l: Layer, t: number, q: number, fast = false) {
   const tr = worldTransform(p, l, t);
   ctx.save();
   ctx.setTransform(q, 0, 0, q, 0, 0);
@@ -143,7 +143,7 @@ function paint(ctx: CanvasRenderingContext2D, p: Project, l: Layer, t: number, q
   ctx.scale(tr.scale, tr.scale);
   ctx.globalAlpha = Math.max(0, Math.min(1, tr.opacity));
   const filters: string[] = [];
-  for (const e of l.effects) {
+  for (const e of fast ? [] : l.effects) {
     if (e.type === 'blur' && e.amount > 0) filters.push(`blur(${e.amount * q}px)`);
     if (e.type === 'glow' && e.amount > 0) filters.push(`drop-shadow(0 0 ${e.amount * q}px ${e.color})`);
   }
@@ -157,6 +157,7 @@ const visible = (l: Layer, t: number) => !l.hidden && t >= l.start && t < l.end;
 
 export function renderFrame(ctx: CanvasRenderingContext2D, p: Project, t: number, opts: RenderOpts = {}) {
   const q = opts.quality ?? 1;
+  const fast = !!opts.fast;
   ctx.setTransform(q, 0, 0, q, 0, 0);
   ctx.globalAlpha = 1;
   ctx.filter = 'none';
@@ -170,7 +171,7 @@ export function renderFrame(ctx: CanvasRenderingContext2D, p: Project, t: number
       // Kırpma maskesi: katmanı ayrı tuvale çiz, maskenin şekliyle kes, sonra sahneye bas
       const W = ctx.canvas.width, H = ctx.canvas.height;
       bufA = buf(bufA, W, H); bufB = buf(bufB, W, H);
-      paint(bufA.getContext('2d')!, p, l, t, q);
+      paint(bufA.getContext('2d')!, p, l, t, q, fast);
       if (visible(m, t) || m.hidden) paint(bufB.getContext('2d')!, p, { ...m, hidden: false, effects: [] }, t, q);
       const a = bufA.getContext('2d')!;
       a.globalCompositeOperation = 'destination-in';
@@ -180,7 +181,7 @@ export function renderFrame(ctx: CanvasRenderingContext2D, p: Project, t: number
       ctx.drawImage(bufA, 0, 0);
       ctx.restore();
     } else {
-      paint(ctx, p, l, t, q);
+      paint(ctx, p, l, t, q, fast);
     }
   }
   const sel = opts.selectedId ? p.layers.find((l) => l.id === opts.selectedId) : undefined;

@@ -55,30 +55,44 @@ export function Editor() {
   }, []);
   const fit = Math.min((box.w - 16) / p.width, (box.h - 16) / p.height);
   const dispW = Math.max(10, Math.floor(p.width * fit)), dispH = Math.max(10, Math.floor(p.height * fit));
-  const dpr = Math.min(2, window.devicePixelRatio || 1) * (s.settings.lowQuality ? 0.5 : 1);
+  const lite = s.settings.lite;
+  const dpr = lite ? Math.min(1, window.devicePixelRatio || 1) * 0.75 : Math.min(2, window.devicePixelRatio || 1);
+  // Oynatma sırasında zaman React'e her karede yazılmaz; bu ref'te tutulur (kasmayı önler)
+  const timeRef = useRef(s.time);
+  if (!s.playing) timeRef.current = s.time;
+  const timecodeRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const c = canvasRef.current;
     if (!c) return;
-    c.width = Math.round(dispW * dpr); c.height = Math.round(dispH * dpr);
-    renderFrame(c.getContext('2d')!, p, s.time, { selectedId: s.playing ? null : s.selectedId, quality: c.width / p.width });
+    const W = Math.round(dispW * dpr), H = Math.round(dispH * dpr);
+    if (c.width !== W || c.height !== H) { c.width = W; c.height = H; }
+    renderFrame(c.getContext('2d')!, p, timeRef.current, { selectedId: s.playing ? null : s.selectedId, quality: c.width / p.width, fast: s.playing && lite });
   });
 
   // ---------- Oynatma ----------
+  // Tuval, zaman çizelgesi ve zaman göstergesi doğrudan güncellenir; editörün geri kalanı yeniden çizilmez.
   useEffect(() => {
     if (!s.playing) return;
     let raf = 0, last = performance.now();
     const tick = (now: number) => {
       const st = useStore.getState();
-      let t = st.time + (now - last) / 1000;
+      const pr = st.project!;
+      const d = projectDuration(pr);
+      let t = timeRef.current + (now - last) / 1000;
       last = now;
-      if (t >= dur) t = 0;
-      st.setTime(t);
+      if (t >= d) t = 0;
+      timeRef.current = t;
+      const c = canvasRef.current;
+      if (c) renderFrame(c.getContext('2d')!, pr, t, { quality: c.width / pr.width, fast: st.settings.lite });
+      const el = tlRef.current;
+      if (el) { programmatic.current = true; el.scrollLeft = t * PPS; }
+      if (timecodeRef.current) timecodeRef.current.textContent = fmtTime(t, pr.fps);
       raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, [s.playing, dur]);
+    return () => { cancelAnimationFrame(raf); useStore.getState().setTime(timeRef.current); };
+  }, [s.playing]);
 
   // ---------- Önizlemede sürükleme ----------
   const drag = useRef<{ id: string; px: number; py: number; w: TR; pw: TR } | null>(null);
@@ -120,13 +134,14 @@ export function Editor() {
   useEffect(() => {
     const el = tlRef.current;
     if (!el) return;
+    if (s.playing) return;
     const want = s.time * PPS;
     if (Math.abs(el.scrollLeft - want) > 1) { programmatic.current = true; el.scrollLeft = want; }
-  }, [s.time, tlW]);
+  }, [s.time, tlW, s.playing]);
   const onTlScroll = () => {
     const el = tlRef.current!;
     if (programmatic.current) { programmatic.current = false; return; }
-    if (s.playing) s.setPlaying(false);
+    if (s.playing) return;
     s.setTime(Math.min(el.scrollLeft / PPS, dur + 2));
   };
   const half = tlW / 2;
@@ -306,7 +321,7 @@ export function Editor() {
             </div>
           </div>
           <div className="playhead" />
-          <div className="timecode">{fmtTime(s.time, p.fps)}</div>
+          <div className="timecode" ref={timecodeRef}>{fmtTime(s.time, p.fps)}</div>
         </div>
         {!wide && tools}
         {!wide && panelEl}

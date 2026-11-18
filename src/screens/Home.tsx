@@ -4,7 +4,7 @@ import { deleteProject, listProjects } from '../db';
 import { newProject, TEMPLATES, TUTORIALS, type Tutorial } from '../factories';
 import { fmtTime, projectDuration } from '../anim';
 import { renderFrame, setImageLoadedHandler } from '../render';
-import { useStore } from '../store';
+import { detectWeakDevice, useStore } from '../store';
 import type { Project } from '../types';
 
 export function Thumb({ p, size = 80, t = 0.6, round = false }: { p: Project; size?: number; t?: number; round?: boolean }) {
@@ -25,6 +25,7 @@ export function Thumb({ p, size = 80, t = 0.6, round = false }: { p: Project; si
 
 export function Home() {
   const { go, open, screen } = useStore();
+  const lite = useStore((x) => x.settings.lite);
   const [projects, setProjects] = useState<Project[]>([]);
   const [sheet, setSheet] = useState(false);
   const [drawer, setDrawer] = useState(false);
@@ -52,7 +53,7 @@ export function Home() {
     <div className="home">
       <header className="home-top">
         <button className="ib" aria-label="Ayarlar menüsü" onClick={() => setDrawer(true)}><Icon name="menu" size={26} stroke={2} /></button>
-        <div className="brand">Warden Motion<img src="logo.png" alt="" /></div>
+        <div className="brand">Warden Motion{lite && <span className="badge" style={{ fontSize: 11 }}>Lite</span>}<img src="logo.png" alt="" /></div>
         <div className="avatar" aria-hidden="true">W</div>
       </header>
 
@@ -193,9 +194,20 @@ function SettingsDrawer({ onClose }: { onClose: () => void }) {
       <aside className="drawer" aria-label="Ayarlar">
         <h1>Ayarlar</h1>
         <div className="group">
-          <div className="row">Düşük Kaliteli Önizleme
-            <button className={'switch' + (settings.lowQuality ? ' on' : '')} role="switch" aria-checked={settings.lowQuality} aria-label="Düşük kaliteli önizleme" onClick={() => setSettings({ lowQuality: !settings.lowQuality })} />
+          <div className="row" style={{ alignItems: 'flex-start', paddingTop: 12 }}>
+            <span>Warden Motion Lite
+              <span style={{ display: 'block', fontSize: 12, fontWeight: 400, color: 'var(--l-text2)', marginTop: 4 }}>
+                Zayıf telefonlarda kasmayı önler: önizleme daha düşük çözünürlükte olur, oynatırken bulanıklık/parlama gösterilmez (dışa aktarılan videoda vardır).
+                {settings.liteSource === 'auto' ? (settings.lite ? ' Cihazın için otomatik açıldı.' : ' Cihazın güçlü görünüyor, otomatik kapalı.') : ''}
+              </span>
+            </span>
+            <button className={'switch' + (settings.lite ? ' on' : '')} role="switch" aria-checked={settings.lite} aria-label="Warden Motion Lite" onClick={() => setSettings({ lite: !settings.lite, liteSource: 'user' })} style={{ marginTop: 4 }} />
           </div>
+          {settings.liteSource === 'user' && (
+            <div className="row"><span style={{ fontWeight: 400, fontSize: 13 }}>Lite'ı yine cihaza göre otomatik seç</span>
+              <button className="chip" style={{ background: 'var(--l-card)', color: 'var(--l-primary)', height: 32 }} onClick={() => setSettings({ liteSource: 'auto', lite: detectWeakDevice() })}>Otomatik</button>
+            </div>
+          )}
           <div className="row">Varsayılan Katman Süresi
             <select className="sel" style={{ width: 90, height: 40 }} value={settings.defaultDuration} onChange={(e) => setSettings({ defaultDuration: +e.target.value })}>
               {[1, 2, 3, 5, 10].map((n) => <option key={n} value={n}>{n}s</option>)}
