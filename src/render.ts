@@ -155,8 +155,8 @@ const buf = (c: HTMLCanvasElement | null, w: number, h: number) => {
   return b;
 };
 
-function paint(ctx: CanvasRenderingContext2D, p: Project, l: Layer, t: number, q: number, fast = false) {
-  const tr = worldTransform(p, l, t);
+function paint(ctx: CanvasRenderingContext2D, p: Project, l: Layer, t: number, q: number, fast = false, trOver?: TR) {
+  const tr = trOver ?? worldTransform(p, l, t);
   ctx.save();
   ctx.setTransform(q, 0, 0, q, 0, 0);
   ctx.translate(tr.x, tr.y);
@@ -194,11 +194,30 @@ export function renderFrame(ctx: CanvasRenderingContext2D, p: Project, t: number
     if (!visible(l, t)) continue;
     const m = l.mask ? p.layers.find((x) => x.id === l.mask) : undefined;
     const warps = fast ? [] : l.effects.filter((e) => e.type === 'fractal');
-    if (m || warps.length) {
+    const mb = fast ? undefined : l.effects.find((e) => e.type === 'motionblur');
+    if (m || warps.length || mb) {
       // Kırpma maskesi: katmanı ayrı tuvale çiz, maskenin şekliyle kes, sonra sahneye bas
       const W = ctx.canvas.width, H = ctx.canvas.height;
       bufA = buf(bufA, W, H);
-      const trw = paint(bufA.getContext('2d')!, p, { ...l, blend: undefined }, t, q, fast);
+      const ab = bufA.getContext('2d')!;
+      const trw = paint(ab, p, { ...l, blend: undefined }, t, q, fast);
+      if (mb) {
+        // Hareket bulanıklığı: önceki anlardaki görüntüleri ortalayarak üst üste çiz
+        const span = fxVal(mb, 'tune', t) / p.fps * 2;
+        const usePos = fxVal(mb, 'pos', t) >= 0.5, useScl = fxVal(mb, 'scl', t) >= 0.5, useAng = fxVal(mb, 'ang', t) >= 0.5;
+        const N = 10;
+        if (span > 0) {
+          ab.clearRect(0, 0, W, H);
+          ab.globalCompositeOperation = 'lighter'; // N örneği eşit ağırlıkla topla = ortalama
+          for (let i = 0; i < N; i++) {
+            const ts = Math.max(l.start, t - span * (1 - i / (N - 1)));
+            const w = worldTransform(p, l, ts);
+            const tr2 = { ...trw, x: usePos ? w.x : trw.x, y: usePos ? w.y : trw.y, scale: useScl ? w.scale : trw.scale, rot: useAng ? w.rot : trw.rot, opacity: trw.opacity / N };
+            paint(ab, p, { ...l, blend: undefined }, t, q, fast, tr2);
+          }
+          ab.globalCompositeOperation = 'source-over';
+        }
+      }
       if (warps.length) {
         // Katmanın tuvaldeki kutusu (dönüşle birlikte)
         const r = Math.hypot(l.w, l.h) / 2 * trw.scale * q;

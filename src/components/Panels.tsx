@@ -752,8 +752,31 @@ export function EffectsPanel({ layer, onClose }: { layer: Layer; onClose: () => 
                   <button onClick={() => { s.updateLayer(layer.id, (l) => ({ ...l, effects: l.effects.map((x) => (x.id === e.id ? { ...makeEffect(e.type), id: e.id, color: e.color } : x)) })); setMenuFx(null); }}>Sıfırla</button>
                 </div>
               )}
+              {!e.closed && m.info && <div className="fxinfo"><Icon name="info" size={14} />{m.info}</div>}
               {!e.closed && m.params.map((pr) => {
                 const keys = paramKeys(pr);
+                if (pr.kind === 'toggle') {
+                  const v = fxVal(e, pr.key, t) >= 0.5;
+                  return (
+                    <div key={pr.key} className="prow">
+                      <span className="tlabel2">{pr.label}</span>
+                      <button className={'sw2' + (v ? ' on' : '')} role="switch" aria-checked={v} aria-label={pr.label} onClick={() => s.updateLayer(layer.id, (l) => setFxParams(l, e.id, { [pr.key]: v ? 0 : 1 }, t))} />
+                    </div>
+                  );
+                }
+                if (pr.kind === 'slider') {
+                  const on = sel?.fx === e.id && sel.key === pr.key;
+                  const v = fxVal(e, pr.key, t);
+                  return (
+                    <div key={pr.key} className={'prow' + (on ? ' on' : '')}>
+                      <button className="plabel" onClick={() => s.setFxParam({ fx: e.id, key: pr.key })}>{pr.label}{(e.v?.[pr.key]?.k?.length ?? 0) > 0 && <i className="kdot" />}</button>
+                      <input className="pslider" type="range" aria-label={pr.label} min={pr.min} max={pr.max} step={pr.step} value={v}
+                        onPointerDown={() => { s.checkpoint(); s.setFxParam({ fx: e.id, key: pr.key }); }}
+                        onChange={(ev) => s.updateLayer(layer.id, (l) => setFxParams(l, e.id, { [pr.key]: +ev.target.value }, t), false)} />
+                      <div className="pvals"><span>{fmtP(v, pr.step)}</span></div>
+                    </div>
+                  );
+                }
                 const on = sel?.fx === e.id && sel.key === pr.key;
                 const animated = keys.some((k) => (e.v?.[k]?.k?.length ?? 0) > 0);
                 return (

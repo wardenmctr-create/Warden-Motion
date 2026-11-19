@@ -5,7 +5,7 @@ export type Anim = { v: number; k?: Key[] };
 
 export type ShapeKind = 'circle' | 'roundrect' | 'rect' | 'triangle' | 'star' | 'hexagon' | 'heart' | 'plus';
 
-export type FxType = 'blur' | 'sway' | 'shake' | 'glow' | 'brightness' | 'contrast' | 'saturate' | 'hue' | 'grayscale' | 'invert' | 'sepia' | 'shadow' | 'mirror' | 'fractal';
+export type FxType = 'blur' | 'sway' | 'shake' | 'glow' | 'brightness' | 'contrast' | 'saturate' | 'hue' | 'grayscale' | 'invert' | 'sepia' | 'shadow' | 'mirror' | 'fractal' | 'motionblur';
 /** v: keyframe'lenebilir parametreler (2B parametreler 'posX' / 'posY' gibi iki anahtar). amount/speed eski projeler için. */
 export interface Effect { id: string; type: FxType; amount: number; speed?: number; color?: string; v?: Record<string, Anim>; closed?: boolean }
 

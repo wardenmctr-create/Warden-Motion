@@ -482,3 +482,20 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
 .gbar { position: relative; height: 12px; border-radius: 6px; margin: 14px 18px 0; }
 .gknob { position: absolute; top: 50%; left: -14px; width: 28px; height: 28px; margin-top: -14px; border-radius: 4px; border: 2px solid #DCE9FF; box-shadow: 0 1px 4px rgba(3,8,26,.5); }
 .gknob.r { left: auto; right: -14px; }
+
+/* Seçili şerit: tutamaçlar şeride dahil değil, iki yanında gri ‹ › (Alight Motion gibi) */
+.track.sel { padding-left: 8px; padding-right: 8px; overflow: visible; border-radius: 3px; }
+.th { top: -2px; bottom: -2px; width: 26px; background: #3A4466; color: var(--d-text); }
+.th::after { content: none; }
+.th.l { left: -26px; right: auto; border-radius: 12px 0 0 12px; }
+.th.r { right: -26px; left: auto; border-radius: 0 12px 12px 0; }
+.th.l::before { content: "‹"; font-size: 15px; line-height: 1; }
+.th.r::before { content: "›"; font-size: 15px; line-height: 1; }
+.track .kf { background: #F7F8FA; border-color: #0B1430; }
+/* Efekt paneli: kaydırıcı ve aç/kapa satırları */
+.fxinfo { display: flex; gap: 6px; font-size: 11px; color: var(--d-text2); padding: 6px 8px 2px; line-height: 1.35; }
+.prow .pslider { flex: 1; min-width: 0; accent-color: var(--turq); }
+.prow .tlabel2 { flex: 1; font-size: 13px; color: var(--d-text); }
+.sw2 { width: 36px; height: 20px; border-radius: 10px; background: #3A4466; position: relative; flex-shrink: 0; }
+.sw2::after { content: ""; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: #8FA6D6; transition: left .15s; }
+.sw2.on { background: #1C6E68; } .sw2.on::after { left: 18px; background: var(--turq); }

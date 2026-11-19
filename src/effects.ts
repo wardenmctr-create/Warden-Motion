@@ -1,8 +1,8 @@
 import { uid, valueAt } from './anim';
 import type { Effect, FxType } from './types';
 
-export interface FxParam { key: string; label: string; two?: boolean; min: number; max: number; step: number; def: number; defY?: number; /** jog: 1 px kaydırmanın değeri */ jog: number }
-export interface FxMeta { type: FxType; name: string; cat: string; params: FxParam[]; color?: string; css: string }
+export interface FxParam { /** jog: kaydırma cetveli (varsayılan), slider: kaydırıcı, toggle: aç/kapa */ kind?: 'jog' | 'slider' | 'toggle'; key: string; label: string; two?: boolean; min: number; max: number; step: number; def: number; defY?: number; /** jog: 1 px kaydırmanın değeri */ jog: number }
+export interface FxMeta { type: FxType; name: string; cat: string; params: FxParam[]; color?: string; css: string; info?: string }
 
 const P = (key: string, label: string, min: number, max: number, def: number, step = 1, jog = step): FxParam => ({ key, label, min, max, def, step, jog });
 
@@ -14,6 +14,12 @@ export const FX: FxMeta[] = [
     P('det', 'Ayrıntı', 0, 6, 1, 0.01, 0.02),
     P('scl', 'Ölçek', 0.1, 10, 1, 0.01, 0.01),
   ], css: 'filter: url(#fx-warp)' },
+  { type: 'motionblur', name: 'Hareket Bulanıklığı', cat: 'Bulanıklık', info: 'Kullanmak için katmanı Taşı ve Çevir ile canlandır (bulanıklık kendiliğinden uygulanır).', params: [
+    { kind: 'slider', key: 'tune', label: 'Ayar', min: 0, max: 4, def: 1, step: 0.01, jog: 0.01 },
+    { kind: 'toggle', key: 'pos', label: 'Konum', min: 0, max: 1, def: 1, step: 1, jog: 1 },
+    { kind: 'toggle', key: 'scl', label: 'Ölçek', min: 0, max: 1, def: 1, step: 1, jog: 1 },
+    { kind: 'toggle', key: 'ang', label: 'Açı', min: 0, max: 1, def: 1, step: 1, jog: 1 },
+  ], css: 'filter: blur(2px); transform: translateX(-4px)' },
   { type: 'blur', name: 'Gauss Bulanıklığı', cat: 'Bulanıklık', params: [P('amount', 'Miktar', 0, 60, 8, 0.5, 0.2)], css: 'filter: blur(5px)' },
   { type: 'sway', name: 'Oto-Sallanma', cat: 'Hareket', params: [P('amount', 'Açı', 0, 45, 6, 0.5, 0.2), P('speed', 'Hız', 0.1, 5, 0.8, 0.05, 0.02)], css: 'animation: fx-sway 1.2s ease-in-out infinite' },
   { type: 'shake', name: 'Rastgele Titreşim', cat: 'Hareket', params: [P('amount', 'Mesafe', 0, 60, 8, 0.5, 0.2), P('speed', 'Hız', 0.1, 5, 1.5, 0.05, 0.02)], css: 'animation: fx-shake .35s steps(3) infinite' },
@@ -37,7 +43,7 @@ export const FX_CATS: { name: string; bg: string }[] = [
   { name: 'Bozulma', bg: 'repeating-linear-gradient(135deg, #1B3A7A 0 10px, #2459B8 10px 20px)' },
 ];
 
-export const FEATURED: FxType[] = ['fractal', 'blur', 'sway'];
+export const FEATURED: FxType[] = ['motionblur', 'fractal', 'blur'];
 
 export const fxMeta = (t: FxType) => FX.find((f) => f.type === t)!;
 

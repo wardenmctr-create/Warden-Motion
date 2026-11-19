@@ -43,6 +43,7 @@ const P: Record<string, string> = {
   fit: 'M4 8V4h4M16 4h4v4M20 16v4h-4M8 20H4v-4',
   key: 'M12 3l9 9-9 9-9-9z',
   border: 'M4 4h16v16H4zM8 8h8v8H8z',
+  info: 'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 11v6M12 7.5v.5',
   nofill: 'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM5.6 18.4L18.4 5.6',
   music: 'M9 18V5l11-2v13M6 21a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM17 19a3 3 0 1 0 0-6 3 3 0 0 0 0 6z',
   curve: 'M4 4h16v16H4zM6 18C12 18 12 6 18 6',
