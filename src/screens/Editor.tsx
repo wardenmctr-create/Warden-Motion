@@ -2,7 +2,7 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react
 import { Icon } from '../components/Icon';
 import { AddPanel, type AddTab, ColorPanel, CBPanel, EffectsPanel, MovePanel, OpacityPanel, TextPanel } from '../components/Panels';
 import { fmtTime, projectDuration, setAnim, valueAt } from '../anim';
-import { deleteMarker, groupLabel, layerMarkers, moveMarker, type Marker } from '../markers';
+import { groupLabel, layerMarkers, moveMarker, type Marker } from '../markers';
 import { estimateExport, exportVideo, heavyEffects, saveFile, type ExportInfo } from '../export';
 import { TUTORIALS } from '../factories';
 import { fxMeta, fxVal } from '../effects';
@@ -396,7 +396,7 @@ export function Editor() {
   const kfDown = (e: React.PointerEvent, m: Marker) => {
     e.stopPropagation();
     try { (e.target as HTMLElement).setPointerCapture(e.pointerId); } catch { /* yok */ }
-    const d = { m, x: e.clientX, active: false, t: m.t, timer: setTimeout(() => { d.active = true; s.checkpoint(); setKfMoving(m.group + '@' + m.t); navigator.vibrate?.(15); }, 300) };
+    const d = { m, x: e.clientX, active: false, t: m.t, timer: setTimeout(() => { d.active = true; s.checkpoint(); setKfMoving(m.group + '@' + Math.round(m.t * p.fps)); navigator.vibrate?.(15); }, 300) };
     kfDrag.current = d;
   };
   const kfMove = (e: React.PointerEvent) => {
@@ -408,6 +408,7 @@ export function Editor() {
     if (Math.abs(t1 - d.t) < 1e-6) return;
     const from = d.t; d.t = t1;
     s.updateLayer(sel.id, (l) => moveMarker(l, d.m.group, from, t1), false);
+    setKfMoving(d.m.group + '@' + Math.round(t1 * p.fps));
     s.setTime(t1);
   };
   const kfUp = (e: React.PointerEvent) => {
@@ -591,9 +592,9 @@ export function Editor() {
                     // Hepsi soluk; sadece seçili katmanda açık panelin işine ait olanlar tam opak
                     .map((m) => ({ m, f: l.id === s.selectedId && !!focus && focus.includes(m.group) }))
                     .sort((a, b) => Number(a.f) - Number(b.f))
-                    .map(({ m, f }) => (
-                      <span key={m.group + '@' + m.t} role="button" aria-label={`${groupLabel(l, m.group)} keyframe ${fmtTime(m.t, p.fps)}`}
-                        className={'kf' + (f ? '' : ' dim') + (f && onMarker(m) ? ' on' : '') + (kfMoving === m.group + '@' + m.t ? ' moving' : '')}
+                    .map(({ m, f }, idx) => (
+                      <span key={m.group + '#' + idx} role="button" aria-label={`${groupLabel(l, m.group)} keyframe ${fmtTime(m.t, p.fps)}`}
+                        className={'kf' + (f ? '' : ' dim') + (f && onMarker(m) ? ' on' : '') + (kfMoving === m.group + '@' + Math.round(m.t * p.fps) ? ' moving' : '')}
                         style={{ left: (m.t - l.start) * PPS }}
                         onPointerDown={(e) => (f ? kfDown(e, m) : e.stopPropagation())} onPointerMove={kfMove} onPointerUp={kfUp} onPointerCancel={kfUp}
                         onClick={(e) => e.stopPropagation()} onContextMenu={(e) => e.preventDefault()}><i /></span>
@@ -606,13 +607,6 @@ export function Editor() {
                   )}
                 </button>
               ))}
-              {sel && !trimming && !kfMoving && (() => {
-                const m = layerMarkers(sel).find((x) => !!focus && focus.includes(x.group) && onMarker(x) && x.t >= sel.start - 1e-6 && x.t <= sel.end + 1e-6);
-                return m ? (
-                  <button className="kfdel" style={{ left: half + m.t * PPS, top: TOP + ROW + 2 }} aria-label="Bu keyframe'i sil"
-                    onClick={() => s.updateLayer(sel.id, (l) => deleteMarker(l, m.group, m.t))}><Icon name="trash" size={14} />Sil</button>
-                ) : null;
-              })()}
               <div style={{ position: 'absolute', top: TOP + rows.length * ROW + 70, height: 1, width: 1 }} />
             </div>
           </div>

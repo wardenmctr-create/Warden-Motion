@@ -490,7 +490,7 @@ export function MovePanel({ layer, onClose }: { layer: Layer; onClose: () => voi
     <div className="dpanel side3" role="dialog" aria-label="Taşı ve Çevir">
       <div className="lcol">
         <button className="ib" aria-label={curve ? 'Eğriden çık' : 'Geri'} onClick={() => (curve ? setCurve(false) : onClose())}><Icon name="back" /></button>
-        {!curve && <button className="ib" aria-label={hasKey ? 'Bu anki keyframe\'i sil' : 'Bu ana keyframe ekle'} onClick={toggle} style={{ color: hasKey ? 'var(--turq)' : 'var(--d-text)' }}><Icon name="key" size={18} fill /></button>}
+        {!curve && <button className="ib" aria-label={hasKey ? 'Bu anki keyframe\'i sil' : 'Bu ana keyframe ekle'} onClick={toggle} style={{ color: hasKey ? 'var(--turq)' : 'var(--d-text)' }}><KfIcon has={hasKey} /></button>}
         <span style={{ flex: 1 }} />
         {!curve && <button className="ib" aria-label="Yumuşatma eğrisi" onClick={() => setCurve(true)} style={{ color: animated ? 'var(--d-text)' : 'var(--d-dim)' }}><Icon name="curve" size={20} /></button>}
       </div>
@@ -649,7 +649,7 @@ export function OpacityPanel({ layer, onClose }: { layer: Layer; onClose: () => 
     <div className="dpanel side2" role="dialog" aria-label="Karıştırma ve Opaklık">
       <div className="lcol">
         <button className="ib" aria-label="Geri" onClick={onClose}><Icon name="back" /></button>
-        <button className="ib" aria-label="Opaklık keyframe" onClick={() => s.updateLayer(layer.id, (l) => ({ ...l, opacity: toggleKey(l.opacity, t) }))} style={{ color: has ? 'var(--turq)' : 'var(--d-text2)' }}><Icon name="key" size={18} fill={has} /></button>
+        <button className="ib" aria-label={has ? 'Opaklık keyframe\'ini sil' : 'Opaklık keyframe ekle'} onClick={() => s.updateLayer(layer.id, (l) => ({ ...l, opacity: toggleKey(l.opacity, t) }))} style={{ color: has ? 'var(--turq)' : 'var(--d-text)' }}><KfIcon has={has} /></button>
       </div>
       <div className="dbody" style={{ paddingLeft: 4 }}>
         <div className="blends">
@@ -734,7 +734,7 @@ export function EffectsPanel({ layer, onClose }: { layer: Layer; onClose: () => 
     <div className="dpanel side2 fxpanel" role="dialog" aria-label="Efektler">
       <div className="lcol">
         <button className="ib" aria-label="Geri" onClick={onClose}><Icon name="back" /></button>
-        <button className="ib" aria-label={hasKey ? 'Keyframe sil' : 'Keyframe ekle'} disabled={!selPr} onClick={toggleK} style={{ color: hasKey ? 'var(--turq)' : 'var(--d-text)' }}><Icon name="key" size={18} fill /></button>
+        <button className="ib" aria-label={hasKey ? 'Keyframe sil' : 'Keyframe ekle'} disabled={!selPr} onClick={toggleK} style={{ color: hasKey ? 'var(--turq)' : 'var(--d-text)' }}><KfIcon has={hasKey} /></button>
         <span style={{ flex: 1 }} />
       </div>
       <div className="dbody fxlist">
@@ -912,5 +912,15 @@ export function CBPanel({ layer, onClose, onChangeFlag }: { layer: Layer; onClos
         </div>
       </div>
     </div>
+  );
+}
+
+/** Keyframe düğmesi: bu karede işaret yoksa içinde + (ekle), varsa içinde − (sil) olan elmas */
+function KfIcon({ has }: { has: boolean }) {
+  return (
+    <svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">
+      <path d="M13 2 24 13 13 24 2 13Z" fill="currentColor" />
+      <path d={has ? 'M8.5 13h9' : 'M8.5 13h9M13 8.5v9'} stroke="#0B1430" strokeWidth="2.4" strokeLinecap="round" />
+    </svg>
   );
 }
