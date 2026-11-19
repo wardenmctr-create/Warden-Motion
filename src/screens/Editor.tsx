@@ -643,7 +643,7 @@ export function Editor() {
                         className={'kf' + (f ? '' : ' dim') + (f && onMarker(m) ? ' on' : '') + (kfMoving === m.group + '@' + Math.round(m.t * p.fps) ? ' moving' : '')}
                         style={{ left: (m.t - l.start) * PPS }}
                         onPointerDown={(e) => (f ? kfDown(e, m) : e.stopPropagation())} onPointerMove={kfMove} onPointerUp={kfUp} onPointerCancel={kfUp}
-                        onClick={(e) => e.stopPropagation()} onContextMenu={(e) => e.preventDefault()}><svg viewBox="0 0 10 28" aria-hidden="true"><path d="M5 1 9 14 5 27 1 14Z" /></svg></span>
+                        onClick={(e) => e.stopPropagation()} onContextMenu={(e) => e.preventDefault()}><svg viewBox="0 0 10 28" preserveAspectRatio="none" aria-hidden="true"><path d="M4.4 1.68Q5 0 5.6 1.68L9.4 12.32Q10 14 9.4 15.68L5.6 26.32Q5 28 4.4 26.32L.6 15.68Q0 14 .6 12.32Z" /></svg></span>
                     ))}
                   {l.id === s.selectedId && (
                     <>

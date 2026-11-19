@@ -560,3 +560,11 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
 .track .kf.moving svg { filter: drop-shadow(0 0 3px rgba(34,211,197,.8)); }
 .track .kf.dim svg { transform: scale(.85); }
 .track .kf.dim svg path { fill: #DBDBDC; stroke: #282F44; }
+
+/* İşaret boyu şeride bağlı: normal = şeridin üst-alt kenarına tam dokunur, seçili = koyu mavi ve taşar, soluk = kenarlara değmez; köşeler yumuşak */
+.track .kf { top: 0; height: 100%; width: 16px; margin: 0 0 0 -8px; overflow: visible; }
+.track .kf svg { width: 9px; height: 100%; overflow: visible; transform-origin: center; transition: transform .12s; }
+.track .kf svg path { stroke-linejoin: round; }
+.track .kf.on svg, .track .kf.moving svg { width: 9px; height: 100%; transform: scale(1.12, 1.4); }
+.track .kf.on svg path, .track .kf.moving svg path { fill: #1E3A8A; stroke: #F7F8FA; stroke-width: 1.4; }
+.track .kf.dim svg { transform: scale(.72); }
