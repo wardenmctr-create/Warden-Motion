@@ -210,7 +210,7 @@ export function renderFrame(ctx: CanvasRenderingContext2D, p: Project, t: number
           ab.clearRect(0, 0, W, H);
           ab.globalCompositeOperation = 'lighter'; // N örneği eşit ağırlıkla topla = ortalama
           for (let i = 0; i < N; i++) {
-            const ts = Math.max(l.start, t - span * (1 - i / (N - 1)));
+            const ts = Math.min(l.end - 1e-4, Math.max(l.start, t + span * (i / (N - 1) - 0.5))); // anın etrafında ortalı
             const w = worldTransform(p, l, ts);
             const tr2 = { ...trw, x: usePos ? w.x : trw.x, y: usePos ? w.y : trw.y, scale: useScl ? w.scale : trw.scale, rot: useAng ? w.rot : trw.rot, opacity: trw.opacity / N };
             paint(ab, p, { ...l, blend: undefined }, t, q, fast, tr2);
