@@ -117,7 +117,7 @@ function fbm(x: number, y: number, oct: number, ox: number, oy: number, px: numb
 }
 
 /** Tuvaldeki katman görüntüsünü fraktal gürültüyle büker. q: tuval pikseli / proje pikseli. */
-export function applyFractalWarp(c: HTMLCanvasElement, e: Effect, t: number, q: number, box: { x0: number; y0: number; x1: number; y1: number }) {
+export function applyFractalWarp(c: HTMLCanvasElement, e: Effect, t: number, q: number, box: { x0: number; y0: number; x1: number; y1: number }, fxq = 0.4) {
   const mag = fxVal(e, 'mag', t), det = fxVal(e, 'det', t), scl = Math.max(0.1, fxVal(e, 'scl', t));
   if (mag <= 0) return;
   const ox = fxVal(e, 'posX', t) / 200, oy = fxVal(e, 'posY', t) / 200, px = fxVal(e, 'parX', t) / 200, py = fxVal(e, 'parY', t) / 200;
@@ -131,7 +131,7 @@ export function applyFractalWarp(c: HTMLCanvasElement, e: Effect, t: number, q: 
   const src = ctx.getImageData(0, 0, W, H);
   const out = ctx.createImageData(bw, bh);
   const S = 1 / (200 * q * scl); // gürültü frekansı
-  const G = 6; // gürültüyü 6 pikselde bir hesapla, aradakileri doğrusal doldur
+  const G = Math.max(1, Math.round(8 - fxq * 7)); // kaliteye göre gürültüyü G pikselde bir hesapla, aradakileri doğrusal doldur
   const gw = Math.ceil(bw / G) + 2, gh = Math.ceil(bh / G) + 2;
   const dxs = new Float32Array(gw * gh), dys = new Float32Array(gw * gh);
   for (let j = 0; j < gh; j++) for (let i = 0; i < gw; i++) {

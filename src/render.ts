@@ -142,7 +142,7 @@ export function toLocal(pw: TR, w: TR): TR {
   return { x: dx * Math.cos(a) - dy * Math.sin(a), y: dx * Math.sin(a) + dy * Math.cos(a), rot: w.rot - pw.rot, scale: w.scale / pw.scale, opacity: w.opacity };
 }
 
-export interface RenderOpts { /** Lite modu: hareket bulanıklığı az parçalı kopyalarla */ lite?: boolean; /** Dışa aktarma: en yüksek kalite */ exporting?: boolean; /** Oynatma/dışa aktarma sırasında videolar gerçekten oynar */ playing?: boolean; selectedId?: string | null; quality?: number; /** Lite oynatma: bulanıklık/parlama atlanır */ fast?: boolean; /** Renk panelinde geçiş tutamaçlarını göster */ gradHandles?: boolean; /** Taşı ve Çevir açıkken seçili katmanın hareket yolu */ motionPath?: boolean }
+export interface RenderOpts { /** Efekt kalitesi 0..1 (dışa aktarmada kullanıcı seçer) */ fxQuality?: number; /** Lite modu: hareket bulanıklığı az parçalı kopyalarla */ lite?: boolean; /** Dışa aktarma: en yüksek kalite */ exporting?: boolean; /** Oynatma/dışa aktarma sırasında videolar gerçekten oynar */ playing?: boolean; selectedId?: string | null; quality?: number; /** Lite oynatma: bulanıklık/parlama atlanır */ fast?: boolean; /** Renk panelinde geçiş tutamaçlarını göster */ gradHandles?: boolean; /** Taşı ve Çevir açıkken seçili katmanın hareket yolu */ motionPath?: boolean }
 
 let bufA: HTMLCanvasElement | null = null, bufB: HTMLCanvasElement | null = null;
 const buf = (c: HTMLCanvasElement | null, w: number, h: number) => {
@@ -186,7 +186,7 @@ let bufC: HTMLCanvasElement | null = null;
  * - preview / export: her ara an ayrı çizilip piksel piksel (kayan sayıyla) ortalanır = gerçek bulanıklık
  */
 function motionBlur(ab: CanvasRenderingContext2D, p: Project, l: Layer, t: number, q: number, fast: boolean, trw: TR, span: number,
-  use: { usePos: boolean; useScl: boolean; useAng: boolean }, mode: 'lite' | 'preview' | 'export') {
+  use: { usePos: boolean; useScl: boolean; useAng: boolean }, mode: 'lite' | 'preview' | 'export', fxq = 0.25) {
   const W = ab.canvas.width, H = ab.canvas.height;
   const tAt = (u: number) => Math.min(l.end - 1e-4, Math.max(l.start, t + span * (u - 0.5))); // anın etrafında ortalı
   const trAt = (u: number): TR => {
@@ -213,7 +213,8 @@ function motionBlur(ab: CanvasRenderingContext2D, p: Project, l: Layer, t: numbe
   }
 
   // Gerçek bulanıklık: piksel başına 1 (önizleme 1,5) adımdan az olacak kadar ara an
-  const N = Math.max(8, Math.min(mode === 'export' ? 160 : 48, Math.ceil(dist / (mode === 'export' ? 0.7 : 1.5))));
+  // Kalite 0..1: önizleme sabit orta kalite; dışa aktarmada kullanıcının seçtiği kalite
+  const N = Math.max(6, Math.min(Math.round(12 + fxq * 148), Math.ceil(dist / (1.6 - fxq * 1.0))));
   const samples: TR[] = []; for (let i = 0; i < N; i++) samples.push(trAt(N === 1 ? 0.5 : i / (N - 1)));
   // Bütün ara anları kapsayan kutu
   const rr = (r * Math.max(...samples.map((x) => x.scale)) + 60) * q;
@@ -271,13 +272,13 @@ export function renderFrame(ctx: CanvasRenderingContext2D, p: Project, t: number
         // Hareket bulanıklığı: önceki anlardaki görüntüleri ortalayarak üst üste çiz
         const span = fxVal(mb, 'tune', t) / p.fps * 2;
         const usePos = fxVal(mb, 'pos', t) >= 0.5, useScl = fxVal(mb, 'scl', t) >= 0.5, useAng = fxVal(mb, 'ang', t) >= 0.5;
-        if (span > 0) motionBlur(ab, p, l, t, q, fast, trw, span, { usePos, useScl, useAng }, opts.exporting ? 'export' : (opts.lite || fast) ? 'lite' : 'preview');
+        if (span > 0) motionBlur(ab, p, l, t, q, fast, trw, span, { usePos, useScl, useAng }, opts.exporting ? 'export' : (opts.lite || fast) ? 'lite' : 'preview', opts.exporting ? (opts.fxQuality ?? 0.5) : 0.25);
       }
       if (warps.length) {
         // Katmanın tuvaldeki kutusu (dönüşle birlikte)
         const r = Math.hypot(l.w, l.h) / 2 * trw.scale * q;
         const box = { x0: trw.x * q - r, y0: trw.y * q - r, x1: trw.x * q + r, y1: trw.y * q + r };
-        for (const e of warps) applyFractalWarp(bufA, e, t, q, box);
+        for (const e of warps) applyFractalWarp(bufA, e, t, q, box, opts.exporting ? (opts.fxQuality ?? 0.5) : 0.3);
       }
       const a = bufA.getContext('2d')!;
       if (m) {

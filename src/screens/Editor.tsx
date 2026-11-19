@@ -2,7 +2,7 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react
 import { Icon } from '../components/Icon';
 import { AddPanel, type AddTab, ColorPanel, CBPanel, EffectsPanel, MovePanel, OpacityPanel, TextPanel } from '../components/Panels';
 import { fmtTime, layerKeyTimes, projectDuration, setAnim, valueAt } from '../anim';
-import { exportVideo, saveFile } from '../export';
+import { estimateExport, exportVideo, heavyEffects, saveFile, type ExportInfo } from '../export';
 import { TUTORIALS } from '../factories';
 import { fxMeta, fxVal } from '../effects';
 import { hitTest, parentWorld, pauseAllVideos, renderFrame, setImageLoadedHandler, toLocal, worldTransform, type TR } from '../render';
@@ -42,6 +42,7 @@ export function Editor() {
   const [projMenu, setProjMenu] = useState(false);
   const [toast, setToast] = useState('');
   const [exporting, setExporting] = useState<number | null>(null);
+  const [exInfo, setExInfo] = useState<ExportInfo | null>(null);
   const [, force] = useState(0);
   const show = (m: string) => { setToast(m); setTimeout(() => setToast(''), 2600); };
 
@@ -236,6 +237,7 @@ export function Editor() {
   const backRef = useRef<() => boolean>(() => false);
   backRef.current = () => {
     if (exporting !== null) return true;
+    if (exDlg) { setExDlg(false); return true; }
     if (mmenu) { setMmenu(false); return true; }
     if (useStore.getState().multi) { useStore.getState().setMulti(null); return true; }
     if (pick) { setPick(null); return true; }
@@ -264,12 +266,15 @@ export function Editor() {
     return () => removeEventListener('keydown', fn);
   }, []);
 
-  const doExport = useCallback(async () => {
+  const [exDlg, setExDlg] = useState(false);
+  const openExport = () => { s.setPlaying(false); s.select(null); setProjMenu(false); if (!p.layers.length) { show('Önce bir katman ekle.'); return; } setExDlg(true); };
+  const doExport = useCallback(async (fxq = 0.5) => {
     s.setPlaying(false); s.select(null); setProjMenu(false);
     if (!p.layers.length) { show('Önce bir katman ekle.'); return; }
     setExporting(0);
     try {
-      const { blob, ext } = await exportVideo(p, (f) => setExporting(f));
+      setExInfo(null);
+      const { blob, ext } = await exportVideo(p, (inf) => { setExporting(inf.f); setExInfo(inf); }, fxq);
       const msg = await saveFile(blob, `${p.name.replace(/[^\p{L}\p{N} _-]/gu, '') || 'warden'}.${ext}`);
       show(msg);
     } catch (err) {
@@ -463,7 +468,7 @@ export function Editor() {
             <button className="ib" aria-label="Projeden çık" onClick={() => s.close()}><Icon name="exit" /></button>
             <input className="ed-title" aria-label="Proje adı" value={p.name} onChange={(e) => s.update((pp) => ({ ...pp, name: e.target.value }), false)} />
             <button className="ib" aria-label="Proje ayarları" onClick={() => setProjMenu(!projMenu)}><Icon name="gear" /></button>
-            <button className="ib" aria-label="Dışa aktar" onClick={doExport}><Icon name="export" /></button>
+            <button className="ib" aria-label="Dışa aktar" onClick={openExport}><Icon name="export" /></button>
           </>
         )}
       </header>
@@ -608,7 +613,7 @@ export function Editor() {
           <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>Arka Fon
             <input type="color" value={p.background} onChange={(e) => s.update((pp) => ({ ...pp, background: e.target.value }), false)} onBlur={() => s.checkpoint()} />
           </label>
-          <button className="btn" onClick={doExport}><Icon name="export" size={18} />Videoyu Dışa Aktar</button>
+          <button className="btn" onClick={openExport}><Icon name="export" size={18} />Videoyu Dışa Aktar</button>
         </div>
       )}
 
@@ -616,11 +621,21 @@ export function Editor() {
         <TutorialBox title={tut.title} steps={tut.steps} tips={tut.tips} />
       )}
 
+      {exDlg && <ExportDialog p={p} onClose={() => setExDlg(false)} onStart={(q) => { setExDlg(false); doExport(q); }} />}
+
       {exporting !== null && (
         <div className="progress" role="status">
           <b>Video hazırlanıyor… %{Math.round(exporting * 100)}</b>
           <div className="bar"><i style={{ width: `${exporting * 100}%` }} /></div>
-          <span style={{ fontSize: 12, color: 'var(--d-text2)' }}>Her kare en yüksek kalitede hazırlanıyor.</span>
+          <span style={{ fontSize: 13, color: 'var(--d-text2)' }}>
+            {exInfo?.eta != null ? `Kalan süre: yaklaşık ${fmtEta(exInfo.eta)}` : 'Süre hesaplanıyor…'}
+          </span>
+          {(exInfo?.slow || (!exInfo && heavyEffects(p).length > 0)) && (
+            <div className="slownote">
+              <Icon name="info" size={16} />
+              <span><b>{(exInfo?.heavy ?? heavyEffects(p)).join(' ve ')}</b> yüksek kalitede hesaplandığı için aktarma normalden uzun sürüyor. Uygulamayı kapatmadan bekle.</span>
+            </div>
+          )}
         </div>
       )}
       {toast && <div className="toast" role="status">{toast}</div>}
@@ -653,4 +668,49 @@ function LayerDot({ l }: { l: import('../types').Layer }) {
   if (l.type === 'text') return <span className="dot txt">T</span>;
   if (l.src && !l.src.startsWith('media:')) return <img className="dot" src={l.src} alt="" />;
   return <span className="dot img"><Icon name="image" size={12} /></span>;
+}
+
+const fmtEta = (sn: number) => (sn < 60 ? `${Math.max(1, Math.round(sn))} sn` : `${Math.floor(sn / 60)} dk ${Math.round(sn % 60)} sn`);
+
+const QLABELS = ['Düşük', 'Orta', 'Yüksek', 'Çok yüksek', 'En yüksek'];
+const loadQ = () => { try { const v = parseFloat(localStorage.getItem('wm-fxq') ?? ''); return Number.isFinite(v) ? v : 0.5; } catch { return 0.5; } };
+
+/** Dışa aktarma penceresi: efekt kalitesi çubuğu + tahmini süre + uyarı */
+function ExportDialog({ p, onClose, onStart }: { p: import('../types').Project; onClose: () => void; onStart: (q: number) => void }) {
+  const [q, setQ] = useState(loadQ);
+  const [est, setEst] = useState<number | null>(null);
+  const heavy = heavyEffects(p);
+  const dur = projectDuration(p);
+  useEffect(() => {
+    setEst(null);
+    const id = setTimeout(() => { estimateExport(p, q).then(setEst); }, 250);
+    return () => clearTimeout(id);
+  }, [q, p]);
+  const label = QLABELS[Math.round(q * 4)];
+  const slowish = est !== null && est > dur * 1.5;
+  return (
+    <div className="choice" onClick={onClose}>
+      <div className="choice-box exdlg" role="dialog" aria-label="Dışa aktar" onClick={(e) => e.stopPropagation()}>
+        <h4>Videoyu Dışa Aktar</h4>
+        <span className="exmeta">{p.width} × {p.height} · {p.fps} fps · {fmtTime(dur, p.fps)}</span>
+        <label className="exq">
+          <span className="top">Efekt kalitesi<b>{label}</b></span>
+          <input className="slider" type="range" min={0} max={1} step={0.01} value={q} disabled={!heavy.length}
+            onChange={(e) => { const v = +e.target.value; setQ(v); try { localStorage.setItem('wm-fxq', String(v)); } catch { /* yok */ } }} />
+          <span className="ends"><span>Hızlı</span><span>En güzel</span></span>
+        </label>
+        {heavy.length ? (
+          <div className={'slownote' + (slowish ? ' warn' : '')}>
+            <Icon name="info" size={16} />
+            <span>Bu projede <b>{heavy.join(' ve ')}</b> var. Kaliteyi yükselttikçe efektler daha pürüzsüz olur ama aktarma <b>daha uzun sürer</b>.</span>
+          </div>
+        ) : <span className="exmeta">Bu projede kaliteyi etkileyen ağır efekt yok; aktarma hızlı olur.</span>}
+        <span className="exest">Tahmini süre: <b>{est === null ? 'hesaplanıyor…' : `yaklaşık ${fmtEta(est)}`}</b></span>
+        <div className="exbtns">
+          <button className="btn ghost" onClick={onClose}>Vazgeç</button>
+          <button className="btn" onClick={() => onStart(q)}>Tamam</button>
+        </div>
+      </div>
+    </div>
+  );
 }

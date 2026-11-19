@@ -14,7 +14,45 @@ function pickMime(): { mime: string; ext: string } {
 }
 
 /** Projeyi kare kare, en yüksek kalitede kaydeder. */
-export async function exportVideo(p: Project, onProgress: (f: number) => void): Promise<{ blob: Blob; ext: string }> {
+export interface ExportInfo {
+  /** 0..1 */ f: number;
+  /** Kalan tahmini süre (sn); ilk kareler ölçülene kadar null */ eta: number | null;
+  /** Aktarmayı yavaşlatan efektler (ör. Hareket Bulanıklığı) */ heavy: string[];
+  /** Bu efektler yüzünden normalden belirgin yavaş mı */ slow: boolean;
+}
+
+/** Aktarmayı yavaşlatan efektlerin adları */
+export function heavyEffects(p: Project): string[] {
+  const names = new Set<string>();
+  for (const l of p.layers) for (const e of l.effects) {
+    if (e.type === 'motionblur') names.add('Hareket Bulanıklığı');
+    if (e.type === 'fractal') names.add('Fraktal Bükme');
+  }
+  return [...names];
+}
+
+/**
+ * Seçilen kalitede tahmini aktarma süresi (sn): birkaç kareyi gerçekten çizip ölçer.
+ * Toplam ≈ kare sayısı × (kare çizim süresi) + video süresi (her kare 1/fps kaydedilir).
+ */
+export async function estimateExport(p: Project, fxQuality: number): Promise<number> {
+  const dur = projectDuration(p);
+  const frames = Math.max(1, Math.round(dur * p.fps));
+  const c = document.createElement('canvas'); c.width = p.width; c.height = p.height;
+  const x = c.getContext('2d', { willReadFrequently: true })!;
+  // Videonun her yerinden eşit aralıklı 8 kare ölç (hareketli ve hareketsiz anlar birlikte)
+  const n = Math.min(8, frames);
+  const ts = Array.from({ length: n }, (_, i) => ((i + 0.5) / n) * dur);
+  renderFrame(x, p, ts[0], { exporting: true, fxQuality }); // ısınma
+  const t0 = performance.now();
+  for (const t of ts) { renderFrame(x, p, t, { exporting: true, fxQuality }); x.getImageData(0, 0, 1, 1); }
+  const per = (performance.now() - t0) / n / 1000;
+  // Her kare: çizim + 1/fps kayıt + kaydediciyi duraklatıp açma payı
+  return frames * (per + 1 / p.fps + 0.012);
+}
+
+export async function exportVideo(p: Project, onProgress: (i: ExportInfo) => void, fxQuality = 0.5): Promise<{ blob: Blob; ext: string }> {
+  const heavy = heavyEffects(p);
   const srcs = p.layers.flatMap((l) => [l.src, l.cb?.eyes]).filter(Boolean) as string[];
   await preloadImages(srcs.filter((s) => !p.layers.some((l) => l.type === 'video' && l.src === s)));
   // Videoların ilk karesi hazır olana kadar bekle (en fazla 8 sn)
@@ -28,10 +66,10 @@ export async function exportVideo(p: Project, onProgress: (f: number) => void): 
   const frames = Math.max(1, Math.round(dur * p.fps));
   // Bir kareyi en yüksek kalitede çizer; video katmanları o kareye gidene kadar bekler
   const drawAt = async (t: number) => {
-    renderFrame(ctx, p, t, { exporting: true });
+    renderFrame(ctx, p, t, { exporting: true, fxQuality });
     const t0 = performance.now();
     while (vids.some((v) => getVideo(v)?.seeking) && performance.now() - t0 < 3000) await new Promise((r) => setTimeout(r, 15));
-    if (vids.length) renderFrame(ctx, p, t, { exporting: true });
+    if (vids.length) renderFrame(ctx, p, t, { exporting: true, fxQuality });
   };
   await drawAt(0);
   // Kare kare kayıt: her kare hazırlanırken kaydedici duraklatılır, sonra tam 1/fps süre açık kalır.
@@ -45,6 +83,7 @@ export async function exportVideo(p: Project, onProgress: (f: number) => void): 
   const done = new Promise<void>((res) => (rec.onstop = () => res()));
   const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
   rec.start();
+  const tStart = performance.now();
   for (let i = 0; i < frames; i++) {
     if (i > 0) {
       if (rec.state === 'recording') rec.pause();
@@ -53,7 +92,14 @@ export async function exportVideo(p: Project, onProgress: (f: number) => void): 
     }
     track.requestFrame?.();
     await wait(1000 / p.fps);
-    onProgress((i + 1) / frames);
+    const spent = (performance.now() - tStart) / 1000, per = spent / (i + 1);
+    onProgress({
+      f: (i + 1) / frames,
+      eta: i >= 4 ? Math.max(0, per * (frames - i - 1)) : null,
+      heavy,
+      // Kare başına süre normalin (1/fps) 1,5 katından fazlaysa yavaş say
+      slow: heavy.length > 0 && i >= 4 && per > 1.5 / p.fps,
+    });
   }
   rec.stop();
   pauseAllVideos();
