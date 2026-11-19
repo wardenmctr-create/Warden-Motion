@@ -205,15 +205,21 @@ export function renderFrame(ctx: CanvasRenderingContext2D, p: Project, t: number
         // Hareket bulanıklığı: önceki anlardaki görüntüleri ortalayarak üst üste çiz
         const span = fxVal(mb, 'tune', t) / p.fps * 2;
         const usePos = fxVal(mb, 'pos', t) >= 0.5, useScl = fxVal(mb, 'scl', t) >= 0.5, useAng = fxVal(mb, 'ang', t) >= 0.5;
-        const N = 10;
         if (span > 0) {
+          const tAt = (u: number) => Math.min(l.end - 1e-4, Math.max(l.start, t + span * (u - 0.5))); // anın etrafında ortalı
+          const w0 = worldTransform(p, l, tAt(0)), w1 = worldTransform(p, l, tAt(1));
+          const r = Math.hypot(l.w, l.h) / 2;
+          // Hareketin tuvaldeki uzunluğu (konum + ölçek + dönüş): kopya sayısını buna göre seç
+          const dist = ((usePos ? Math.hypot(w1.x - w0.x, w1.y - w0.y) : 0) + (useScl ? Math.abs(w1.scale - w0.scale) * r : 0) + (useAng ? Math.abs(w1.rot - w0.rot) * Math.PI / 180 * r * trw.scale : 0)) * q;
+          const N = Math.max(8, Math.min(20, Math.ceil(dist / 1.5))); // çok soluk kopya rengi bozar
+          const soften = Math.min(12, dist / N); // kopyalar arası boşluğu kapatan hafif bulanıklık (tuval pikseli)
           ab.clearRect(0, 0, W, H);
           ab.globalCompositeOperation = 'lighter'; // N örneği eşit ağırlıkla topla = ortalama
           for (let i = 0; i < N; i++) {
-            const ts = Math.min(l.end - 1e-4, Math.max(l.start, t + span * (i / (N - 1) - 0.5))); // anın etrafında ortalı
-            const w = worldTransform(p, l, ts);
+            const w = worldTransform(p, l, tAt(i / (N - 1)));
             const tr2 = { ...trw, x: usePos ? w.x : trw.x, y: usePos ? w.y : trw.y, scale: useScl ? w.scale : trw.scale, rot: useAng ? w.rot : trw.rot, opacity: trw.opacity / N };
-            paint(ab, p, { ...l, blend: undefined }, t, q, fast, tr2);
+            const ex = soften > 0.6 ? [...l.effects, { id: '_mb', type: 'blur' as const, amount: soften / q }] : l.effects;
+            paint(ab, p, { ...l, blend: undefined, effects: ex }, t, q, fast, tr2);
           }
           ab.globalCompositeOperation = 'source-over';
         }
