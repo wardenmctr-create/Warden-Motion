@@ -437,3 +437,48 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
 .mthumb img, .mthumb video { width: 100%; height: 100%; object-fit: cover; }
 .vbadge { position: absolute; left: 3px; bottom: 3px; z-index: 1; width: 18px; height: 18px; border-radius: 50%; background: rgba(11,20,48,.8); color: var(--d-text); display: flex; align-items: center; justify-content: center; }
 .mall { height: 34px; border-radius: 8px; background: #2E3F7E; color: var(--d-text); font-size: 12.5px; display: flex; align-items: center; justify-content: center; gap: 6px; }
+
+/* Efekt paneli (video düzeni) */
+.fxpanel .fxlist { padding: 6px 6px 8px 4px; }
+.fxcard { background: #2A3560; border-radius: 6px; margin-bottom: 6px; overflow: hidden; }
+.fxhead { display: flex; align-items: center; height: 40px; padding-left: 4px; border-bottom: 1px solid #222C55; }
+.fxhead .ib { width: 38px; height: 38px; color: var(--d-text); }
+.fxname { flex: 1; text-align: left; display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--d-text); height: 100%; }
+.fxname .tri { font-size: 10px; transition: transform .15s; }
+.fxname .tri.shut { transform: rotate(-90deg); }
+.fxmenu { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; padding: 6px; background: #222C55; }
+.fxmenu button { height: 34px; border-radius: 6px; background: #34417A; font-size: 12.5px; }
+.prow { display: flex; align-items: center; gap: 6px; min-height: 46px; padding: 0 6px; }
+.prow + .prow { border-top: 1px solid #262F5C; }
+.plabel { width: 74px; height: 32px; flex-shrink: 0; border-radius: 4px; background: #1E2850; font-size: 11.5px; color: var(--d-text2); display: flex; align-items: center; justify-content: center; gap: 4px; position: relative; }
+.prow.on .plabel { color: var(--turq); background: #16203F; }
+.kdot { width: 6px; height: 6px; background: var(--turq); transform: rotate(45deg); display: inline-block; }
+.pjog { flex: 1; min-width: 0; height: 40px; position: relative; touch-action: none; cursor: ew-resize; background-image: repeating-linear-gradient(90deg, #4A5E8C 0 1px, transparent 1px 10px); background-size: 10px 60%; background-repeat: repeat-x; background-position-y: center; border-radius: 4px; }
+.pjog i { position: absolute; left: 50%; top: 2px; bottom: 2px; width: 2px; background: var(--turq); opacity: .7; }
+.pvals { width: 62px; flex-shrink: 0; display: flex; flex-direction: column; align-items: flex-end; gap: 2px; font-size: 12.5px; color: var(--d-text); font-variant-numeric: tabular-nums; }
+.pvals small { color: var(--d-dim); margin-right: 6px; font-size: 10px; }
+.prow.on .pvals { color: var(--turq); }
+.swipehint { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 6; pointer-events: none; width: 128px; height: 84px; border-radius: 8px; background: rgba(11,20,48,.72); color: var(--d-text); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; font-size: 10px; }
+.swipehint b { color: var(--turq); font-size: 14px; }
+.swipehint .ar { font-size: 16px; line-height: 1; color: var(--d-text2); }
+
+.menu .tags { display: flex; gap: 8px; padding: 8px 20px 12px; }
+.menu .tags button { width: 26px; height: 26px; padding: 0; border-radius: 4px; border: 1.5px solid #4A5E8C; }
+.menu .tags button.on { outline: 2px solid var(--d-text); outline-offset: 1px; }
+.ttag { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 5px; vertical-align: middle; }
+.menu { max-height: 70vh; overflow-y: auto; }
+
+/* Renk ve Dolgu (video düzeni) */
+.ctabs { grid-template-columns: repeat(4, minmax(0, 1fr)); display: grid; }
+.ctabs button { display: flex; align-items: center; justify-content: center; }
+.ctabs button:disabled { opacity: .35; }
+.gicon { width: 22px; height: 14px; border-radius: 3px; background: linear-gradient(90deg, #DCE9FF, #34417A); display: inline-block; }
+.gtypes { display: flex; justify-content: center; gap: 8px; margin: 2px 0 12px; }
+.gtypes button { width: 44px; height: 30px; border-radius: 6px; background: var(--d-panel2); display: flex; align-items: center; justify-content: center; }
+.gtypes button.on { background: #0D162F; outline: 1.5px solid var(--turq); }
+.gt { width: 22px; height: 16px; border-radius: 3px; display: inline-block; }
+.gt.lin { background: linear-gradient(90deg, #F7F8FA, #16203F); }
+.gt.rad { background: radial-gradient(circle, #F7F8FA, #16203F 70%); }
+.gbar { position: relative; height: 12px; border-radius: 6px; margin: 14px 18px 0; }
+.gknob { position: absolute; top: 50%; left: -14px; width: 28px; height: 28px; margin-top: -14px; border-radius: 4px; border: 2px solid #DCE9FF; box-shadow: 0 1px 4px rgba(3,8,26,.5); }
+.gknob.r { left: auto; right: -14px; }

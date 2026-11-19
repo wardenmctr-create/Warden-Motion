@@ -5,8 +5,9 @@ export type Anim = { v: number; k?: Key[] };
 
 export type ShapeKind = 'circle' | 'roundrect' | 'rect' | 'triangle' | 'star' | 'hexagon' | 'heart' | 'plus';
 
-export type FxType = 'blur' | 'sway' | 'shake' | 'glow' | 'brightness' | 'contrast' | 'saturate' | 'hue' | 'grayscale' | 'invert' | 'sepia' | 'shadow' | 'mirror';
-export interface Effect { id: string; type: FxType; amount: number; speed?: number; color?: string }
+export type FxType = 'blur' | 'sway' | 'shake' | 'glow' | 'brightness' | 'contrast' | 'saturate' | 'hue' | 'grayscale' | 'invert' | 'sepia' | 'shadow' | 'mirror' | 'fractal';
+/** v: keyframe'lenebilir parametreler (2B parametreler 'posX' / 'posY' gibi iki anahtar). amount/speed eski projeler için. */
+export interface Effect { id: string; type: FxType; amount: number; speed?: number; color?: string; v?: Record<string, Anim>; closed?: boolean }
 
 export type LayerType = 'shape' | 'text' | 'image' | 'cb' | 'video';
 
@@ -42,6 +43,14 @@ export interface Layer {
   blend?: BlendMode;
   /** Geçişli renk: ikinci renk + katman kutusuna göre (-0.5..0.5) başlangıç/bitiş noktaları */
   fill2?: string;
+  /** Geçiş tipi: doğrusal (varsayılan) ya da dairesel */
+  gtype?: 'linear' | 'radial';
+  /** Dolgu yok (sadece şekil) */
+  noFill?: boolean;
+  flipX?: boolean;
+  flipY?: boolean;
+  /** Zaman çizelgesinde katman renk etiketi */
+  tag?: string;
   grad?: { x1: number; y1: number; x2: number; y2: number };
 }
 

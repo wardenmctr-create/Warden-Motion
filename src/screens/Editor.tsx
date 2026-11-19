@@ -4,6 +4,7 @@ import { AddPanel, type AddTab, ColorPanel, CBPanel, EffectsPanel, MovePanel, Op
 import { fmtTime, layerKeyTimes, projectDuration, setAnim, valueAt } from '../anim';
 import { exportVideo, saveFile } from '../export';
 import { TUTORIALS } from '../factories';
+import { fxMeta, fxVal } from '../effects';
 import { hitTest, parentWorld, pauseAllVideos, renderFrame, setImageLoadedHandler, toLocal, worldTransform, type TR } from '../render';
 import { useStore } from '../store';
 import type { Project } from '../types';
@@ -104,6 +105,14 @@ export function Editor() {
   const pts = useRef(new Map<number, { x: number; y: number }>());
   const pinch = useRef<{ id: string; d0: number; a0: number; s0: number; r0: number } | null>(null);
   const gdrag = useRef<{ id: string; which: 1 | 2 } | null>(null);
+  const fxDrag = useRef<{ x: number; y: number; v: [number, number] } | null>(null);
+  // Efekt panelinde 2B parametre (Konum, Paralaks) seçiliyse önizlemede kaydırarak ayarlanır
+  const fxSel = panel === 'effects' && sel && s.fxParam ? (() => {
+    const e = sel.effects.find((x) => x.id === s.fxParam!.fx);
+    const pr = e && fxMeta(e.type).params.find((x) => x.key === s.fxParam!.key);
+    return e && pr?.two ? { e, pr } : null;
+  })() : null;
+  const [swiping, setSwiping] = useState(false);
   const toProj = (e: { clientX: number; clientY: number }) => {
     const r = canvasRef.current!.getBoundingClientRect();
     return { x: (e.clientX - r.left) / r.width * p.width, y: (e.clientY - r.top) / r.height * p.height };
@@ -128,6 +137,12 @@ export function Editor() {
       const l = p.layers.find((x) => x.id === id);
       drag.current = null;
       if (l) { const pi = pinchInfo(); pinch.current = { id: l.id, d0: pi.d, a0: pi.a, s0: valueAt(l.scale, s.time), r0: valueAt(l.rotation, s.time) }; }
+      return;
+    }
+    if (fxSel) {
+      s.checkpoint();
+      fxDrag.current = { x: e.clientX, y: e.clientY, v: [fxVal(fxSel.e, fxSel.pr.key + 'X', s.time), fxVal(fxSel.e, fxSel.pr.key + 'Y', s.time)] };
+      setSwiping(true);
       return;
     }
     const pt = toProj(e);
@@ -158,6 +173,18 @@ export function Editor() {
       s.updateLayer(pc.id, (l) => ({ ...l, scale: setAnim(l.scale, s.time, sc), rotation: setAnim(l.rotation, s.time, rot) }), false);
       return;
     }
+    const fd = fxDrag.current;
+    if (fd && fxSel && sel) {
+      const k = fxSel.pr.key, dx = (e.clientX - fd.x) * 2, dy = (e.clientY - fd.y) * 2;
+      s.updateLayer(sel.id, (l) => ({ ...l, effects: l.effects.map((x) => {
+        if (x.id !== fxSel.e.id) return x;
+        const v = { ...(x.v ?? {}) };
+        v[k + 'X'] = setAnim(v[k + 'X'] ?? { v: fd.v[0] }, s.time, Math.round(fd.v[0] + dx));
+        v[k + 'Y'] = setAnim(v[k + 'Y'] ?? { v: fd.v[1] }, s.time, Math.round(fd.v[1] + dy));
+        return { ...x, v };
+      }) }), false);
+      return;
+    }
     const g = gdrag.current;
     if (g && sel) {
       const lp = toLayerLocal(sel, toProj(e));
@@ -174,7 +201,7 @@ export function Editor() {
   const onUp = (e: React.PointerEvent) => {
     pts.current.delete(e.pointerId);
     if (pts.current.size < 2) pinch.current = null;
-    if (!pts.current.size) { drag.current = null; gdrag.current = null; }
+    if (!pts.current.size) { drag.current = null; gdrag.current = null; fxDrag.current = null; setSwiping(false); }
   };
 
   // ---------- Zaman çizelgesi ----------
@@ -442,6 +469,14 @@ export function Editor() {
       </header>
 
       <div className="stage" ref={stageRef}>
+        {fxSel && (
+          <div className="swipehint" style={{ opacity: swiping ? 0.35 : 1 }}>
+            <span className="ar">↑</span>
+            <span>← Ayarlamak için kaydır →</span>
+            <b>{fxSel.pr.label}</b>
+            <span className="ar">↓</span>
+          </div>
+        )}
         <canvas ref={canvasRef} style={{ width: dispW, height: dispH }} onPointerDown={onDown} onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={onUp} />
       </div>
 
@@ -471,7 +506,7 @@ export function Editor() {
                 <button key={l.id} className={'track' + (l.id === s.selectedId ? ' sel' : multi?.includes(l.id) ? ' msel' : ' off')}
                   style={{ left: half + l.start * PPS, width: Math.max(8, (l.end - l.start) * PPS), top: TOP + i * ROW, opacity: l.hidden ? 0.45 : 1 }}
                   {...pressHandlers(l.id)}>
-                  <span className="tname">{l.mask ? '◐ ' : ''}{l.name}</span>
+                  <span className="tname">{l.tag && <i className="ttag" style={{ background: l.tag }} />}{l.mask ? '◐ ' : ''}{l.name}</span>
                   {l.id === s.selectedId && layerKeyTimes(l).map((kt) => <span key={kt} className="kf" style={{ left: (kt - l.start) * PPS }} />)}
                   {l.id === s.selectedId && (
                     <>
@@ -520,6 +555,19 @@ export function Editor() {
 
       {menu && sel && (
         <div className="menu" role="menu">
+          <button onClick={() => { s.duplicateLayer(sel.id); setMenu(false); }}>Katmanı Çoğalt</button>
+          <button onClick={() => { s.removeLayer(sel.id); setMenu(false); }}>Katmanı Sil</button>
+          <button onClick={() => { s.updateLayer(sel.id, (l) => ({ ...l, flipX: !l.flipX })); setMenu(false); }}>Yatay Çevir</button>
+          <button onClick={() => { s.updateLayer(sel.id, (l) => ({ ...l, flipY: !l.flipY })); setMenu(false); }}>Dikey Çevir</button>
+          <button onClick={() => { const k = Math.min(p.width / sel.w, p.height / sel.h); s.updateLayer(sel.id, (l) => ({ ...l, w: Math.round(l.w * k), h: Math.round(l.h * k), x: { v: p.width / 2 }, y: { v: p.height / 2 }, scale: { v: 1 }, rotation: { v: 0 } })); setMenu(false); }}>Ekrana Sığdır</button>
+          <button onClick={() => { const k = Math.max(p.width / sel.w, p.height / sel.h); s.updateLayer(sel.id, (l) => ({ ...l, w: Math.round(l.w * k), h: Math.round(l.h * k), x: { v: p.width / 2 }, y: { v: p.height / 2 }, scale: { v: 1 }, rotation: { v: 0 } })); setMenu(false); }}>Ekranı Doldur</button>
+          <button onClick={() => { s.updateLayer(sel.id, (l) => ({ ...l, w: p.width, h: p.height, x: { v: p.width / 2 }, y: { v: p.height / 2 }, scale: { v: 1 }, rotation: { v: 0 } })); setMenu(false); }}>Ekrana Uzat</button>
+          <div className="tags">
+            {['', '#22D3C5', '#3B9BFF', '#8F7CF0', '#E84393', '#F2C230'].map((c) => (
+              <button key={c || 'yok'} aria-label={c ? `Etiket ${c}` : 'Etiketi kaldır'} className={(sel.tag ?? '') === c ? 'on' : ''} style={{ background: c || 'transparent' }} onClick={() => { s.updateLayer(sel.id, (l) => ({ ...l, tag: c || undefined })); setMenu(false); }} />
+            ))}
+          </div>
+          <hr />
           <button onClick={() => { s.update((pp) => { const ls = pp.layers.filter((l) => l.id !== sel.id); return { ...pp, layers: [...ls, sel] }; }); setMenu(false); }}>Öne Getir</button>
           <button onClick={() => { s.update((pp) => { const ls = pp.layers.filter((l) => l.id !== sel.id); return { ...pp, layers: [sel, ...ls] }; }); setMenu(false); }}>Arkaya Gönder</button>
           <button onClick={() => { const r = sel.w / sel.h, cover = Math.max(p.width / sel.w, p.height / sel.h); s.updateLayer(sel.id, (l) => ({ ...l, w: Math.round(l.w * cover), h: Math.round(l.w * cover / r), x: { v: p.width / 2 }, y: { v: p.height / 2 }, scale: { v: 1 } })); setMenu(false); }}>Kompozisyon Alanını Doldur</button>

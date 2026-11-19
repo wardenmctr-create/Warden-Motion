@@ -50,6 +50,9 @@ interface State {
   selectedId: string | null;
   /** Çoklu seçim modu (uzun basınca); null = kapalı */
   multi: string[] | null;
+  /** Efekt panelinde seçili parametre (önizlemede kaydırarak ayarlanır) */
+  fxParam: { fx: string; key: string } | null;
+  setFxParam: (p: { fx: string; key: string } | null) => void;
   setMulti: (ids: string[] | null) => void;
   time: number;
   playing: boolean;
@@ -87,6 +90,8 @@ export const useStore = create<State>((set, get) => ({
   future: [],
   selectedId: null,
   multi: null,
+  fxParam: null,
+  setFxParam: (fxParam) => set({ fxParam }),
   setMulti: (multi) => set({ multi, selectedId: null }),
   time: 0,
   playing: false,

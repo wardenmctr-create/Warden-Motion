@@ -1,7 +1,7 @@
 import { valueAt } from './anim';
 import { getMedia } from './db';
 import type { Layer, Project, ShapeKind } from './types';
-import { fxFilter } from './effects';
+import { applyFractalWarp, fxFilter, fxVal } from './effects';
 
 // ---------- Görsel önbelleği ----------
 const cache = new Map<string, HTMLImageElement | 'loading' | 'error'>();
@@ -101,11 +101,11 @@ export function layerTransform(l: Layer, t: number) {
   let x = valueAt(l.x, t), y = valueAt(l.y, t), rot = valueAt(l.rotation, t);
   const local = t - l.start;
   for (const e of l.effects) {
-    if (e.type === 'sway') rot += Math.sin(local * (e.speed ?? 0.8) * Math.PI * 2) * e.amount;
+    if (e.type === 'sway') rot += Math.sin(local * fxVal(e, 'speed', t) * Math.PI * 2) * fxVal(e, 'amount', t);
     if (e.type === 'shake') {
-      const sp = e.speed ?? 1.5;
+      const sp = fxVal(e, 'speed', t), am = fxVal(e, 'amount', t);
       const tt = Math.floor(local * sp * 10) / (sp * 10 || 1);
-      x += noise(tt, 1) * e.amount; y += noise(tt, 2) * e.amount;
+      x += noise(tt, 1) * am; y += noise(tt, 2) * am;
     }
   }
   return { x, y, rot, scale: valueAt(l.scale, t), opacity: valueAt(l.opacity, t) };
@@ -166,10 +166,11 @@ function paint(ctx: CanvasRenderingContext2D, p: Project, l: Layer, t: number, q
   const filters: string[] = [];
   for (const e of l.effects) {
     if (fast && (e.type === 'blur' || e.type === 'glow' || e.type === 'shadow')) continue;
-    const f = fxFilter(e, q);
+    const f = fxFilter(e, q, t);
     if (f) filters.push(f);
   }
-  if (l.effects.some((e) => e.type === 'mirror' && e.amount >= 50)) ctx.scale(-1, 1);
+  if (l.effects.some((e) => e.type === 'mirror')) ctx.scale(-1, 1);
+  if (l.flipX || l.flipY) ctx.scale(l.flipX ? -1 : 1, l.flipY ? -1 : 1);
   ctx.filter = filters.length ? filters.join(' ') : 'none';
   if (l.blend && l.blend !== 'normal' && !l.mask) ctx.globalCompositeOperation = l.blend as GlobalCompositeOperation;
   drawLayer(ctx, l);
@@ -192,15 +193,25 @@ export function renderFrame(ctx: CanvasRenderingContext2D, p: Project, t: number
   for (const l of p.layers) {
     if (!visible(l, t)) continue;
     const m = l.mask ? p.layers.find((x) => x.id === l.mask) : undefined;
-    if (m) {
+    const warps = fast ? [] : l.effects.filter((e) => e.type === 'fractal');
+    if (m || warps.length) {
       // Kırpma maskesi: katmanı ayrı tuvale çiz, maskenin şekliyle kes, sonra sahneye bas
       const W = ctx.canvas.width, H = ctx.canvas.height;
-      bufA = buf(bufA, W, H); bufB = buf(bufB, W, H);
-      paint(bufA.getContext('2d')!, p, l, t, q, fast);
-      if (visible(m, t) || m.hidden) paint(bufB.getContext('2d')!, p, { ...m, hidden: false, effects: [] }, t, q);
+      bufA = buf(bufA, W, H);
+      const trw = paint(bufA.getContext('2d')!, p, { ...l, blend: undefined }, t, q, fast);
+      if (warps.length) {
+        // Katmanın tuvaldeki kutusu (dönüşle birlikte)
+        const r = Math.hypot(l.w, l.h) / 2 * trw.scale * q;
+        const box = { x0: trw.x * q - r, y0: trw.y * q - r, x1: trw.x * q + r, y1: trw.y * q + r };
+        for (const e of warps) applyFractalWarp(bufA, e, t, q, box);
+      }
       const a = bufA.getContext('2d')!;
-      a.globalCompositeOperation = l.maskInvert ? 'destination-out' : 'destination-in';
-      a.drawImage(bufB, 0, 0);
+      if (m) {
+        bufB = buf(bufB, W, H);
+        paint(bufB.getContext('2d')!, p, { ...m, hidden: false, effects: [] }, t, q);
+        a.globalCompositeOperation = l.maskInvert ? 'destination-out' : 'destination-in';
+        a.drawImage(bufB, 0, 0);
+      }
       ctx.save();
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       if (l.blend && l.blend !== 'normal') ctx.globalCompositeOperation = l.blend as GlobalCompositeOperation;
@@ -223,7 +234,8 @@ function drawImageCover(ctx: CanvasRenderingContext2D, img: HTMLImageElement, w:
 
 function fillOf(ctx: CanvasRenderingContext2D, l: Layer): string | CanvasGradient {
   if (!l.fill2 || !l.grad) return l.fill;
-  const g = ctx.createLinearGradient(l.grad.x1 * l.w, l.grad.y1 * l.h, l.grad.x2 * l.w, l.grad.y2 * l.h);
+  const ax = l.grad.x1 * l.w, ay = l.grad.y1 * l.h, bx = l.grad.x2 * l.w, by = l.grad.y2 * l.h;
+  const g = l.gtype === 'radial' ? ctx.createRadialGradient(ax, ay, 0, ax, ay, Math.max(1, Math.hypot(bx - ax, by - ay))) : ctx.createLinearGradient(ax, ay, bx, by);
   g.addColorStop(0, l.fill);
   g.addColorStop(1, l.fill2);
   return g;
@@ -232,8 +244,7 @@ function fillOf(ctx: CanvasRenderingContext2D, l: Layer): string | CanvasGradien
 function drawLayer(ctx: CanvasRenderingContext2D, l: Layer) {
   const { w, h } = l;
   if (l.type === 'shape' && l.shape) {
-    ctx.fillStyle = fillOf(ctx, l);
-    ctx.fill(shapePath(l.shape, w, h));
+    if (!l.noFill) { ctx.fillStyle = fillOf(ctx, l); ctx.fill(shapePath(l.shape, w, h)); }
   } else if (l.type === 'text') {
     ctx.fillStyle = fillOf(ctx, l);
     ctx.font = `700 ${l.fontSize ?? 64}px Inter, system-ui, sans-serif`;

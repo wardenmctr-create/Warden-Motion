@@ -6,7 +6,7 @@ import { makeLayer, SHAPES } from '../factories';
 import { resolveSrc, shapePath } from '../render';
 import { useStore } from '../store';
 import { askText } from '../dialog';
-import { FEATURED, FX, FX_CATS, fxMeta, makeEffect } from '../effects';
+import { FEATURED, FX, FX_CATS, fxMeta, fxVal, makeEffect, paramKeys, type FxParam } from '../effects';
 import type { AnimProp, Effect, FxType, Layer, Project } from '../types';
 
 // ---------- Ortak ----------
@@ -570,44 +570,62 @@ const ink = (hex: string) => { const n = parseInt(hex.slice(1, 7), 16); const y 
 export function ColorPanel({ layer, onClose }: { layer: Layer; onClose: () => void }) {
   const { s } = useNow();
   const grad = !!(layer.fill2 && layer.grad);
+  const mode: 'none' | 'solid' | 'grad' = layer.noFill ? 'none' : grad ? 'grad' : 'solid';
   const [slot, setSlot] = useState<1 | 2>(1);
+  const [pal, setPal] = useState(false); // geçişte bir uca dokununca renk paleti açılır
   const cur = slot === 2 && grad ? layer.fill2! : layer.fill;
   const setColor = (c: string, commit = true) => s.updateLayer(layer.id, (l) => (slot === 2 && grad ? { ...l, fill2: c } : { ...l, fill: c }), commit);
   const [hex, setHex] = useState(cur.toUpperCase());
   useEffect(() => setHex(cur.toUpperCase()), [cur]);
+  const setMode = (m: typeof mode) => {
+    setPal(false); setSlot(1);
+    s.updateLayer(layer.id, (l) => m === 'none' ? { ...l, noFill: true }
+      : m === 'solid' ? { ...l, noFill: false, fill2: undefined, grad: undefined }
+      : { ...l, noFill: false, fill2: l.fill2 ?? '#F2C230', grad: l.grad ?? { x1: 0, y1: -0.5, x2: 0, y2: 0.5 }, gtype: l.gtype ?? 'linear' });
+  };
+  const palette = (
+    <div className="cgrid">
+      <input className="hexbar" aria-label="Renk kodu" value={hex} style={{ background: cur, color: ink(cur) }}
+        onChange={(e) => setHex(e.target.value.toUpperCase())}
+        onBlur={() => { if (/^#[0-9A-F]{6}$/.test(hex)) setColor(hex); else setHex(cur.toUpperCase()); }}
+        onKeyDown={(e) => e.key === 'Enter' && (e.target as HTMLInputElement).blur()} />
+      <div className="swgrid">
+        {SWATCHES.map((c) => <button key={c} aria-label={c} className={cur.toUpperCase() === c ? 'on' : ''} style={{ background: c }} onClick={() => setColor(c)} />)}
+      </div>
+      <label className="pal" aria-label="Özel renk seç">
+        <Icon name="bucket" size={20} />
+        <input type="color" value={cur.slice(0, 7)} onFocus={() => s.checkpoint()} onChange={(e) => setColor(e.target.value.toUpperCase(), false)} />
+      </label>
+    </div>
+  );
   return (
     <div className="dpanel side2" role="dialog" aria-label="Renk ve Dolgu">
       <div className="lcol">
-        <button className="ib" aria-label="Geri" onClick={onClose}><Icon name="back" /></button>
+        <button className="ib" aria-label="Geri" onClick={() => (pal ? setPal(false) : onClose())}><Icon name="back" /></button>
       </div>
       <div className="dbody" style={{ paddingLeft: 4 }}>
-        <div className="seg dseg">
-          <button className={!grad ? 'on' : ''} onClick={() => { setSlot(1); s.updateLayer(layer.id, (l) => ({ ...l, fill2: undefined, grad: undefined })); }}>Düz Renk</button>
-          <button className={grad ? 'on' : ''} onClick={() => !grad && s.updateLayer(layer.id, (l) => ({ ...l, fill2: '#F5DCA0', grad: { x1: -0.35, y1: -0.35, x2: 0.35, y2: 0.35 } }))}>Geçiş</button>
+        <div className="seg dseg ctabs">
+          <button className={mode === 'none' ? 'on' : ''} aria-label="Dolgu yok" onClick={() => setMode('none')}><Icon name="nofill" size={18} /></button>
+          <button className={mode === 'solid' ? 'on' : ''} aria-label="Düz renk" onClick={() => setMode('solid')}><Icon name="bucket" size={18} /></button>
+          <button className={mode === 'grad' ? 'on' : ''} aria-label="Geçiş" onClick={() => setMode('grad')}><span className="gicon" /></button>
+          <button disabled aria-label="Görsel dolgu (yakında)"><Icon name="image" size={18} /></button>
         </div>
-        {grad && (
-          <div className="slots">
-            {([1, 2] as const).map((n) => (
-              <button key={n} className={slot === n ? 'on' : ''} onClick={() => setSlot(n)}>
-                <span style={{ background: n === 1 ? layer.fill : layer.fill2 }} />{n === 1 ? 'Başlangıç' : 'Bitiş'}
-              </button>
-            ))}
-            <span className="hint">Noktaları önizlemede sürükle</span>
-          </div>
-        )}
-        <div className="cgrid">
-          <input className="hexbar" aria-label="Renk kodu" value={hex} style={{ background: cur, color: ink(cur) }}
-            onChange={(e) => setHex(e.target.value.toUpperCase())}
-            onBlur={() => { if (/^#[0-9A-F]{6}$/.test(hex)) setColor(hex); else setHex(cur.toUpperCase()); }}
-            onKeyDown={(e) => e.key === 'Enter' && (e.target as HTMLInputElement).blur()} />
-          <div className="swgrid">
-            {SWATCHES.map((c) => <button key={c} aria-label={c} className={cur.toUpperCase() === c ? 'on' : ''} style={{ background: c }} onClick={() => setColor(c)} />)}
-          </div>
-          <label className="pal" aria-label="Özel renk seç">
-            <Icon name="bucket" size={20} />
-            <input type="color" value={cur.slice(0, 7)} onFocus={() => s.checkpoint()} onChange={(e) => setColor(e.target.value.toUpperCase(), false)} />
-          </label>
-        </div>
+        {mode === 'solid' && palette}
+        {mode === 'none' && <p style={{ color: 'var(--d-text2)', fontSize: 13, textAlign: 'center', margin: '18px 0' }}>Bu katmanın dolgusu yok.</p>}
+        {mode === 'grad' && (pal ? palette : (
+          <>
+            <div className="gtypes">
+              <button className={layer.gtype !== 'radial' ? 'on' : ''} aria-label="Doğrusal geçiş" onClick={() => s.updateLayer(layer.id, (l) => ({ ...l, gtype: 'linear' }))}><span className="gt lin" /></button>
+              <button className={layer.gtype === 'radial' ? 'on' : ''} aria-label="Dairesel geçiş" onClick={() => s.updateLayer(layer.id, (l) => ({ ...l, gtype: 'radial' }))}><span className="gt rad" /></button>
+            </div>
+            <div className="gbar" style={{ background: `linear-gradient(90deg, ${layer.fill}, ${layer.fill2})` }}>
+              {([1, 2] as const).map((n) => (
+                <button key={n} className={'gknob' + (n === 2 ? ' r' : '')} aria-label={n === 1 ? 'Başlangıç rengi' : 'Bitiş rengi'} style={{ background: n === 1 ? layer.fill : layer.fill2 }} onClick={() => { setSlot(n); setPal(true); }} />
+              ))}
+            </div>
+            <p className="hint" style={{ fontSize: 11, color: 'var(--d-text2)', margin: '8px 2px 0', textAlign: 'center' }}>Uçlara dokunarak renk seç; yönü önizlemedeki noktaları sürükleyerek ayarla.</p>
+          </>
+        ))}
       </div>
     </div>
   );
@@ -648,40 +666,120 @@ export function OpacityPanel({ layer, onClose }: { layer: Layer; onClose: () => 
   );
 }
 
-// ---------- Efektler: katmanın efekt listesi + "Efekt Ekle" ----------
+// ---------- Efektler: katmanın efekt listesi (videodaki düzen) ----------
+const fmtP = (n: number, step: number) => (step >= 1 ? String(Math.round(n)) : n.toFixed(step < 0.01 ? 3 : 2)).replace('.', ',');
+
+/** Parametrenin değerini t anında yazar (keyframe varsa o anda keyframe günceller) */
+function setFxParams(l: Layer, fxId: string, vals: Record<string, number>, t: number): Layer {
+  return { ...l, effects: l.effects.map((e) => {
+    if (e.id !== fxId) return e;
+    const v = { ...(e.v ?? {}) };
+    for (const [k, n] of Object.entries(vals)) v[k] = setAnim(v[k] ?? { v: fxVal(e, k, t) }, t, n);
+    return { ...e, v, ...(vals.amount !== undefined && !(v.amount?.k?.length) ? { amount: vals.amount } : {}) };
+  }) };
+}
+
 export function EffectsPanel({ layer, onClose }: { layer: Layer; onClose: () => void }) {
-  const { s } = useNow();
+  const { s, t } = useNow();
   const [browse, setBrowse] = useState(false);
-  const upd = (id: string, patch: Partial<Effect>) =>
-    s.updateLayer(layer.id, (l) => ({ ...l, effects: l.effects.map((e) => (e.id === id ? { ...e, ...patch } : e)) }), false);
+  const [menuFx, setMenuFx] = useState<string | null>(null);
+  const sel = s.fxParam;
+  useEffect(() => () => useStore.getState().setFxParam(null), []);
+  // Seçili parametre yoksa ilk efektin ilk parametresini seç
+  useEffect(() => {
+    if (sel && layer.effects.some((e) => e.id === sel.fx)) return;
+    const e = layer.effects.find((x) => fxMeta(x.type).params.length);
+    s.setFxParam(e ? { fx: e.id, key: fxMeta(e.type).params[0].key } : null);
+  }, [layer.effects.length]);
+
+  const selFx = layer.effects.find((e) => e.id === sel?.fx);
+  const selPr = selFx ? fxMeta(selFx.type).params.find((p) => p.key === sel!.key) : undefined;
+  const selKeys = selPr ? paramKeys(selPr) : [];
+  const hasKey = !!selFx && selKeys.some((k) => selFx.v?.[k] && keyAt(selFx.v[k], t));
+  const toggleK = () => selFx && s.updateLayer(layer.id, (l) => ({ ...l, effects: l.effects.map((e) => {
+    if (e.id !== selFx.id) return e;
+    const v = { ...(e.v ?? {}) };
+    for (const k of selKeys) {
+      const a0 = v[k] ?? { v: fxVal(e, k, t) };
+      const on = !!keyAt(a0, t);
+      if (on === hasKey) v[k] = toggleKey(a0, t);
+    }
+    return { ...e, v };
+  }) }));
+
+  // Kaydırma cetveli: yatay = değer (2B'de X), dikey = 2B'de Y
+  const jog = useRef<{ x: number; y: number; v: number[]; fx: string; pr: FxParam } | null>(null);
+  const jogDown = (ev: React.PointerEvent, e: Effect, pr: FxParam) => {
+    try { (ev.currentTarget as HTMLElement).setPointerCapture(ev.pointerId); } catch { /* yok */ }
+    s.setFxParam({ fx: e.id, key: pr.key });
+    s.checkpoint();
+    jog.current = { x: ev.clientX, y: ev.clientY, v: paramKeys(pr).map((k) => fxVal(e, k, t)), fx: e.id, pr };
+  };
+  const jogMove = (ev: React.PointerEvent) => {
+    const j = jog.current; if (!j) return;
+    const clamp = (n: number) => Math.min(j.pr.max, Math.max(j.pr.min, Math.round(n / j.pr.step) * j.pr.step));
+    const vals: Record<string, number> = j.pr.two
+      ? { [j.pr.key + 'X']: clamp(j.v[0] + (ev.clientX - j.x) * j.pr.jog), [j.pr.key + 'Y']: clamp(j.v[1] + (ev.clientY - j.y) * j.pr.jog) }
+      : { [j.pr.key]: clamp(j.v[0] + (ev.clientX - j.x) * j.pr.jog) };
+    s.updateLayer(layer.id, (l) => setFxParams(l, j.fx, vals, t), false);
+  };
+  const jogUp = () => { jog.current = null; };
+
   return (
-    <div className="dpanel side2" role="dialog" aria-label="Efektler">
-      <div className="lcol"><button className="ib" aria-label="Geri" onClick={onClose}><Icon name="back" /></button></div>
-      <div className="dbody" style={{ paddingLeft: 6 }}>
-        <button className="addfx" onClick={() => setBrowse(true)}><Icon name="plus" size={18} stroke={2.2} />Efekt Ekle</button>
+    <div className="dpanel side2 fxpanel" role="dialog" aria-label="Efektler">
+      <div className="lcol">
+        <button className="ib" aria-label="Geri" onClick={onClose}><Icon name="back" /></button>
+        <button className="ib" aria-label={hasKey ? 'Keyframe sil' : 'Keyframe ekle'} disabled={!selPr} onClick={toggleK} style={{ color: hasKey ? 'var(--turq)' : 'var(--d-text)' }}><Icon name="key" size={18} fill /></button>
+        <span style={{ flex: 1 }} />
+      </div>
+      <div className="dbody fxlist">
         {layer.effects.map((e) => {
           const m = fxMeta(e.type);
           return (
-            <div key={e.id} className="fx" style={{ flexDirection: 'column', alignItems: 'stretch' }}>
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                <span className="n">{m.name}</span>
+            <div key={e.id} className="fxcard">
+              <div className="fxhead">
+                <button className="fxname" aria-expanded={!e.closed} onClick={() => s.updateLayer(layer.id, (l) => ({ ...l, effects: l.effects.map((x) => (x.id === e.id ? { ...x, closed: !x.closed } : x)) }))}>
+                  <span className={'tri' + (e.closed ? ' shut' : '')}>▼</span>{m.name}
+                </button>
+                <button className="ib" aria-label={`${m.name} seçenekleri`} onClick={() => setMenuFx(menuFx === e.id ? null : e.id)}><Icon name="more" size={20} stroke={3} /></button>
                 <button className="ib" aria-label={`${m.name} kaldır`} onClick={() => s.updateLayer(layer.id, (l) => ({ ...l, effects: l.effects.filter((x) => x.id !== e.id) }))}><Icon name="trash" size={18} /></button>
               </div>
-              {e.type !== 'mirror' && (
-                <label className="prop"><span className="top">{m.label}<b>{e.amount}</b></span>
-                  <input className="slider" type="range" min={m.min} max={m.max} step={m.step ?? 1} value={e.amount} onPointerDown={() => s.checkpoint()} onChange={(ev) => upd(e.id, { amount: +ev.target.value })} /></label>
+              {menuFx === e.id && (
+                <div className="fxmenu">
+                  <button onClick={() => { s.updateLayer(layer.id, (l) => { const i = l.effects.findIndex((x) => x.id === e.id); const ef = [...l.effects]; if (i > 0) [ef[i - 1], ef[i]] = [ef[i], ef[i - 1]]; return { ...l, effects: ef }; }); setMenuFx(null); }}>Yukarı taşı</button>
+                  <button onClick={() => { s.updateLayer(layer.id, (l) => { const i = l.effects.findIndex((x) => x.id === e.id); const ef = [...l.effects]; if (i < ef.length - 1) [ef[i + 1], ef[i]] = [ef[i], ef[i + 1]]; return { ...l, effects: ef }; }); setMenuFx(null); }}>Aşağı taşı</button>
+                  <button onClick={() => { s.updateLayer(layer.id, (l) => ({ ...l, effects: [...l.effects, { ...structuredClone(e), id: Math.random().toString(36).slice(2, 10) }] })); setMenuFx(null); }}>Çoğalt</button>
+                  <button onClick={() => { s.updateLayer(layer.id, (l) => ({ ...l, effects: l.effects.map((x) => (x.id === e.id ? { ...makeEffect(e.type), id: e.id, color: e.color } : x)) })); setMenuFx(null); }}>Sıfırla</button>
+                </div>
               )}
-              {m.speed && (
-                <label className="prop"><span className="top">Hız<b>{e.speed}</b></span>
-                  <input className="slider" type="range" min={0.1} max={5} step={0.1} value={e.speed} onPointerDown={() => s.checkpoint()} onChange={(ev) => upd(e.id, { speed: +ev.target.value })} /></label>
+              {!e.closed && m.params.map((pr) => {
+                const keys = paramKeys(pr);
+                const on = sel?.fx === e.id && sel.key === pr.key;
+                const animated = keys.some((k) => (e.v?.[k]?.k?.length ?? 0) > 0);
+                return (
+                  <div key={pr.key} className={'prow' + (on ? ' on' : '')}>
+                    <button className="plabel" onClick={() => s.setFxParam({ fx: e.id, key: pr.key })}>{pr.label}{animated && <i className="kdot" />}</button>
+                    <div className="pjog" role="slider" aria-label={pr.label} aria-valuenow={fxVal(e, keys[0], t)}
+                      onPointerDown={(ev) => jogDown(ev, e, pr)} onPointerMove={jogMove} onPointerUp={jogUp} onPointerCancel={jogUp}
+                      style={{ backgroundPositionX: `${(fxVal(e, keys[0], t) / pr.jog) % 10}px` }}><i /></div>
+                    <div className="pvals">
+                      {keys.map((k, i) => (
+                        <span key={k}>{pr.two && <small>{i ? 'y' : 'x'}</small>}{fmtP(fxVal(e, k, t), pr.step)}</span>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
+              {!e.closed && m.color && (
+                <div className="prow"><span className="plabel">Renk</span><span style={{ flex: 1 }} />
+                  <input type="color" aria-label="Efekt rengi" value={e.color} onChange={(ev) => s.updateLayer(layer.id, (l) => ({ ...l, effects: l.effects.map((x) => (x.id === e.id ? { ...x, color: ev.target.value } : x)) }), false)} /></div>
               )}
-              {m.color && <label className="prop"><span className="top">Renk<input type="color" value={e.color} onChange={(ev) => upd(e.id, { color: ev.target.value })} /></span></label>}
             </div>
           );
         })}
-        {!layer.effects.length && <p style={{ color: 'var(--d-text2)', fontSize: 13, margin: '10px 2px' }}>Bu katmanda efekt yok.</p>}
+        <button className="addfx" onClick={() => setBrowse(true)}><Icon name="plus" size={18} stroke={2.2} />Efekt Ekle</button>
       </div>
-      {browse && <EffectBrowser onClose={() => setBrowse(false)} onPick={(t) => { s.updateLayer(layer.id, (l) => ({ ...l, effects: [...l.effects, makeEffect(t)] })); setBrowse(false); }} />}
+      {browse && <EffectBrowser onClose={() => setBrowse(false)} onPick={(ty) => { const ne = makeEffect(ty); s.updateLayer(layer.id, (l) => ({ ...l, effects: [...l.effects, ne] })); const pr0 = fxMeta(ty).params[0]; s.setFxParam(pr0 ? { fx: ne.id, key: pr0.key } : null); setBrowse(false); }} />}
     </div>
   );
 }
