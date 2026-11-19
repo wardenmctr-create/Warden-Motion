@@ -99,7 +99,7 @@ export function Editor() {
       const c = canvasRef.current;
       if (c) renderFrame(c.getContext('2d')!, pr, t, { quality: c.width / pr.width, fast: st.settings.lite, lite: st.settings.lite, playing: true });
       const el = tlRef.current;
-      if (el) { programmatic.current = true; el.scrollLeft = t * ppsRef.current; }
+      if (el && innerRef.current) innerRef.current.style.transform = `translateX(${-Math.round(t * ppsRef.current)}px)`;
       if (timecodeRef.current) timecodeRef.current.textContent = fmtTime(t, pr.fps);
       raf = requestAnimationFrame(tick);
     };
@@ -213,7 +213,6 @@ export function Editor() {
 
   // ---------- Zaman çizelgesi ----------
   const tlRef = useRef<HTMLDivElement>(null);
-  const programmatic = useRef(false);
   const [tlW, setTlW] = useState(360);
   useLayoutEffect(() => {
     const el = tlRef.current!;
@@ -221,13 +220,11 @@ export function Editor() {
     ro.observe(el);
     return () => ro.disconnect();
   }, []);
-  useEffect(() => {
-    const el = tlRef.current;
-    if (!el) return;
-    if (s.playing) return;
-    const want = s.time * PPS;
-    if (Math.abs(el.scrollLeft - want) > 1) { programmatic.current = true; el.scrollLeft = want; }
-  }, [s.time, tlW, s.playing, PPS]);
+  // İçerik, zaman × ölçek kadar sola kaydırılır (tam piksel): oynatma çizgisi hep bir kare çizgisinin üstünde
+  useLayoutEffect(() => {
+    if (s.playing || !innerRef.current) return;
+    innerRef.current.style.transform = `translateX(${-Math.round(s.time * PPS)}px)`;
+  });
   const pillsRef = useRef<HTMLDivElement>(null);
   const innerRef = useRef<HTMLDivElement>(null);
   // İki parmakla aç/kapat = yakınlaştır/uzaklaştır (oynatma çizgisindeki an sabit kalır)
@@ -236,15 +233,23 @@ export function Editor() {
     const el = tlBoxRef.current; if (!el) return;
     let d0 = 0, p0 = 100;
     const dist = (e: TouchEvent) => Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
-    const start = (e: TouchEvent) => { if (e.touches.length === 2) { d0 = dist(e); p0 = ppsRef.current; e.preventDefault(); } };
+    const start = (e: TouchEvent) => { if (e.touches.length === 2) { cancelAnimationFrame(inertia.current); pan.current = null; d0 = dist(e); p0 = ppsRef.current; e.preventDefault(); } };
     const move = (e: TouchEvent) => {
       if (e.touches.length !== 2 || !d0) return;
       e.preventDefault();
       setPPS(Math.min(PPS_MAX, Math.max(PPS_MIN, p0 * dist(e) / d0)));
     };
     const end = (e: TouchEvent) => { if (e.touches.length < 2) d0 = 0; };
+    let acc = 0;
     const wheel = (e: WheelEvent) => {
-      if (!e.ctrlKey && !e.metaKey) return;
+      if (!e.ctrlKey && !e.metaKey) {
+        const dx = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.shiftKey ? e.deltaY : 0;
+        if (!dx) return; // dikey tekerlek: katmanlar arasında doğal kaydırma
+        e.preventDefault();
+        acc += dx;
+        wheelStep.current(acc); acc = 0;
+        return;
+      }
       e.preventDefault();
       setPPS((v) => Math.min(PPS_MAX, Math.max(PPS_MIN, v * Math.exp(-e.deltaY * 0.0025))));
     };
@@ -257,19 +262,55 @@ export function Editor() {
   const onTlScroll = () => {
     const el = tlRef.current!;
     if (pillsRef.current) pillsRef.current.style.transform = `translateY(${-el.scrollTop}px)`;
-    if (programmatic.current) { programmatic.current = false; if (innerRef.current) innerRef.current.style.transform = ''; return; } // kodla kaydırma zaten tam kareye
-    if (s.playing) return;
-    const raw = Math.min(el.scrollLeft / PPS, dur + 2);
-    // Cetvelde görünen çizgilere otur
-    let t = Math.round(raw * p.fps / tickStep) * tickStep / p.fps;
-    // Mıknatıs: açık işin işaretleyicisine 8 px'ten yakınsa ona yapış
-    if (sel) for (const m of layerMarkers(sel)) if ((!s.kfFocus || s.kfFocus.includes(m.group)) && Math.abs(m.t - raw) * PPS < 8) { t = m.t; break; }
-    t = snapF(t);
-    // İçerik kare kare kayar: kaydırma kaymasını telafi et, oynatma çizgisi hep bir çizginin üstünde kalsın
-    if (innerRef.current) innerRef.current.style.transform = `translateX(${el.scrollLeft - t * PPS}px)`;
-    s.setTime(t);
   };
-  const half = tlW / 2;
+  // Yatay kaydırma: parmak kaydıkça zaman cetveldeki çizgiden çizgiye atlar (ara konum yok)
+  const pan = useRef<{ x: number; y: number; t0: number; on: boolean; lastX: number; lastT: number; vx: number } | null>(null);
+  const panSuppressClick = useRef(false);
+  const wheelStep = useRef((_px: number) => {});
+  wheelStep.current = (px: number) => stepTo(useStore.getState().time + px / PPS);
+  const inertia = useRef(0);
+  const stepTo = (raw: number) => {
+    const fr = Math.max(0, Math.min(Math.round((dur + 2) * p.fps), Math.round(raw * p.fps / tickStep) * tickStep));
+    const t = fr / p.fps;
+    if (Math.abs(t - useStore.getState().time) > 1e-9) s.setTime(t);
+  };
+  const panDown = (e: React.PointerEvent) => {
+    if (e.button > 0) return;
+    cancelAnimationFrame(inertia.current);
+    pan.current = { x: e.clientX, y: e.clientY, t0: useStore.getState().time, on: false, lastX: e.clientX, lastT: performance.now(), vx: 0 };
+  };
+  const panMove = (e: React.PointerEvent) => {
+    const d = pan.current; if (!d || rowPress.current?.active || kfDrag.current?.active) return;
+    const dx = e.clientX - d.x;
+    if (!d.on) {
+      if (Math.abs(dx) < 6 || Math.abs(dx) < Math.abs(e.clientY - d.y)) return;
+      d.on = true; panSuppressClick.current = true;
+      if (s.playing) s.setPlaying(false);
+      try { (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId); } catch { /* yok */ }
+    }
+    const now = performance.now();
+    d.vx = 0.8 * d.vx + 0.2 * ((e.clientX - d.lastX) / Math.max(1, now - d.lastT));
+    d.lastX = e.clientX; d.lastT = now;
+    stepTo(d.t0 - dx / PPS);
+  };
+  const panUp = () => {
+    const d = pan.current; pan.current = null;
+    if (!d?.on) return;
+    // Fırlatma: hız azalarak devam eder, yine kare kare
+    let v = d.vx * 1000 / PPS; // sn/sn
+    let t = useStore.getState().time, last = performance.now();
+    const run = (now: number) => {
+      const dt = (now - last) / 1000; last = now;
+      v *= Math.exp(-dt * 4);
+      if (Math.abs(v) < 0.05) return;
+      t -= v * dt; stepTo(t);
+      inertia.current = requestAnimationFrame(run);
+    };
+    // Sadece gerçekten fırlatıldıysa (son hareket yeni ve hızlı) devam et
+    if (performance.now() - d.lastT < 60 && Math.abs(d.vx) > 0.6) inertia.current = requestAnimationFrame(run);
+    setTimeout(() => { panSuppressClick.current = false; }, 0);
+  };
+  const half = Math.round(tlW / 2);
   const snapF = (t: number) => Math.round(t * p.fps) / p.fps;
   const totalW = (dur + 2) * PPS;
 
@@ -342,12 +383,13 @@ export function Editor() {
   };
 
   // Uzun basma: çoklu seçim modunu açar; mod açıkken dokunma seçime ekler/çıkarır
-  const press = useRef<{ t: ReturnType<typeof setTimeout>; long: boolean } | null>(null);
+  const press = useRef<{ t: ReturnType<typeof setTimeout>; long: boolean; x: number; y: number } | null>(null);
   const pressHandlers = (id: string) => ({
-    onPointerDown: () => {
-      const pr = { long: false, t: setTimeout(() => { pr.long = true; useStore.getState().setMulti([id]); navigator.vibrate?.(20); }, 450) };
+    onPointerDown: (e: React.PointerEvent) => {
+      const pr = { long: false, x: e.clientX, y: e.clientY, t: setTimeout(() => { pr.long = true; useStore.getState().setMulti([id]); navigator.vibrate?.(20); }, 450) };
       press.current = pr;
     },
+    onPointerMove: (e: React.PointerEvent) => { const pr = press.current; if (pr && !pr.long && Math.hypot(e.clientX - pr.x, e.clientY - pr.y) > 8) clearTimeout(pr.t); },
     onPointerUp: () => { if (press.current) clearTimeout(press.current.t); },
     onPointerLeave: () => { if (press.current) clearTimeout(press.current.t); },
     onContextMenu: (e: React.MouseEvent) => e.preventDefault(),
@@ -456,15 +498,15 @@ export function Editor() {
 
   // ---------- Katman sırası: şeridin hizasındaki boşluğa basılı tutup aşağı/yukarı kaydır ----------
   const [reord, setReord] = useState<{ from: number; cur: number } | null>(null);
-  const rowPress = useRef<{ i: number; y: number; timer: ReturnType<typeof setTimeout>; active: boolean } | null>(null);
+  const rowPress = useRef<{ i: number; x: number; y: number; timer: ReturnType<typeof setTimeout>; active: boolean } | null>(null);
   const rowDown = (e: React.PointerEvent, i: number) => {
     try { (e.target as HTMLElement).setPointerCapture(e.pointerId); } catch { /* yok */ }
-    const r = { i, y: e.clientY, active: false, timer: setTimeout(() => { r.active = true; setReord({ from: i, cur: i }); navigator.vibrate?.(15); }, 400) };
+    const r = { i, x: e.clientX, y: e.clientY, active: false, timer: setTimeout(() => { r.active = true; setReord({ from: i, cur: i }); navigator.vibrate?.(15); }, 400) };
     rowPress.current = r;
   };
   const rowMove = (e: React.PointerEvent) => {
     const r = rowPress.current; if (!r) return;
-    if (!r.active) { if (Math.abs(e.clientY - r.y) > 8) clearTimeout(r.timer); return; }
+    if (!r.active) { if (Math.abs(e.clientY - r.y) > 8 || Math.abs(e.clientX - r.x) > 8) clearTimeout(r.timer); return; }
     const cur = Math.max(0, Math.min(rows.length - 1, r.i + Math.round((e.clientY - r.y) / ROW)));
     setReord((o) => (o && o.cur !== cur ? { ...o, cur } : o));
   };
@@ -604,7 +646,9 @@ export function Editor() {
 
       <div className="lower">
         <div className="tl" ref={tlBoxRef}>
-          <div className="tl-scroll" ref={tlRef} onScroll={onTlScroll}>
+          <div className="tl-scroll" ref={tlRef} onScroll={onTlScroll}
+            onPointerDown={panDown} onPointerMove={panMove} onPointerUp={panUp} onPointerCancel={panUp}
+            onClickCapture={(e) => { if (panSuppressClick.current) { e.stopPropagation(); e.preventDefault(); } }}>
             <div className="tl-inner" ref={innerRef} style={{ width: totalW + tlW }}>
               <div className="ruler" style={{ left: half, width: totalW }}>
                 {(() => {
@@ -616,10 +660,13 @@ export function Editor() {
                   const out = [];
                   for (let f = 0; f <= n; f += step) {
                     const cls = f % fps === 0 ? 's' : half2 && f % half2 === 0 ? 'h' : '';
-                    out.push(<i key={f} className={cls} style={{ left: f * fpx }} />);
+                    out.push(<i key={f} className={cls} style={{ left: Math.round(f * fpx) }} />);
                   }
                   // Uzaklaştırınca yarım saniyeler atlanırsa onları ayrıca göster
-                  if (half2 && step > half2) for (let sec = 0.5; sec <= dur + 2; sec += 1) out.push(<i key={'h' + sec} className="h" style={{ left: sec * PPS }} />);
+                  if (half2 && step > half2) for (let sec = 0.5; sec <= dur + 2; sec += 1) out.push(<i key={'h' + sec} className="h" style={{ left: Math.round(sec * PPS) }} />);
+                  // Oynatma çizgisinin karesi görünen adımda değilse onun çizgisini de göster
+                  const cf = Math.round(s.time * fps);
+                  if (cf % step) out.push(<i key={'c' + cf} className="cur" style={{ left: Math.round(cf * fpx) }} />);
                   return out;
                 })()}
               </div>
@@ -674,8 +721,8 @@ export function Editor() {
               <span>Değişiklik<b>{(() => { const d = trim0.current.side === 'start' ? sel.start - trim0.current.s0 : sel.end - trim0.current.e0; return (d < 0 ? '-' : '+') + fmtTime(Math.abs(d), p.fps); })()}</b></span>
             </div>
           )}
-          <div className="playhead" />
-          <div className="timecode" ref={timecodeRef}>{fmtTime(s.time, p.fps)}</div>
+          <div className="playhead" style={{ left: half }} />
+          <div className="timecode" ref={timecodeRef} style={{ left: half }}>{fmtTime(s.time, p.fps)}</div>
         </div>
         {!wide && tools}
         {!wide && panelEl}

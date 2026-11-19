@@ -429,7 +429,7 @@ export function MovePanel({ layer, onClose }: { layer: Layer; onClose: () => voi
   const props = MODE_PROPS[mode];
   const hasKey = props.some((pr) => keyAt(layer[pr], t));
   const animated = props.some((pr) => (layer[pr].k?.length ?? 0) > 0);
-  const drag = useRef<{ x: number; y: number; v: number[]; cx?: number; cy?: number } | null>(null);
+  const drag = useRef<{ x: number; y: number; v: number[]; cx?: number; cy?: number; lastAng?: number; acc?: number } | null>(null);
   const padRef = useRef<HTMLDivElement>(null);
 
   const set = (vals: Partial<Record<AnimProp, number>>, commit = true) =>
@@ -458,10 +458,13 @@ export function MovePanel({ layer, onClose }: { layer: Layer; onClose: () => voi
     const dx = e.clientX - d.x, dy = e.clientY - d.y;
     if (mode === 'move') set({ x: Math.round((d.v[0] + dx * 1.5) * 100) / 100, y: Math.round((d.v[1] + dy * 1.5) * 100) / 100 }, false);
     else if (mode === 'rotate') {
-      // Kadran: parmağın merkeze göre açısı (0° = sağ), mevcut tur sayısı korunur
+      // Kadran: her hareketteki açı farkı toplanır; kaç tur çevrilirse o kadar döner (sınır yok)
       const ang = Math.atan2(e.clientY - d.cy!, e.clientX - d.cx!) * 180 / Math.PI;
-      const turns = Math.round((d.v[0] - ang) / 360);
-      set({ rotation: Math.round((ang + turns * 360) * 10) / 10 }, false);
+      if (d.lastAng === undefined) { d.lastAng = ang; d.acc = d.v[0]; return; }
+      let da = ang - d.lastAng;
+      if (da > 180) da -= 360; else if (da < -180) da += 360;
+      d.lastAng = ang; d.acc = (d.acc ?? d.v[0]) + da;
+      set({ rotation: Math.round(d.acc * 10) / 10 }, false);
     } else set({ scale: Math.max(0.01, Math.round((d.v[0] + dx * 0.004) * 1000) / 1000) }, false);
   };
   const onPadUp = () => { drag.current = null; };
@@ -527,7 +530,10 @@ export function MovePanel({ layer, onClose }: { layer: Layer; onClose: () => voi
           {mode === 'rotate' && (
             <div className="dial">
               <div className="ring">
-                <span className="deg">{Math.round(rot)}°</span>
+                <span className="deg">
+                  {Math.abs(rot) >= 360 && <small className="turns">×{Math.trunc(rot / 360)}</small>}
+                  {Math.round(rot - Math.trunc(rot / 360) * 360)}°
+                </span>
                 <span className="knob" style={{ transform: `rotate(${rot}deg) translateX(var(--r))` }} />
               </div>
             </div>
