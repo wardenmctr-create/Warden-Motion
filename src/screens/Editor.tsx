@@ -71,7 +71,7 @@ export function Editor() {
     if (!c) return;
     const W = Math.round(dispW * dpr), H = Math.round(dispH * dpr);
     if (c.width !== W || c.height !== H) { c.width = W; c.height = H; }
-    renderFrame(c.getContext('2d')!, p, timeRef.current, { selectedId: s.playing ? null : s.selectedId, quality: c.width / p.width, fast: s.playing && lite, gradHandles: panel === 'color', motionPath: panel === 'move' });
+    renderFrame(c.getContext('2d')!, p, timeRef.current, { lite, selectedId: s.playing ? null : s.selectedId, quality: c.width / p.width, fast: s.playing && lite, gradHandles: panel === 'color', motionPath: panel === 'move' });
   });
 
   const loopRef = useRef(loop);
@@ -90,7 +90,7 @@ export function Editor() {
       if (t >= d) { if (st.loopOn) t = 0; else { timeRef.current = d; st.setPlaying(false); return; } }
       timeRef.current = t;
       const c = canvasRef.current;
-      if (c) renderFrame(c.getContext('2d')!, pr, t, { quality: c.width / pr.width, fast: st.settings.lite, playing: true });
+      if (c) renderFrame(c.getContext('2d')!, pr, t, { quality: c.width / pr.width, fast: st.settings.lite, lite: st.settings.lite, playing: true });
       const el = tlRef.current;
       if (el) { programmatic.current = true; el.scrollLeft = t * PPS; }
       if (timecodeRef.current) timecodeRef.current.textContent = fmtTime(t, pr.fps);
@@ -620,7 +620,7 @@ export function Editor() {
         <div className="progress" role="status">
           <b>Video hazırlanıyor… %{Math.round(exporting * 100)}</b>
           <div className="bar"><i style={{ width: `${exporting * 100}%` }} /></div>
-          <span style={{ fontSize: 12, color: 'var(--d-text2)' }}>Video gerçek süresinde kaydedilir.</span>
+          <span style={{ fontSize: 12, color: 'var(--d-text2)' }}>Her kare en yüksek kalitede hazırlanıyor.</span>
         </div>
       )}
       {toast && <div className="toast" role="status">{toast}</div>}

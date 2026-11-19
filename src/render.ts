@@ -142,7 +142,7 @@ export function toLocal(pw: TR, w: TR): TR {
   return { x: dx * Math.cos(a) - dy * Math.sin(a), y: dx * Math.sin(a) + dy * Math.cos(a), rot: w.rot - pw.rot, scale: w.scale / pw.scale, opacity: w.opacity };
 }
 
-export interface RenderOpts { /** Oynatma/dışa aktarma sırasında videolar gerçekten oynar */ playing?: boolean; selectedId?: string | null; quality?: number; /** Lite oynatma: bulanıklık/parlama atlanır */ fast?: boolean; /** Renk panelinde geçiş tutamaçlarını göster */ gradHandles?: boolean; /** Taşı ve Çevir açıkken seçili katmanın hareket yolu */ motionPath?: boolean }
+export interface RenderOpts { /** Lite modu: hareket bulanıklığı az parçalı kopyalarla */ lite?: boolean; /** Dışa aktarma: en yüksek kalite */ exporting?: boolean; /** Oynatma/dışa aktarma sırasında videolar gerçekten oynar */ playing?: boolean; selectedId?: string | null; quality?: number; /** Lite oynatma: bulanıklık/parlama atlanır */ fast?: boolean; /** Renk panelinde geçiş tutamaçlarını göster */ gradHandles?: boolean; /** Taşı ve Çevir açıkken seçili katmanın hareket yolu */ motionPath?: boolean }
 
 let bufA: HTMLCanvasElement | null = null, bufB: HTMLCanvasElement | null = null;
 const buf = (c: HTMLCanvasElement | null, w: number, h: number) => {
@@ -178,6 +178,72 @@ function paint(ctx: CanvasRenderingContext2D, p: Project, l: Layer, t: number, q
   return tr;
 }
 
+let bufC: HTMLCanvasElement | null = null;
+
+/**
+ * Hareket bulanıklığı. Katman, o anın etrafındaki ara anlarda çizilir.
+ * - lite: az sayıda kopya üst üste (hızlı, donmaz)
+ * - preview / export: her ara an ayrı çizilip piksel piksel (kayan sayıyla) ortalanır = gerçek bulanıklık
+ */
+function motionBlur(ab: CanvasRenderingContext2D, p: Project, l: Layer, t: number, q: number, fast: boolean, trw: TR, span: number,
+  use: { usePos: boolean; useScl: boolean; useAng: boolean }, mode: 'lite' | 'preview' | 'export') {
+  const W = ab.canvas.width, H = ab.canvas.height;
+  const tAt = (u: number) => Math.min(l.end - 1e-4, Math.max(l.start, t + span * (u - 0.5))); // anın etrafında ortalı
+  const trAt = (u: number): TR => {
+    const w = worldTransform(p, l, tAt(u));
+    return { ...trw, x: use.usePos ? w.x : trw.x, y: use.usePos ? w.y : trw.y, scale: use.useScl ? w.scale : trw.scale, rot: use.useAng ? w.rot : trw.rot };
+  };
+  const a0 = trAt(0), a1 = trAt(1);
+  const r = Math.hypot(l.w, l.h) / 2;
+  const dist = (Math.hypot(a1.x - a0.x, a1.y - a0.y) + Math.abs(a1.scale - a0.scale) * r + Math.abs(a1.rot - a0.rot) * Math.PI / 180 * r * trw.scale) * q;
+  const lay = { ...l, blend: undefined };
+  ab.clearRect(0, 0, W, H);
+  if (dist < 1) { paint(ab, p, lay, t, q, fast, trw); return; }
+
+  if (mode === 'lite') {
+    const N = Math.max(6, Math.min(12, Math.ceil(dist / 3)));
+    const soften = Math.min(10, dist / N);
+    ab.globalCompositeOperation = 'lighter';
+    for (let i = 0; i < N; i++) {
+      const ex = soften > 0.6 ? [...l.effects, { id: '_mb', type: 'blur' as const, amount: soften / q }] : l.effects;
+      paint(ab, p, { ...lay, effects: ex }, t, q, true, { ...trAt(i / (N - 1)), opacity: trw.opacity / N });
+    }
+    ab.globalCompositeOperation = 'source-over';
+    return;
+  }
+
+  // Gerçek bulanıklık: piksel başına 1 (önizleme 1,5) adımdan az olacak kadar ara an
+  const N = Math.max(8, Math.min(mode === 'export' ? 160 : 48, Math.ceil(dist / (mode === 'export' ? 0.7 : 1.5))));
+  const samples: TR[] = []; for (let i = 0; i < N; i++) samples.push(trAt(N === 1 ? 0.5 : i / (N - 1)));
+  // Bütün ara anları kapsayan kutu
+  const rr = (r * Math.max(...samples.map((x) => x.scale)) + 60) * q;
+  const x0 = Math.max(0, Math.floor(Math.min(...samples.map((x) => x.x)) * q - rr)), y0 = Math.max(0, Math.floor(Math.min(...samples.map((x) => x.y)) * q - rr));
+  const x1 = Math.min(W, Math.ceil(Math.max(...samples.map((x) => x.x)) * q + rr)), y1 = Math.min(H, Math.ceil(Math.max(...samples.map((x) => x.y)) * q + rr));
+  const bw = x1 - x0, bh = y1 - y0;
+  if (bw <= 0 || bh <= 0) return;
+  bufC = buf(bufC, W, H);
+  const cc = bufC.getContext('2d', { willReadFrequently: true })!;
+  const acc = new Float32Array(bw * bh * 4);
+  for (const tr of samples) {
+    cc.setTransform(1, 0, 0, 1, 0, 0);
+    cc.clearRect(x0, y0, bw, bh);
+    paint(cc, p, lay, t, q, fast, tr);
+    const d = cc.getImageData(x0, y0, bw, bh).data;
+    for (let k = 0; k < d.length; k += 4) {
+      const al = d[k + 3];
+      if (!al) continue;
+      acc[k] += d[k] * al; acc[k + 1] += d[k + 1] * al; acc[k + 2] += d[k + 2] * al; acc[k + 3] += al;
+    }
+  }
+  const out = ab.createImageData(bw, bh), od = out.data;
+  for (let k = 0; k < acc.length; k += 4) {
+    const sa = acc[k + 3];
+    if (!sa) continue;
+    od[k] = acc[k] / sa; od[k + 1] = acc[k + 1] / sa; od[k + 2] = acc[k + 2] / sa; od[k + 3] = sa / N;
+  }
+  ab.putImageData(out, x0, y0);
+}
+
 const visible = (l: Layer, t: number) => !l.hidden && t >= l.start && t < l.end;
 
 export function renderFrame(ctx: CanvasRenderingContext2D, p: Project, t: number, opts: RenderOpts = {}) {
@@ -194,7 +260,7 @@ export function renderFrame(ctx: CanvasRenderingContext2D, p: Project, t: number
     if (!visible(l, t)) continue;
     const m = l.mask ? p.layers.find((x) => x.id === l.mask) : undefined;
     const warps = fast ? [] : l.effects.filter((e) => e.type === 'fractal');
-    const mb = fast ? undefined : l.effects.find((e) => e.type === 'motionblur');
+    const mb = l.effects.find((e) => e.type === 'motionblur');
     if (m || warps.length || mb) {
       // Kırpma maskesi: katmanı ayrı tuvale çiz, maskenin şekliyle kes, sonra sahneye bas
       const W = ctx.canvas.width, H = ctx.canvas.height;
@@ -205,24 +271,7 @@ export function renderFrame(ctx: CanvasRenderingContext2D, p: Project, t: number
         // Hareket bulanıklığı: önceki anlardaki görüntüleri ortalayarak üst üste çiz
         const span = fxVal(mb, 'tune', t) / p.fps * 2;
         const usePos = fxVal(mb, 'pos', t) >= 0.5, useScl = fxVal(mb, 'scl', t) >= 0.5, useAng = fxVal(mb, 'ang', t) >= 0.5;
-        if (span > 0) {
-          const tAt = (u: number) => Math.min(l.end - 1e-4, Math.max(l.start, t + span * (u - 0.5))); // anın etrafında ortalı
-          const w0 = worldTransform(p, l, tAt(0)), w1 = worldTransform(p, l, tAt(1));
-          const r = Math.hypot(l.w, l.h) / 2;
-          // Hareketin tuvaldeki uzunluğu (konum + ölçek + dönüş): kopya sayısını buna göre seç
-          const dist = ((usePos ? Math.hypot(w1.x - w0.x, w1.y - w0.y) : 0) + (useScl ? Math.abs(w1.scale - w0.scale) * r : 0) + (useAng ? Math.abs(w1.rot - w0.rot) * Math.PI / 180 * r * trw.scale : 0)) * q;
-          const N = Math.max(8, Math.min(20, Math.ceil(dist / 1.5))); // çok soluk kopya rengi bozar
-          const soften = Math.min(12, dist / N); // kopyalar arası boşluğu kapatan hafif bulanıklık (tuval pikseli)
-          ab.clearRect(0, 0, W, H);
-          ab.globalCompositeOperation = 'lighter'; // N örneği eşit ağırlıkla topla = ortalama
-          for (let i = 0; i < N; i++) {
-            const w = worldTransform(p, l, tAt(i / (N - 1)));
-            const tr2 = { ...trw, x: usePos ? w.x : trw.x, y: usePos ? w.y : trw.y, scale: useScl ? w.scale : trw.scale, rot: useAng ? w.rot : trw.rot, opacity: trw.opacity / N };
-            const ex = soften > 0.6 ? [...l.effects, { id: '_mb', type: 'blur' as const, amount: soften / q }] : l.effects;
-            paint(ab, p, { ...l, blend: undefined, effects: ex }, t, q, fast, tr2);
-          }
-          ab.globalCompositeOperation = 'source-over';
-        }
+        if (span > 0) motionBlur(ab, p, l, t, q, fast, trw, span, { usePos, useScl, useAng }, opts.exporting ? 'export' : (opts.lite || fast) ? 'lite' : 'preview');
       }
       if (warps.length) {
         // Katmanın tuvaldeki kutusu (dönüşle birlikte)
