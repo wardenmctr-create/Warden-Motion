@@ -423,6 +423,8 @@ const fmt2 = (n: number) => n.toFixed(2).replace('.', ',');
 export function MovePanel({ layer, onClose }: { layer: Layer; onClose: () => void }) {
   const { s, t } = useNow();
   const [mode, setMode] = useState<Mode>('move');
+  useEffect(() => { s.setKfFocus([mode === 'move' ? 'pos' : mode === 'rotate' ? 'rot' : 'scl']); }, [mode]);
+  useEffect(() => () => useStore.getState().setKfFocus(null), []);
   const [curve, setCurve] = useState(false);
   const props = MODE_PROPS[mode];
   const hasKey = props.some((pr) => keyAt(layer[pr], t));
@@ -639,6 +641,7 @@ const BLENDS: { id: import('../types').BlendMode; name: string }[] = [
 ];
 export function OpacityPanel({ layer, onClose }: { layer: Layer; onClose: () => void }) {
   const { s, t } = useNow();
+  useEffect(() => { s.setKfFocus(['op']); return () => useStore.getState().setKfFocus(null); }, []);
   const v = valueAt(layer.opacity, t);
   const has = !!keyAt(layer.opacity, t);
   const bm = layer.blend ?? 'normal';
@@ -684,6 +687,8 @@ export function EffectsPanel({ layer, onClose }: { layer: Layer; onClose: () => 
   const [browse, setBrowse] = useState(false);
   const [menuFx, setMenuFx] = useState<string | null>(null);
   const sel = s.fxParam;
+  useEffect(() => { s.setKfFocus(sel ? [`fx:${sel.fx}:${sel.key}`] : ['fx:none']); }, [sel?.fx, sel?.key]);
+  useEffect(() => () => useStore.getState().setKfFocus(null), []);
   useEffect(() => () => useStore.getState().setFxParam(null), []);
   // Seçili parametre yoksa ilk efektin ilk parametresini seç
   useEffect(() => {

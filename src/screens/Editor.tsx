@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Icon } from '../components/Icon';
 import { AddPanel, type AddTab, ColorPanel, CBPanel, EffectsPanel, MovePanel, OpacityPanel, TextPanel } from '../components/Panels';
-import { fmtTime, layerKeyTimes, projectDuration, setAnim, valueAt } from '../anim';
+import { fmtTime, projectDuration, setAnim, valueAt } from '../anim';
+import { deleteMarker, groupLabel, layerMarkers, moveMarker, type Marker } from '../markers';
 import { estimateExport, exportVideo, heavyEffects, saveFile, type ExportInfo } from '../export';
 import { TUTORIALS } from '../factories';
 import { fxMeta, fxVal } from '../effects';
@@ -98,7 +99,7 @@ export function Editor() {
       raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
-    return () => { cancelAnimationFrame(raf); pauseAllVideos(); useStore.getState().setTime(timeRef.current); };
+    return () => { cancelAnimationFrame(raf); pauseAllVideos(); useStore.getState().setTime(Math.round(timeRef.current * p.fps) / p.fps); };
   }, [s.playing]);
 
   // ---------- Önizlemede sürükleme ----------
@@ -228,9 +229,13 @@ export function Editor() {
     if (pillsRef.current) pillsRef.current.style.transform = `translateY(${-el.scrollTop}px)`;
     if (programmatic.current) { programmatic.current = false; return; }
     if (s.playing) return;
-    s.setTime(Math.min(el.scrollLeft / PPS, dur + 2));
+    let t = Math.min(el.scrollLeft / PPS, dur + 2);
+    // Mıknatıs: seçili katmanın işaretleyicisine 8 px'ten yakınsa ona yapış
+    if (sel) for (const m of layerMarkers(sel)) if ((!s.kfFocus || s.kfFocus.includes(m.group)) && Math.abs(m.t - t) * PPS < 8) { t = m.t; break; }
+    s.setTime(snapF(t)); // her zaman tam bir kareye otur
   };
   const half = tlW / 2;
+  const snapF = (t: number) => Math.round(t * p.fps) / p.fps;
   const totalW = (dur + 2) * PPS;
 
   // ---------- Geri tuşu (Android) ----------
@@ -365,13 +370,15 @@ export function Editor() {
   };
 
   // Kırpma tutamaçları: seçili katmanın başını/sonunu sürükle
-  const trim0 = useRef<{ id: string; side: 'start' | 'end'; x: number; v: number } | null>(null);
+  const trim0 = useRef<{ id: string; side: 'start' | 'end'; x: number; v: number; s0: number; e0: number } | null>(null);
+  const [trimming, setTrimming] = useState(false);
   const trimDown = (e: React.PointerEvent, id: string, side: 'start' | 'end') => {
     e.stopPropagation();
     try { (e.target as HTMLElement).setPointerCapture(e.pointerId); } catch { /* yok */ }
     const l = p.layers.find((x) => x.id === id)!;
     s.checkpoint();
-    trim0.current = { id, side, x: e.clientX, v: side === 'start' ? l.start : l.end };
+    trim0.current = { id, side, x: e.clientX, v: side === 'start' ? l.start : l.end, s0: l.start, e0: l.end };
+    setTrimming(true);
   };
   const trimMove = (e: React.PointerEvent) => {
     const d = trim0.current; if (!d) return;
@@ -379,7 +386,69 @@ export function Editor() {
     const v = Math.round((d.v + (e.clientX - d.x) / PPS) * p.fps) / p.fps;
     s.updateLayer(d.id, (l) => (d.side === 'start' ? { ...l, start: Math.max(0, Math.min(v, l.end - 0.1)) } : { ...l, end: Math.max(l.start + 0.1, v) }), false);
   };
-  const trimUp = () => { trim0.current = null; };
+  const trimUp = () => { trim0.current = null; setTrimming(false); };
+
+  // ---------- Hareket işaretleyicileri ----------
+  const focus = s.kfFocus;
+  const onMarker = (m: Marker) => Math.abs(m.t - s.time) < 0.5 / p.fps;
+  const kfDrag = useRef<{ m: Marker; x: number; timer: ReturnType<typeof setTimeout>; active: boolean; t: number } | null>(null);
+  const [kfMoving, setKfMoving] = useState<string | null>(null);
+  const kfDown = (e: React.PointerEvent, m: Marker) => {
+    e.stopPropagation();
+    try { (e.target as HTMLElement).setPointerCapture(e.pointerId); } catch { /* yok */ }
+    const d = { m, x: e.clientX, active: false, t: m.t, timer: setTimeout(() => { d.active = true; s.checkpoint(); setKfMoving(m.group + '@' + m.t); navigator.vibrate?.(15); }, 300) };
+    kfDrag.current = d;
+  };
+  const kfMove = (e: React.PointerEvent) => {
+    const d = kfDrag.current; if (!d) return;
+    e.stopPropagation();
+    if (!d.active) { if (Math.abs(e.clientX - d.x) > 8) clearTimeout(d.timer); return; }
+    if (!sel) return;
+    const t1 = Math.min(sel.end, Math.max(sel.start, snapF(d.m.t + (e.clientX - d.x) / PPS)));
+    if (Math.abs(t1 - d.t) < 1e-6) return;
+    const from = d.t; d.t = t1;
+    s.updateLayer(sel.id, (l) => moveMarker(l, d.m.group, from, t1), false);
+    s.setTime(t1);
+  };
+  const kfUp = (e: React.PointerEvent) => {
+    const d = kfDrag.current; if (!d) return;
+    e.stopPropagation();
+    clearTimeout(d.timer);
+    if (!d.active) s.setTime(d.m.t); // dokununca o ana git
+    kfDrag.current = null; setKfMoving(null);
+  };
+
+  // ---------- Katman sırası: şeridin hizasındaki boşluğa basılı tutup aşağı/yukarı kaydır ----------
+  const [reord, setReord] = useState<{ from: number; cur: number } | null>(null);
+  const rowPress = useRef<{ i: number; y: number; timer: ReturnType<typeof setTimeout>; active: boolean } | null>(null);
+  const rowDown = (e: React.PointerEvent, i: number) => {
+    try { (e.target as HTMLElement).setPointerCapture(e.pointerId); } catch { /* yok */ }
+    const r = { i, y: e.clientY, active: false, timer: setTimeout(() => { r.active = true; setReord({ from: i, cur: i }); navigator.vibrate?.(15); }, 400) };
+    rowPress.current = r;
+  };
+  const rowMove = (e: React.PointerEvent) => {
+    const r = rowPress.current; if (!r) return;
+    if (!r.active) { if (Math.abs(e.clientY - r.y) > 8) clearTimeout(r.timer); return; }
+    const cur = Math.max(0, Math.min(rows.length - 1, r.i + Math.round((e.clientY - r.y) / ROW)));
+    setReord((o) => (o && o.cur !== cur ? { ...o, cur } : o));
+  };
+  const rowUp = () => {
+    const r = rowPress.current; rowPress.current = null;
+    if (!r) return;
+    clearTimeout(r.timer);
+    if (r.active && reord && reord.cur !== reord.from) {
+      const nr = [...rows]; const [it] = nr.splice(reord.from, 1); nr.splice(reord.cur, 0, it);
+      s.update((pp) => ({ ...pp, layers: [...nr].reverse().map((l) => pp.layers.find((x) => x.id === l.id)!) }));
+    }
+    setReord(null);
+  };
+  const rowOffset = (i: number) => {
+    if (!reord) return 0;
+    if (i === reord.from) return (reord.cur - reord.from) * ROW;
+    if (reord.from < reord.cur && i > reord.from && i <= reord.cur) return -ROW;
+    if (reord.from > reord.cur && i < reord.from && i >= reord.cur) return ROW;
+    return 0;
+  };
 
   const openAdd = (tab: AddTab | null) => { setAddTab(tab); setReplaceFlagOf(null); setPanel('add'); s.setPlaying(false); };
 
@@ -507,12 +576,28 @@ export function Editor() {
                 ))}
                 {Array.from({ length: Math.ceil(dur + 2) }, (_, i) => <b key={i} style={{ left: i * PPS }}>{i}s</b>)}
               </div>
+              {!sel && rows.map((l, i) => (
+                <div key={'row' + l.id} className={'rowstrip' + (reord?.from === i ? ' on' : '')} style={{ top: TOP + i * ROW - 3 }}
+                  onPointerDown={(e) => rowDown(e, i)} onPointerMove={rowMove} onPointerUp={rowUp} onPointerCancel={rowUp} onContextMenu={(e) => e.preventDefault()} />
+              ))}
+              {reord && <div className="rowline" style={{ top: TOP + reord.cur * ROW - 3 }} />}
               {(sel ? [sel] : rows).map((l, i) => (
-                <button key={l.id} className={'track' + (l.id === s.selectedId ? ' sel' : multi?.includes(l.id) ? ' msel' : ' off')}
-                  style={{ left: half + l.start * PPS, width: Math.max(8, (l.end - l.start) * PPS), top: TOP + i * ROW, opacity: l.hidden ? 0.45 : 1 }}
+                <button key={l.id} className={'track' + (l.id === s.selectedId ? ' sel' : multi?.includes(l.id) ? ' msel' : ' off') + (reord?.from === i && !sel ? ' drag' : '')}
+                  style={{ left: half + l.start * PPS, width: Math.max(8, (l.end - l.start) * PPS), top: TOP + i * ROW, opacity: l.hidden ? 0.45 : 1, transform: sel ? undefined : `translateY(${rowOffset(i)}px)` }}
                   {...pressHandlers(l.id)}>
                   <span className="tname">{l.tag && <i className="ttag" style={{ background: l.tag }} />}{l.mask ? '◐ ' : ''}{l.name}</span>
-                  {l.id === s.selectedId && layerKeyTimes(l).map((kt) => <span key={kt} className="kf" style={{ left: (kt - l.start) * PPS }} />)}
+                  {!(trimming && l.id === s.selectedId) && layerMarkers(l)
+                    .filter((m) => m.t >= l.start - 1e-6 && m.t <= l.end + 1e-6) // çubuğun dışında kalanlar görünmez
+                    // Hepsi soluk; sadece seçili katmanda açık panelin işine ait olanlar tam opak
+                    .map((m) => ({ m, f: l.id === s.selectedId && !!focus && focus.includes(m.group) }))
+                    .sort((a, b) => Number(a.f) - Number(b.f))
+                    .map(({ m, f }) => (
+                      <span key={m.group + '@' + m.t} role="button" aria-label={`${groupLabel(l, m.group)} keyframe ${fmtTime(m.t, p.fps)}`}
+                        className={'kf' + (f ? '' : ' dim') + (f && onMarker(m) ? ' on' : '') + (kfMoving === m.group + '@' + m.t ? ' moving' : '')}
+                        style={{ left: (m.t - l.start) * PPS }}
+                        onPointerDown={(e) => (f ? kfDown(e, m) : e.stopPropagation())} onPointerMove={kfMove} onPointerUp={kfUp} onPointerCancel={kfUp}
+                        onClick={(e) => e.stopPropagation()} onContextMenu={(e) => e.preventDefault()}><i /></span>
+                    ))}
                   {l.id === s.selectedId && (
                     <>
                       <span className="th l" role="slider" aria-label="Katmanın başlangıcı" aria-valuenow={l.start} onPointerDown={(e) => trimDown(e, l.id, 'start')} onPointerMove={trimMove} onPointerUp={trimUp} onClick={(e) => e.stopPropagation()} />
@@ -521,6 +606,13 @@ export function Editor() {
                   )}
                 </button>
               ))}
+              {sel && !trimming && !kfMoving && (() => {
+                const m = layerMarkers(sel).find((x) => !!focus && focus.includes(x.group) && onMarker(x) && x.t >= sel.start - 1e-6 && x.t <= sel.end + 1e-6);
+                return m ? (
+                  <button className="kfdel" style={{ left: half + m.t * PPS, top: TOP + ROW + 2 }} aria-label="Bu keyframe'i sil"
+                    onClick={() => s.updateLayer(sel.id, (l) => deleteMarker(l, m.group, m.t))}><Icon name="trash" size={14} />Sil</button>
+                ) : null;
+              })()}
               <div style={{ position: 'absolute', top: TOP + rows.length * ROW + 70, height: 1, width: 1 }} />
             </div>
           </div>
@@ -532,6 +624,14 @@ export function Editor() {
                   <LayerDot l={l} />
                 </button>
               ))}
+            </div>
+          )}
+          {trimming && sel && trim0.current && (
+            <div className="triminfo">
+              <span>Başlangıç<b>{fmtTime(sel.start, p.fps)}</b></span>
+              <span>Bitiş<b>{fmtTime(sel.end, p.fps)}</b></span>
+              <span>Süre<b>{fmtTime(sel.end - sel.start, p.fps)}</b></span>
+              <span>Değişiklik<b>{(() => { const d = trim0.current.side === 'start' ? sel.start - trim0.current.s0 : sel.end - trim0.current.e0; return (d < 0 ? '-' : '+') + fmtTime(Math.abs(d), p.fps); })()}</b></span>
             </div>
           )}
           <div className="playhead" />

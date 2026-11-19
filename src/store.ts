@@ -52,6 +52,9 @@ interface State {
   multi: string[] | null;
   /** Efekt panelinde seçili parametre (önizlemede kaydırarak ayarlanır) */
   fxParam: { fx: string; key: string } | null;
+  /** Açık panelin işi: bu grupların işaretleyicileri tam opak, diğerleri soluk (null = hepsi opak) */
+  kfFocus: string[] | null;
+  setKfFocus: (g: string[] | null) => void;
   setFxParam: (p: { fx: string; key: string } | null) => void;
   setMulti: (ids: string[] | null) => void;
   time: number;
@@ -91,6 +94,8 @@ export const useStore = create<State>((set, get) => ({
   selectedId: null,
   multi: null,
   fxParam: null,
+  kfFocus: null,
+  setKfFocus: (kfFocus) => set({ kfFocus }),
   setFxParam: (fxParam) => set({ fxParam }),
   setMulti: (multi) => set({ multi, selectedId: null }),
   time: 0,

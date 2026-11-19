@@ -518,3 +518,30 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
 .exest b { color: var(--turq); }
 .slownote.warn { border-color: #E8A33F; }
 .exbtns { display: flex; gap: 8px; justify-content: flex-end; margin-top: 4px; }
+
+/* Hareket işaretleyicileri (keyframe) */
+.track .kf { width: 26px; height: 26px; top: 50%; margin: -13px 0 0 -13px; background: transparent; border: none; transform: none; display: flex; align-items: center; justify-content: center; touch-action: none; z-index: 3; }
+.track .kf i { width: 10px; height: 10px; transform: rotate(45deg); background: #F7F8FA; border: 1.5px solid #0B1430; transition: width .12s, height .12s; }
+.track .kf.dim { opacity: .35; }
+.track .kf.on i, .track .kf.moving i { width: 14px; height: 14px; background: #0B1430; border: 2px solid #F7F8FA; }
+.track .kf.moving i { box-shadow: 0 0 0 3px rgba(34,211,197,.5); }
+.kfdel { position: absolute; transform: translateX(-50%); z-index: 6; height: 26px; padding: 0 10px; border-radius: 13px; background: #0B1430; border: 1px solid #4A63A8; color: var(--d-text); font-size: 12px; display: flex; align-items: center; gap: 4px; }
+/* Kırpma bilgisi */
+.triminfo { position: absolute; left: 0; right: 0; top: 0; z-index: 7; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; padding: 4px 8px; background: var(--d-bg); font-size: 10px; color: var(--d-text2); }
+.triminfo span { display: flex; flex-direction: column; }
+.triminfo b { color: var(--d-text); font-size: 12px; font-weight: 500; font-variant-numeric: tabular-nums; }
+/* Katman sırası: şeridin hizasındaki boşluk */
+.rowstrip { position: absolute; left: 0; right: 0; height: calc(20px + 6px); touch-action: pan-x; z-index: 0; }
+.rowstrip.on { background: rgba(34,211,197,.08); }
+.rowline { position: absolute; left: 0; right: 0; height: 2px; background: var(--turq); z-index: 4; pointer-events: none; transform: translateY(-2px); }
+.track { z-index: 1; transition: transform .12s; }
+.track.drag { transition: none; box-shadow: 0 4px 12px rgba(3,8,26,.6); z-index: 5; }
+/* Seçili / seçili değil şeritler aynı görünür; fark sadece seçiliyken iki yandaki tutamaçlar */
+.track, .track.off, .track.sel { background: linear-gradient(90deg, #3FB4DA, #3B7FE0); color: var(--d-deep); padding-left: 8px; padding-right: 8px; border-radius: 3px; }
+
+/* Soluk işaretler %15 küçük ve dokunulamaz (dokunuş şeride gider) */
+.track .kf.dim { opacity: .4; pointer-events: none; }
+.track .kf.dim i { transform: rotate(45deg) scale(.85); }
+/* Soluk işaret: yarı saydam, %15 küçük, renkleri ¼ oranında griye karışık */
+.track .kf.dim { opacity: .5; }
+.track .kf.dim i { background: #DBDBDC; border-color: #282F44; }
