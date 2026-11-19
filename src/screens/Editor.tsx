@@ -13,7 +13,7 @@ import type { Project } from '../types';
 export type Panel = null | 'add' | 'move' | 'color' | 'opacity' | 'effects' | 'cb' | 'text';
 const PANEL_TITLE: Record<string, string> = { move: 'Taşı ve Çevir', color: 'Renk ve Dolgu', opacity: 'Karıştırma ve Opaklık', effects: 'Efektler', text: 'Metni Düzenle', cb: 'CB Ayarları' };
 
-const PPS = 100; // zaman çizelgesi: saniye başına piksel
+const PPS_MIN = 15, PPS_MAX = 1200; // zaman çizelgesi yakınlaştırma sınırları (saniye başına piksel)
 const TOP = 44, ROW = 26; // katman şeritlerinin başladığı yer ve satır aralığı
 
 export function useWide() {
@@ -34,6 +34,9 @@ export function Editor() {
   const wide = useWide();
   const sel = p.layers.find((l) => l.id === s.selectedId) ?? null;
   const dur = projectDuration(p);
+  // Zaman çizelgesi ölçeği: iki parmakla (PC'de Ctrl + tekerlek) yakınlaştırılır
+  const [PPS, setPPS] = useState(100);
+  const ppsRef = useRef(PPS); ppsRef.current = PPS;
   const [panel, setPanel] = useState<Panel>(null);
   const [addTab, setAddTab] = useState<AddTab | null>(null);
   const [loop, setLoop] = useState(true);
@@ -94,7 +97,7 @@ export function Editor() {
       const c = canvasRef.current;
       if (c) renderFrame(c.getContext('2d')!, pr, t, { quality: c.width / pr.width, fast: st.settings.lite, lite: st.settings.lite, playing: true });
       const el = tlRef.current;
-      if (el) { programmatic.current = true; el.scrollLeft = t * PPS; }
+      if (el) { programmatic.current = true; el.scrollLeft = t * ppsRef.current; }
       if (timecodeRef.current) timecodeRef.current.textContent = fmtTime(t, pr.fps);
       raf = requestAnimationFrame(tick);
     };
@@ -222,8 +225,32 @@ export function Editor() {
     if (s.playing) return;
     const want = s.time * PPS;
     if (Math.abs(el.scrollLeft - want) > 1) { programmatic.current = true; el.scrollLeft = want; }
-  }, [s.time, tlW, s.playing]);
+  }, [s.time, tlW, s.playing, PPS]);
   const pillsRef = useRef<HTMLDivElement>(null);
+  // İki parmakla aç/kapat = yakınlaştır/uzaklaştır (oynatma çizgisindeki an sabit kalır)
+  const tlBoxRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = tlBoxRef.current; if (!el) return;
+    let d0 = 0, p0 = 100;
+    const dist = (e: TouchEvent) => Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+    const start = (e: TouchEvent) => { if (e.touches.length === 2) { d0 = dist(e); p0 = ppsRef.current; e.preventDefault(); } };
+    const move = (e: TouchEvent) => {
+      if (e.touches.length !== 2 || !d0) return;
+      e.preventDefault();
+      setPPS(Math.min(PPS_MAX, Math.max(PPS_MIN, p0 * dist(e) / d0)));
+    };
+    const end = (e: TouchEvent) => { if (e.touches.length < 2) d0 = 0; };
+    const wheel = (e: WheelEvent) => {
+      if (!e.ctrlKey && !e.metaKey) return;
+      e.preventDefault();
+      setPPS((v) => Math.min(PPS_MAX, Math.max(PPS_MIN, v * Math.exp(-e.deltaY * 0.0025))));
+    };
+    el.addEventListener('touchstart', start, { passive: false });
+    el.addEventListener('touchmove', move, { passive: false });
+    el.addEventListener('touchend', end);
+    el.addEventListener('wheel', wheel, { passive: false });
+    return () => { el.removeEventListener('touchstart', start); el.removeEventListener('touchmove', move); el.removeEventListener('touchend', end); el.removeEventListener('wheel', wheel); };
+  }, []);
   const onTlScroll = () => {
     const el = tlRef.current!;
     if (pillsRef.current) pillsRef.current.style.transform = `translateY(${-el.scrollTop}px)`;
@@ -568,14 +595,26 @@ export function Editor() {
       </div>
 
       <div className="lower">
-        <div className="tl">
+        <div className="tl" ref={tlBoxRef}>
           <div className="tl-scroll" ref={tlRef} onScroll={onTlScroll}>
             <div className="tl-inner" style={{ width: totalW + tlW }}>
               <div className="ruler" style={{ left: half, width: totalW }}>
-                {Array.from({ length: Math.ceil((dur + 2) * 4) }, (_, i) => (
-                  <i key={i} className={i % 4 === 0 ? 's' : ''} style={{ left: i * PPS / 4 }} />
-                ))}
-                {Array.from({ length: Math.ceil(dur + 2) }, (_, i) => <b key={i} style={{ left: i * PPS }}>{i}s</b>)}
+                {(() => {
+                  // Kare çizgileri: çizgiler arası en az 6 px olacak şekilde kare atlanır
+                  const fps = p.fps, fpx = PPS / fps;
+                  const steps = [1, 2, 3, 5, 6, 10, 15, 30, 60].filter((k) => fps % k === 0 || k >= fps);
+                  const step = steps.find((k) => k * fpx >= 6) ?? fps;
+                  const half2 = fps % 2 === 0 ? fps / 2 : null;
+                  const n = Math.ceil((dur + 2) * fps);
+                  const out = [];
+                  for (let f = 0; f <= n; f += step) {
+                    const cls = f % fps === 0 ? 's' : half2 && f % half2 === 0 ? 'h' : '';
+                    out.push(<i key={f} className={cls} style={{ left: f * fpx }} />);
+                  }
+                  // Uzaklaştırınca yarım saniyeler atlanırsa onları ayrıca göster
+                  if (half2 && step > half2) for (let sec = 0.5; sec <= dur + 2; sec += 1) out.push(<i key={'h' + sec} className="h" style={{ left: sec * PPS }} />);
+                  return out;
+                })()}
               </div>
               {!sel && rows.map((l, i) => (
                 <div key={'row' + l.id} className={'rowstrip' + (reord?.from === i ? ' on' : '')} style={{ top: TOP + i * ROW - 3 }}
@@ -597,7 +636,7 @@ export function Editor() {
                         className={'kf' + (f ? '' : ' dim') + (f && onMarker(m) ? ' on' : '') + (kfMoving === m.group + '@' + Math.round(m.t * p.fps) ? ' moving' : '')}
                         style={{ left: (m.t - l.start) * PPS }}
                         onPointerDown={(e) => (f ? kfDown(e, m) : e.stopPropagation())} onPointerMove={kfMove} onPointerUp={kfUp} onPointerCancel={kfUp}
-                        onClick={(e) => e.stopPropagation()} onContextMenu={(e) => e.preventDefault()}><i /></span>
+                        onClick={(e) => e.stopPropagation()} onContextMenu={(e) => e.preventDefault()}><svg viewBox="0 0 10 28" aria-hidden="true"><path d="M5 1 9 14 5 27 1 14Z" /></svg></span>
                     ))}
                   {l.id === s.selectedId && (
                     <>

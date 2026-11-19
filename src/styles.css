@@ -545,3 +545,18 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
 /* Soluk işaret: yarı saydam, %15 küçük, renkleri ¼ oranında griye karışık */
 .track .kf.dim { opacity: .5; }
 .track .kf.dim i { background: #DBDBDC; border-color: #282F44; }
+
+/* Cetvel: kare çizgileri kısa, yarım saniye orta, tam saniye en uzun */
+.ruler { height: 16px; }
+.ruler i { position: absolute; top: auto; bottom: 0; width: 1px; height: 4px; background: var(--d-dim); }
+.ruler i.h { height: 8px; background: var(--d-text2); }
+.ruler i.s { height: 13px; width: 1.5px; top: auto; background: var(--d-text); }
+/* İşaretler: dikine uzun ince baklava, uçları şeridi hafifçe aşar */
+.track .kf { width: 16px; height: 30px; margin: -15px 0 0 -8px; }
+.track .kf svg { width: 9px; height: 28px; overflow: visible; transition: width .12s, height .12s; }
+.track .kf svg path { fill: #F7F8FA; stroke: #0B1430; stroke-width: 1.2; vector-effect: non-scaling-stroke; }
+.track .kf.on svg, .track .kf.moving svg { width: 11px; height: 32px; }
+.track .kf.on svg path, .track .kf.moving svg path { fill: #0B1430; stroke: #F7F8FA; stroke-width: 1.6; }
+.track .kf.moving svg { filter: drop-shadow(0 0 3px rgba(34,211,197,.8)); }
+.track .kf.dim svg { transform: scale(.85); }
+.track .kf.dim svg path { fill: #DBDBDC; stroke: #282F44; }
