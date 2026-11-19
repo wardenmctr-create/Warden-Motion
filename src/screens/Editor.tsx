@@ -37,6 +37,8 @@ export function Editor() {
   // Zaman çizelgesi ölçeği: iki parmakla (PC'de Ctrl + tekerlek) yakınlaştırılır
   const [PPS, setPPS] = useState(100);
   const ppsRef = useRef(PPS); ppsRef.current = PPS;
+  // Cetvelde görünen çizgi adımı (kare): çizgiler arası en az 6 px
+  const tickStep = [1, 2, 3, 5, 6, 10, 15, 30, 60].filter((k) => p.fps % k === 0 || k >= p.fps).find((k) => k * PPS / p.fps >= 6) ?? p.fps;
   const [panel, setPanel] = useState<Panel>(null);
   const [addTab, setAddTab] = useState<AddTab | null>(null);
   const [loop, setLoop] = useState(true);
@@ -227,6 +229,7 @@ export function Editor() {
     if (Math.abs(el.scrollLeft - want) > 1) { programmatic.current = true; el.scrollLeft = want; }
   }, [s.time, tlW, s.playing, PPS]);
   const pillsRef = useRef<HTMLDivElement>(null);
+  const innerRef = useRef<HTMLDivElement>(null);
   // İki parmakla aç/kapat = yakınlaştır/uzaklaştır (oynatma çizgisindeki an sabit kalır)
   const tlBoxRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -254,12 +257,17 @@ export function Editor() {
   const onTlScroll = () => {
     const el = tlRef.current!;
     if (pillsRef.current) pillsRef.current.style.transform = `translateY(${-el.scrollTop}px)`;
-    if (programmatic.current) { programmatic.current = false; return; }
+    if (programmatic.current) { programmatic.current = false; if (innerRef.current) innerRef.current.style.transform = ''; return; } // kodla kaydırma zaten tam kareye
     if (s.playing) return;
-    let t = Math.min(el.scrollLeft / PPS, dur + 2);
-    // Mıknatıs: seçili katmanın işaretleyicisine 8 px'ten yakınsa ona yapış
-    if (sel) for (const m of layerMarkers(sel)) if ((!s.kfFocus || s.kfFocus.includes(m.group)) && Math.abs(m.t - t) * PPS < 8) { t = m.t; break; }
-    s.setTime(snapF(t)); // her zaman tam bir kareye otur
+    const raw = Math.min(el.scrollLeft / PPS, dur + 2);
+    // Cetvelde görünen çizgilere otur
+    let t = Math.round(raw * p.fps / tickStep) * tickStep / p.fps;
+    // Mıknatıs: açık işin işaretleyicisine 8 px'ten yakınsa ona yapış
+    if (sel) for (const m of layerMarkers(sel)) if ((!s.kfFocus || s.kfFocus.includes(m.group)) && Math.abs(m.t - raw) * PPS < 8) { t = m.t; break; }
+    t = snapF(t);
+    // İçerik kare kare kayar: kaydırma kaymasını telafi et, oynatma çizgisi hep bir çizginin üstünde kalsın
+    if (innerRef.current) innerRef.current.style.transform = `translateX(${el.scrollLeft - t * PPS}px)`;
+    s.setTime(t);
   };
   const half = tlW / 2;
   const snapF = (t: number) => Math.round(t * p.fps) / p.fps;
@@ -597,13 +605,12 @@ export function Editor() {
       <div className="lower">
         <div className="tl" ref={tlBoxRef}>
           <div className="tl-scroll" ref={tlRef} onScroll={onTlScroll}>
-            <div className="tl-inner" style={{ width: totalW + tlW }}>
+            <div className="tl-inner" ref={innerRef} style={{ width: totalW + tlW }}>
               <div className="ruler" style={{ left: half, width: totalW }}>
                 {(() => {
                   // Kare çizgileri: çizgiler arası en az 6 px olacak şekilde kare atlanır
                   const fps = p.fps, fpx = PPS / fps;
-                  const steps = [1, 2, 3, 5, 6, 10, 15, 30, 60].filter((k) => fps % k === 0 || k >= fps);
-                  const step = steps.find((k) => k * fpx >= 6) ?? fps;
+                  const step = tickStep;
                   const half2 = fps % 2 === 0 ? fps / 2 : null;
                   const n = Math.ceil((dur + 2) * fps);
                   const out = [];
