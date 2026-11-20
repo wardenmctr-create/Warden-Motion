@@ -51,6 +51,14 @@
     {
      "name": "Yumuşak Küp İç",
      "src": "packs/hazir/govdeler/yumusak-kup-ic.png"
+    },
+    {
+     "name": "Basık Çizgi",
+     "src": "packs/hazir/govdeler/wardencb-cizgi.png"
+    },
+    {
+     "name": "Basık İç",
+     "src": "packs/hazir/govdeler/wardencb-ic.png"
     }
    ]
   },
@@ -84,6 +92,66 @@
     {
      "name": "Ağlayan",
      "src": "packs/hazir/gozler/aglayan.png"
+    },
+    {
+     "name": "Bakan",
+     "src": "packs/hazir/gozler/wardencb-bakan.png"
+    },
+    {
+     "name": "Sevinçli",
+     "src": "packs/hazir/gozler/wardencb-sevincli.png"
+    },
+    {
+     "name": "Gülen",
+     "src": "packs/hazir/gozler/wardencb-gulen.png"
+    },
+    {
+     "name": "Şaşırmış",
+     "src": "packs/hazir/gozler/wardencb-sasirmis.png"
+    },
+    {
+     "name": "Şok",
+     "src": "packs/hazir/gozler/wardencb-sok.png"
+    },
+    {
+     "name": "Hüzünlü",
+     "src": "packs/hazir/gozler/wardencb-huzunlu.png"
+    },
+    {
+     "name": "Sinirli",
+     "src": "packs/hazir/gozler/wardencb-sinirli.png"
+    },
+    {
+     "name": "Uykulu",
+     "src": "packs/hazir/gozler/wardencb-uykulu.png"
+    },
+    {
+     "name": "Uyuyan",
+     "src": "packs/hazir/gozler/wardencb-uyuyan.png"
+    },
+    {
+     "name": "Göz Kırpan",
+     "src": "packs/hazir/gozler/wardencb-goz-kirpan.png"
+    },
+    {
+     "name": "Kalp",
+     "src": "packs/hazir/gozler/wardencb-kalp.png"
+    },
+    {
+     "name": "Yıldız",
+     "src": "packs/hazir/gozler/wardencb-yildiz.png"
+    },
+    {
+     "name": "Spiral",
+     "src": "packs/hazir/gozler/wardencb-spiral.png"
+    },
+    {
+     "name": "Çarpı",
+     "src": "packs/hazir/gozler/wardencb-carpi.png"
+    },
+    {
+     "name": "Şüpheli",
+     "src": "packs/hazir/gozler/wardencb-supheli.png"
     }
    ]
   },
@@ -134,6 +202,22 @@
     {
      "name": "Miğfer",
      "src": "packs/hazir/sapkalar/migfer.png"
+    },
+    {
+     "name": "Ushanka",
+     "src": "packs/hazir/sapkalar/ushanka.png",
+     "parts": [
+      {
+       "name": "Arka Kulak",
+       "src": "packs/hazir/sapkalar/ushanka--arka-kulak.png",
+       "back": true
+      },
+      {
+       "name": "Ön",
+       "src": "packs/hazir/sapkalar/ushanka--on.png"
+      }
+     ],
+     "root": 1
     }
    ]
   },
@@ -192,204 +276,951 @@
    ]
   },
   {
-   "name": "WardenCB Pozlar",
+   "name": "Pozlar",
    "items": [
     {
      "name": "Normal",
-     "src": "packs/hazir/wardencb/wardencb-pozlar-normal.png"
+     "src": "packs/hazir/wardencb/pozlar-normal.png",
+     "parts": [
+      {
+       "name": "Ushanka Arka Kulak",
+       "src": "packs/hazir/wardencb/pozlar-normal--ushanka-arka-kulak.png",
+       "parent": 4
+      },
+      {
+       "name": "İç",
+       "src": "packs/hazir/wardencb/pozlar-normal--ic.png"
+      },
+      {
+       "name": "Çizgi",
+       "src": "packs/hazir/wardencb/pozlar-normal--cizgi.png"
+      },
+      {
+       "name": "Göz",
+       "src": "packs/hazir/wardencb/pozlar-normal--goz.png"
+      },
+      {
+       "name": "Ushanka",
+       "src": "packs/hazir/wardencb/pozlar-normal--ushanka.png"
+      }
+     ],
+     "root": 2
     },
     {
      "name": "Mutlu",
-     "src": "packs/hazir/wardencb/wardencb-pozlar-mutlu.png"
+     "src": "packs/hazir/wardencb/pozlar-mutlu.png",
+     "parts": [
+      {
+       "name": "Ushanka Arka Kulak",
+       "src": "packs/hazir/wardencb/pozlar-mutlu--ushanka-arka-kulak.png",
+       "parent": 4
+      },
+      {
+       "name": "İç",
+       "src": "packs/hazir/wardencb/pozlar-mutlu--ic.png"
+      },
+      {
+       "name": "Çizgi",
+       "src": "packs/hazir/wardencb/pozlar-mutlu--cizgi.png"
+      },
+      {
+       "name": "Göz",
+       "src": "packs/hazir/wardencb/pozlar-mutlu--goz.png"
+      },
+      {
+       "name": "Ushanka",
+       "src": "packs/hazir/wardencb/pozlar-mutlu--ushanka.png"
+      },
+      {
+       "name": "İşaretler",
+       "src": "packs/hazir/wardencb/pozlar-mutlu--isaretler.png"
+      }
+     ],
+     "root": 2
     },
     {
      "name": "Neşeli",
-     "src": "packs/hazir/wardencb/wardencb-pozlar-neseli.png"
+     "src": "packs/hazir/wardencb/pozlar-neseli.png",
+     "parts": [
+      {
+       "name": "Ushanka Arka Kulak",
+       "src": "packs/hazir/wardencb/pozlar-neseli--ushanka-arka-kulak.png",
+       "parent": 4
+      },
+      {
+       "name": "İç",
+       "src": "packs/hazir/wardencb/pozlar-neseli--ic.png"
+      },
+      {
+       "name": "Çizgi",
+       "src": "packs/hazir/wardencb/pozlar-neseli--cizgi.png"
+      },
+      {
+       "name": "Göz",
+       "src": "packs/hazir/wardencb/pozlar-neseli--goz.png"
+      },
+      {
+       "name": "Ushanka",
+       "src": "packs/hazir/wardencb/pozlar-neseli--ushanka.png"
+      },
+      {
+       "name": "İşaretler",
+       "src": "packs/hazir/wardencb/pozlar-neseli--isaretler.png"
+      }
+     ],
+     "root": 2
     },
     {
      "name": "Gülüyor",
-     "src": "packs/hazir/wardencb/wardencb-pozlar-guluyor.png"
+     "src": "packs/hazir/wardencb/pozlar-guluyor.png",
+     "parts": [
+      {
+       "name": "Ushanka Arka Kulak",
+       "src": "packs/hazir/wardencb/pozlar-guluyor--ushanka-arka-kulak.png",
+       "parent": 4
+      },
+      {
+       "name": "İç",
+       "src": "packs/hazir/wardencb/pozlar-guluyor--ic.png"
+      },
+      {
+       "name": "Çizgi",
+       "src": "packs/hazir/wardencb/pozlar-guluyor--cizgi.png"
+      },
+      {
+       "name": "Göz",
+       "src": "packs/hazir/wardencb/pozlar-guluyor--goz.png"
+      },
+      {
+       "name": "Ushanka",
+       "src": "packs/hazir/wardencb/pozlar-guluyor--ushanka.png"
+      },
+      {
+       "name": "İşaretler",
+       "src": "packs/hazir/wardencb/pozlar-guluyor--isaretler.png"
+      }
+     ],
+     "root": 2
     },
     {
      "name": "Göz kırpıyor",
-     "src": "packs/hazir/wardencb/wardencb-pozlar-goz-kirpiyor.png"
+     "src": "packs/hazir/wardencb/pozlar-goz-kirpiyor.png",
+     "parts": [
+      {
+       "name": "Ushanka Arka Kulak",
+       "src": "packs/hazir/wardencb/pozlar-goz-kirpiyor--ushanka-arka-kulak.png",
+       "parent": 4
+      },
+      {
+       "name": "İç",
+       "src": "packs/hazir/wardencb/pozlar-goz-kirpiyor--ic.png"
+      },
+      {
+       "name": "Çizgi",
+       "src": "packs/hazir/wardencb/pozlar-goz-kirpiyor--cizgi.png"
+      },
+      {
+       "name": "Göz",
+       "src": "packs/hazir/wardencb/pozlar-goz-kirpiyor--goz.png"
+      },
+      {
+       "name": "Ushanka",
+       "src": "packs/hazir/wardencb/pozlar-goz-kirpiyor--ushanka.png"
+      },
+      {
+       "name": "İşaretler",
+       "src": "packs/hazir/wardencb/pozlar-goz-kirpiyor--isaretler.png"
+      }
+     ],
+     "root": 2
     },
     {
      "name": "Düşünceli",
-     "src": "packs/hazir/wardencb/wardencb-pozlar-dusunceli.png"
+     "src": "packs/hazir/wardencb/pozlar-dusunceli.png",
+     "parts": [
+      {
+       "name": "Ushanka Arka Kulak",
+       "src": "packs/hazir/wardencb/pozlar-dusunceli--ushanka-arka-kulak.png",
+       "parent": 4
+      },
+      {
+       "name": "İç",
+       "src": "packs/hazir/wardencb/pozlar-dusunceli--ic.png"
+      },
+      {
+       "name": "Çizgi",
+       "src": "packs/hazir/wardencb/pozlar-dusunceli--cizgi.png"
+      },
+      {
+       "name": "Göz",
+       "src": "packs/hazir/wardencb/pozlar-dusunceli--goz.png"
+      },
+      {
+       "name": "Ushanka",
+       "src": "packs/hazir/wardencb/pozlar-dusunceli--ushanka.png"
+      }
+     ],
+     "root": 2
     },
     {
      "name": "Şaşkın",
-     "src": "packs/hazir/wardencb/wardencb-pozlar-saskin.png"
+     "src": "packs/hazir/wardencb/pozlar-saskin.png",
+     "parts": [
+      {
+       "name": "Ushanka Arka Kulak",
+       "src": "packs/hazir/wardencb/pozlar-saskin--ushanka-arka-kulak.png",
+       "parent": 4
+      },
+      {
+       "name": "İç",
+       "src": "packs/hazir/wardencb/pozlar-saskin--ic.png"
+      },
+      {
+       "name": "Çizgi",
+       "src": "packs/hazir/wardencb/pozlar-saskin--cizgi.png"
+      },
+      {
+       "name": "Göz",
+       "src": "packs/hazir/wardencb/pozlar-saskin--goz.png"
+      },
+      {
+       "name": "Ushanka",
+       "src": "packs/hazir/wardencb/pozlar-saskin--ushanka.png"
+      },
+      {
+       "name": "İşaretler",
+       "src": "packs/hazir/wardencb/pozlar-saskin--isaretler.png"
+      }
+     ],
+     "root": 2
     },
     {
      "name": "Şok",
-     "src": "packs/hazir/wardencb/wardencb-pozlar-sok.png"
+     "src": "packs/hazir/wardencb/pozlar-sok.png",
+     "parts": [
+      {
+       "name": "Ushanka Arka Kulak",
+       "src": "packs/hazir/wardencb/pozlar-sok--ushanka-arka-kulak.png",
+       "parent": 4
+      },
+      {
+       "name": "İç",
+       "src": "packs/hazir/wardencb/pozlar-sok--ic.png"
+      },
+      {
+       "name": "Çizgi",
+       "src": "packs/hazir/wardencb/pozlar-sok--cizgi.png"
+      },
+      {
+       "name": "Göz",
+       "src": "packs/hazir/wardencb/pozlar-sok--goz.png"
+      },
+      {
+       "name": "Ushanka",
+       "src": "packs/hazir/wardencb/pozlar-sok--ushanka.png"
+      },
+      {
+       "name": "İşaretler",
+       "src": "packs/hazir/wardencb/pozlar-sok--isaretler.png"
+      }
+     ],
+     "root": 2
     },
     {
      "name": "Üzgün",
-     "src": "packs/hazir/wardencb/wardencb-pozlar-uzgun.png"
+     "src": "packs/hazir/wardencb/pozlar-uzgun.png",
+     "parts": [
+      {
+       "name": "Ushanka Arka Kulak",
+       "src": "packs/hazir/wardencb/pozlar-uzgun--ushanka-arka-kulak.png",
+       "parent": 4
+      },
+      {
+       "name": "İç",
+       "src": "packs/hazir/wardencb/pozlar-uzgun--ic.png"
+      },
+      {
+       "name": "Çizgi",
+       "src": "packs/hazir/wardencb/pozlar-uzgun--cizgi.png"
+      },
+      {
+       "name": "Göz",
+       "src": "packs/hazir/wardencb/pozlar-uzgun--goz.png"
+      },
+      {
+       "name": "Ushanka",
+       "src": "packs/hazir/wardencb/pozlar-uzgun--ushanka.png"
+      }
+     ],
+     "root": 2
     },
     {
      "name": "Ağlıyor",
-     "src": "packs/hazir/wardencb/wardencb-pozlar-agliyor.png"
+     "src": "packs/hazir/wardencb/pozlar-agliyor.png",
+     "parts": [
+      {
+       "name": "Ushanka Arka Kulak",
+       "src": "packs/hazir/wardencb/pozlar-agliyor--ushanka-arka-kulak.png",
+       "parent": 4
+      },
+      {
+       "name": "İç",
+       "src": "packs/hazir/wardencb/pozlar-agliyor--ic.png"
+      },
+      {
+       "name": "Çizgi",
+       "src": "packs/hazir/wardencb/pozlar-agliyor--cizgi.png"
+      },
+      {
+       "name": "Göz",
+       "src": "packs/hazir/wardencb/pozlar-agliyor--goz.png"
+      },
+      {
+       "name": "Ushanka",
+       "src": "packs/hazir/wardencb/pozlar-agliyor--ushanka.png"
+      },
+      {
+       "name": "İşaretler",
+       "src": "packs/hazir/wardencb/pozlar-agliyor--isaretler.png"
+      }
+     ],
+     "root": 2
     },
     {
      "name": "Kızgın",
-     "src": "packs/hazir/wardencb/wardencb-pozlar-kizgin.png"
+     "src": "packs/hazir/wardencb/pozlar-kizgin.png",
+     "parts": [
+      {
+       "name": "Ushanka Arka Kulak",
+       "src": "packs/hazir/wardencb/pozlar-kizgin--ushanka-arka-kulak.png",
+       "parent": 4
+      },
+      {
+       "name": "İç",
+       "src": "packs/hazir/wardencb/pozlar-kizgin--ic.png"
+      },
+      {
+       "name": "Çizgi",
+       "src": "packs/hazir/wardencb/pozlar-kizgin--cizgi.png"
+      },
+      {
+       "name": "Göz",
+       "src": "packs/hazir/wardencb/pozlar-kizgin--goz.png"
+      },
+      {
+       "name": "Ushanka",
+       "src": "packs/hazir/wardencb/pozlar-kizgin--ushanka.png"
+      },
+      {
+       "name": "İşaretler",
+       "src": "packs/hazir/wardencb/pozlar-kizgin--isaretler.png"
+      }
+     ],
+     "root": 2
     },
     {
      "name": "Öfkeli",
-     "src": "packs/hazir/wardencb/wardencb-pozlar-ofkeli.png"
+     "src": "packs/hazir/wardencb/pozlar-ofkeli.png",
+     "parts": [
+      {
+       "name": "Ushanka Arka Kulak",
+       "src": "packs/hazir/wardencb/pozlar-ofkeli--ushanka-arka-kulak.png",
+       "parent": 4
+      },
+      {
+       "name": "İç",
+       "src": "packs/hazir/wardencb/pozlar-ofkeli--ic.png"
+      },
+      {
+       "name": "Çizgi",
+       "src": "packs/hazir/wardencb/pozlar-ofkeli--cizgi.png"
+      },
+      {
+       "name": "Göz",
+       "src": "packs/hazir/wardencb/pozlar-ofkeli--goz.png"
+      },
+      {
+       "name": "Ushanka",
+       "src": "packs/hazir/wardencb/pozlar-ofkeli--ushanka.png"
+      },
+      {
+       "name": "İşaretler",
+       "src": "packs/hazir/wardencb/pozlar-ofkeli--isaretler.png"
+      }
+     ],
+     "root": 2
     },
     {
      "name": "Sıkılmış",
-     "src": "packs/hazir/wardencb/wardencb-pozlar-sikilmis.png"
+     "src": "packs/hazir/wardencb/pozlar-sikilmis.png",
+     "parts": [
+      {
+       "name": "Ushanka Arka Kulak",
+       "src": "packs/hazir/wardencb/pozlar-sikilmis--ushanka-arka-kulak.png",
+       "parent": 4
+      },
+      {
+       "name": "İç",
+       "src": "packs/hazir/wardencb/pozlar-sikilmis--ic.png"
+      },
+      {
+       "name": "Çizgi",
+       "src": "packs/hazir/wardencb/pozlar-sikilmis--cizgi.png"
+      },
+      {
+       "name": "Göz",
+       "src": "packs/hazir/wardencb/pozlar-sikilmis--goz.png"
+      },
+      {
+       "name": "Ushanka",
+       "src": "packs/hazir/wardencb/pozlar-sikilmis--ushanka.png"
+      },
+      {
+       "name": "İşaretler",
+       "src": "packs/hazir/wardencb/pozlar-sikilmis--isaretler.png"
+      }
+     ],
+     "root": 2
     },
     {
      "name": "Uykulu",
-     "src": "packs/hazir/wardencb/wardencb-pozlar-uykulu.png"
+     "src": "packs/hazir/wardencb/pozlar-uykulu.png",
+     "parts": [
+      {
+       "name": "Ushanka Arka Kulak",
+       "src": "packs/hazir/wardencb/pozlar-uykulu--ushanka-arka-kulak.png",
+       "parent": 4
+      },
+      {
+       "name": "İç",
+       "src": "packs/hazir/wardencb/pozlar-uykulu--ic.png"
+      },
+      {
+       "name": "Çizgi",
+       "src": "packs/hazir/wardencb/pozlar-uykulu--cizgi.png"
+      },
+      {
+       "name": "Göz",
+       "src": "packs/hazir/wardencb/pozlar-uykulu--goz.png"
+      },
+      {
+       "name": "Ushanka",
+       "src": "packs/hazir/wardencb/pozlar-uykulu--ushanka.png"
+      },
+      {
+       "name": "İşaretler",
+       "src": "packs/hazir/wardencb/pozlar-uykulu--isaretler.png"
+      }
+     ],
+     "root": 2
     },
     {
      "name": "Uyuyor",
-     "src": "packs/hazir/wardencb/wardencb-pozlar-uyuyor.png"
+     "src": "packs/hazir/wardencb/pozlar-uyuyor.png",
+     "parts": [
+      {
+       "name": "Ushanka Arka Kulak",
+       "src": "packs/hazir/wardencb/pozlar-uyuyor--ushanka-arka-kulak.png",
+       "parent": 4
+      },
+      {
+       "name": "İç",
+       "src": "packs/hazir/wardencb/pozlar-uyuyor--ic.png"
+      },
+      {
+       "name": "Çizgi",
+       "src": "packs/hazir/wardencb/pozlar-uyuyor--cizgi.png"
+      },
+      {
+       "name": "Göz",
+       "src": "packs/hazir/wardencb/pozlar-uyuyor--goz.png"
+      },
+      {
+       "name": "Ushanka",
+       "src": "packs/hazir/wardencb/pozlar-uyuyor--ushanka.png"
+      },
+      {
+       "name": "İşaretler",
+       "src": "packs/hazir/wardencb/pozlar-uyuyor--isaretler.png"
+      }
+     ],
+     "root": 2
     },
     {
      "name": "Utangaç",
-     "src": "packs/hazir/wardencb/wardencb-pozlar-utangac.png"
+     "src": "packs/hazir/wardencb/pozlar-utangac.png",
+     "parts": [
+      {
+       "name": "Ushanka Arka Kulak",
+       "src": "packs/hazir/wardencb/pozlar-utangac--ushanka-arka-kulak.png",
+       "parent": 4
+      },
+      {
+       "name": "İç",
+       "src": "packs/hazir/wardencb/pozlar-utangac--ic.png"
+      },
+      {
+       "name": "Çizgi",
+       "src": "packs/hazir/wardencb/pozlar-utangac--cizgi.png"
+      },
+      {
+       "name": "Göz",
+       "src": "packs/hazir/wardencb/pozlar-utangac--goz.png"
+      },
+      {
+       "name": "Ushanka",
+       "src": "packs/hazir/wardencb/pozlar-utangac--ushanka.png"
+      },
+      {
+       "name": "İşaretler",
+       "src": "packs/hazir/wardencb/pozlar-utangac--isaretler.png"
+      }
+     ],
+     "root": 2
     },
     {
      "name": "Aşık",
-     "src": "packs/hazir/wardencb/wardencb-pozlar-asik.png"
+     "src": "packs/hazir/wardencb/pozlar-asik.png",
+     "parts": [
+      {
+       "name": "Ushanka Arka Kulak",
+       "src": "packs/hazir/wardencb/pozlar-asik--ushanka-arka-kulak.png",
+       "parent": 4
+      },
+      {
+       "name": "İç",
+       "src": "packs/hazir/wardencb/pozlar-asik--ic.png"
+      },
+      {
+       "name": "Çizgi",
+       "src": "packs/hazir/wardencb/pozlar-asik--cizgi.png"
+      },
+      {
+       "name": "Göz",
+       "src": "packs/hazir/wardencb/pozlar-asik--goz.png"
+      },
+      {
+       "name": "Ushanka",
+       "src": "packs/hazir/wardencb/pozlar-asik--ushanka.png"
+      },
+      {
+       "name": "İşaretler",
+       "src": "packs/hazir/wardencb/pozlar-asik--isaretler.png"
+      }
+     ],
+     "root": 2
     },
     {
      "name": "Heyecanlı",
-     "src": "packs/hazir/wardencb/wardencb-pozlar-heyecanli.png"
+     "src": "packs/hazir/wardencb/pozlar-heyecanli.png",
+     "parts": [
+      {
+       "name": "Ushanka Arka Kulak",
+       "src": "packs/hazir/wardencb/pozlar-heyecanli--ushanka-arka-kulak.png",
+       "parent": 4
+      },
+      {
+       "name": "İç",
+       "src": "packs/hazir/wardencb/pozlar-heyecanli--ic.png"
+      },
+      {
+       "name": "Çizgi",
+       "src": "packs/hazir/wardencb/pozlar-heyecanli--cizgi.png"
+      },
+      {
+       "name": "Göz",
+       "src": "packs/hazir/wardencb/pozlar-heyecanli--goz.png"
+      },
+      {
+       "name": "Ushanka",
+       "src": "packs/hazir/wardencb/pozlar-heyecanli--ushanka.png"
+      },
+      {
+       "name": "İşaretler",
+       "src": "packs/hazir/wardencb/pozlar-heyecanli--isaretler.png"
+      }
+     ],
+     "root": 2
     },
     {
      "name": "Kafası karışık",
-     "src": "packs/hazir/wardencb/wardencb-pozlar-kafasi-karisik.png"
+     "src": "packs/hazir/wardencb/pozlar-kafasi-karisik.png",
+     "parts": [
+      {
+       "name": "Ushanka Arka Kulak",
+       "src": "packs/hazir/wardencb/pozlar-kafasi-karisik--ushanka-arka-kulak.png",
+       "parent": 4
+      },
+      {
+       "name": "İç",
+       "src": "packs/hazir/wardencb/pozlar-kafasi-karisik--ic.png"
+      },
+      {
+       "name": "Çizgi",
+       "src": "packs/hazir/wardencb/pozlar-kafasi-karisik--cizgi.png"
+      },
+      {
+       "name": "Göz",
+       "src": "packs/hazir/wardencb/pozlar-kafasi-karisik--goz.png"
+      },
+      {
+       "name": "Ushanka",
+       "src": "packs/hazir/wardencb/pozlar-kafasi-karisik--ushanka.png"
+      },
+      {
+       "name": "İşaretler",
+       "src": "packs/hazir/wardencb/pozlar-kafasi-karisik--isaretler.png"
+      }
+     ],
+     "root": 2
     },
     {
      "name": "Şüpheli",
-     "src": "packs/hazir/wardencb/wardencb-pozlar-supheli.png"
+     "src": "packs/hazir/wardencb/pozlar-supheli.png",
+     "parts": [
+      {
+       "name": "Ushanka Arka Kulak",
+       "src": "packs/hazir/wardencb/pozlar-supheli--ushanka-arka-kulak.png",
+       "parent": 4
+      },
+      {
+       "name": "İç",
+       "src": "packs/hazir/wardencb/pozlar-supheli--ic.png"
+      },
+      {
+       "name": "Çizgi",
+       "src": "packs/hazir/wardencb/pozlar-supheli--cizgi.png"
+      },
+      {
+       "name": "Göz",
+       "src": "packs/hazir/wardencb/pozlar-supheli--goz.png"
+      },
+      {
+       "name": "Ushanka",
+       "src": "packs/hazir/wardencb/pozlar-supheli--ushanka.png"
+      }
+     ],
+     "root": 2
     },
     {
      "name": "Gururlu",
-     "src": "packs/hazir/wardencb/wardencb-pozlar-gururlu.png"
+     "src": "packs/hazir/wardencb/pozlar-gururlu.png",
+     "parts": [
+      {
+       "name": "Ushanka Arka Kulak",
+       "src": "packs/hazir/wardencb/pozlar-gururlu--ushanka-arka-kulak.png",
+       "parent": 4
+      },
+      {
+       "name": "İç",
+       "src": "packs/hazir/wardencb/pozlar-gururlu--ic.png"
+      },
+      {
+       "name": "Çizgi",
+       "src": "packs/hazir/wardencb/pozlar-gururlu--cizgi.png"
+      },
+      {
+       "name": "Göz",
+       "src": "packs/hazir/wardencb/pozlar-gururlu--goz.png"
+      },
+      {
+       "name": "Ushanka",
+       "src": "packs/hazir/wardencb/pozlar-gururlu--ushanka.png"
+      },
+      {
+       "name": "İşaretler",
+       "src": "packs/hazir/wardencb/pozlar-gururlu--isaretler.png"
+      }
+     ],
+     "root": 2
     },
     {
      "name": "Korkmuş",
-     "src": "packs/hazir/wardencb/wardencb-pozlar-korkmus.png"
+     "src": "packs/hazir/wardencb/pozlar-korkmus.png",
+     "parts": [
+      {
+       "name": "Ushanka Arka Kulak",
+       "src": "packs/hazir/wardencb/pozlar-korkmus--ushanka-arka-kulak.png",
+       "parent": 4
+      },
+      {
+       "name": "İç",
+       "src": "packs/hazir/wardencb/pozlar-korkmus--ic.png"
+      },
+      {
+       "name": "Çizgi",
+       "src": "packs/hazir/wardencb/pozlar-korkmus--cizgi.png"
+      },
+      {
+       "name": "Göz",
+       "src": "packs/hazir/wardencb/pozlar-korkmus--goz.png"
+      },
+      {
+       "name": "Ushanka",
+       "src": "packs/hazir/wardencb/pozlar-korkmus--ushanka.png"
+      },
+      {
+       "name": "İşaretler",
+       "src": "packs/hazir/wardencb/pozlar-korkmus--isaretler.png"
+      }
+     ],
+     "root": 2
     },
     {
      "name": "Endişeli",
-     "src": "packs/hazir/wardencb/wardencb-pozlar-endiseli.png"
+     "src": "packs/hazir/wardencb/pozlar-endiseli.png",
+     "parts": [
+      {
+       "name": "Ushanka Arka Kulak",
+       "src": "packs/hazir/wardencb/pozlar-endiseli--ushanka-arka-kulak.png",
+       "parent": 4
+      },
+      {
+       "name": "İç",
+       "src": "packs/hazir/wardencb/pozlar-endiseli--ic.png"
+      },
+      {
+       "name": "Çizgi",
+       "src": "packs/hazir/wardencb/pozlar-endiseli--cizgi.png"
+      },
+      {
+       "name": "Göz",
+       "src": "packs/hazir/wardencb/pozlar-endiseli--goz.png"
+      },
+      {
+       "name": "Ushanka",
+       "src": "packs/hazir/wardencb/pozlar-endiseli--ushanka.png"
+      },
+      {
+       "name": "İşaretler",
+       "src": "packs/hazir/wardencb/pozlar-endiseli--isaretler.png"
+      }
+     ],
+     "root": 2
     },
     {
      "name": "Mahcup",
-     "src": "packs/hazir/wardencb/wardencb-pozlar-mahcup.png"
+     "src": "packs/hazir/wardencb/pozlar-mahcup.png",
+     "parts": [
+      {
+       "name": "Ushanka Arka Kulak",
+       "src": "packs/hazir/wardencb/pozlar-mahcup--ushanka-arka-kulak.png",
+       "parent": 4
+      },
+      {
+       "name": "İç",
+       "src": "packs/hazir/wardencb/pozlar-mahcup--ic.png"
+      },
+      {
+       "name": "Çizgi",
+       "src": "packs/hazir/wardencb/pozlar-mahcup--cizgi.png"
+      },
+      {
+       "name": "Göz",
+       "src": "packs/hazir/wardencb/pozlar-mahcup--goz.png"
+      },
+      {
+       "name": "Ushanka",
+       "src": "packs/hazir/wardencb/pozlar-mahcup--ushanka.png"
+      },
+      {
+       "name": "İşaretler",
+       "src": "packs/hazir/wardencb/pozlar-mahcup--isaretler.png"
+      }
+     ],
+     "root": 2
     },
     {
      "name": "Sersem",
-     "src": "packs/hazir/wardencb/wardencb-pozlar-sersem.png"
+     "src": "packs/hazir/wardencb/pozlar-sersem.png",
+     "parts": [
+      {
+       "name": "Ushanka Arka Kulak",
+       "src": "packs/hazir/wardencb/pozlar-sersem--ushanka-arka-kulak.png",
+       "parent": 4
+      },
+      {
+       "name": "İç",
+       "src": "packs/hazir/wardencb/pozlar-sersem--ic.png"
+      },
+      {
+       "name": "Çizgi",
+       "src": "packs/hazir/wardencb/pozlar-sersem--cizgi.png"
+      },
+      {
+       "name": "Göz",
+       "src": "packs/hazir/wardencb/pozlar-sersem--goz.png"
+      },
+      {
+       "name": "Ushanka",
+       "src": "packs/hazir/wardencb/pozlar-sersem--ushanka.png"
+      },
+      {
+       "name": "İşaretler",
+       "src": "packs/hazir/wardencb/pozlar-sersem--isaretler.png"
+      }
+     ],
+     "root": 2
     },
     {
      "name": "Bitkin",
-     "src": "packs/hazir/wardencb/wardencb-pozlar-bitkin.png"
+     "src": "packs/hazir/wardencb/pozlar-bitkin.png",
+     "parts": [
+      {
+       "name": "Ushanka Arka Kulak",
+       "src": "packs/hazir/wardencb/pozlar-bitkin--ushanka-arka-kulak.png",
+       "parent": 4
+      },
+      {
+       "name": "İç",
+       "src": "packs/hazir/wardencb/pozlar-bitkin--ic.png"
+      },
+      {
+       "name": "Çizgi",
+       "src": "packs/hazir/wardencb/pozlar-bitkin--cizgi.png"
+      },
+      {
+       "name": "Göz",
+       "src": "packs/hazir/wardencb/pozlar-bitkin--goz.png"
+      },
+      {
+       "name": "Ushanka",
+       "src": "packs/hazir/wardencb/pozlar-bitkin--ushanka.png"
+      },
+      {
+       "name": "İşaretler",
+       "src": "packs/hazir/wardencb/pozlar-bitkin--isaretler.png"
+      }
+     ],
+     "root": 2
     },
     {
      "name": "Kendini beğenmiş",
-     "src": "packs/hazir/wardencb/wardencb-pozlar-kendini-begenmis.png"
+     "src": "packs/hazir/wardencb/pozlar-kendini-begenmis.png",
+     "parts": [
+      {
+       "name": "Ushanka Arka Kulak",
+       "src": "packs/hazir/wardencb/pozlar-kendini-begenmis--ushanka-arka-kulak.png",
+       "parent": 4
+      },
+      {
+       "name": "İç",
+       "src": "packs/hazir/wardencb/pozlar-kendini-begenmis--ic.png"
+      },
+      {
+       "name": "Çizgi",
+       "src": "packs/hazir/wardencb/pozlar-kendini-begenmis--cizgi.png"
+      },
+      {
+       "name": "Göz",
+       "src": "packs/hazir/wardencb/pozlar-kendini-begenmis--goz.png"
+      },
+      {
+       "name": "Ushanka",
+       "src": "packs/hazir/wardencb/pozlar-kendini-begenmis--ushanka.png"
+      },
+      {
+       "name": "İşaretler",
+       "src": "packs/hazir/wardencb/pozlar-kendini-begenmis--isaretler.png"
+      }
+     ],
+     "root": 2
     },
     {
      "name": "Meraklı",
-     "src": "packs/hazir/wardencb/wardencb-pozlar-merakli.png"
+     "src": "packs/hazir/wardencb/pozlar-merakli.png",
+     "parts": [
+      {
+       "name": "Ushanka Arka Kulak",
+       "src": "packs/hazir/wardencb/pozlar-merakli--ushanka-arka-kulak.png",
+       "parent": 4
+      },
+      {
+       "name": "İç",
+       "src": "packs/hazir/wardencb/pozlar-merakli--ic.png"
+      },
+      {
+       "name": "Çizgi",
+       "src": "packs/hazir/wardencb/pozlar-merakli--cizgi.png"
+      },
+      {
+       "name": "Göz",
+       "src": "packs/hazir/wardencb/pozlar-merakli--goz.png"
+      },
+      {
+       "name": "Ushanka",
+       "src": "packs/hazir/wardencb/pozlar-merakli--ushanka.png"
+      },
+      {
+       "name": "İşaretler",
+       "src": "packs/hazir/wardencb/pozlar-merakli--isaretler.png"
+      }
+     ],
+     "root": 2
     },
     {
      "name": "Hayal kırıklığı",
-     "src": "packs/hazir/wardencb/wardencb-pozlar-hayal-kirikligi.png"
+     "src": "packs/hazir/wardencb/pozlar-hayal-kirikligi.png",
+     "parts": [
+      {
+       "name": "Ushanka Arka Kulak",
+       "src": "packs/hazir/wardencb/pozlar-hayal-kirikligi--ushanka-arka-kulak.png",
+       "parent": 4
+      },
+      {
+       "name": "İç",
+       "src": "packs/hazir/wardencb/pozlar-hayal-kirikligi--ic.png"
+      },
+      {
+       "name": "Çizgi",
+       "src": "packs/hazir/wardencb/pozlar-hayal-kirikligi--cizgi.png"
+      },
+      {
+       "name": "Göz",
+       "src": "packs/hazir/wardencb/pozlar-hayal-kirikligi--goz.png"
+      },
+      {
+       "name": "Ushanka",
+       "src": "packs/hazir/wardencb/pozlar-hayal-kirikligi--ushanka.png"
+      },
+      {
+       "name": "İşaretler",
+       "src": "packs/hazir/wardencb/pozlar-hayal-kirikligi--isaretler.png"
+      }
+     ],
+     "root": 2
     },
     {
      "name": "Selam veriyor",
-     "src": "packs/hazir/wardencb/wardencb-pozlar-selam-veriyor.png"
-    }
-   ]
-  },
-  {
-   "name": "WardenCB Parçalar",
-   "items": [
-    {
-     "name": "Gövde",
-     "src": "packs/hazir/wardencb/wardencb-parcalar-govde.png"
-    },
-    {
-     "name": "Ushanka",
-     "src": "packs/hazir/wardencb/wardencb-parcalar-ushanka.png"
-    },
-    {
-     "name": "Gölge",
-     "src": "packs/hazir/wardencb/wardencb-parcalar-golge.png"
-    },
-    {
-     "name": "Göz Normal",
-     "src": "packs/hazir/wardencb/wardencb-parcalar-goz-normal.png"
-    },
-    {
-     "name": "Göz Mutlu",
-     "src": "packs/hazir/wardencb/wardencb-parcalar-goz-mutlu.png"
-    },
-    {
-     "name": "Göz Kapalı",
-     "src": "packs/hazir/wardencb/wardencb-parcalar-goz-kapali.png"
-    },
-    {
-     "name": "Göz Şaşkın",
-     "src": "packs/hazir/wardencb/wardencb-parcalar-goz-saskin.png"
-    },
-    {
-     "name": "Göz Şok",
-     "src": "packs/hazir/wardencb/wardencb-parcalar-goz-sok.png"
-    },
-    {
-     "name": "Göz Üzgün",
-     "src": "packs/hazir/wardencb/wardencb-parcalar-goz-uzgun.png"
-    },
-    {
-     "name": "Göz Kızgın",
-     "src": "packs/hazir/wardencb/wardencb-parcalar-goz-kizgin.png"
-    },
-    {
-     "name": "Göz Uykulu",
-     "src": "packs/hazir/wardencb/wardencb-parcalar-goz-uykulu.png"
-    },
-    {
-     "name": "Göz Uyuyor",
-     "src": "packs/hazir/wardencb/wardencb-parcalar-goz-uyuyor.png"
-    },
-    {
-     "name": "Göz Kırpma",
-     "src": "packs/hazir/wardencb/wardencb-parcalar-goz-kirpma.png"
-    },
-    {
-     "name": "Göz Kalp",
-     "src": "packs/hazir/wardencb/wardencb-parcalar-goz-kalp.png"
-    },
-    {
-     "name": "Göz Yıldız",
-     "src": "packs/hazir/wardencb/wardencb-parcalar-goz-yildiz.png"
-    },
-    {
-     "name": "Göz Spiral",
-     "src": "packs/hazir/wardencb/wardencb-parcalar-goz-spiral.png"
-    },
-    {
-     "name": "Göz Çarpı",
-     "src": "packs/hazir/wardencb/wardencb-parcalar-goz-carpi.png"
-    },
-    {
-     "name": "Göz Şüpheli",
-     "src": "packs/hazir/wardencb/wardencb-parcalar-goz-supheli.png"
+     "src": "packs/hazir/wardencb/pozlar-selam-veriyor.png",
+     "parts": [
+      {
+       "name": "Ushanka Arka Kulak",
+       "src": "packs/hazir/wardencb/pozlar-selam-veriyor--ushanka-arka-kulak.png",
+       "parent": 4
+      },
+      {
+       "name": "İç",
+       "src": "packs/hazir/wardencb/pozlar-selam-veriyor--ic.png"
+      },
+      {
+       "name": "Çizgi",
+       "src": "packs/hazir/wardencb/pozlar-selam-veriyor--cizgi.png"
+      },
+      {
+       "name": "Göz",
+       "src": "packs/hazir/wardencb/pozlar-selam-veriyor--goz.png"
+      },
+      {
+       "name": "Ushanka",
+       "src": "packs/hazir/wardencb/pozlar-selam-veriyor--ushanka.png"
+      },
+      {
+       "name": "İşaretler",
+       "src": "packs/hazir/wardencb/pozlar-selam-veriyor--isaretler.png"
+      }
+     ],
+     "root": 2
     }
    ]
   }

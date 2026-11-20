@@ -133,7 +133,7 @@ function star5(cx: number, cy: number, R: number, r: number) {
 }
 
 /** Gözler: gövdeden ayrı katman. look: bakış, blink: kırpma */
-function Eyes({ id, pose, look, lookY, blink }: { id: string; pose: Pose; look: number; lookY: number; blink: boolean }) {
+function Eyes({ id, pose, look, lookY, blink, white }: { id: string; pose: Pose; look: number; lookY: number; blink: boolean; white?: boolean }) {
   const lineEyes = (s: EyeSpec) => s.kind !== 'lens' && s.kind !== 'round';
   const l = blink && !lineEyes(pose.l) ? K('closed') : pose.l;
   const r = blink && !lineEyes(pose.r) ? K('closed') : pose.r;
@@ -141,7 +141,7 @@ function Eyes({ id, pose, look, lookY, blink }: { id: string; pose: Pose; look: 
     <g className="wcb-eyes" style={{ transform: `translate(${look * 14}px, ${lookY * 8}px)`, transition: 'transform .3s ease-out' }}>
       <defs>
         {(['l', 'r'] as const).map((k) => (
-          <linearGradient key={k} id={`${id}e${k}`} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor={EYE_FILL[k][0]} /><stop offset="1" stopColor={EYE_FILL[k][1]} /></linearGradient>
+          <linearGradient key={k} id={`${id}e${k}`} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor={EYE_FILL[white ? 'l' : k][0]} /><stop offset="1" stopColor={EYE_FILL[white ? 'l' : k][1]} /></linearGradient>
         ))}
       </defs>
       <Eye id={id} e={EYE_L} side="l" spec={l} />
@@ -195,13 +195,18 @@ function Effects({ fx }: { fx: Fx[] }) {
  * lacivert ushanka (turkuaz 8 köşeli yıldızlı), sol göz beyaz, sağ göz lacivert.
  * Ağzı yok: bütün duygu gözlerden, kaşlardan, duruştan ve duygu işaretlerinden. Kendiliğinden göz kırpar ve bakınır.
  */
-export type WcbLayer = 'shadow' | 'body' | 'eyes' | 'hat' | 'fx';
-export function WardenCB({ size = 120, mood = 'idle', look, autoBlink = true, layers, flagHref = 'wardencb/bayrak.png' }: {
-  size?: number; mood?: Mood; /** verilmezse kendiliğinden etrafa bakınır */ look?: number; autoBlink?: boolean;
+/** Katmanlar (alttan üste): gölge, ushankanın arka kulağı, iç (bayrak), çizgi, göz, ushanka, işaretler. 'body' = arka kulak + iç + çizgi */
+export type WcbLayer = 'shadow' | 'hatBack' | 'fill' | 'line' | 'body' | 'eyes' | 'hat' | 'fx';
+export function WardenCB({ size = 120, mood = 'idle', look, lookY: lookYProp, autoBlink = true, layers, flagHref = 'wardencb/bayrak.png', flip = false, viewBox = '60 190 580 490', whiteEyes = false, still = false }: {
+  size?: number; mood?: Mood; /** verilmezse kendiliğinden etrafa bakınır */ look?: number; lookY?: number; autoBlink?: boolean;
   /** Sadece bu katmanları çiz (pack parçaları için); verilmezse hepsi */ layers?: WcbLayer[];
   flagHref?: string;
+  /** Aynala: diğer tarafa dönük */ flip?: boolean;
+  viewBox?: string;
+  /** İki göz de beyaz (pack'teki gözler) */ whiteEyes?: boolean;
+  /** Duruş uygulanmaz (eğilme/ezilme yok) */ still?: boolean;
 }) {
-  const show = (k: WcbLayer) => !layers || layers.includes(k);
+  const show = (k: WcbLayer) => !layers || layers.includes(k) || (['hatBack', 'fill', 'line'].includes(k) && layers.includes('body'));
   const id = useId().replace(/:/g, '');
   const pose: Pose = POSES[mood] ?? POSES.idle;
   const [blink, setBlink] = useState(false);
@@ -229,28 +234,26 @@ export function WardenCB({ size = 120, mood = 'idle', look, autoBlink = true, la
     return () => clearTimeout(t);
   }, [autoBlink]);
   const lx = look ?? pose.look?.[0] ?? wander.x;
-  const ly = pose.look?.[1] ?? (look !== undefined ? 0 : wander.y);
-  const sq = pose.squash ?? 1, tilt = pose.tilt ?? 0, dy = pose.dy ?? 0;
+  const ly = lookYProp ?? pose.look?.[1] ?? (look !== undefined ? 0 : wander.y);
+  const sq = still ? 1 : pose.squash ?? 1, tilt = still ? 0 : pose.tilt ?? 0, dy = still ? 0 : pose.dy ?? 0;
   // Duruş: alt orta noktadan ezilme/uzama, merkezden eğilme, zıplama
   const bodyT = `translate(0 ${dy}) rotate(${tilt} 330 520) translate(330 650) scale(${(2 - sq).toFixed(3)} ${sq.toFixed(3)}) translate(-330 -650)`;
   return (
-    <svg width={size} height={size * 490 / 580} viewBox="60 190 580 490" role="img" aria-label={`WardenCB: ${pose.name}`}>
+    <svg width={size} height={size * +viewBox.split(' ')[3] / +viewBox.split(' ')[2]} viewBox={viewBox} role="img" aria-label={`WardenCB: ${pose.name}`} style={flip ? { transform: 'scaleX(-1)' } : undefined}>
       <defs>
         <clipPath id={`${id}b`}><path d={BODY} /></clipPath>
       </defs>
       {show('shadow') && <ellipse cx="340" cy="664" rx={230 * (dy < 0 ? 0.8 : 1)} ry="12" fill="#0B1430" opacity={dy < 0 ? 0.14 : 0.22} />}
       <g className="wcb-pose" transform={bodyT}>
         {/* ---- GÖVDE katmanı ---- */}
-        {show('body') && <g className="wcb-body">
-          <path d={FLAP_L} fill={HAT_COLOR} stroke={INK} strokeWidth="8" strokeLinejoin="round" />
-          <g clipPath={`url(#${id}b)`}>
-            <rect x="120" y="320" width="400" height="340" fill="#F7F8FA" />
-            <image href={flagHref} x="112" y="400" width="390" height="260" preserveAspectRatio="none" />
-          </g>
-          <path d={BODY} fill="none" stroke={INK} strokeWidth="8" strokeLinejoin="round" />
+        {show('hatBack') && <path className="wcb-hatback" d={FLAP_L} fill={HAT_COLOR} stroke={INK} strokeWidth="8" strokeLinejoin="round" />}
+        {show('fill') && <g className="wcb-fill" clipPath={`url(#${id}b)`}>
+          <rect x="120" y="320" width="400" height="340" fill="#F7F8FA" />
+          {flagHref && <image href={flagHref} x="112" y="400" width="390" height="260" preserveAspectRatio="none" />}
         </g>}
+        {show('line') && <path className="wcb-line" d={BODY} fill="none" stroke={INK} strokeWidth="8" strokeLinejoin="round" />}
         {/* ---- GÖZ katmanı (ayrı) ---- */}
-        {show('eyes') && <Eyes id={id} pose={pose} look={lx} lookY={ly} blink={blink} />}
+        {show('eyes') && <Eyes id={id} pose={pose} look={lx} lookY={ly} blink={blink} white={whiteEyes} />}
         {/* ---- ŞAPKA katmanı ---- */}
         {show('hat') && <g className="wcb-hat">
           <path d={FLAP_R} fill={HAT_COLOR} stroke={INK} strokeWidth="8" strokeLinejoin="round" />

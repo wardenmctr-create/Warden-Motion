@@ -90,7 +90,9 @@ function Pager<T>({ items, cols, rows = 2, render, keyOf, empty }: { items: T[];
 // ---------- Ekle paneli ----------
 export type AddTab = 'shape' | 'media' | 'text' | 'cb' | 'flags';
 
-interface PackFolder { name: string; items: { name: string; src: string }[] }
+interface PackPart { name: string; src: string; back?: boolean; parent?: number }
+interface PackItem { name: string; src: string; id?: string; parts?: PackPart[]; root?: number }
+interface PackFolder { name: string; items: PackItem[] }
 
 export function AddPanel({ tab, setTab, onClose, toast, replaceFlagOf }: { tab: AddTab | null; setTab: (t: AddTab) => void; onClose: () => void; toast: (m: string) => void; replaceFlagOf: string | null }) {
   const { s, p, t } = useNow();
@@ -119,6 +121,50 @@ export function AddPanel({ tab, setTab, onClose, toast, replaceFlagOf }: { tab: 
     onClose();
   };
 
+  /**
+   * Çok parçalı pack öğesi (ör. WardenCB pozu, ushanka): projeye bütün gibi gelir ama her parça ayrı katmandır.
+   * Kök parça dışındakiler kökü takip eder. "back" parçalar (ushankanın arka kulağı) en üstteki CB gövdesinin arkasına konur.
+   */
+  const addParts = async (it: PackItem) => {
+    const parts = it.parts!, root = it.root ?? 0;
+    const { w, h } = await loadSize(parts[root].src);
+    const k = Math.min(p.width, p.height) * (it.src.includes('wardencb/') ? 0.6 : 0.45) / Math.max(w, h);
+    const ids = parts.map(() => uid());
+    const made: Layer[] = parts.map((pt, i) => ({
+      ...makeLayer(p, t, dur, { type: 'image', name: `${it.name} ${pt.name}`, src: pt.src, w: Math.round(w * k), h: Math.round(h * k) }),
+      id: ids[i], ...(i === root ? {} : { parent: ids[pt.parent ?? root], x: { v: 0 }, y: { v: 0 } }),
+    }));
+    s.update((pp) => {
+      const layers = [...pp.layers];
+      const backs = made.filter((_, i) => parts[i].back), rest = made.filter((_, i) => !parts[i].back);
+      // Arka parçalar: en üstteki gövdenin (ebeveyni olmayan CB/gövde çizgisi ve onu takip edenler) en altına
+      let at = layers.length;
+      if (backs.length) {
+        const isBody = (l: Layer) => !l.parent && (l.type === 'cb' || /govdeler\//.test(l.src ?? '') || layers.some((c) => c.parent === l.id));
+        const body = [...layers].reverse().find(isBody);
+        if (body) {
+          const fam = new Set([body.id]);
+          for (let ch = true; ch;) { ch = false; for (const l of layers) if (l.parent && fam.has(l.parent) && !fam.has(l.id)) { fam.add(l.id); ch = true; } }
+          at = layers.findIndex((l) => fam.has(l.id));
+          // Ushanka basık gövdeye konuyorsa ölçüp tam yerine oturt (gövde tuvali 400, ushanka tuvali 516 birim)
+          if (/govdeler\/wardencb-cizgi/.test(body.src ?? '') && /ushanka/.test(it.src)) {
+            const u = body.w / 400, r = made[root];
+            r.w = Math.round(516 * u); r.h = Math.round(416 * u);
+            r.x = { v: Math.round(valueAt(body.x, t) + 28 * u) }; r.y = { v: Math.round(valueAt(body.y, t) - 26 * u) };
+            r.scale = { v: valueAt(body.scale, t) };
+            for (const b of backs) { b.w = r.w; b.h = r.h; }
+          }
+        }
+      }
+      layers.splice(at, 0, ...backs);
+      return { ...pp, layers: [...layers, ...rest] };
+    });
+    s.select(ids[root]);
+    pushRecent(it.src);
+    toast(`${it.name}: ${parts.length} ayrı katman olarak eklendi${parts.some((x) => x.back) ? ' (arka kulak CB\'nin arkasında)' : ''}.`);
+    onClose();
+  };
+
   /** Gövde kur: çizgi (ebeveyn) + beyaz iç (takip eder) [+ bayrak iç'e kırpılmış] [+ gözler] */
   const buildBody = (shape: string, flagSrc?: string, flagName?: string) => {
     const size = Math.round(Math.min(p.width, p.height) * 0.5);
@@ -127,8 +173,10 @@ export function AddPanel({ tab, setTab, onClose, toast, replaceFlagOf }: { tab: 
     const inner = { ...makeLayer(p, t, dur, { type: 'image', name: `${flagName ?? 'Gövde'} İç`, src: `packs/hazir/govdeler/${shape}-ic.png`, w: size, h: size }), id: innerId, parent: lineId, x: { v: 0 }, y: { v: 0 } };
     const extra: Layer[] = [];
     if (flagSrc) {
-      extra.push({ ...makeLayer(p, t, dur, { type: 'image', name: `${flagName} Bayrak`, src: flagSrc, w: Math.round(size * 1.34), h: size }), id: uid(), parent: lineId, mask: innerId, x: { v: 0 }, y: { v: 0 } });
-      extra.push({ ...makeLayer(p, t, dur, { type: 'image', name: `${flagName} Gözler`, src: 'packs/hazir/gozler/normal.png', w: Math.round(size * 0.62), h: Math.round(size * 0.62) }), id: uid(), parent: lineId, x: { v: 0 }, y: { v: -Math.round(size * 0.06) } });
+      // Basık gövde: bayrak alt kısımda (üstü beyaz), gözler kendi göz setinden ve gövdeye göre ölçülü yerinde
+      const wb = shape === 'wardencb';
+      extra.push({ ...makeLayer(p, t, dur, { type: 'image', name: `${flagName} Bayrak`, src: flagSrc, w: Math.round(size * (wb ? 1 : 1.34)), h: Math.round(size * (wb ? 0.68 : 1)) }), id: uid(), parent: lineId, mask: innerId, x: { v: 0 }, y: { v: wb ? Math.round(size * 0.1) : 0 } });
+      extra.push({ ...makeLayer(p, t, dur, { type: 'image', name: `${flagName} Gözler`, src: wb ? 'packs/hazir/gozler/wardencb-bakan.png' : 'packs/hazir/gozler/normal.png', w: Math.round(size * (wb ? 0.95 : 0.62)), h: Math.round(size * (wb ? 0.95 : 0.62)) }), id: uid(), parent: lineId, x: { v: wb ? -Math.round(size * 0.0375) : 0 }, y: { v: wb ? Math.round(size * 0.1125) : -Math.round(size * 0.06) } });
     }
     s.update((pp) => ({ ...pp, layers: [...pp.layers, inner, ...extra.slice(0, 1), line, ...extra.slice(1)] }));
     s.select(lineId);
@@ -166,13 +214,13 @@ export function AddPanel({ tab, setTab, onClose, toast, replaceFlagOf }: { tab: 
         )}
         {tab === 'media' && <MediaTab onPick={(src, name, kind) => (kind === 'video' ? addVideo(src, name) : addImage(src, name, 0.7))} />}
         {tab === 'text' && <TextTab onAdd={(text) => { s.addLayer(makeLayer(p, t, dur, { type: 'text', name: text.slice(0, 18) || 'Metin', text, fontSize: Math.round(p.height / 12), fill: '#0D1631', w: Math.round(p.width * 0.6), h: Math.round(p.height / 8) })); onClose(); }} />}
-        {tab === 'cb' && <CBTab onPick={(src, name) => addImage(src, name)} onBody={(shape) => buildBody(shape)} toast={toast} />}
+        {tab === 'cb' && <CBTab onPick={(it) => (it.parts ? addParts(it) : addImage(it.src, it.name))} onBody={(shape) => buildBody(shape)} toast={toast} />}
         {tab === 'flags' && (
           <FlagsTab
             replace={!!replaceFlagOf}
             onPick={(src, name, mode) => {
               if (replaceFlagOf) { s.updateLayer(replaceFlagOf, (l) => ({ ...l, src })); onClose(); return; }
-              if (mode === 'cb' || mode === 'cbsoft') buildBody(mode === 'cbsoft' ? 'yumusak-top' : 'top', src, name);
+              if (mode !== 'flat') buildBody(mode === 'cbsoft' ? 'yumusak-top' : mode === 'cbwarden' ? 'wardencb' : 'top', src, name);
               else addImage(src, `${name} Bayrağı`, 0.6);
             }}
             toast={toast}
@@ -250,7 +298,7 @@ function TextTab({ onAdd }: { onAdd: (t: string) => void }) {
 }
 
 // ---------- CB Araçları ----------
-function CBTab({ onPick, onBody, toast }: { onPick: (src: string, name: string) => void; onBody: (shape: string) => void; toast: (m: string) => void }) {
+function CBTab({ onPick, onBody, toast }: { onPick: (it: PackItem) => void; onBody: (shape: string) => void; toast: (m: string) => void }) {
   const [which, setWhich] = useState<'ready' | 'mine'>(() => (localStorage.getItem('wm-pack-tab') as 'ready' | 'mine') || 'ready');
   const [ready, setReady] = useState<PackFolder[]>([]);
   const [folder, setFolder] = useState('Tümü');
@@ -263,11 +311,11 @@ function CBTab({ onPick, onBody, toast }: { onPick: (src: string, name: string) 
   useEffect(() => { localStorage.setItem('wm-pack-tab', which); setFolder('Tümü'); setEdit(false); }, [which]);
 
   const recent = getRecent().filter((r) => r.startsWith('packs/') || mine.some((m) => m.id === r));
-  const nameOf = (src: string) => ready.flatMap((f) => f.items).find((i) => i.src === src)?.name ?? mine.find((m) => m.id === src)?.name ?? '';
+  const itemOf = (src: string): PackItem => ready.flatMap((f) => f.items).find((i) => i.src === src) ?? { src, name: mine.find((m) => m.id === src)?.name ?? '' };
 
   const folders = which === 'ready' ? ready.map((f) => f.name) : myFolders;
-  const shown: { src: string; name: string; id?: string }[] = folder === 'Son'
-    ? recent.map((r) => ({ src: r, name: nameOf(r) }))
+  const shown: PackItem[] = folder === 'Son'
+    ? recent.map(itemOf)
     : which === 'ready'
       ? ready.filter((f) => folder === 'Tümü' || f.name === folder).flatMap((f) => f.items)
       : mine.filter((m) => folder === 'Tümü' || m.folder === folder).map((m) => ({ src: m.id, name: m.name, id: m.id }));
@@ -297,7 +345,7 @@ function CBTab({ onPick, onBody, toast }: { onPick: (src: string, name: string) 
 
       {which === 'ready' && folder === 'Gövdeler' && (
         <div className="chips">
-          {[['yumusak-top', 'Yumuşak top'], ['yumusak-kup', 'Yumuşak küp'], ['top', 'Top'], ['dikdortgen', 'Dikdörtgen'], ['kup', 'Küp'], ['ucgen', 'Üçgen']].map(([k, n]) => (
+          {[['wardencb', 'Basık top'], ['yumusak-top', 'Yumuşak top'], ['yumusak-kup', 'Yumuşak küp'], ['top', 'Top'], ['dikdortgen', 'Dikdörtgen'], ['kup', 'Küp'], ['ucgen', 'Üçgen']].map(([k, n]) => (
             <button key={k} className="chip" style={{ color: 'var(--turq)' }} onClick={() => onBody(k)}><Icon name="ball" size={14} />{n} gövdesi kur</button>
           ))}
         </div>
@@ -326,7 +374,7 @@ function CBTab({ onPick, onBody, toast }: { onPick: (src: string, name: string) 
           </>
         ) : (
           <>
-            <button className="thumb" style={{ width: '100%' }} aria-label={it.name} onClick={() => !edit && onPick(it.src, it.name)}>
+            <button className="thumb" style={{ width: '100%' }} aria-label={it.name} onClick={() => !edit && onPick(it)}>
               <Img src={it.src} alt="" />
               {edit && it.id && <span className="x" role="button" aria-label={`${it.name} sil`} onClick={async (e) => { e.stopPropagation(); await removeUserPackItem(it.id!); refresh(); }}><Icon name="close" size={14} stroke={2.4} /></span>}
             </button>
@@ -343,7 +391,7 @@ function CBTab({ onPick, onBody, toast }: { onPick: (src: string, name: string) 
 interface FlagMeta { code: string; en: string; continent: string; iso: boolean }
 const CONT: Record<string, string> = { Europe: 'Avrupa', Asia: 'Asya', Africa: 'Afrika', 'North America': 'Kuzey Amerika', 'South America': 'Güney Amerika', Oceania: 'Okyanusya', Antarctica: 'Antarktika' };
 
-function FlagsTab({ onPick, toast, replace }: { onPick: (src: string, name: string, mode: 'cb' | 'cbsoft' | 'flat') => void; toast: (m: string) => void; replace: boolean }) {
+function FlagsTab({ onPick, toast, replace }: { onPick: (src: string, name: string, mode: 'cb' | 'cbsoft' | 'cbwarden' | 'flat') => void; toast: (m: string) => void; replace: boolean }) {
   const [all, setAll] = useState<FlagMeta[]>([]);
   const [q, setQ] = useState('');
   const [cont, setCont] = useState('Tümü');
@@ -356,7 +404,7 @@ function FlagsTab({ onPick, toast, replace }: { onPick: (src: string, name: stri
     let n = f.en;
     if (f.iso && f.code.length === 2) { try { n = dn?.of(f.code.toUpperCase()) ?? f.en; } catch { /* yok */ } }
     return { ...f, name: n };
-  }).sort((a, b) => a.name.localeCompare(b.name, 'tr')), [all, dn]);
+  }).sort((a, b) => Number(b.code === 'wardencb') - Number(a.code === 'wardencb') || a.name.localeCompare(b.name, 'tr')), [all, dn]);
   const ql = q.toLocaleLowerCase('tr');
   const list = named.filter((f) => (cont === 'Tümü' || CONT[f.continent] === cont) && (!ql || f.name.toLocaleLowerCase('tr').includes(ql) || f.en.toLowerCase().includes(ql) || f.code === ql));
   const choose = (src: string, name: string) => (replace ? onPick(src, name, 'flat') : setAsk({ src, name }));
@@ -406,6 +454,7 @@ function FlagsTab({ onPick, toast, replace }: { onPick: (src: string, name: stri
             <h4>{ask.name}</h4>
             <button className="btn" onClick={() => { onPick(ask.src, ask.name, 'cbsoft'); setAsk(null); }}><Icon name="ball" size={18} />Yumuşak CB olarak ekle</button>
             <button className="btn ghost" onClick={() => { onPick(ask.src, ask.name, 'cb'); setAsk(null); }}><Icon name="ball" size={18} />Yuvarlak CB olarak ekle</button>
+            <button className="btn ghost" onClick={() => { onPick(ask.src, ask.name, 'cbwarden'); setAsk(null); }}><Icon name="ball" size={18} />Basık CB olarak ekle</button>
             <span style={{ fontSize: 12, color: 'var(--d-text2)' }}>Top gövdesi kurulur: çizgi + beyaz iç + iç'e kırpılmış bayrak + gözler. Hepsi çizgiyi takip eder.</span>
             <button className="btn ghost" onClick={() => { onPick(ask.src, ask.name, 'flat'); setAsk(null); }}><Icon name="flag" size={18} />Düz bayrak olarak ekle</button>
             <button className="btn ghost" onClick={() => setAsk(null)}>Vazgeç</button>
