@@ -30,8 +30,8 @@ const FLAP_L = 'M126 410 C106 460 98 536 102 600 C104 634 116 652 138 654 C170 6
 // Her ifade bu kutulardan türetilir. Gözler gövdeden ayrı katman: kayar, kırpılır, değişir.
 // ---------------------------------------------------------------------------------------------
 export interface EyeBox { l: number; r: number; top: number; bot: number }
-export const EYE_L: EyeBox = { l: 160, r: 310, top: 500, bot: 586 };
-export const EYE_R: EyeBox = { l: 332, r: 494, top: 503, bot: 583 };
+export const EYE_L: EyeBox = { l: 140, r: 290, top: 500, bot: 586 };
+export const EYE_R: EyeBox = { l: 312, r: 474, top: 503, bot: 583 };
 
 type EyeShape = { d: string; line?: boolean };
 /** Göz şekli: kapak açısı (derece; + dışa doğru aşağı), kapak düşüşü (px), şekil türü */
