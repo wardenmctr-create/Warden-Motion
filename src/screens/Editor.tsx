@@ -4,7 +4,6 @@ import { AddPanel, type AddTab, ColorPanel, CBPanel, EffectsPanel, MovePanel, Op
 import { fmtTime, projectDuration, setAnim, valueAt } from '../anim';
 import { groupLabel, layerMarkers, moveMarker, type Marker } from '../markers';
 import { estimateExport, exportVideo, heavyEffects, saveFile, type ExportInfo } from '../export';
-import { TUTORIALS } from '../factories';
 import { fxMeta, fxVal } from '../effects';
 import { hitTest, parentWorld, pauseAllVideos, renderFrame, setImageLoadedHandler, toLocal, worldTransform, type TR } from '../render';
 import { useStore } from '../store';
@@ -582,7 +581,6 @@ export function Editor() {
     </div>
   ) : null
 
-  const tut = p.tutorial ? TUTORIALS.find((t) => t.id === p.tutorial) : undefined;
   const rows = [...p.layers].reverse(); // en üstteki katman zaman çizelgesinde en üstte
   const multi = s.multi;
   const [mmenu, setMmenu] = useState(false);
@@ -676,7 +674,7 @@ export function Editor() {
               ))}
               {reord && <div className="rowline" style={{ top: TOP + reord.cur * ROW - 3 }} />}
               {(sel ? [sel] : rows).map((l, i) => (
-                <button key={l.id} className={'track' + (l.id === s.selectedId ? ' sel' : multi?.includes(l.id) ? ' msel' : ' off') + (reord?.from === i && !sel ? ' drag' : '')}
+                <button key={l.id} data-lid={l.id} className={'track' + (l.id === s.selectedId ? ' sel' : multi?.includes(l.id) ? ' msel' : ' off') + (reord?.from === i && !sel ? ' drag' : '')}
                   style={{ left: half + l.start * PPS, width: Math.max(8, (l.end - l.start) * PPS), top: TOP + i * ROW, opacity: l.hidden ? 0.45 : 1, transform: sel ? undefined : `translateY(${rowOffset(i)}px)` }}
                   {...pressHandlers(l.id)}>
                   <span className="tname">{l.tag && <i className="ttag" style={{ background: l.tag }} />}{l.mask ? '◐ ' : ''}{l.name}</span>
@@ -707,7 +705,7 @@ export function Editor() {
           {!sel && p.layers.length > 0 && (
             <div className="pills" ref={pillsRef}>
               {rows.map((l, i) => (
-                <button key={l.id} className={'lpill' + (multi?.includes(l.id) ? ' on' : '')} style={{ top: TOP + i * ROW }} aria-label={l.name} {...pressHandlers(l.id)}>
+                <button key={l.id} data-lid={l.id} className={'lpill' + (multi?.includes(l.id) ? ' on' : '')} style={{ top: TOP + i * ROW }} aria-label={l.name} {...pressHandlers(l.id)}>
                   <LayerDot l={l} />
                 </button>
               ))}
@@ -804,9 +802,6 @@ export function Editor() {
         </div>
       )}
 
-      {tut && (
-        <TutorialBox title={tut.title} steps={tut.steps} tips={tut.tips} />
-      )}
 
       {exDlg && <ExportDialog p={p} onClose={() => setExDlg(false)} onStart={(q) => { setExDlg(false); doExport(q); }} />}
 
@@ -826,25 +821,6 @@ export function Editor() {
         </div>
       )}
       {toast && <div className="toast" role="status">{toast}</div>}
-    </div>
-  );
-}
-
-function TutorialBox({ title, steps, tips }: { title: string; steps: string[]; tips: string[] }) {
-  const { tutorialStep: i, setTutorialStep } = useStore();
-  const [min, setMin] = useState(false);
-  if (min) return <button className="btn tutmin" onClick={() => setMin(false)}><Icon name="cap" size={18} />Öğretici</button>;
-  const done = i >= steps.length;
-  return (
-    <div className="tutbox" role="region" aria-label="Öğretici">
-      <div className="h"><Icon name="cap" size={16} />{title} · {done ? 'Taktikler' : `Adım ${i + 1}/${steps.length}`}
-        <span style={{ flex: 1 }} /><button className="ib" style={{ width: 32, height: 32 }} aria-label="Küçült" onClick={() => setMin(true)}><Icon name="chevD" size={18} /></button></div>
-      {done ? <ul style={{ margin: 0, paddingLeft: 18, display: 'flex', flexDirection: 'column', gap: 4 }}>{tips.map((t) => <li key={t}>{t}</li>)}</ul> : <div>{steps[i]}</div>}
-      <div className="nav2">
-        <button className="btn ghost" disabled={i === 0} onClick={() => setTutorialStep(i - 1)}>Geri</button>
-        {!done && <button className="btn" onClick={() => setTutorialStep(i + 1)}>{i === steps.length - 1 ? 'Taktiklere geç' : 'İleri'}</button>}
-        {done && <button className="btn" onClick={() => setMin(true)}><Icon name="check" size={16} />Bitir</button>}
-      </div>
     </div>
   );
 }

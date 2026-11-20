@@ -4,6 +4,7 @@ import { Editor } from './screens/Editor';
 import { Home } from './screens/Home';
 import { useStore } from './store';
 import { setMediaMax } from './db';
+import { Assistant } from './assistant/Assistant';
 
 export function App() {
   const screen = useStore((s) => s.screen);
@@ -28,5 +29,5 @@ export function App() {
     return () => remove?.();
   }, []);
 
-  return screen === 'editor' && hasProject ? <Editor /> : <Home />;
+  return <>{screen === 'editor' && hasProject ? <Editor /> : <Home />}<Assistant /></>;
 }

@@ -6,6 +6,9 @@ import { fmtTime, projectDuration } from '../anim';
 import { renderFrame, setImageLoadedHandler } from '../render';
 import { detectWeakDevice, useStore } from '../store';
 import { askConfirm } from '../dialog';
+import { replayIntro } from '../assistant/Assistant';
+import { APP_VERSION } from '../assistant/engine';
+import { WardenCB } from '../components/WardenCB';
 import type { Project } from '../types';
 
 export function Thumb({ p, size = 80, t = 0.6, round = false }: { p: Project; size?: number; t?: number; round?: boolean }) {
@@ -103,7 +106,7 @@ export function Home() {
             <div className="plist">
               {projects.map((p) => (
                 <div key={p.id} style={{ position: 'relative' }}>
-                  <button className="pcard" onClick={() => open(p)}>
+                  <button className="pcard" data-pid={p.id} onClick={() => open(p)}>
                     <div className="pthumb"><Thumb p={p} /><span className="dur">{fmtTime(projectDuration(p), p.fps)}</span></div>
                     <div className="pmeta">
                       <b>{p.name}</b>
@@ -215,9 +218,13 @@ function SettingsDrawer({ onClose }: { onClose: () => void }) {
             </select>
           </div>
         </div>
+        <button className="linkrow wa-meet" onClick={() => { onClose(); setTimeout(replayIntro, 250); }}>
+          <WardenCB size={54} mood="wave" />
+          <span><b>WardenCB ile tanış</b><small>Asistanı ve uygulama turunu yeniden başlat</small></span>
+        </button>
         <div className="linkrow" style={{ height: 'auto', padding: 14, flexDirection: 'column', alignItems: 'flex-start', gap: 6 }}>
           <b>Hakkında</b>
-          <span style={{ fontSize: 13, color: 'var(--l-text2)' }}>Warden Motion v0.1 · Deneme sürümü. Projelerin ve yüklediğin pack'ler bu cihazda saklanır.</span>
+          <span style={{ fontSize: 13, color: 'var(--l-text2)' }}>Warden Motion v{APP_VERSION} · Deneme sürümü. Projelerin ve yüklediğin pack'ler bu cihazda saklanır.</span>
         </div>
         <div className="linkrow" style={{ height: 'auto', padding: 14, flexDirection: 'column', alignItems: 'flex-start', gap: 6 }}>
           <b>Açık Kaynak Kütüphaneleri</b>

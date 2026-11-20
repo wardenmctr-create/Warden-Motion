@@ -580,3 +580,35 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
 .ruler i.s { margin-left: -0.75px; }
 .ruler i.cur { height: 4px; background: var(--d-text2); }
 .playhead { margin-left: -1px; }
+
+/* ---------- WardenCB asistanı ---------- */
+.wa { position: fixed; inset: 0; z-index: 900; pointer-events: none; }
+.wa-ring { position: fixed; border: 3px solid #22D3E6; border-radius: 14px; box-shadow: 0 0 0 4px rgba(34, 211, 230, .22), 0 0 18px rgba(34, 211, 230, .55); animation: wa-pulse 1.3s ease-in-out infinite; transition: left .18s, top .18s, width .18s, height .18s; }
+.wa-ring.warn { border-color: #F2C230; box-shadow: 0 0 0 4px rgba(242, 194, 48, .22), 0 0 18px rgba(242, 194, 48, .5); }
+@keyframes wa-pulse { 50% { transform: scale(1.04); opacity: .75; } }
+.wa-arrow { position: fixed; left: 0; top: 0; overflow: visible; }
+.wa-arrow path:not(marker path) { fill: none; stroke: #22D3E6; stroke-width: 4; stroke-linecap: round; stroke-dasharray: 9 7; animation: wa-dash .7s linear infinite; filter: drop-shadow(0 1px 2px rgba(11, 20, 48, .6)); }
+.wa-arrow path.warn { stroke: #F2C230; }
+@keyframes wa-dash { to { stroke-dashoffset: -16; } }
+.wa-card { position: fixed; pointer-events: auto; background: linear-gradient(180deg, #1E2A55, #17224A); color: #DCE9FF; border: 1.5px solid #2C6FD8; border-radius: 18px; box-shadow: 0 10px 30px rgba(11, 20, 48, .55); padding: 8px 12px 10px; animation: wa-in .28s ease-out; }
+.wa-card.r { padding-right: 96px; }
+.wa-card.l { padding-left: 96px; }
+@keyframes wa-in { from { opacity: 0; transform: translateY(10px); } }
+.wa-head { display: flex; align-items: center; gap: 2px; font-size: 11px; font-weight: 700; color: #8FA6D6; letter-spacing: .2px; }
+.wa-head .ib { width: 30px; height: 30px; color: #8FA6D6; }
+.wa-card p { margin: 2px 0 8px; font-size: 14px; line-height: 1.42; }
+.wa-card p.warn { color: #F7D774; }
+.wa-btns { display: flex; align-items: center; gap: 8px; }
+.wa-b { height: 34px; padding: 0 16px; border-radius: 17px; border: 0; font: inherit; font-weight: 700; font-size: 13px; background: #22D3C5; color: #0B1430; cursor: pointer; }
+.wa-b.ghost { background: transparent; color: #8FA6D6; padding: 0 10px; }
+.wa-mascot { position: fixed; pointer-events: none; transition: left .25s, top .25s; animation: wa-from-r .45s cubic-bezier(.2, .9, .3, 1.2); }
+.wa-mascot.l { animation-name: wa-from-l; }
+.wa-mascot > svg { display: block; animation: wa-bob 2.6s ease-in-out infinite; }
+@keyframes wa-from-r { from { transform: translateX(120px); opacity: 0; } }
+@keyframes wa-from-l { from { transform: translateX(-120px); opacity: 0; } }
+@keyframes wa-bob { 50% { translate: 0 -3px; } }
+.wa-min { position: fixed; left: 6px; bottom: 42%; z-index: 900; width: 66px; height: 58px; border-radius: 20px; border: 1.5px solid #2C6FD8; background: #17224A; padding: 2px; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 18px rgba(11, 20, 48, .5); cursor: pointer; }
+.wa-meet { height: auto !important; padding: 10px 14px !important; gap: 12px; display: flex; align-items: center; text-align: left; width: 100%; cursor: pointer; }
+.wa-meet span { display: flex; flex-direction: column; gap: 3px; }
+.wa-meet small { font-size: 12px; color: var(--l-text2); font-weight: 400; }
+.wa-card p.wa-sub { margin-top: -4px; font-size: 13px; font-weight: 700; color: #7EE8F0; }
