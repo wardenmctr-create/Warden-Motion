@@ -254,9 +254,13 @@ const INTRO_END: Step[] = [WHAT_NOW(false), pickTutorial()];
 export const WHATS_NEW: { v: string; items: Step[] }[] = [
   {
     v: '0.9', items: [
-      { say: 'Bu güncellemede yeni olan benim: WardenCB! Artık öğreticilerde ekranında nereye basacağını gösteriyorum, yanlış yere girersen çıkış yolunu da.', mood: 'proud' },
+      { say: 'Şimdi bu güncellemede neler geldiğini anlatayım! İlki benim: WardenCB. Öğreticilerde ekranında nereye basacağını gösteriyorum, yanlış yere girersen çıkış yolunu da. "Anlamadım" dersen adımı ben yaparım.', mood: 'proud' },
       { say: 'CB Araçları\'nda yeni "Pozlar" klasörü: 30 duygu, 30 poz. Projeye bütün gibi gelir ama iç, çizgi, göz ve ushanka ayrı katmanlardır.', mood: 'excited' },
-      { say: 'Gövdeler\'e "Basık top", Gözler\'e beyaz göz seti, Şapkalar\'a ushanka (arka kulağı CB\'nin arkasına kendisi geçer) geldi. Bayraklar\'da da benim bayrağım var: "Basık CB olarak ekle" ile beni kurabilirsin.', mood: 'happy' },
+      { say: 'Gövdeler\'e "Basık top", Gözler\'e beyaz göz seti, Şapkalar\'a ushanka geldi. Ushankanın arka kulağı ayrı katman, ana parçayı takip eder ve CB\'nin arkasına kendisi geçer.', mood: 'happy' },
+      { say: 'Bayraklar\'ın en başında benim bayrağım var. "Basık CB olarak ekle" dersen beni parça parça kurabilirsin.', mood: 'wink' },
+      { say: 'Seçili katmanın köşelerinden tutup büyütebilirsin. Kenarlardan şekilleri genişletir, görselleri ve bayrakları kırparsın.', mood: 'curious' },
+      { say: 'Yeni şekiller: Çubuk, Hilal, Çokgen ve Serbest Çokgen. Şekillerin turkuaz tutamaçları var: hilali kaydırıp top ya da yarım daire yaparsın, çubuğun uzunluğunu ve kalınlığını ayarlarsın.', mood: 'joy' },
+      { say: '"Şekli Düzenle" artık çalışıyor: yıldızın köşe sayısı, çokgenin kenar sayısı, köşe yuvarlaklığı… Serbest çokgene köşe ekleyip her köşeyi istediğin yere sürükleyebilirsin.', mood: 'smug' },
     ],
   },
 ];
@@ -355,7 +359,8 @@ const TUT_CB1 = (): Step[] => [
 
 export function buildScript(id: string, opts: { existing?: boolean; from?: string; pid?: string; tips?: string[] } = {}): Script | null {
   if (id === 'intro') {
-    const news = opts.existing ? WHATS_NEW.filter((w) => !opts.from || w.v > opts.from).flatMap((w) => w.items) : [];
+    // Bu güncellemenin yenilikleri herkese anlatılır (yeni kullanıcıya da)
+    const news = WHATS_NEW.filter((w) => w.v === APP_VERSION || (opts.existing && (!opts.from || w.v > opts.from))).flatMap((w) => w.items);
     return { id, title: 'Tanışma', steps: [...INTRO, ...news, ...INTRO_END] };
   }
   if (id === 'whatsnew') {
