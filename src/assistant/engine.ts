@@ -286,7 +286,12 @@ export function startDemo(id: string) {
 }
 const jump = (d: number) => () => { const r = useAssistant.getState().run; if (r) useAssistant.getState().go(r.step + d); };
 /** Öğretici sonu: Anlamadım / Tamam sg. "sg" sorusu: evet → görüşürüz, hayır → şerefsiz! */
-const tutEnd = (id: string, say: string): Step[] => [
+const tutEnd = (id: string, say: string, sg = false): Step[] => !sg ? [
+  { say, mood: 'joy', choices: [
+    { label: 'Anladım', act: finish },
+    { label: 'Anlamadım', act: () => startDemo(id) },
+  ] },
+] : [
   { say, mood: 'joy', choices: [
     { label: 'Anlamadım', act: () => startDemo(id) },
     { label: 'Tamam sg', act: jump(1) },
@@ -359,7 +364,7 @@ export function buildScript(id: string, opts: { existing?: boolean; from?: strin
   }
   if (id === 'editor') return { id, title: 'Editör turu', steps: EDITOR_TOUR };
   if (id === 'tut:g1') return { id, pid: opts.pid, title: 'Temel Animasyon', steps: [...TUT_G1(), ...tips(opts.tips ?? []), ...tutEnd('g1', 'Öğretici bitti! Anladın mı? Anlamadıysan bütün projeyi ben baştan yapıp anlatayım.')] };
-  if (id === 'tut:cb1') return { id, pid: opts.pid, title: 'Temel CB', steps: [...TUT_CB1(), ...tips(opts.tips ?? []), ...tutEnd('cb1', 'Öğretici bitti! Anladın mı? Anlamadıysan bütün projeyi ben baştan yapıp anlatayım.')] };
+  if (id === 'tut:cb1') return { id, pid: opts.pid, title: 'Temel CB', steps: [...TUT_CB1(), ...tips(opts.tips ?? []), ...tutEnd('cb1', 'Öğretici bitti! Anladın mı? Anlamadıysan bütün projeyi ben baştan yapıp anlatayım.', true)] };
   return null;
 }
 
