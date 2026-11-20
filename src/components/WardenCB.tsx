@@ -15,7 +15,7 @@ function star8(cx: number, cy: number, R: number, r: number) {
 
 // ---------------------------------------------------------------------------------------------
 /** Ushankanın tek rengi (ışık/gölge yok) */
-export const HAT_COLOR = '#5A5A22';
+export const HAT_COLOR = '#14214A';
 
 // GÖVDE: bütün koordinatlar kullanıcının gönderdiği 736×736 referans çizimden piksel ölçüldü.
 // ---------------------------------------------------------------------------------------------
