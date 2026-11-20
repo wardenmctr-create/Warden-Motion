@@ -23,7 +23,7 @@ export function App() {
         if (!dispatchEvent(ev)) return;
         const st = useStore.getState();
         if (st.screen === 'editor') st.close();
-        else if (st.screen === 'tutorials') st.go('home');
+        else if (st.screen === 'tutorials' || st.screen === 'account') st.go('home');
         else CapApp.exitApp();
       }).then((h) => { remove = () => h.remove(); });
     });

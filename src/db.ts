@@ -76,3 +76,35 @@ export async function addUserFlag(file: File, name: string) {
   const id = await putMedia(file);
   await set('index', [...(await listUserFlags()), { id, name }], flagStore);
 }
+
+// ---------- Yedekleme (hesap) ----------
+const blobToData = (b: Blob) => new Promise<string>((res) => { const r = new FileReader(); r.onload = () => res(String(r.result)); r.readAsDataURL(b); });
+const dataToBlob = async (d: string) => (await fetch(d)).blob();
+
+export interface BackupInfo { projects: number; media: number; pack: number; flags: number }
+/** Bütün projeler, galeriden eklenenler, yüklediğim pack ve bayraklar tek dosyada */
+export async function exportBackup(extra: Record<string, unknown> = {}): Promise<{ blob: Blob; info: BackupInfo }> {
+  const projects = await listProjects();
+  const media: Record<string, string> = {};
+  for (const k of await keys(mediaStore)) { const b = await get<Blob>(k, mediaStore); if (b) media[String(k)] = await blobToData(b); }
+  const pack = { index: await listUserPack(), folders: (await get<string[]>('folders', packStore)) ?? [] };
+  const flags = await listUserFlags();
+  const data = { app: 'warden-motion', v: 1, date: Date.now(), projects, media, pack, flags, ...extra };
+  return { blob: new Blob([JSON.stringify(data)], { type: 'application/json' }), info: { projects: projects.length, media: Object.keys(media).length, pack: pack.index.length, flags: flags.length } };
+}
+/** Yedeği geri yükler: var olanlar silinmez, aynı projeler yedekteki hâliyle güncellenir */
+export async function importBackup(file: Blob): Promise<BackupInfo & { extra: Record<string, unknown> }> {
+  const d = JSON.parse(await file.text());
+  if (d?.app !== 'warden-motion') throw new Error('Bu bir Warden Motion yedeği değil.');
+  for (const [k, v] of Object.entries((d.media ?? {}) as Record<string, string>)) await set(k, await dataToBlob(v), mediaStore);
+  for (const p of (d.projects ?? []) as Project[]) await saveProject(p);
+  const idx = await listUserPack();
+  const newItems = ((d.pack?.index ?? []) as UserPackItem[]).filter((i) => !idx.some((x) => x.id === i.id));
+  await set('index', [...idx, ...newItems], packStore);
+  const folders = (await get<string[]>('folders', packStore)) ?? [];
+  await set('folders', [...new Set([...folders, ...((d.pack?.folders ?? []) as string[])])], packStore);
+  const fl = await listUserFlags();
+  await set('index', [...fl, ...((d.flags ?? []) as UserFlag[]).filter((f) => !fl.some((x) => x.id === f.id))], flagStore);
+  const { app: _a, v: _v, date: _d, projects, media, pack, flags, ...extra } = d;
+  return { projects: projects?.length ?? 0, media: Object.keys(media ?? {}).length, pack: pack?.index?.length ?? 0, flags: flags?.length ?? 0, extra };
+}

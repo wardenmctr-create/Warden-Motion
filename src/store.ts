@@ -39,7 +39,7 @@ const loadSettings = (): Settings => {
   return base;
 };
 
-type Screen = 'home' | 'editor' | 'tutorials';
+type Screen = 'home' | 'editor' | 'tutorials' | 'account';
 
 interface State {
   screen: Screen;

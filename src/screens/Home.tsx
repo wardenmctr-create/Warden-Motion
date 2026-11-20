@@ -10,6 +10,7 @@ import { replayIntro } from '../assistant/Assistant';
 import { APP_VERSION } from '../assistant/engine';
 import { WardenCB } from '../components/WardenCB';
 import { AiButton } from '../ai/Chat';
+import { AccountAvatar, AccountScreen } from './Account';
 import type { Project } from '../types';
 
 export function Thumb({ p, size = 80, t = 0.6, round = false }: { p: Project; size?: number; t?: number; round?: boolean }) {
@@ -37,6 +38,7 @@ export function Home() {
   const tpls = useMemo(() => TEMPLATES.map((t) => ({ t, p: t.make() })), []);
   const refresh = () => listProjects().then(setProjects);
   useEffect(() => { refresh(); setImageLoadedHandler(() => setProjects((x) => [...x])); }, []);
+  useEffect(() => { if (screen === 'home') refresh(); }, [screen]);
   // Android geri tuşu: açık panel/çekmeceyi kapat
   const open2 = useRef({ sheet, drawer });
   open2.current = { sheet, drawer };
@@ -63,7 +65,7 @@ export function Home() {
       </header>
 
       <main className="home-body">
-        {screen === 'tutorials' ? (
+        {screen === 'account' ? <AccountScreen /> : screen === 'tutorials' ? (
           <>
             <div className="sec-head"><h2>Öğreticiler</h2><span>8 proje · 3 CB · 5 genel</span></div>
             <div className="tut-grid">
@@ -128,7 +130,7 @@ export function Home() {
         <button className={screen === 'home' ? 'on' : ''} onClick={() => go('home')}><Icon name="home" size={24} fill={screen === 'home'} />Ana Sayfa</button>
         <button className={screen === 'tutorials' ? 'on' : ''} onClick={() => go('tutorials')}><Icon name="cap" size={24} />Öğreticiler</button>
         <span style={{ minWidth: 64 }} />
-        <button onClick={() => go('home')}><Icon name="film" size={24} />Projeler</button>
+        <button className={'accbtn' + (screen === 'account' ? ' on' : '')} onClick={() => go('account')}><AccountAvatar size={28} />Hesap</button>
         <button onClick={() => go('home')}><Icon name="grid" size={24} />Şablonlar</button>
         <button className="fab" aria-label="Yeni proje" onClick={() => setSheet(true)}><Icon name="plus" size={28} stroke={2.2} /></button>
       </nav>
