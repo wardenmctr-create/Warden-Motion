@@ -114,7 +114,7 @@ export function Editor() {
   const pinch = useRef<{ id: string; d0: number; a0: number; s0: number; r0: number } | null>(null);
   const gdrag = useRef<{ id: string; which: 1 | 2 } | null>(null);
   // Seçim tutamacı sürükleme: köşe (büyüt), kenar (genişlet / kırp), şekle özel tutamaçlar
-  const hdrag = useRef<{ id: string; handle: string; l0: import('../types').Layer; start: { x: number; y: number } } | null>(null);
+  const hdrag = useRef<{ id: string; handle: string; l0: import('../types').Layer; start: { x: number; y: number }; kids: import('../types').Layer[] } | null>(null);
   const fxDrag = useRef<{ x: number; y: number; v: [number, number] } | null>(null);
   // Efekt panelinde 2B parametre (Konum, Paralaks) seçiliyse önizlemede kaydırarak ayarlanır
   const fxSel = panel === 'effects' && sel && s.fxParam ? (() => {
@@ -171,7 +171,10 @@ export function Editor() {
       if (hd) {
         s.checkpoint();
         const lp = toLayerLocal(sel, pt);
-        hdrag.current = { id: sel.id, handle: hd.id, l0: sel, start: { x: lp.x * (sel.flipX ? -1 : 1), y: lp.y * (sel.flipY ? -1 : 1) } };
+        // Onu takip eden bütün parçalar (ushankanın arka kulağı, CB'nin iç/bayrak/gözü…) birlikte büyür
+        const fam = new Set([sel.id]);
+        for (let ch = true; ch;) { ch = false; for (const l of p.layers) if (l.parent && fam.has(l.parent) && !fam.has(l.id)) { fam.add(l.id); ch = true; } }
+        hdrag.current = { id: sel.id, handle: hd.id, l0: sel, start: { x: lp.x * (sel.flipX ? -1 : 1), y: lp.y * (sel.flipY ? -1 : 1) }, kids: p.layers.filter((l) => l.id !== sel.id && fam.has(l.id)) };
         return;
       }
     }
@@ -216,7 +219,17 @@ export function Editor() {
     if (hd && sel) {
       const lp = toLayerLocal(sel, toProj(e));
       const ch = applyHandle(hd.l0, hd.handle, { x: lp.x * (sel.flipX ? -1 : 1), y: lp.y * (sel.flipY ? -1 : 1) }, hd.start);
-      s.updateLayer(hd.id, (l) => ({ ...l, ...ch }), false);
+      const kx = (ch.w ?? hd.l0.w) / hd.l0.w, ky = (ch.h ?? hd.l0.h) / hd.l0.h;
+      const resize = (ch.w !== undefined || ch.h !== undefined) && hd.kids.length > 0;
+      const sc = (a: import('../types').Anim, k: number) => ({ v: Math.round(a.v * k), ...(a.k ? { k: a.k.map((q) => ({ ...q, v: Math.round(q.v * k) })) } : {}) });
+      s.update((pp) => ({ ...pp, layers: pp.layers.map((l) => {
+        if (l.id === hd.id) return { ...l, ...ch };
+        const k0 = resize ? hd.kids.find((q) => q.id === l.id) : undefined;
+        if (!k0) return l;
+        // Takip eden parça: boyutu ve ebeveyne göre konumu aynı oranda
+        return { ...l, w: Math.max(1, Math.round(k0.w * kx)), h: Math.max(1, Math.round(k0.h * ky)), ...(k0.type === 'text' && k0.fontSize ? { fontSize: Math.max(4, Math.round(k0.fontSize * Math.min(kx, ky))) } : {}),
+          x: sc(k0.x, kx), y: sc(k0.y, ky) };
+      }) }), false);
       return;
     }
     const d = drag.current;
