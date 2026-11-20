@@ -622,3 +622,13 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
 .wa-choices { display: flex; flex-direction: column; gap: 6px; margin: 2px 0 6px; }
 .wa-ch { min-height: 38px; border-radius: 12px; border: 1.5px solid #2C6FD8; background: #0F1834; color: #DCE9FF; font: inherit; font-weight: 700; font-size: 13.5px; text-align: left; padding: 6px 12px; cursor: pointer; }
 .wa-ch:active { background: #22D3C5; color: #0B1430; }
+.wa-ghost { visibility: hidden; }
+.wa-card p { cursor: default; white-space: pre-wrap; }
+.wa-hand { position: fixed; z-index: 3; pointer-events: none; margin: -2px 0 0 -4px; transition: left .6s cubic-bezier(.3, .7, .3, 1), top .6s cubic-bezier(.3, .7, .3, 1); filter: drop-shadow(0 3px 4px rgba(11, 20, 48, .55)); }
+.wa-hand.drag { transition: none; }
+.wa-hand svg { display: block; transition: transform .15s; transform-origin: 4px 2px; }
+.wa-hand.press svg { transform: scale(.82); }
+.wa-hand i { position: absolute; left: -14px; top: -16px; width: 36px; height: 36px; border-radius: 50%; border: 3px solid #22D3E6; opacity: 0; }
+.wa-hand.press i { animation: wa-rip .45s ease-out; }
+@keyframes wa-rip { from { opacity: .9; transform: scale(.3); } to { opacity: 0; transform: scale(1.4); } }
+.wa-head .ib { font-size: 15px; }

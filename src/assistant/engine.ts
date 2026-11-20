@@ -5,6 +5,7 @@ import type { Mood } from '../components/WardenCB';
 import type { Layer } from '../types';
 import { useStore } from '../store';
 import { newProject, TUTORIALS } from '../factories';
+import { setAnim, valueAt } from '../anim';
 
 export const APP_VERSION = '0.9';
 
@@ -79,9 +80,10 @@ export interface Goal {
   /** seçili katmanda hiçbir panel açık olmamalı */
   noPanel?: boolean;
 }
-export interface Hint { el: HTMLElement | null; say: string; mood: Mood; recover?: boolean }
+/** act: "Anlamadım" deyince asistanın kendisinin yapacağı (verilmezse öğeye dokunur) */
+export interface Hint { el: HTMLElement | null; say: string; mood: Mood; recover?: boolean; act?: () => void }
 
-const H = (el: HTMLElement | null, say: string, mood: Mood = 'point', recover = true): Hint => ({ el, say, mood, recover });
+const H = (el: HTMLElement | null, say: string, mood: Mood = 'point', recover = true, act?: () => void): Hint => ({ el, say, mood, recover, act });
 
 /** Editörde açık olan her şeyi kapatma yolu (en üstteki önce) */
 function closeTop(u: UI, keep: Goal = {}): Hint | null {
@@ -152,7 +154,7 @@ export function route(g: Goal): Hint | null {
       const l = [...(st.project?.layers ?? [])].reverse().find(g.sel);
       if (!l) return H(label('Geri al'), 'Gereken katman silinmiş gibi. Geri al ile geri getir.', 'worried');
       const el = find(`.lpill[data-lid="${l.id}"]`) ?? find(`.track[data-lid="${l.id}"]`);
-      return H(el, `"${g.selName ?? l.name}" katmanını seç: buna dokun.`, 'point', false);
+      return H(el, `"${g.selName ?? l.name}" katmanını seç: buna dokun.`, 'point', false, () => st.select(l.id));
     }
   }
   if (g.panel) {
@@ -187,7 +189,21 @@ export interface Step {
   btn?: string;
   /** Seçenekler: kullanıcı birini seçer */
   choices?: { label: string; act: () => void }[];
+  /** Geç'e basınca senaryo biter */
+  end?: boolean;
+  /** Asistan bu adımı kendisi yaparken (Anlamadım / gösterim) dokunmak dışında ne yapacağı */
+  auto?: (h: HandApi) => Promise<void>;
 }
+/** Asistanın eli: ekranda görünen el/işaretçi ile dokunur, sürükler */
+export interface HandApi {
+  tap: (el: HTMLElement, act?: () => void) => Promise<void>;
+  /** sahnede (ekran koordinatı) from→to sürükleme animasyonu; her karede onMove(0..1) */
+  drag: (from: { x: number; y: number }, to: { x: number; y: number }, onMove: (k: number) => void, ms?: number) => Promise<void>;
+  wait: (ms: number) => Promise<void>;
+}
+const canvasPt = (fx: number, fy: number) => { const c = find('.stage canvas')!.getBoundingClientRect(); return { x: c.left + c.width * fx, y: c.top + c.height * fy }; };
+/** Proje noktasını ekran koordinatına çevirir */
+const projToScreen = (x: number, y: number) => { const p = proj()!; return canvasPt(x / p.width, y / p.height); };
 export interface Script { id: string; title: string; steps: Step[]; pid?: string }
 
 const proj = () => useStore.getState().project;
@@ -257,25 +273,74 @@ const EDITOR_TOUR: Step[] = [
   pickTutorial(),
 ];
 
+/** "Anlamadım" deyince: öğreticiyi yeni bir projede WardenCB baştan sona kendisi yapar */
+export let pendingDemo: string | null = null;
+export const clearPendingDemo = () => { pendingDemo = null; };
+export function startDemo(id: string) {
+  const tu = TUTORIALS.find((t) => t.id === id);
+  if (!tu) return;
+  finish();
+  const p = { ...newProject(`${tu.title} (WardenCB gösteriyor)`, tu.ratio[0], tu.ratio[1], 30, tu.bg), tutorial: tu.id };
+  pendingDemo = p.id;
+  useStore.getState().open(p);
+}
+const jump = (d: number) => () => { const r = useAssistant.getState().run; if (r) useAssistant.getState().go(r.step + d); };
+/** Öğretici sonu: Anlamadım / Tamam sg. "sg" sorusu: evet → görüşürüz, hayır → şerefsiz! */
+const tutEnd = (id: string, say: string): Step[] => [
+  { say, mood: 'joy', choices: [
+    { label: 'Anlamadım', act: () => startDemo(id) },
+    { label: 'Tamam sg', act: jump(1) },
+  ] },
+  { say: '"sg" derken "sonra görüşürüz" mü demek istedin?', mood: 'suspicious', choices: [
+    { label: 'Evet', act: jump(1) },
+    { label: 'Hayır', act: jump(2) },
+  ] },
+  { say: 'Haa tamam! Sonraki projede görüşürüz.', mood: 'happy', btn: 'Görüşürüz', end: true },
+  { say: 'Şerefsiz!', mood: 'furious', btn: 'Pardon', end: true },
+];
 const tips = (t: string[]): Step[] => t.map((say, i) => ({ say: `Taktik ${i + 1}: ${say}`, mood: 'smug' as Mood }));
 
 const TUT_G1 = (): Step[] => [
   { say: 'Temel Animasyon\'a hoş geldin! Önce bir daire ekleyelim: "Daire"ye dokun.', mood: 'wave', need: { tutorial: 'g1', add: 'Şekil' }, target: () => find('.addcard .cell[aria-label="Daire"]'), done: () => layers().some(isCircle) },
   { say: 'Daire geldi! Şimdi alttan "Taşı ve Çevir"e dokun.', need: { tutorial: 'g1', sel: isCircle, selName: 'Daire', noPanel: true }, target: () => find('.tbig', 'Taşı ve Çevir'), done: () => readUI().panel === 'Taşı ve Çevir' },
   { say: 'Zaman en başta. Elmas + düğmesine bas: ilk keyframe buraya konur.', need: { tutorial: 'g1', sel: isCircle, selName: 'Daire', panel: 'Taşı ve Çevir', time0: true }, target: () => label('Bu ana keyframe ekle'), done: () => layers().some((l) => isCircle(l) && !!l.x.k?.length) },
-  { say: 'Şimdi zaman çizelgesini parmağınla sola kaydır ve yaklaşık 1. saniyeye git.', need: { tutorial: 'g1', sel: isCircle, selName: 'Daire', panel: 'Taşı ve Çevir' }, target: () => find('.tl'), done: () => useStore.getState().time >= 0.5 },
-  { say: 'Daireyi önizlemede başka bir yere sürükle. İkinci keyframe kendiliğinden oluşur.', mood: 'excited', need: { tutorial: 'g1', sel: isCircle, selName: 'Daire', panel: 'Taşı ve Çevir' }, target: () => find('.stage canvas'), done: () => layers().some((l) => isCircle(l) && ((l.x.k?.length ?? 0) >= 2 || (l.y.k?.length ?? 0) >= 2)) },
+  { say: 'Şimdi zaman çizelgesini parmağınla sola kaydır ve yaklaşık 1. saniyeye git.', need: { tutorial: 'g1', sel: isCircle, selName: 'Daire', panel: 'Taşı ve Çevir' }, target: () => find('.tl'), done: () => useStore.getState().time >= 0.5,
+    auto: async (h) => { const tl = find('.tl')!.getBoundingClientRect(); const y = tl.top + tl.height * 0.6; await h.drag({ x: tl.left + tl.width * 0.75, y }, { x: tl.left + tl.width * 0.25, y }, (k) => useStore.getState().setTime(Math.round(k * 30) / 30), 1100); } },
+  { say: 'Daireyi önizlemede başka bir yere sürükle. İkinci keyframe kendiliğinden oluşur.', mood: 'excited', need: { tutorial: 'g1', sel: isCircle, selName: 'Daire', panel: 'Taşı ve Çevir' }, target: () => find('.stage canvas'), done: () => layers().some((l) => isCircle(l) && ((l.x.k?.length ?? 0) >= 2 || (l.y.k?.length ?? 0) >= 2)),
+    auto: async (h) => {
+      const st = useStore.getState(), l = layers().find(isCircle)!, t = st.time, p = proj()!;
+      const x0 = valueAt(l.x, t), y0 = valueAt(l.y, t), x1 = x0 + p.width * 0.25, y1 = y0 - p.height * 0.15;
+      st.checkpoint();
+      await h.drag(projToScreen(x0, y0), projToScreen(x1, y1), (k) => st.updateLayer(l.id, (q) => ({ ...q, x: setAnim(q.x, t, Math.round(x0 + (x1 - x0) * k)), y: setAnim(q.y, t, Math.round(y0 + (y1 - y0) * k)) }), false), 900);
+    } },
   { say: 'Süper! Şimdi ▶ ile oynat ve izle.', need: { tutorial: 'g1' }, target: () => label('Oynat'), done: () => useStore.getState().playing },
   { say: 'Tebrikler, ilk animasyonun hazır!', mood: 'proud' },
 ];
 
 const TUT_CB1 = (): Step[] => [
-  { say: 'Temel CB\'ye hoş geldin! İlk countryball\'unu yapacağız. Bayrak sekmesinden bir ülke seç.', mood: 'wave', need: { tutorial: 'cb1', add: 'Bayrak' }, target: () => find('.flag-scroll'), done: () => !!find('.choice button', 'Yumuşak CB olarak ekle') || layers().some(isCBLine) },
+  { say: 'Temel CB\'ye hoş geldin! İlk countryball\'unu yapacağız. Bayrak sekmesinden bir ülke seç.', mood: 'wave', need: { tutorial: 'cb1', add: 'Bayrak' }, target: () => find('.flag-scroll'), done: () => !!find('.choice button', 'Yumuşak CB olarak ekle') || layers().some(isCBLine),
+    auto: async (h) => { const f = [...document.querySelectorAll('.flag-scroll .flag')].find((b) => b.querySelector('img')) as HTMLElement | undefined; if (f) await h.tap(f); } },
   { say: '"Yumuşak CB olarak ekle"ye dokun: çizgi, beyaz iç, içe kırpılmış bayrak ve gözler kurulur.', need: { tutorial: 'cb1', add: 'Bayrak', choice: 'Yumuşak' }, target: () => find('.choice button', 'Yumuşak CB olarak ekle') ?? find('.flag-scroll'), done: () => layers().some(isCBLine) },
   { say: 'CB hazır! Çizgi katmanı seçili: onu taşıyınca hepsi birlikte gider. Önizlemede biraz sürükleyip dene.', mood: 'happy', target: () => find('.stage canvas') },
   { say: 'Şimdi şapka: CB sekmesinde "Şapkalar" klasörüne dokun.', need: { tutorial: 'cb1', add: 'CB' }, target: () => find('.addcard .chip', 'Şapkalar'), done: () => !!find('.addcard .chip.on', 'Şapkalar') || layers().some((l) => /ushanka/i.test(l.src ?? '') || /sapkalar/.test(l.src ?? '')) },
-  { say: 'İstediğin şapkayı seç. Ushanka seçersen arka kulağı CB\'nin arkasına kendisi geçer.', need: { tutorial: 'cb1', add: 'CB' }, target: () => find('.addcard .pager'), done: () => layers().some((l) => /sapkalar/.test(l.src ?? '')) },
-  { say: 'Şapkayı önizlemede CB\'nin başına sürükle. Boyut için Taşı ve Çevir → Ölçek.', target: () => find('.stage canvas') },
+  { say: 'İstediğin şapkayı seç. Ushanka seçersen arka kulağı CB\'nin arkasına kendisi geçer.', need: { tutorial: 'cb1', add: 'CB' }, target: () => find('.addcard .pager'), done: () => layers().some((l) => /sapkalar/.test(l.src ?? '')),
+    auto: async (h) => {
+      for (let i = 0; i < 4; i++) {
+        const u = find('.addcard .thumb[aria-label="Ushanka"]');
+        if (u) { await h.tap(u); return; }
+        const nx = find('.addcard [aria-label="Sonraki sayfa"]');
+        if (nx) await h.tap(nx); else return;
+        await h.wait(400);
+      }
+    } },
+  { say: 'Şapkayı önizlemede CB\'nin başına sürükle. Boyut için Taşı ve Çevir → Ölçek.', target: () => find('.stage canvas'),
+    auto: async (h) => {
+      const st = useStore.getState(), hat = layers().find((l) => !l.parent && /sapkalar/.test(l.src ?? '')), cb = layers().find(isCBLine);
+      if (!hat || !cb) return;
+      const t = st.time, x0 = valueAt(hat.x, t), y0 = valueAt(hat.y, t), x1 = valueAt(cb.x, t), y1 = valueAt(cb.y, t) - cb.h * 0.42;
+      st.select(hat.id); st.checkpoint();
+      await h.drag(projToScreen(x0, y0), projToScreen(x1, y1), (k) => st.updateLayer(hat.id, (q) => ({ ...q, x: setAnim(q.x, t, Math.round(x0 + (x1 - x0) * k)), y: setAnim(q.y, t, Math.round(y0 + (y1 - y0) * k)) }), false), 900);
+    } },
   { say: 'Biraz hareket katalım: CB\'nin çizgisi seçiliyken alttan "Efektler"e dokun.', need: { tutorial: 'cb1', sel: isCBLine, selName: 'CB Çizgi', noPanel: true }, target: () => find('.tbig', 'Efektler'), done: () => readUI().panel === 'Efektler' },
   { say: '"Efekt Ekle"ye dokun.', need: { tutorial: 'cb1', sel: isCBLine, selName: 'CB Çizgi', panel: 'Efektler' }, target: () => find('.addfx'), done: () => readUI().fxb || layers().some((l) => isCBLine(l) && l.effects.some((e) => e.type === 'sway')) },
   { say: '"Oto-Sallanma"yı seç: CB hafifçe sağa sola sallanır.', need: { tutorial: 'cb1', sel: isCBLine, selName: 'CB Çizgi', panel: 'Efektler', fxb: true }, target: () => find('.fxb-grid button', 'Oto-Sallanma'), done: () => layers().some((l) => isCBLine(l) && l.effects.some((e) => e.type === 'sway')) },
@@ -293,8 +358,8 @@ export function buildScript(id: string, opts: { existing?: boolean; from?: strin
     return news.length ? { id, title: 'Yeni neler var', steps: [{ say: 'Selam! Uygulama güncellendi, yenilikleri anlatayım.', mood: 'wave' }, ...news, { say: 'Bu kadar, iyi eğlenceler!', mood: 'happy', btn: 'Bitir' }] } : null;
   }
   if (id === 'editor') return { id, title: 'Editör turu', steps: EDITOR_TOUR };
-  if (id === 'tut:g1') return { id, pid: opts.pid, title: 'Temel Animasyon', steps: [...TUT_G1(), ...tips(opts.tips ?? []), { say: 'Öğretici bitti. Kendi animasyonunu yapmaya hazırsın!', mood: 'joy', btn: 'Bitir' }] };
-  if (id === 'tut:cb1') return { id, pid: opts.pid, title: 'Temel CB', steps: [...TUT_CB1(), ...tips(opts.tips ?? []), { say: 'Öğretici bitti. Artık kendi CB\'lerini yapabilirsin!', mood: 'joy', btn: 'Bitir' }] };
+  if (id === 'tut:g1') return { id, pid: opts.pid, title: 'Temel Animasyon', steps: [...TUT_G1(), ...tips(opts.tips ?? []), ...tutEnd('g1', 'Öğretici bitti! Anladın mı? Anlamadıysan bütün projeyi ben baştan yapıp anlatayım.')] };
+  if (id === 'tut:cb1') return { id, pid: opts.pid, title: 'Temel CB', steps: [...TUT_CB1(), ...tips(opts.tips ?? []), ...tutEnd('cb1', 'Öğretici bitti! Anladın mı? Anlamadıysan bütün projeyi ben baştan yapıp anlatayım.')] };
   return null;
 }
 
@@ -308,19 +373,20 @@ export const saveSaved = (s: Saved) => { try { localStorage.setItem(KEY, JSON.st
 /** Asistan gelmeden önce uygulamayı kullanmış mı (bu güncellemede hem tanışma hem yenilikler gösterilir) */
 export const WAS_EXISTING = (() => { try { return Object.keys(localStorage).some((k) => k.startsWith('wm-') && k !== KEY); } catch { return false; } })();
 
-interface Run { script: Script; step: number; pid?: string }
+interface Run { script: Script; step: number; pid?: string; /** gösterim: asistan her adımı kendisi yapar */ demo?: boolean }
 interface AState {
   run: Run | null;
   min: boolean;
-  start: (s: Script, step?: number) => void;
+  start: (s: Script, step?: number, demo?: boolean) => void;
   go: (step: number) => void;
   stop: (finished?: boolean) => void;
   setMin: (b: boolean) => void;
+  setDemo: (b: boolean) => void;
 }
 export const useAssistant = create<AState>((set, get) => ({
   run: null,
   min: false,
-  start: (script, step = 0) => set({ run: { script, step: Math.min(step, script.steps.length - 1), pid: script.pid }, min: false }),
+  start: (script, step = 0, demo = false) => set({ run: { script, step: Math.min(step, script.steps.length - 1), pid: script.pid, demo }, min: false }),
   go: (step) => {
     const r = get().run;
     if (!r) return;
@@ -341,4 +407,5 @@ export const useAssistant = create<AState>((set, get) => ({
     set({ run: null, min: false });
   },
   setMin: (min) => set({ min }),
+  setDemo: (demo) => { const r = get().run; if (r) set({ run: { ...r, demo } }); },
 }));
