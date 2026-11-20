@@ -14,12 +14,14 @@ function star8(cx: number, cy: number, R: number, r: number) {
 }
 
 // ---------------------------------------------------------------------------------------------
+/** Ushankanın tek rengi (ışık/gölge yok) */
+export const HAT_COLOR = '#5A5A22';
+
 // GÖVDE: bütün koordinatlar kullanıcının gönderdiği 736×736 referans çizimden piksel ölçüldü.
 // ---------------------------------------------------------------------------------------------
 const BODY = 'M322 330 C440 330 512 400 512 500 C512 572 492 616 452 634 C412 648 370 650 322 650 C274 650 232 648 192 634 C152 616 132 572 132 500 C132 400 204 330 322 330Z';
 // Ushanka (referanstaki gibi): öne katlanmış uzun ön bant + iki yandan sarkan kulaklıklar
 const HAT = 'M120 302 C200 288 400 272 512 264 C517 302 519 362 516 424 C470 406 400 398 322 400 C240 402 180 412 128 426 C121 382 117 342 120 302Z';
-const HAT_TOP = 'M120 302 C200 288 400 272 512 264 L513 284 C400 292 200 308 121 322Z';
 const FLAP_R = 'M512 266 C550 284 574 334 580 404 C586 474 578 562 584 612 C588 638 604 650 600 662 C568 668 520 658 486 664 C492 612 500 540 503 430 L516 424Z';
 const FLAP_L = 'M126 410 C106 460 98 536 102 600 C104 634 116 652 138 654 C170 656 200 650 214 640 L204 420Z';
 
@@ -133,25 +135,16 @@ export function WardenCB({ size = 120, mood = 'idle', look, autoBlink = true }: 
     <svg width={size} height={size * 452 / 534} viewBox="86 220 534 452" role="img" aria-label="WardenCB">
       <defs>
         <clipPath id={`${id}b`}><path d={BODY} /></clipPath>
-        <linearGradient id={`${id}u`} x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0" stopColor="#5C5A22" /><stop offset=".45" stopColor="#323A2E" /><stop offset=".7" stopColor="#1A2540" /><stop offset="1" stopColor="#14214A" />
-        </linearGradient>
-        <linearGradient id={`${id}fl`} x1="0" y1="0" x2="1" y2="0"><stop offset="0" stopColor="#4A4A1A" /><stop offset="1" stopColor="#6A6A2A" /></linearGradient>
-        <linearGradient id={`${id}f`} x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#1C2C5C" /><stop offset="1" stopColor="#0F1838" /></linearGradient>
-        <radialGradient id={`${id}s`} cx=".35" cy=".35" r=".9">
-          <stop offset="0" stopColor="#FFFFFF" stopOpacity=".25" /><stop offset=".5" stopColor="#FFFFFF" stopOpacity="0" /><stop offset="1" stopColor="#000000" stopOpacity=".35" />
-        </radialGradient>
       </defs>
       <ellipse cx="350" cy="660" rx="230" ry="12" fill="#0B1430" opacity=".22" />
       {/* ---- GÖVDE katmanı ---- */}
       <g className="wcb-body">
         {/* Sol kulaklık yanağın arkasında */}
-        <path d={FLAP_L} fill={`url(#${id}fl)`} stroke="#0B0B10" strokeWidth="8" strokeLinejoin="round" />
+        <path d={FLAP_L} fill={HAT_COLOR} stroke="#0B0B10" strokeWidth="8" strokeLinejoin="round" />
         <path d={FLAP_R} fill="#14214A" stroke="#0B0B10" strokeWidth="8" strokeLinejoin="round" />
         <g clipPath={`url(#${id}b)`}>
           <rect x="120" y="320" width="400" height="340" fill="#F7F8FA" />
           <image href="wardencb/bayrak.png" x="112" y="400" width="390" height="260" preserveAspectRatio="none" />
-          <rect x="120" y="320" width="400" height="340" fill={`url(#${id}s)`} />
         </g>
         <path d={BODY} fill="none" stroke="#0B0B10" strokeWidth="8" strokeLinejoin="round" />
       </g>
@@ -159,11 +152,10 @@ export function WardenCB({ size = 120, mood = 'idle', look, autoBlink = true }: 
       <Eyes id={id} mood={mood} look={lx} lookY={ly} blink={blink} />
       {/* ---- ŞAPKA katmanı ---- */}
       <g className="wcb-hat">
-        <path d={FLAP_R} fill={`url(#${id}f)`} stroke="#0B0B10" strokeWidth="8" strokeLinejoin="round" />
-        <path d="M540 470 C548 520 546 580 552 626" fill="none" stroke="#000" strokeOpacity=".28" strokeWidth="6" strokeLinecap="round" />
-        <path d={HAT} fill={`url(#${id}u)`} stroke="#0B0B10" strokeWidth="8" strokeLinejoin="round" />
-        <path d={HAT_TOP} fill="#FFFFFF" opacity=".08" />
-        <path d="M138 410 C200 396 300 386 400 386 C450 386 488 392 506 400" fill="none" stroke="#000" strokeOpacity=".25" strokeWidth="6" strokeLinecap="round" />
+        <path d={FLAP_R} fill={HAT_COLOR} stroke="#0B0B10" strokeWidth="8" strokeLinejoin="round" />
+        <path d={HAT} fill={HAT_COLOR} stroke="#0B0B10" strokeWidth="8" strokeLinejoin="round" />
+        {/* Öndeki kulaklık ile başlığı ayıran çizgi */}
+        <path d="M514 424 C536 420 560 412 579 398" fill="none" stroke="#0B0B10" strokeWidth="8" strokeLinecap="round" />
         <polygon points={star8(300, 348, 40, 19)} fill="#1E2A2E" stroke="#22D3E6" strokeWidth="7" strokeLinejoin="round" />
       </g>
       {mood !== 'idle' && (
