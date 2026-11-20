@@ -21,7 +21,7 @@ const WCB = 'packs/hazir/wardencb', GOV = 'packs/hazir/govdeler', GOZ = 'packs/h
 // Pozlar: projeye bütün gibi gelir ama ayrı katmanlardır (alttan üste). Çizgi kök; arka kulak ushankayı takip eder.
 const CHAR_PARTS = (fx: boolean): Part[] => [
   { name: 'Ushanka Arka Kulak', layers: ['hatBack'], parent: 4 }, { name: 'İç', layers: ['fill'] }, { name: 'Çizgi', layers: ['line'] },
-  { name: 'Göz', layers: ['eyes'] }, { name: 'Ushanka', layers: ['hat'] }, ...(fx ? [{ name: 'İşaretler', layers: ['fx'] as WcbLayer[] }] : []),
+  { name: 'Göz', layers: fx ? ['eyes', 'fx'] : ['eyes'] }, { name: 'Ushanka', layers: ['hat'] },
 ];
 const items: Item[] = [];
 for (const [k, p] of Object.entries(POSES)) if (k !== 'point') items.push({ folder: 'Pozlar', name: p.name, mood: k as Mood, parts: CHAR_PARTS(!!(p as { fx?: unknown[] }).fx?.length), root: 2, dir: WCB });
@@ -57,13 +57,14 @@ const shot = async (it: Item, layers: WcbLayer[], file: string) => {
 };
 for (const it of items) {
   const base = it.file ?? `${slug(it.folder)}-${slug(it.name)}`;
-  const src = await shot(it, it.parts.flatMap((p) => p.layers), `${base}.png`);
-  const out: Out = { name: it.name, src };
+  // Çok parçalı öğelerin ayrı küçük resmi yok: arayüz parçaları üst üste koyarak gösterir
+  const out: Out = { name: it.name, src: '' };
   if (it.parts.length > 1) {
     out.parts = [];
     for (const pt of it.parts) out.parts.push({ name: pt.name, src: await shot(it, pt.layers, `${base}--${slug(pt.name)}.png`), ...(pt.back ? { back: true } : {}), ...(pt.parent !== undefined ? { parent: pt.parent } : {}) });
     out.root = it.root ?? 0;
-  }
+    out.src = out.parts[out.root].src;
+  } else out.src = await shot(it, it.parts[0].layers, `${base}.png`);
   if (!folders.has(it.folder)) folders.set(it.folder, []);
   folders.get(it.folder)!.push(out);
 }

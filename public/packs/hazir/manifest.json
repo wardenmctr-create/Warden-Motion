@@ -205,7 +205,7 @@
     },
     {
      "name": "Ushanka",
-     "src": "packs/hazir/sapkalar/ushanka.png",
+     "src": "packs/hazir/sapkalar/ushanka--on.png",
      "parts": [
       {
        "name": "Arka Kulak",
@@ -280,7 +280,7 @@
    "items": [
     {
      "name": "Normal",
-     "src": "packs/hazir/wardencb/pozlar-normal.png",
+     "src": "packs/hazir/wardencb/pozlar-normal--cizgi.png",
      "parts": [
       {
        "name": "Ushanka Arka Kulak",
@@ -308,7 +308,7 @@
     },
     {
      "name": "Mutlu",
-     "src": "packs/hazir/wardencb/pozlar-mutlu.png",
+     "src": "packs/hazir/wardencb/pozlar-mutlu--cizgi.png",
      "parts": [
       {
        "name": "Ushanka Arka Kulak",
@@ -330,17 +330,13 @@
       {
        "name": "Ushanka",
        "src": "packs/hazir/wardencb/pozlar-mutlu--ushanka.png"
-      },
-      {
-       "name": "İşaretler",
-       "src": "packs/hazir/wardencb/pozlar-mutlu--isaretler.png"
       }
      ],
      "root": 2
     },
     {
      "name": "Neşeli",
-     "src": "packs/hazir/wardencb/pozlar-neseli.png",
+     "src": "packs/hazir/wardencb/pozlar-neseli--cizgi.png",
      "parts": [
       {
        "name": "Ushanka Arka Kulak",
@@ -362,17 +358,13 @@
       {
        "name": "Ushanka",
        "src": "packs/hazir/wardencb/pozlar-neseli--ushanka.png"
-      },
-      {
-       "name": "İşaretler",
-       "src": "packs/hazir/wardencb/pozlar-neseli--isaretler.png"
       }
      ],
      "root": 2
     },
     {
      "name": "Gülüyor",
-     "src": "packs/hazir/wardencb/pozlar-guluyor.png",
+     "src": "packs/hazir/wardencb/pozlar-guluyor--cizgi.png",
      "parts": [
       {
        "name": "Ushanka Arka Kulak",
@@ -394,17 +386,13 @@
       {
        "name": "Ushanka",
        "src": "packs/hazir/wardencb/pozlar-guluyor--ushanka.png"
-      },
-      {
-       "name": "İşaretler",
-       "src": "packs/hazir/wardencb/pozlar-guluyor--isaretler.png"
       }
      ],
      "root": 2
     },
     {
      "name": "Göz kırpıyor",
-     "src": "packs/hazir/wardencb/pozlar-goz-kirpiyor.png",
+     "src": "packs/hazir/wardencb/pozlar-goz-kirpiyor--cizgi.png",
      "parts": [
       {
        "name": "Ushanka Arka Kulak",
@@ -426,17 +414,13 @@
       {
        "name": "Ushanka",
        "src": "packs/hazir/wardencb/pozlar-goz-kirpiyor--ushanka.png"
-      },
-      {
-       "name": "İşaretler",
-       "src": "packs/hazir/wardencb/pozlar-goz-kirpiyor--isaretler.png"
       }
      ],
      "root": 2
     },
     {
      "name": "Düşünceli",
-     "src": "packs/hazir/wardencb/pozlar-dusunceli.png",
+     "src": "packs/hazir/wardencb/pozlar-dusunceli--cizgi.png",
      "parts": [
       {
        "name": "Ushanka Arka Kulak",
@@ -464,7 +448,7 @@
     },
     {
      "name": "Şaşkın",
-     "src": "packs/hazir/wardencb/pozlar-saskin.png",
+     "src": "packs/hazir/wardencb/pozlar-saskin--cizgi.png",
      "parts": [
       {
        "name": "Ushanka Arka Kulak",
@@ -486,17 +470,13 @@
       {
        "name": "Ushanka",
        "src": "packs/hazir/wardencb/pozlar-saskin--ushanka.png"
-      },
-      {
-       "name": "İşaretler",
-       "src": "packs/hazir/wardencb/pozlar-saskin--isaretler.png"
       }
      ],
      "root": 2
     },
     {
      "name": "Şok",
-     "src": "packs/hazir/wardencb/pozlar-sok.png",
+     "src": "packs/hazir/wardencb/pozlar-sok--cizgi.png",
      "parts": [
       {
        "name": "Ushanka Arka Kulak",
@@ -518,17 +498,13 @@
       {
        "name": "Ushanka",
        "src": "packs/hazir/wardencb/pozlar-sok--ushanka.png"
-      },
-      {
-       "name": "İşaretler",
-       "src": "packs/hazir/wardencb/pozlar-sok--isaretler.png"
       }
      ],
      "root": 2
     },
     {
      "name": "Üzgün",
-     "src": "packs/hazir/wardencb/pozlar-uzgun.png",
+     "src": "packs/hazir/wardencb/pozlar-uzgun--cizgi.png",
      "parts": [
       {
        "name": "Ushanka Arka Kulak",
@@ -556,7 +532,7 @@
     },
     {
      "name": "Ağlıyor",
-     "src": "packs/hazir/wardencb/pozlar-agliyor.png",
+     "src": "packs/hazir/wardencb/pozlar-agliyor--cizgi.png",
      "parts": [
       {
        "name": "Ushanka Arka Kulak",
@@ -578,17 +554,13 @@
       {
        "name": "Ushanka",
        "src": "packs/hazir/wardencb/pozlar-agliyor--ushanka.png"
-      },
-      {
-       "name": "İşaretler",
-       "src": "packs/hazir/wardencb/pozlar-agliyor--isaretler.png"
       }
      ],
      "root": 2
     },
     {
      "name": "Kızgın",
-     "src": "packs/hazir/wardencb/pozlar-kizgin.png",
+     "src": "packs/hazir/wardencb/pozlar-kizgin--cizgi.png",
      "parts": [
       {
        "name": "Ushanka Arka Kulak",
@@ -610,17 +582,13 @@
       {
        "name": "Ushanka",
        "src": "packs/hazir/wardencb/pozlar-kizgin--ushanka.png"
-      },
-      {
-       "name": "İşaretler",
-       "src": "packs/hazir/wardencb/pozlar-kizgin--isaretler.png"
       }
      ],
      "root": 2
     },
     {
      "name": "Öfkeli",
-     "src": "packs/hazir/wardencb/pozlar-ofkeli.png",
+     "src": "packs/hazir/wardencb/pozlar-ofkeli--cizgi.png",
      "parts": [
       {
        "name": "Ushanka Arka Kulak",
@@ -642,17 +610,13 @@
       {
        "name": "Ushanka",
        "src": "packs/hazir/wardencb/pozlar-ofkeli--ushanka.png"
-      },
-      {
-       "name": "İşaretler",
-       "src": "packs/hazir/wardencb/pozlar-ofkeli--isaretler.png"
       }
      ],
      "root": 2
     },
     {
      "name": "Sıkılmış",
-     "src": "packs/hazir/wardencb/pozlar-sikilmis.png",
+     "src": "packs/hazir/wardencb/pozlar-sikilmis--cizgi.png",
      "parts": [
       {
        "name": "Ushanka Arka Kulak",
@@ -674,17 +638,13 @@
       {
        "name": "Ushanka",
        "src": "packs/hazir/wardencb/pozlar-sikilmis--ushanka.png"
-      },
-      {
-       "name": "İşaretler",
-       "src": "packs/hazir/wardencb/pozlar-sikilmis--isaretler.png"
       }
      ],
      "root": 2
     },
     {
      "name": "Uykulu",
-     "src": "packs/hazir/wardencb/pozlar-uykulu.png",
+     "src": "packs/hazir/wardencb/pozlar-uykulu--cizgi.png",
      "parts": [
       {
        "name": "Ushanka Arka Kulak",
@@ -706,17 +666,13 @@
       {
        "name": "Ushanka",
        "src": "packs/hazir/wardencb/pozlar-uykulu--ushanka.png"
-      },
-      {
-       "name": "İşaretler",
-       "src": "packs/hazir/wardencb/pozlar-uykulu--isaretler.png"
       }
      ],
      "root": 2
     },
     {
      "name": "Uyuyor",
-     "src": "packs/hazir/wardencb/pozlar-uyuyor.png",
+     "src": "packs/hazir/wardencb/pozlar-uyuyor--cizgi.png",
      "parts": [
       {
        "name": "Ushanka Arka Kulak",
@@ -738,17 +694,13 @@
       {
        "name": "Ushanka",
        "src": "packs/hazir/wardencb/pozlar-uyuyor--ushanka.png"
-      },
-      {
-       "name": "İşaretler",
-       "src": "packs/hazir/wardencb/pozlar-uyuyor--isaretler.png"
       }
      ],
      "root": 2
     },
     {
      "name": "Utangaç",
-     "src": "packs/hazir/wardencb/pozlar-utangac.png",
+     "src": "packs/hazir/wardencb/pozlar-utangac--cizgi.png",
      "parts": [
       {
        "name": "Ushanka Arka Kulak",
@@ -770,17 +722,13 @@
       {
        "name": "Ushanka",
        "src": "packs/hazir/wardencb/pozlar-utangac--ushanka.png"
-      },
-      {
-       "name": "İşaretler",
-       "src": "packs/hazir/wardencb/pozlar-utangac--isaretler.png"
       }
      ],
      "root": 2
     },
     {
      "name": "Aşık",
-     "src": "packs/hazir/wardencb/pozlar-asik.png",
+     "src": "packs/hazir/wardencb/pozlar-asik--cizgi.png",
      "parts": [
       {
        "name": "Ushanka Arka Kulak",
@@ -802,17 +750,13 @@
       {
        "name": "Ushanka",
        "src": "packs/hazir/wardencb/pozlar-asik--ushanka.png"
-      },
-      {
-       "name": "İşaretler",
-       "src": "packs/hazir/wardencb/pozlar-asik--isaretler.png"
       }
      ],
      "root": 2
     },
     {
      "name": "Heyecanlı",
-     "src": "packs/hazir/wardencb/pozlar-heyecanli.png",
+     "src": "packs/hazir/wardencb/pozlar-heyecanli--cizgi.png",
      "parts": [
       {
        "name": "Ushanka Arka Kulak",
@@ -834,17 +778,13 @@
       {
        "name": "Ushanka",
        "src": "packs/hazir/wardencb/pozlar-heyecanli--ushanka.png"
-      },
-      {
-       "name": "İşaretler",
-       "src": "packs/hazir/wardencb/pozlar-heyecanli--isaretler.png"
       }
      ],
      "root": 2
     },
     {
      "name": "Kafası karışık",
-     "src": "packs/hazir/wardencb/pozlar-kafasi-karisik.png",
+     "src": "packs/hazir/wardencb/pozlar-kafasi-karisik--cizgi.png",
      "parts": [
       {
        "name": "Ushanka Arka Kulak",
@@ -866,17 +806,13 @@
       {
        "name": "Ushanka",
        "src": "packs/hazir/wardencb/pozlar-kafasi-karisik--ushanka.png"
-      },
-      {
-       "name": "İşaretler",
-       "src": "packs/hazir/wardencb/pozlar-kafasi-karisik--isaretler.png"
       }
      ],
      "root": 2
     },
     {
      "name": "Şüpheli",
-     "src": "packs/hazir/wardencb/pozlar-supheli.png",
+     "src": "packs/hazir/wardencb/pozlar-supheli--cizgi.png",
      "parts": [
       {
        "name": "Ushanka Arka Kulak",
@@ -904,7 +840,7 @@
     },
     {
      "name": "Gururlu",
-     "src": "packs/hazir/wardencb/pozlar-gururlu.png",
+     "src": "packs/hazir/wardencb/pozlar-gururlu--cizgi.png",
      "parts": [
       {
        "name": "Ushanka Arka Kulak",
@@ -926,17 +862,13 @@
       {
        "name": "Ushanka",
        "src": "packs/hazir/wardencb/pozlar-gururlu--ushanka.png"
-      },
-      {
-       "name": "İşaretler",
-       "src": "packs/hazir/wardencb/pozlar-gururlu--isaretler.png"
       }
      ],
      "root": 2
     },
     {
      "name": "Korkmuş",
-     "src": "packs/hazir/wardencb/pozlar-korkmus.png",
+     "src": "packs/hazir/wardencb/pozlar-korkmus--cizgi.png",
      "parts": [
       {
        "name": "Ushanka Arka Kulak",
@@ -958,17 +890,13 @@
       {
        "name": "Ushanka",
        "src": "packs/hazir/wardencb/pozlar-korkmus--ushanka.png"
-      },
-      {
-       "name": "İşaretler",
-       "src": "packs/hazir/wardencb/pozlar-korkmus--isaretler.png"
       }
      ],
      "root": 2
     },
     {
      "name": "Endişeli",
-     "src": "packs/hazir/wardencb/pozlar-endiseli.png",
+     "src": "packs/hazir/wardencb/pozlar-endiseli--cizgi.png",
      "parts": [
       {
        "name": "Ushanka Arka Kulak",
@@ -990,17 +918,13 @@
       {
        "name": "Ushanka",
        "src": "packs/hazir/wardencb/pozlar-endiseli--ushanka.png"
-      },
-      {
-       "name": "İşaretler",
-       "src": "packs/hazir/wardencb/pozlar-endiseli--isaretler.png"
       }
      ],
      "root": 2
     },
     {
      "name": "Mahcup",
-     "src": "packs/hazir/wardencb/pozlar-mahcup.png",
+     "src": "packs/hazir/wardencb/pozlar-mahcup--cizgi.png",
      "parts": [
       {
        "name": "Ushanka Arka Kulak",
@@ -1022,17 +946,13 @@
       {
        "name": "Ushanka",
        "src": "packs/hazir/wardencb/pozlar-mahcup--ushanka.png"
-      },
-      {
-       "name": "İşaretler",
-       "src": "packs/hazir/wardencb/pozlar-mahcup--isaretler.png"
       }
      ],
      "root": 2
     },
     {
      "name": "Sersem",
-     "src": "packs/hazir/wardencb/pozlar-sersem.png",
+     "src": "packs/hazir/wardencb/pozlar-sersem--cizgi.png",
      "parts": [
       {
        "name": "Ushanka Arka Kulak",
@@ -1054,17 +974,13 @@
       {
        "name": "Ushanka",
        "src": "packs/hazir/wardencb/pozlar-sersem--ushanka.png"
-      },
-      {
-       "name": "İşaretler",
-       "src": "packs/hazir/wardencb/pozlar-sersem--isaretler.png"
       }
      ],
      "root": 2
     },
     {
      "name": "Bitkin",
-     "src": "packs/hazir/wardencb/pozlar-bitkin.png",
+     "src": "packs/hazir/wardencb/pozlar-bitkin--cizgi.png",
      "parts": [
       {
        "name": "Ushanka Arka Kulak",
@@ -1086,17 +1002,13 @@
       {
        "name": "Ushanka",
        "src": "packs/hazir/wardencb/pozlar-bitkin--ushanka.png"
-      },
-      {
-       "name": "İşaretler",
-       "src": "packs/hazir/wardencb/pozlar-bitkin--isaretler.png"
       }
      ],
      "root": 2
     },
     {
      "name": "Kendini beğenmiş",
-     "src": "packs/hazir/wardencb/pozlar-kendini-begenmis.png",
+     "src": "packs/hazir/wardencb/pozlar-kendini-begenmis--cizgi.png",
      "parts": [
       {
        "name": "Ushanka Arka Kulak",
@@ -1118,17 +1030,13 @@
       {
        "name": "Ushanka",
        "src": "packs/hazir/wardencb/pozlar-kendini-begenmis--ushanka.png"
-      },
-      {
-       "name": "İşaretler",
-       "src": "packs/hazir/wardencb/pozlar-kendini-begenmis--isaretler.png"
       }
      ],
      "root": 2
     },
     {
      "name": "Meraklı",
-     "src": "packs/hazir/wardencb/pozlar-merakli.png",
+     "src": "packs/hazir/wardencb/pozlar-merakli--cizgi.png",
      "parts": [
       {
        "name": "Ushanka Arka Kulak",
@@ -1150,17 +1058,13 @@
       {
        "name": "Ushanka",
        "src": "packs/hazir/wardencb/pozlar-merakli--ushanka.png"
-      },
-      {
-       "name": "İşaretler",
-       "src": "packs/hazir/wardencb/pozlar-merakli--isaretler.png"
       }
      ],
      "root": 2
     },
     {
      "name": "Hayal kırıklığı",
-     "src": "packs/hazir/wardencb/pozlar-hayal-kirikligi.png",
+     "src": "packs/hazir/wardencb/pozlar-hayal-kirikligi--cizgi.png",
      "parts": [
       {
        "name": "Ushanka Arka Kulak",
@@ -1182,17 +1086,13 @@
       {
        "name": "Ushanka",
        "src": "packs/hazir/wardencb/pozlar-hayal-kirikligi--ushanka.png"
-      },
-      {
-       "name": "İşaretler",
-       "src": "packs/hazir/wardencb/pozlar-hayal-kirikligi--isaretler.png"
       }
      ],
      "root": 2
     },
     {
      "name": "Selam veriyor",
-     "src": "packs/hazir/wardencb/pozlar-selam-veriyor.png",
+     "src": "packs/hazir/wardencb/pozlar-selam-veriyor--cizgi.png",
      "parts": [
       {
        "name": "Ushanka Arka Kulak",
@@ -1214,10 +1114,6 @@
       {
        "name": "Ushanka",
        "src": "packs/hazir/wardencb/pozlar-selam-veriyor--ushanka.png"
-      },
-      {
-       "name": "İşaretler",
-       "src": "packs/hazir/wardencb/pozlar-selam-veriyor--isaretler.png"
       }
      ],
      "root": 2
