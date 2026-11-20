@@ -366,7 +366,7 @@ function CBTab({ onPick, onBody, toast }: { onPick: (it: PackItem) => void; onBo
         ) : (
           <>
             <button className="thumb" style={{ width: '100%' }} aria-label={it.name} onClick={() => !edit && onPick(it)}>
-              {it.parts ? <span className="pstack">{it.parts.map((pt) => <Img key={pt.src} src={pt.src} alt="" />)}</span> : <Img src={it.src} alt="" />}
+              <Img src={it.src} alt="" />
               {edit && it.id && <span className="x" role="button" aria-label={`${it.name} sil`} onClick={async (e) => { e.stopPropagation(); await removeUserPackItem(it.id!); refresh(); }}><Icon name="close" size={14} stroke={2.4} /></span>}
             </button>
             <div className="tlabel">{it.name}</div>
