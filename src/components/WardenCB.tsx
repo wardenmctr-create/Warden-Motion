@@ -195,7 +195,13 @@ function Effects({ fx }: { fx: Fx[] }) {
  * lacivert ushanka (turkuaz 8 köşeli yıldızlı), sol göz beyaz, sağ göz lacivert.
  * Ağzı yok: bütün duygu gözlerden, kaşlardan, duruştan ve duygu işaretlerinden. Kendiliğinden göz kırpar ve bakınır.
  */
-export function WardenCB({ size = 120, mood = 'idle', look, autoBlink = true }: { size?: number; mood?: Mood; /** verilmezse kendiliğinden etrafa bakınır */ look?: number; autoBlink?: boolean }) {
+export type WcbLayer = 'shadow' | 'body' | 'eyes' | 'hat' | 'fx';
+export function WardenCB({ size = 120, mood = 'idle', look, autoBlink = true, layers, flagHref = 'wardencb/bayrak.png' }: {
+  size?: number; mood?: Mood; /** verilmezse kendiliğinden etrafa bakınır */ look?: number; autoBlink?: boolean;
+  /** Sadece bu katmanları çiz (pack parçaları için); verilmezse hepsi */ layers?: WcbLayer[];
+  flagHref?: string;
+}) {
+  const show = (k: WcbLayer) => !layers || layers.includes(k);
   const id = useId().replace(/:/g, '');
   const pose: Pose = POSES[mood] ?? POSES.idle;
   const [blink, setBlink] = useState(false);
@@ -232,29 +238,29 @@ export function WardenCB({ size = 120, mood = 'idle', look, autoBlink = true }: 
       <defs>
         <clipPath id={`${id}b`}><path d={BODY} /></clipPath>
       </defs>
-      <ellipse cx="340" cy="664" rx={230 * (dy < 0 ? 0.8 : 1)} ry="12" fill="#0B1430" opacity={dy < 0 ? 0.14 : 0.22} />
+      {show('shadow') && <ellipse cx="340" cy="664" rx={230 * (dy < 0 ? 0.8 : 1)} ry="12" fill="#0B1430" opacity={dy < 0 ? 0.14 : 0.22} />}
       <g className="wcb-pose" transform={bodyT}>
         {/* ---- GÖVDE katmanı ---- */}
-        <g className="wcb-body">
+        {show('body') && <g className="wcb-body">
           <path d={FLAP_L} fill={HAT_COLOR} stroke={INK} strokeWidth="8" strokeLinejoin="round" />
           <g clipPath={`url(#${id}b)`}>
             <rect x="120" y="320" width="400" height="340" fill="#F7F8FA" />
-            <image href="wardencb/bayrak.png" x="112" y="400" width="390" height="260" preserveAspectRatio="none" />
+            <image href={flagHref} x="112" y="400" width="390" height="260" preserveAspectRatio="none" />
           </g>
           <path d={BODY} fill="none" stroke={INK} strokeWidth="8" strokeLinejoin="round" />
-        </g>
+        </g>}
         {/* ---- GÖZ katmanı (ayrı) ---- */}
-        <Eyes id={id} pose={pose} look={lx} lookY={ly} blink={blink} />
+        {show('eyes') && <Eyes id={id} pose={pose} look={lx} lookY={ly} blink={blink} />}
         {/* ---- ŞAPKA katmanı ---- */}
-        <g className="wcb-hat">
+        {show('hat') && <g className="wcb-hat">
           <path d={FLAP_R} fill={HAT_COLOR} stroke={INK} strokeWidth="8" strokeLinejoin="round" />
           <path d={HAT} fill={HAT_COLOR} stroke={INK} strokeWidth="8" strokeLinejoin="round" />
           <path d="M526 420 C544 414 562 407 579 398" fill="none" stroke={INK} strokeWidth="8" strokeLinecap="round" />
           <polygon points={star8(310, 346, 40, 19)} fill="#1E2A2E" stroke="#22D3E6" strokeWidth="7" strokeLinejoin="round" />
-        </g>
+        </g>}
       </g>
       {/* ---- Duygu işaretleri ---- */}
-      <g transform={`translate(0 ${dy})`}><Effects fx={pose.fx ?? []} /></g>
+      {show('fx') && <g transform={`translate(0 ${dy})`}><Effects fx={pose.fx ?? []} /></g>}
     </svg>
   );
 }
