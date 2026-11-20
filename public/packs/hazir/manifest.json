@@ -35,6 +35,22 @@
     {
      "name": "Üçgen İç",
      "src": "packs/hazir/govdeler/ucgen-ic.png"
+    },
+    {
+     "name": "Yumuşak Top Çizgi",
+     "src": "packs/hazir/govdeler/yumusak-top-cizgi.png"
+    },
+    {
+     "name": "Yumuşak Top İç",
+     "src": "packs/hazir/govdeler/yumusak-top-ic.png"
+    },
+    {
+     "name": "Yumuşak Küp Çizgi",
+     "src": "packs/hazir/govdeler/yumusak-kup-cizgi.png"
+    },
+    {
+     "name": "Yumuşak Küp İç",
+     "src": "packs/hazir/govdeler/yumusak-kup-ic.png"
     }
    ]
   },

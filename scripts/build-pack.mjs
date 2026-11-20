@@ -29,6 +29,11 @@ const items = {
     'Küp İç': s(`<path d="M40 150 L140 60 H472 V362 L372 452 H40Z" fill="${W}"/>`),
     'Üçgen Çizgi': s(`<path d="M256 34 L486 452 H26Z" fill="none" stroke="${K}" stroke-width="24" stroke-linejoin="round"/>`),
     'Üçgen İç': s(`<path d="M256 34 L486 452 H26Z" fill="${W}" stroke="${W}" stroke-width="0"/>`),
+    // Günümüz çizim tarzı: yere konmuş yumuşak top gibi, alt kısmı hafif basık ve yayvan
+    'Yumuşak Top Çizgi': s(`<path d="M256 28 C390 28 488 130 488 265 C488 352 462 410 420 438 C380 462 320 470 256 470 C192 470 132 462 92 438 C50 410 24 352 24 265 C24 130 122 28 256 28Z" fill="none" stroke="${K}" stroke-width="24" stroke-linejoin="round"/>`),
+    'Yumuşak Top İç': s(`<path d="M256 28 C390 28 488 130 488 265 C488 352 462 410 420 438 C380 462 320 470 256 470 C192 470 132 462 92 438 C50 410 24 352 24 265 C24 130 122 28 256 28Z" fill="${W}"/>`),
+    'Yumuşak Küp Çizgi': s(`<path d="M124 46 Q256 32 388 46 Q462 52 466 124 Q476 256 466 392 Q462 466 388 472 Q256 480 124 472 Q50 466 46 392 Q36 256 46 124 Q50 52 124 46Z" fill="none" stroke="${K}" stroke-width="24" stroke-linejoin="round"/>`),
+    'Yumuşak Küp İç': s(`<path d="M124 46 Q256 32 388 46 Q462 52 466 124 Q476 256 466 392 Q462 466 388 472 Q256 480 124 472 Q50 466 46 392 Q36 256 46 124 Q50 52 124 46Z" fill="${W}"/>`),
   },
   'Gözler': {
     'Normal': eyePair(eyeWhite),

@@ -172,7 +172,7 @@ export function AddPanel({ tab, setTab, onClose, toast, replaceFlagOf }: { tab: 
             replace={!!replaceFlagOf}
             onPick={(src, name, mode) => {
               if (replaceFlagOf) { s.updateLayer(replaceFlagOf, (l) => ({ ...l, src })); onClose(); return; }
-              if (mode === 'cb') buildBody('top', src, name);
+              if (mode === 'cb' || mode === 'cbsoft') buildBody(mode === 'cbsoft' ? 'yumusak-top' : 'top', src, name);
               else addImage(src, `${name} Bayrağı`, 0.6);
             }}
             toast={toast}
@@ -297,7 +297,7 @@ function CBTab({ onPick, onBody, toast }: { onPick: (src: string, name: string) 
 
       {which === 'ready' && folder === 'Gövdeler' && (
         <div className="chips">
-          {[['top', 'Top'], ['dikdortgen', 'Dikdörtgen'], ['kup', 'Küp'], ['ucgen', 'Üçgen']].map(([k, n]) => (
+          {[['yumusak-top', 'Yumuşak top'], ['yumusak-kup', 'Yumuşak küp'], ['top', 'Top'], ['dikdortgen', 'Dikdörtgen'], ['kup', 'Küp'], ['ucgen', 'Üçgen']].map(([k, n]) => (
             <button key={k} className="chip" style={{ color: 'var(--turq)' }} onClick={() => onBody(k)}><Icon name="ball" size={14} />{n} gövdesi kur</button>
           ))}
         </div>
@@ -343,7 +343,7 @@ function CBTab({ onPick, onBody, toast }: { onPick: (src: string, name: string) 
 interface FlagMeta { code: string; en: string; continent: string; iso: boolean }
 const CONT: Record<string, string> = { Europe: 'Avrupa', Asia: 'Asya', Africa: 'Afrika', 'North America': 'Kuzey Amerika', 'South America': 'Güney Amerika', Oceania: 'Okyanusya', Antarctica: 'Antarktika' };
 
-function FlagsTab({ onPick, toast, replace }: { onPick: (src: string, name: string, mode: 'cb' | 'flat') => void; toast: (m: string) => void; replace: boolean }) {
+function FlagsTab({ onPick, toast, replace }: { onPick: (src: string, name: string, mode: 'cb' | 'cbsoft' | 'flat') => void; toast: (m: string) => void; replace: boolean }) {
   const [all, setAll] = useState<FlagMeta[]>([]);
   const [q, setQ] = useState('');
   const [cont, setCont] = useState('Tümü');
@@ -404,7 +404,8 @@ function FlagsTab({ onPick, toast, replace }: { onPick: (src: string, name: stri
         <div className="choice" onClick={() => setAsk(null)}>
           <div className="choice-box" onClick={(e) => e.stopPropagation()}>
             <h4>{ask.name}</h4>
-            <button className="btn" onClick={() => { onPick(ask.src, ask.name, 'cb'); setAsk(null); }}><Icon name="ball" size={18} />CB olarak ekle</button>
+            <button className="btn" onClick={() => { onPick(ask.src, ask.name, 'cbsoft'); setAsk(null); }}><Icon name="ball" size={18} />Yumuşak CB olarak ekle</button>
+            <button className="btn ghost" onClick={() => { onPick(ask.src, ask.name, 'cb'); setAsk(null); }}><Icon name="ball" size={18} />Yuvarlak CB olarak ekle</button>
             <span style={{ fontSize: 12, color: 'var(--d-text2)' }}>Top gövdesi kurulur: çizgi + beyaz iç + iç'e kırpılmış bayrak + gözler. Hepsi çizgiyi takip eder.</span>
             <button className="btn ghost" onClick={() => { onPick(ask.src, ask.name, 'flat'); setAsk(null); }}><Icon name="flag" size={18} />Düz bayrak olarak ekle</button>
             <button className="btn ghost" onClick={() => setAsk(null)}>Vazgeç</button>
