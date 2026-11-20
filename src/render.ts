@@ -1,3 +1,4 @@
+import { fillShape, layerHandles, visBox, type Handle } from './shapes';
 import { valueAt } from './anim';
 import { getMedia } from './db';
 import type { Layer, Project, ShapeKind } from './types';
@@ -59,40 +60,7 @@ export function preloadImages(srcs: string[]): Promise<void> {
   }))).then(() => undefined);
 }
 
-// ---------- Şekiller ----------
-export function shapePath(kind: ShapeKind, w: number, h: number): Path2D {
-  const p = new Path2D();
-  const hw = w / 2, hh = h / 2;
-  switch (kind) {
-    case 'circle': p.ellipse(0, 0, hw, hh, 0, 0, Math.PI * 2); break;
-    case 'rect': p.rect(-hw, -hh, w, h); break;
-    case 'roundrect': p.roundRect(-hw, -hh, w, h, Math.min(w, h) * 0.18); break;
-    case 'triangle': p.moveTo(0, -hh); p.lineTo(hw, hh); p.lineTo(-hw, hh); p.closePath(); break;
-    case 'hexagon':
-      for (let i = 0; i < 6; i++) {
-        const a = Math.PI / 3 * i - Math.PI / 2;
-        i ? p.lineTo(Math.cos(a) * hw, Math.sin(a) * hh) : p.moveTo(Math.cos(a) * hw, Math.sin(a) * hh);
-      }
-      p.closePath(); break;
-    case 'star':
-      for (let i = 0; i < 10; i++) {
-        const r = i % 2 ? 0.45 : 1;
-        const a = Math.PI / 5 * i - Math.PI / 2;
-        i ? p.lineTo(Math.cos(a) * hw * r, Math.sin(a) * hh * r) : p.moveTo(Math.cos(a) * hw * r, Math.sin(a) * hh * r);
-      }
-      p.closePath(); break;
-    case 'plus': {
-      const t = 0.32;
-      p.rect(-hw * t, -hh, w * t, h); p.rect(-hw, -hh * t, w, h * t); break;
-    }
-    case 'heart':
-      p.moveTo(0, hh);
-      p.bezierCurveTo(-hw * 1.3, -hh * 0.1, -hw * 0.6, -hh * 1.2, 0, -hh * 0.45);
-      p.bezierCurveTo(hw * 0.6, -hh * 1.2, hw * 1.3, -hh * 0.1, 0, hh);
-      p.closePath(); break;
-  }
-  return p;
-}
+export { shapePath } from './shapes';
 
 // ---------- Kare çizimi ----------
 const noise = (t: number, seed: number) => Math.sin(t * 12.9898 + seed * 78.233) * 0.5 + Math.sin(t * 4.1 + seed) * 0.5;
@@ -317,9 +285,16 @@ function fillOf(ctx: CanvasRenderingContext2D, l: Layer): string | CanvasGradien
 }
 
 function drawLayer(ctx: CanvasRenderingContext2D, l: Layer) {
+  if (l.crop && l.type !== 'shape' && l.type !== 'text') {
+    const b = visBox(l);
+    ctx.save(); ctx.beginPath(); ctx.rect(b.x0, b.y0, b.x1 - b.x0, b.y1 - b.y0); ctx.clip();
+    drawLayer(ctx, { ...l, crop: undefined });
+    ctx.restore();
+    return;
+  }
   const { w, h } = l;
   if (l.type === 'shape' && l.shape) {
-    if (!l.noFill) { ctx.fillStyle = fillOf(ctx, l); ctx.fill(shapePath(l.shape, w, h)); }
+    if (!l.noFill) { ctx.fillStyle = fillOf(ctx, l); fillShape(ctx, l as Layer & { shape: ShapeKind }); }
   } else if (l.type === 'text') {
     ctx.fillStyle = fillOf(ctx, l);
     ctx.font = `700 ${l.fontSize ?? 64}px Inter, system-ui, sans-serif`;
@@ -374,30 +349,58 @@ function drawSelection(ctx: CanvasRenderingContext2D, l: Layer, tr: TR, q: numbe
   ctx.setTransform(q, 0, 0, q, 0, 0);
   ctx.translate(tr.x, tr.y);
   ctx.rotate(tr.rot * Math.PI / 180);
-  const w = l.w * tr.scale, h = l.h * tr.scale;
+  const fx = l.flipX ? -1 : 1, fy = l.flipY ? -1 : 1, k = tr.scale;
   const lw = 2 / q * Math.max(1, ctx.canvas.width / q / 700);
+  const b = visBox(l);
   ctx.strokeStyle = '#3B9BFF';
   ctx.lineWidth = lw;
-  ctx.strokeRect(-w / 2, -h / 2, w, h);
-  ctx.fillStyle = '#DCE9FF';
+  ctx.strokeRect(Math.min(b.x0 * fx, b.x1 * fx) * k, Math.min(b.y0 * fy, b.y1 * fy) * k, (b.x1 - b.x0) * k, (b.y1 - b.y0) * k);
   const hr = lw * 3.5;
-  for (const [hx, hy] of [[-1, -1], [0, -1], [1, -1], [-1, 0], [1, 0], [-1, 1], [0, 1], [1, 1]]) {
+  if (l.shape === 'custom' && l.pts) {
     ctx.beginPath();
-    ctx.arc(hx * w / 2, hy * h / 2, hr, 0, Math.PI * 2);
+    l.pts.forEach(([x, y], i) => (i ? ctx.lineTo(x * l.w * k * fx, y * l.h * k * fy) : ctx.moveTo(x * l.w * k * fx, y * l.h * k * fy)));
+    ctx.closePath(); ctx.setLineDash([lw * 3, lw * 2]); ctx.strokeStyle = '#22D3C5'; ctx.stroke(); ctx.setLineDash([]);
+  }
+  for (const hd of layerHandles(l)) {
+    const x = hd.x * k * fx, y = hd.y * k * fy;
+    ctx.beginPath();
+    if (hd.kind === 'crop') {
+      // Kırpma tutamacı: kenara paralel kısa kalın çubuk
+      const vert = hd.id === 'k-l' || hd.id === 'k-r';
+      ctx.roundRect(x - (vert ? hr * 0.6 : hr * 2.2), y - (vert ? hr * 2.2 : hr * 0.6), vert ? hr * 1.2 : hr * 4.4, vert ? hr * 4.4 : hr * 1.2, hr * 0.6);
+      ctx.fillStyle = '#DCE9FF';
+    } else {
+      ctx.arc(x, y, hd.kind === 'special' || hd.kind === 'vertex' ? hr * 1.25 : hr, 0, Math.PI * 2);
+      ctx.fillStyle = hd.kind === 'special' || hd.kind === 'vertex' ? '#22D3C5' : '#DCE9FF';
+    }
     ctx.fill();
+    ctx.strokeStyle = hd.kind === 'special' || hd.kind === 'vertex' ? '#0B1430' : '#3B9BFF';
     ctx.stroke();
   }
   if (grad && l.grad && l.fill2) {
-    const k = tr.scale;
-    const a = [l.grad.x1 * l.w * k, l.grad.y1 * l.h * k], b = [l.grad.x2 * l.w * k, l.grad.y2 * l.h * k];
-    ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]);
+    const a = [l.grad.x1 * l.w * k, l.grad.y1 * l.h * k], b2 = [l.grad.x2 * l.w * k, l.grad.y2 * l.h * k];
+    ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b2[0], b2[1]);
     ctx.strokeStyle = '#F7F8FA'; ctx.lineWidth = lw; ctx.stroke();
-    for (const [pt, c] of [[a, l.fill], [b, l.fill2]] as [number[], string][]) {
+    for (const [pt, c] of [[a, l.fill], [b2, l.fill2]] as [number[], string][]) {
       ctx.beginPath(); ctx.arc(pt[0], pt[1], hr * 1.6, 0, Math.PI * 2);
       ctx.fillStyle = c; ctx.fill(); ctx.strokeStyle = '#0B1430'; ctx.lineWidth = lw * 1.5; ctx.stroke();
     }
   }
   ctx.restore();
+}
+
+/** Seçili katmanın tutamaçlarından, noktaya en yakın olanı (sahne koordinatında, tol: yarıçap) */
+export function pickHandle(p: Project, l: Layer, t: number, px: number, py: number, tol: number): Handle | null {
+  const tr = worldTransform(p, l, t);
+  const a = tr.rot * Math.PI / 180, fx = l.flipX ? -1 : 1, fy = l.flipY ? -1 : 1;
+  let best: Handle | null = null, bd = tol;
+  for (const hd of layerHandles(l)) {
+    const lx = hd.x * fx * tr.scale, ly = hd.y * fy * tr.scale;
+    const wx = tr.x + lx * Math.cos(a) - ly * Math.sin(a), wy = tr.y + lx * Math.sin(a) + ly * Math.cos(a);
+    const d = Math.hypot(wx - px, wy - py);
+    if (d < bd - (hd.kind === 'special' || hd.kind === 'vertex' ? 0.5 : 0)) { bd = d; best = hd; }
+  }
+  return best;
 }
 
 /** Önizlemede dokunulan katmanı bul (üstten alta). */
@@ -410,7 +413,8 @@ export function hitTest(p: Project, t: number, px: number, py: number, only?: st
     const a = -tr.rot * Math.PI / 180;
     const dx = px - tr.x, dy = py - tr.y;
     const lx = dx * Math.cos(a) - dy * Math.sin(a), ly = dx * Math.sin(a) + dy * Math.cos(a);
-    if (Math.abs(lx) <= l.w * tr.scale / 2 && Math.abs(ly) <= l.h * tr.scale / 2) return l;
+    const b = visBox(l), ux = lx / tr.scale * (l.flipX ? -1 : 1), uy = ly / tr.scale * (l.flipY ? -1 : 1);
+    if (ux >= b.x0 && ux <= b.x1 && uy >= b.y0 && uy <= b.y1) return l;
   }
   return null;
 }

@@ -3,7 +3,7 @@ export type Key = { t: number; v: number; e?: [number, number, number, number] }
 /** Canlandırılabilir değer: keyframe yoksa sabit `v`, varsa `k` üzerinden ara değer. */
 export type Anim = { v: number; k?: Key[] };
 
-export type ShapeKind = 'circle' | 'roundrect' | 'rect' | 'triangle' | 'star' | 'hexagon' | 'heart' | 'plus';
+export type ShapeKind = 'circle' | 'roundrect' | 'rect' | 'triangle' | 'star' | 'hexagon' | 'heart' | 'plus' | 'polygon' | 'bar' | 'crescent' | 'custom';
 
 export type FxType = 'blur' | 'sway' | 'shake' | 'glow' | 'brightness' | 'contrast' | 'saturate' | 'hue' | 'grayscale' | 'invert' | 'sepia' | 'shadow' | 'mirror' | 'fractal' | 'motionblur';
 /** v: keyframe'lenebilir parametreler (2B parametreler 'posX' / 'posY' gibi iki anahtar). amount/speed eski projeler için. */
@@ -26,6 +26,12 @@ export interface Layer {
   h: number;
   fill: string;
   shape?: ShapeKind;
+  /** Şekil ayarları (Şekli Düzenle): köşe sayısı, iç derinlik, hilal kesiği… */
+  sp?: Record<string, number>;
+  /** Serbest çokgenin köşeleri (kutuya göre -0.5..0.5) */
+  pts?: [number, number][];
+  /** Kırpma (görsel/video/CB): her kenardan kesilen oran 0..1 */
+  crop?: { l: number; t: number; r: number; b: number };
   text?: string;
   fontSize?: number;
   /** Görsel kaynağı: 'packs/…' / 'flags/…' gibi bir yol ya da 'media:<id>' */

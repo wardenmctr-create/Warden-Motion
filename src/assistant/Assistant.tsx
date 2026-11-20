@@ -51,9 +51,6 @@ export function Assistant() {
       else if (cur.screen === 'home' && s2.ver !== APP_VERSION) {
         const sc = buildScript('whatsnew', { from: s2.ver });
         if (sc) start(sc); else saveSaved({ ...s2, ver: APP_VERSION });
-      } else if (cur.screen === 'editor' && cur.project && !cur.project.tutorial && s2.intro && !s2.editor) {
-        const sc = buildScript('editor');
-        if (sc) start(sc);
       }
     }, 700);
     return () => clearTimeout(t);
@@ -162,10 +159,15 @@ export function Assistant() {
         </div>
         <p className={view.recover ? 'warn' : ''}>{view.say}</p>
         {view.sub && <p className="wa-sub">👉 {view.sub}</p>}
+        {step.choices && !view.recover && !view.sub ? (
+          <div className="wa-choices">
+            {step.choices.map((c) => <button key={c.label} className="wa-ch" onClick={c.act}>{c.label}</button>)}
+          </div>
+        ) : null}
         <div className="wa-btns">
           {run.step > 0 && !view.recover && <button className="wa-b ghost" onClick={() => go(run.step - 1)}>Geri</button>}
           <span style={{ flex: 1 }} />
-          {view.action
+          {step.choices ? null : view.action
             ? <button className="wa-b ghost" onClick={() => go(run.step + 1)}>Atla</button>
             : <button className="wa-b" onClick={() => go(run.step + 1)}>{step.btn ?? 'İleri'}</button>}
         </div>

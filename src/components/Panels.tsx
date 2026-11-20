@@ -3,11 +3,12 @@ import { Icon } from './Icon';
 import { EASES, keyAt, segmentKey, setAnim, setEase, toggleKey, uid, valueAt } from '../anim';
 import { addUserFlag, addUserFolder, addUserPackItems, listUserFlags, listUserFolders, listUserPack, putMedia, removeUserPackItem, type UserFlag, type UserPackItem } from '../db';
 import { makeLayer, SHAPES } from '../factories';
-import { resolveSrc, shapePath } from '../render';
+import { resolveSrc } from '../render';
+import { addVertex, fillShape, regularPts, SHAPE_PARAMS, sp as shapeParam } from '../shapes';
 import { useStore } from '../store';
 import { askText } from '../dialog';
 import { FEATURED, FX, FX_CATS, fxMeta, fxVal, makeEffect, paramKeys, type FxParam } from '../effects';
-import type { AnimProp, Effect, FxType, Layer, Project } from '../types';
+import type { AnimProp, Effect, FxType, Layer, Project, ShapeKind } from '../types';
 
 // ---------- Ortak ----------
 function Head({ title, onClose, back = false }: { title: string; onClose: () => void; back?: boolean }) {
@@ -207,8 +208,8 @@ export function AddPanel({ tab, setTab, onClose, toast, replaceFlagOf }: { tab: 
       {tab && <div className="addbody">
         {tab === 'shape' && (
           <Pager items={SHAPES} cols={7} keyOf={(sh) => sh.kind} render={(sh) => (
-            <button className="cell" aria-label={sh.name} onClick={() => { s.addLayer(makeLayer(p, t, dur, { type: 'shape', name: sh.name, shape: sh.kind, w: sh.kind === 'rect' || sh.kind === 'roundrect' ? 260 : 240, h: 240 })); onClose(); }}>
-              <ShapeIcon kind={sh.kind} />
+            <button className="cell" aria-label={sh.name} onClick={() => { s.addLayer(makeLayer(p, t, dur, { type: 'shape', name: sh.name, shape: sh.kind, w: sh.w ?? 240, h: sh.h ?? 240, ...(sh.sp ? { sp: sh.sp } : {}), ...(sh.pts ? { pts: sh.pts } : {}) })); onClose(); }}>
+              <ShapeIcon kind={sh.kind} pts={sh.pts} />
             </button>
           )} />
         )}
@@ -231,13 +232,13 @@ export function AddPanel({ tab, setTab, onClose, toast, replaceFlagOf }: { tab: 
   );
 }
 
-function ShapeIcon({ kind }: { kind: Parameters<typeof shapePath>[0] }) {
+function ShapeIcon({ kind, pts }: { kind: ShapeKind; pts?: [number, number][] }) {
   const ref = useRef<HTMLCanvasElement>(null);
   useEffect(() => {
     const c = ref.current!; c.width = 80; c.height = 80;
     const x = c.getContext('2d')!;
     x.translate(40, 40); x.fillStyle = '#B9C6DC';
-    x.fill(shapePath(kind, kind === 'rect' || kind === 'roundrect' ? 56 : 58, 56));
+    fillShape(x, { shape: kind, w: kind === 'bar' ? 64 : 58, h: kind === 'bar' ? 14 : 56, pts });
   }, [kind]);
   return <canvas ref={ref} style={{ width: 40, height: 40 }} />;
 }
@@ -978,5 +979,68 @@ function KfIcon({ has }: { has: boolean }) {
       <path d="M13 2 24 13 13 24 2 13Z" fill="currentColor" />
       <path d={has ? 'M8.5 13h9' : 'M8.5 13h9M13 8.5v9'} stroke="#0B1430" strokeWidth="2.4" strokeLinecap="round" />
     </svg>
+  );
+}
+
+// ---------- Şekli Düzenle (uygulamanın kendi şekilleri) ----------
+const SHAPE_HELP: Partial<Record<ShapeKind, string>> = {
+  bar: 'Önizlemede uçtaki tutamaç uzunluğu, üstteki kalınlığı ayarlar.',
+  crescent: 'Önizlemede içteki turkuaz tutamacı kaydır: dışarı çekersen tam top, içeri itersen ince hilal olur. Kesiği büyütüp kenara alırsan yarım daire olur.',
+  star: 'Önizlemede turkuaz tutamaçla yıldızın içini derinleştir.',
+  roundrect: 'Önizlemede turkuaz tutamaçla köşeleri yuvarla.',
+  custom: 'Önizlemede her köşeyi (turkuaz noktalar) istediğin yere sürükle.',
+};
+export function ShapeEditPanel({ layer, onClose }: { layer: Layer; onClose: () => void }) {
+  const { s } = useNow();
+  const kind = layer.shape!;
+  const params = SHAPE_PARAMS[kind] ?? [];
+  const set = (key: string, v: number, commit = false) => s.updateLayer(layer.id, (l) => ({ ...l, sp: { ...l.sp, [key]: v } }), commit);
+  const pts = layer.pts ?? regularPts(5);
+  const halfMoon = () => s.updateLayer(layer.id, (l) => ({ ...l, sp: { ...l.sp, cx: 0, cy: -4.5, r: 9 } }));
+  return (
+    <div className="dpanel side2" role="dialog" aria-label="Şekli Düzenle">
+      <Head title="Şekli Düzenle" onClose={onClose} back />
+      <div className="dbody shapeed">
+        {SHAPE_HELP[kind] && <p className="shint">{SHAPE_HELP[kind]}</p>}
+        {params.map((pr) => {
+          const v = shapeParam(layer, pr.key);
+          if (pr.int && pr.max - pr.min <= 1) return (
+            <div key={pr.key} className="prop row"><span>{pr.label}</span>
+              <button className={'sw2' + (v ? ' on' : '')} role="switch" aria-checked={!!v} aria-label={pr.label} onClick={() => set(pr.key, v ? 0 : 1, true)} /></div>
+          );
+          if (pr.int) return (
+            <div key={pr.key} className="prop row"><span>{pr.label}</span>
+              <div className="stepper">
+                <button aria-label={`${pr.label} azalt`} disabled={v <= pr.min} onClick={() => set(pr.key, v - 1, true)}>−</button>
+                <b>{v}</b>
+                <button aria-label={`${pr.label} arttır`} disabled={v >= pr.max} onClick={() => set(pr.key, v + 1, true)}>+</button>
+              </div></div>
+          );
+          return (
+            <label key={pr.key} className="prop"><span className="top">{pr.label}<b>{v.toFixed(2).replace('.', ',')}</b></span>
+              <input className="slider" type="range" min={pr.min} max={pr.max} step={pr.step} value={v} aria-label={pr.label} onPointerDown={() => s.checkpoint()} onChange={(e) => set(pr.key, +e.target.value)} /></label>
+          );
+        })}
+        {kind === 'crescent' && (
+          <div className="chips" style={{ marginTop: 6 }}>
+            <button className="chip" onClick={() => s.updateLayer(layer.id, (l) => ({ ...l, sp: { ...l.sp, cx: 0.3, cy: -0.1, r: 0.9 } }))}>Hilal</button>
+            <button className="chip" onClick={halfMoon}>Yarım daire</button>
+            <button className="chip" onClick={() => s.updateLayer(layer.id, (l) => ({ ...l, sp: { ...l.sp, cx: 1.5, cy: 0, r: 0.5 } }))}>Tam top</button>
+          </div>
+        )}
+        {kind === 'custom' && (
+          <>
+            <div className="prop row"><span>Köşe sayısı</span>
+              <div className="stepper">
+                <button aria-label="Köşe çıkar" disabled={pts.length <= 3} onClick={() => s.updateLayer(layer.id, (l) => ({ ...l, pts: pts.slice(0, -1) }))}>−</button>
+                <b>{pts.length}</b>
+                <button aria-label="Köşe ekle" disabled={pts.length >= 40} onClick={() => s.updateLayer(layer.id, (l) => ({ ...l, pts: addVertex(pts) }))}>+</button>
+              </div></div>
+            <button className="btn ghost" onClick={() => s.updateLayer(layer.id, (l) => ({ ...l, pts: regularPts(pts.length) }))}>Düzgün çokgene çevir</button>
+          </>
+        )}
+        {!params.length && kind !== 'custom' && <p className="shint">Bu şeklin ayarı yok. Önizlemede köşelerden büyütüp kenarlardan genişlet/daralt.</p>}
+      </div>
+    </div>
   );
 }

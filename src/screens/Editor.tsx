@@ -1,16 +1,17 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Icon } from '../components/Icon';
-import { AddPanel, type AddTab, ColorPanel, CBPanel, EffectsPanel, MovePanel, OpacityPanel, TextPanel } from '../components/Panels';
+import { AddPanel, type AddTab, ColorPanel, CBPanel, EffectsPanel, MovePanel, OpacityPanel, ShapeEditPanel, TextPanel } from '../components/Panels';
+import { applyHandle } from '../shapes';
 import { fmtTime, projectDuration, setAnim, valueAt } from '../anim';
 import { groupLabel, layerMarkers, moveMarker, type Marker } from '../markers';
 import { estimateExport, exportVideo, heavyEffects, saveFile, type ExportInfo } from '../export';
 import { fxMeta, fxVal } from '../effects';
-import { hitTest, parentWorld, pauseAllVideos, renderFrame, setImageLoadedHandler, toLocal, worldTransform, type TR } from '../render';
+import { hitTest, pickHandle, parentWorld, pauseAllVideos, renderFrame, setImageLoadedHandler, toLocal, worldTransform, type TR } from '../render';
 import { useStore } from '../store';
 import type { Project } from '../types';
 
-export type Panel = null | 'add' | 'move' | 'color' | 'opacity' | 'effects' | 'cb' | 'text';
-const PANEL_TITLE: Record<string, string> = { move: 'Taşı ve Çevir', color: 'Renk ve Dolgu', opacity: 'Karıştırma ve Opaklık', effects: 'Efektler', text: 'Metni Düzenle', cb: 'CB Ayarları' };
+export type Panel = null | 'add' | 'move' | 'color' | 'opacity' | 'effects' | 'cb' | 'text' | 'shape';
+const PANEL_TITLE: Record<string, string> = { move: 'Taşı ve Çevir', color: 'Renk ve Dolgu', opacity: 'Karıştırma ve Opaklık', effects: 'Efektler', text: 'Metni Düzenle', cb: 'CB Ayarları', shape: 'Şekli Düzenle' };
 
 const PPS_MIN = 15, PPS_MAX = 1200; // zaman çizelgesi yakınlaştırma sınırları (saniye başına piksel)
 const TOP = 44, ROW = 26; // katman şeritlerinin başladığı yer ve satır aralığı
@@ -111,6 +112,8 @@ export function Editor() {
   const pts = useRef(new Map<number, { x: number; y: number }>());
   const pinch = useRef<{ id: string; d0: number; a0: number; s0: number; r0: number } | null>(null);
   const gdrag = useRef<{ id: string; which: 1 | 2 } | null>(null);
+  // Seçim tutamacı sürükleme: köşe (büyüt), kenar (genişlet / kırp), şekle özel tutamaçlar
+  const hdrag = useRef<{ id: string; handle: string; l0: import('../types').Layer; start: { x: number; y: number } } | null>(null);
   const fxDrag = useRef<{ x: number; y: number; v: [number, number] } | null>(null);
   // Efekt panelinde 2B parametre (Konum, Paralaks) seçiliyse önizlemede kaydırarak ayarlanır
   const fxSel = panel === 'effects' && sel && s.fxParam ? (() => {
@@ -161,6 +164,16 @@ export function Editor() {
         if (Math.hypot(lp.x - gx, lp.y - gy) < tol) { s.checkpoint(); gdrag.current = { id: sel.id, which }; return; }
       }
     }
+    if (sel) {
+      const cr = canvasRef.current!.getBoundingClientRect();
+      const hd = pickHandle(p, sel, s.time, pt.x, pt.y, 20 * p.width / cr.width);
+      if (hd) {
+        s.checkpoint();
+        const lp = toLayerLocal(sel, pt);
+        hdrag.current = { id: sel.id, handle: hd.id, l0: sel, start: { x: lp.x * (sel.flipX ? -1 : 1), y: lp.y * (sel.flipY ? -1 : 1) } };
+        return;
+      }
+    }
     const hit = hitTest(p, s.time, pt.x, pt.y);
     const keepSel = !!sel && hitTest(p, s.time, pt.x, pt.y, sel.id) !== null;
     const target = keepSel ? sel : hit;
@@ -198,6 +211,13 @@ export function Editor() {
       s.updateLayer(g.id, (l) => ({ ...l, grad: g.which === 1 ? { ...l.grad!, x1: nx, y1: ny } : { ...l.grad!, x2: nx, y2: ny } }), false);
       return;
     }
+    const hd = hdrag.current;
+    if (hd && sel) {
+      const lp = toLayerLocal(sel, toProj(e));
+      const ch = applyHandle(hd.l0, hd.handle, { x: lp.x * (sel.flipX ? -1 : 1), y: lp.y * (sel.flipY ? -1 : 1) }, hd.start);
+      s.updateLayer(hd.id, (l) => ({ ...l, ...ch }), false);
+      return;
+    }
     const d = drag.current;
     if (!d) return;
     const pt = toProj(e);
@@ -207,7 +227,7 @@ export function Editor() {
   const onUp = (e: React.PointerEvent) => {
     pts.current.delete(e.pointerId);
     if (pts.current.size < 2) pinch.current = null;
-    if (!pts.current.size) { drag.current = null; gdrag.current = null; fxDrag.current = null; setSwiping(false); }
+    if (!pts.current.size) { drag.current = null; gdrag.current = null; hdrag.current = null; fxDrag.current = null; setSwiping(false); }
   };
 
   // ---------- Zaman çizelgesi ----------
@@ -537,6 +557,7 @@ export function Editor() {
     : sel && panel === 'opacity' ? <OpacityPanel layer={sel} onClose={() => setPanel(null)} />
     : sel && panel === 'effects' ? <EffectsPanel layer={sel} onClose={() => setPanel(null)} />
     : sel && panel === 'text' ? <TextPanel layer={sel} onClose={() => setPanel(null)} />
+    : sel && panel === 'shape' && sel.shape ? <ShapeEditPanel layer={sel} onClose={() => setPanel(null)} />
     : sel && panel === 'cb' ? <CBPanel layer={sel} onClose={() => setPanel(null)} onChangeFlag={() => { setAddTab('flags'); setReplaceFlagOf(sel.id); setPanel('add'); }} />
     : null;
 
@@ -575,7 +596,7 @@ export function Editor() {
         {sel.type === 'cb' ? big('ball', 'CB Ayarları', () => setPanel('cb')) : big('border', 'Kenarlık ve Gölge', null)}
         {big('layers', 'Karıştırma ve Opaklık', () => setPanel('opacity'))}
         {big('move', 'Taşı ve Çevir', () => setPanel('move'))}
-        {sel.type === 'text' ? big('text', 'Metni Düzenle', () => setPanel('text')) : big('pen', 'Şekli Düzenle', null)}
+        {sel.type === 'text' ? big('text', 'Metni Düzenle', () => setPanel('text')) : big('pen', 'Şekli Düzenle', sel.type === 'shape' && sel.shape ? () => setPanel('shape') : null)}
         {big('sparkle', 'Efektler', () => setPanel('effects'))}
       </div>
     </div>

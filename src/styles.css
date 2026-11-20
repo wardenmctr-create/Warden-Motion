@@ -612,3 +612,13 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
 .wa-meet span { display: flex; flex-direction: column; gap: 3px; }
 .wa-meet small { font-size: 12px; color: var(--l-text2); font-weight: 400; }
 .wa-card p.wa-sub { margin-top: -4px; font-size: 13px; font-weight: 700; color: #7EE8F0; }
+/* Şekli Düzenle */
+.shapeed .shint { margin: 0 0 10px; font-size: 12.5px; color: var(--d-text2); line-height: 1.4; }
+.shapeed .prop.row { display: flex; align-items: center; justify-content: space-between; min-height: 46px; }
+.stepper { display: flex; align-items: center; gap: 4px; background: var(--d-panel2); border-radius: 12px; padding: 3px; }
+.stepper button { width: 38px; height: 34px; border: 0; border-radius: 9px; background: var(--d-panel); color: var(--d-text); font-size: 20px; font-weight: 700; cursor: pointer; }
+.stepper button:disabled { opacity: .35; }
+.stepper b { min-width: 34px; text-align: center; font-size: 15px; }
+.wa-choices { display: flex; flex-direction: column; gap: 6px; margin: 2px 0 6px; }
+.wa-ch { min-height: 38px; border-radius: 12px; border: 1.5px solid #2C6FD8; background: #0F1834; color: #DCE9FF; font: inherit; font-weight: 700; font-size: 13.5px; text-align: left; padding: 6px 12px; cursor: pointer; }
+.wa-ch:active { background: #22D3C5; color: #0B1430; }

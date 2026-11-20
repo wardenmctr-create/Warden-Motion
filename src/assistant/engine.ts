@@ -4,6 +4,7 @@ import { create } from 'zustand';
 import type { Mood } from '../components/WardenCB';
 import type { Layer } from '../types';
 import { useStore } from '../store';
+import { newProject, TUTORIALS } from '../factories';
 
 export const APP_VERSION = '0.9';
 
@@ -184,6 +185,8 @@ export interface Step {
   done?: () => boolean;
   /** "İleri" düğmesinin yazısı */
   btn?: string;
+  /** Seçenekler: kullanıcı birini seçer */
+  choices?: { label: string; act: () => void }[];
 }
 export interface Script { id: string; title: string; steps: Step[]; pid?: string }
 
@@ -200,7 +203,36 @@ const INTRO: Step[] = [
   { say: 'Adım adım öğreticiler burada: 3 CB, 5 genel animasyon. Onlarda da ben yanındayım.', target: () => find('.nav button', 'Öğreticiler'), need: { screen: 'home' } },
   { say: 'Ayarlar burada: zayıf telefonlar için Lite modu ve beni tekrar çağırmak için "WardenCB ile tanış".', target: () => label('Ayarlar menüsü'), need: { screen: 'home' } },
 ];
-const INTRO_END: Step = { say: 'Hepsi bu kadar! Editöre ilk girdiğinde orayı da gezdireceğim. İyi animasyonlar!', mood: 'joy', btn: 'Bitir' };
+// ---- Seçeneklerin yaptıkları ----
+const finish = () => useAssistant.getState().stop(true);
+export function openTutorial(id: string) {
+  const tu = TUTORIALS.find((t) => t.id === id);
+  if (!tu) return;
+  finish();
+  useStore.getState().open({ ...newProject(tu.title, tu.ratio[0], tu.ratio[1], 30, tu.bg), tutorial: tu.id });
+}
+function tourEditor() {
+  finish();
+  const st = useStore.getState();
+  if (!(st.screen === 'editor' && st.project)) st.open(newProject('Deneme Projesi', 720, 900, 30, '#FFFFFF'));
+  setTimeout(() => { const sc = buildScript('editor'); if (sc) useAssistant.getState().start(sc); }, 400);
+}
+const pickTutorial = (): Step => ({
+  say: 'Hangisini yapalım? İkisinde de her adımda nereye basacağını göstereceğim.', mood: 'excited',
+  choices: [
+    ...TUTORIALS.filter((t) => t.ready).map((t) => ({ label: `${t.title} (${t.kind})`, act: () => openTutorial(t.id) })),
+    { label: 'Şimdilik yeter', act: finish },
+  ],
+});
+const WHAT_NOW = (inEditor: boolean): Step => ({
+  say: 'Şimdi ne yapalım?', mood: 'curious',
+  choices: [
+    ...(inEditor ? [] : [{ label: 'Proje arayüzünü tanıt', act: tourEditor }]),
+    { label: 'Bir öğretici proje yapalım', act: () => { const r = useAssistant.getState().run; if (r) useAssistant.getState().go(r.step + 1); } },
+    { label: 'Şimdilik yeter', act: finish },
+  ],
+});
+const INTRO_END: Step[] = [WHAT_NOW(false), pickTutorial()];
 
 /** Her güncellemede "yeni neler var" (en yeni en sonda) */
 export const WHATS_NEW: { v: string; items: Step[] }[] = [
@@ -219,7 +251,10 @@ const EDITOR_TOUR: Step[] = [
   { say: 'Zaman çizelgesi: kaydırınca kare kare ilerler, iki parmakla yakınlaştırırsın. Ortadaki çizgi o anki kare.', target: () => find('.tl'), need: { screen: 'editor' } },
   { say: 'Katman eklemek için +: şekil, medya, metin, CB araçları ve bayraklar.', target: () => find('.fab-d'), need: { clean: true } },
   { say: 'Bir katmanı seçince altta araçlar çıkar: Taşı ve Çevir, Efektler… ◆+ ile keyframe eklersin, ◆− ile silersin.', mood: 'think', target: () => find('.lpill') ?? find('.tl'), need: { screen: 'editor' } },
-  { say: 'Bitince videonu buradan dışa aktar. Hadi, sıra sende!', mood: 'joy', target: () => label('Dışa aktar'), need: { clean: true }, btn: 'Bitir' },
+  { say: 'Bitince videonu buradan dışa aktar.', mood: 'joy', target: () => label('Dışa aktar'), need: { clean: true } },
+  { say: 'Seçili katmanda köşelerdeki noktalardan tutup büyütürsün; kenarlardan şekilleri genişletir, görselleri kırparsın. Uygulamanın şekillerinde turkuaz tutamaçlar ve "Şekli Düzenle" ayarları da var.', mood: 'think', target: () => find('.stage canvas') },
+  WHAT_NOW(true),
+  pickTutorial(),
 ];
 
 const tips = (t: string[]): Step[] => t.map((say, i) => ({ say: `Taktik ${i + 1}: ${say}`, mood: 'smug' as Mood }));
@@ -251,7 +286,7 @@ const TUT_CB1 = (): Step[] => [
 export function buildScript(id: string, opts: { existing?: boolean; from?: string; pid?: string; tips?: string[] } = {}): Script | null {
   if (id === 'intro') {
     const news = opts.existing ? WHATS_NEW.filter((w) => !opts.from || w.v > opts.from).flatMap((w) => w.items) : [];
-    return { id, title: 'Tanışma', steps: [...INTRO, ...news, INTRO_END] };
+    return { id, title: 'Tanışma', steps: [...INTRO, ...news, ...INTRO_END] };
   }
   if (id === 'whatsnew') {
     const news = WHATS_NEW.filter((w) => !opts.from || w.v > opts.from).flatMap((w) => w.items);

@@ -1,3 +1,4 @@
+import { regularPts } from './shapes';
 import { EASE_INOUT, uid } from './anim';
 import type { Layer, Project, ShapeKind } from './types';
 
@@ -17,10 +18,12 @@ export function makeLayer(p: Project, start: number, dur: number, part: Partial<
   };
 }
 
-export const SHAPES: { kind: ShapeKind; name: string }[] = [
-  { kind: 'circle', name: 'Daire' }, { kind: 'roundrect', name: 'Yuvarlatılmış Dikdörtgen' },
+export const SHAPES: { kind: ShapeKind; name: string; w?: number; h?: number; sp?: Record<string, number>; pts?: [number, number][] }[] = [
+  { kind: 'circle', name: 'Daire' }, { kind: 'roundrect', name: 'Yuvarlatılmış Dikdörtgen', w: 260 },
   { kind: 'plus', name: 'Artı' }, { kind: 'triangle', name: 'Üçgen' }, { kind: 'hexagon', name: 'Altıgen' },
-  { kind: 'star', name: 'Yıldız' }, { kind: 'rect', name: 'Kare' }, { kind: 'heart', name: 'Kalp' },
+  { kind: 'star', name: 'Yıldız' }, { kind: 'rect', name: 'Kare', w: 260 }, { kind: 'heart', name: 'Kalp' },
+  { kind: 'bar', name: 'Çubuk', w: 320, h: 44 }, { kind: 'crescent', name: 'Hilal' },
+  { kind: 'polygon', name: 'Çokgen' }, { kind: 'custom', name: 'Serbest Çokgen', pts: regularPts(5) },
 ];
 
 // ---------- Şablonlar ----------
