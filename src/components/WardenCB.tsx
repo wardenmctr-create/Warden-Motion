@@ -21,7 +21,7 @@ export const HAT_COLOR = '#5A5A22';
 // ---------------------------------------------------------------------------------------------
 const BODY = 'M322 330 C440 330 512 400 512 500 C512 572 492 616 452 634 C412 648 370 650 322 650 C274 650 232 648 192 634 C152 616 132 572 132 500 C132 400 204 330 322 330Z';
 // Ushanka (referanstaki gibi): öne katlanmış uzun ön bant + iki yandan sarkan kulaklıklar
-const HAT = 'M120 302 C200 288 400 272 512 264 C517 302 519 362 516 424 C470 406 400 398 322 400 C240 402 180 412 128 426 C121 382 117 342 120 302Z';
+const HAT = 'M120 302 C200 288 400 272 512 264 C532 268 546 278 550 296 C556 336 556 384 550 420 C540 424 526 424 516 424 C470 406 400 398 322 400 C240 402 180 412 128 426 C121 382 117 342 120 302Z';
 const FLAP_R = 'M512 266 C550 284 574 334 580 404 C586 474 578 562 584 612 C588 638 604 650 600 662 C568 668 520 658 486 664 C492 612 500 540 503 430 L516 424Z';
 const FLAP_L = 'M126 410 C106 460 98 536 102 600 C104 634 116 652 138 654 C170 656 200 650 214 640 L204 420Z';
 
@@ -155,7 +155,7 @@ export function WardenCB({ size = 120, mood = 'idle', look, autoBlink = true }: 
         <path d={FLAP_R} fill={HAT_COLOR} stroke="#0B0B10" strokeWidth="8" strokeLinejoin="round" />
         <path d={HAT} fill={HAT_COLOR} stroke="#0B0B10" strokeWidth="8" strokeLinejoin="round" />
         {/* Öndeki kulaklık ile başlığı ayıran çizgi */}
-        <path d="M514 424 C536 420 560 412 579 398" fill="none" stroke="#0B0B10" strokeWidth="8" strokeLinecap="round" />
+        <path d="M550 420 C560 414 570 407 579 398" fill="none" stroke="#0B0B10" strokeWidth="8" strokeLinecap="round" />
         <polygon points={star8(300, 348, 40, 19)} fill="#1E2A2E" stroke="#22D3E6" strokeWidth="7" strokeLinejoin="round" />
       </g>
       {mood !== 'idle' && (
