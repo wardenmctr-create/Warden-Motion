@@ -2,6 +2,7 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react
 import { Icon } from '../components/Icon';
 import { AddPanel, type AddTab, ColorPanel, CBPanel, EffectsPanel, MovePanel, OpacityPanel, ShapeEditPanel, TextPanel } from '../components/Panels';
 import { applyHandle } from '../shapes';
+import { AiButton } from '../ai/Chat';
 import { fmtTime, projectDuration, setAnim, valueAt } from '../anim';
 import { groupLabel, layerMarkers, moveMarker, type Marker } from '../markers';
 import { estimateExport, exportVideo, heavyEffects, saveFile, type ExportInfo } from '../export';
@@ -633,6 +634,7 @@ export function Editor() {
           <>
             <button className="ib" aria-label="Projeden çık" onClick={() => s.close()}><Icon name="exit" /></button>
             <input className="ed-title" aria-label="Proje adı" value={p.name} onChange={(e) => s.update((pp) => ({ ...pp, name: e.target.value }), false)} />
+            <AiButton size={32} />
             <button className="ib" aria-label="Proje ayarları" onClick={() => setProjMenu(!projMenu)}><Icon name="gear" /></button>
             <button className="ib" aria-label="Dışa aktar" onClick={openExport}><Icon name="export" /></button>
           </>

@@ -7,7 +7,9 @@ import { useStore } from '../store';
 import { newProject, TUTORIALS } from '../factories';
 import { setAnim, valueAt } from '../anim';
 
-export const APP_VERSION = '0.9';
+export const APP_VERSION = '0.10';
+/** Sürüm karşılaştırma: '0.10' > '0.9' */
+export const verGt = (a: string, b: string) => { const x = a.split('.').map(Number), y = b.split('.').map(Number); for (let i = 0; i < Math.max(x.length, y.length); i++) { if ((x[i] ?? 0) !== (y[i] ?? 0)) return (x[i] ?? 0) > (y[i] ?? 0); } return false; };
 
 // ---------------------------------------------------------------------------------------------
 // Ekran okuma
@@ -253,6 +255,12 @@ const INTRO_END: Step[] = [WHAT_NOW(false), pickTutorial()];
 /** Her güncellemede "yeni neler var" (en yeni en sonda) */
 export const WHATS_NEW: { v: string; items: Step[] }[] = [
   {
+    v: '0.10', items: [
+      { say: 'Büyük haber: artık benimle gerçekten konuşabilirsin! Sağ üstteki benim resmime dokun. Uygulamayla ilgili ne istersen sor, ya da "şöyle bir video yap" de, ben kurayım.', mood: 'excited', target: () => find('[aria-label="WardenCB ile konuş"]') },
+      { say: 'Bunun için bir kere ücretsiz bir yapay zekâ anahtarı girmen lazım; nasıl alınacağını orada anlatıyorum. Galeriden artık klasörlere de girebiliyorsun, bayraklar da donmadan açılıyor.', mood: 'happy' },
+    ],
+  },
+  {
     v: '0.9', items: [
       { say: 'Şimdi bu güncellemede neler geldiğini anlatayım! İlki benim: WardenCB. Öğreticilerde ekranında nereye basacağını gösteriyorum, yanlış yere girersen çıkış yolunu da. "Anlamadım" dersen adımı ben yaparım.', mood: 'proud' },
       { say: 'CB Araçları\'nda yeni "Pozlar" klasörü: 30 duygu, 30 poz. Projeye bütün gibi gelir ama iç, çizgi, göz ve ushanka ayrı katmanlardır.', mood: 'excited' },
@@ -360,11 +368,11 @@ const TUT_CB1 = (): Step[] => [
 export function buildScript(id: string, opts: { existing?: boolean; from?: string; pid?: string; tips?: string[] } = {}): Script | null {
   if (id === 'intro') {
     // Bu güncellemenin yenilikleri herkese anlatılır (yeni kullanıcıya da)
-    const news = WHATS_NEW.filter((w) => w.v === APP_VERSION || (opts.existing && (!opts.from || w.v > opts.from))).flatMap((w) => w.items);
+    const news = WHATS_NEW.filter((w) => w.v === APP_VERSION || (opts.existing && (!opts.from || verGt(w.v, opts.from)))).flatMap((w) => w.items);
     return { id, title: 'Tanışma', steps: [...INTRO, ...news, ...INTRO_END] };
   }
   if (id === 'whatsnew') {
-    const news = WHATS_NEW.filter((w) => !opts.from || w.v > opts.from).flatMap((w) => w.items);
+    const news = WHATS_NEW.filter((w) => !opts.from || verGt(w.v, opts.from)).flatMap((w) => w.items);
     return news.length ? { id, title: 'Yeni neler var', steps: [{ say: 'Selam! Uygulama güncellendi, yenilikleri anlatayım.', mood: 'wave' }, ...news, { say: 'Bu kadar, iyi eğlenceler!', mood: 'happy', btn: 'Bitir' }] } : null;
   }
   if (id === 'editor') return { id, title: 'Editör turu', steps: EDITOR_TOUR };

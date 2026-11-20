@@ -8,6 +8,25 @@ export function newProject(name: string, width: number, height: number, fps: num
 
 const A = (v: number) => ({ v });
 
+/**
+ * CB gövdesi: çizgi (kök) + beyaz iç (takip eder) [+ içe kırpılmış bayrak + gözler].
+ * Sıra alttan üste; "size" verilmezse projenin yarısı.
+ */
+export function cbBodyLayers(p: Project, t: number, dur: number, shape: string, flagSrc?: string, flagName?: string, size0?: number): { layers: Layer[]; rootId: string } {
+  const size = Math.round(size0 ?? Math.min(p.width, p.height) * 0.5);
+  const lineId = uid(), innerId = uid();
+  const line = { ...makeLayer(p, t, dur, { type: 'image', name: `${flagName ?? 'Gövde'} Çizgi`, src: `packs/hazir/govdeler/${shape}-cizgi.png`, w: size, h: size }), id: lineId };
+  const inner = { ...makeLayer(p, t, dur, { type: 'image', name: `${flagName ?? 'Gövde'} İç`, src: `packs/hazir/govdeler/${shape}-ic.png`, w: size, h: size }), id: innerId, parent: lineId, x: A(0), y: A(0) };
+  const extra: Layer[] = [];
+  if (flagSrc) {
+    // Basık gövde: bayrak alt kısımda (üstü beyaz), gözler kendi göz setinden ve gövdeye göre ölçülü yerinde
+    const wb = shape === 'wardencb';
+    extra.push({ ...makeLayer(p, t, dur, { type: 'image', name: `${flagName} Bayrak`, src: flagSrc, w: Math.round(size * (wb ? 1 : 1.34)), h: Math.round(size * (wb ? 0.68 : 1)) }), id: uid(), parent: lineId, mask: innerId, x: A(0), y: A(wb ? Math.round(size * 0.1) : 0) });
+    extra.push({ ...makeLayer(p, t, dur, { type: 'image', name: `${flagName} Gözler`, src: wb ? 'packs/hazir/gozler/wardencb-bakan.png' : 'packs/hazir/gozler/normal.png', w: Math.round(size * (wb ? 0.95 : 0.62)), h: Math.round(size * (wb ? 0.95 : 0.62)) }), id: uid(), parent: lineId, x: A(wb ? -Math.round(size * 0.0375) : 0), y: A(wb ? Math.round(size * 0.1125) : -Math.round(size * 0.06)) });
+  }
+  return { layers: [inner, ...extra.slice(0, 1), line, ...extra.slice(1)], rootId: lineId };
+}
+
 export function makeLayer(p: Project, start: number, dur: number, part: Partial<Layer> & Pick<Layer, 'type' | 'name'>): Omit<Layer, 'id'> {
   const size = Math.round(Math.min(p.width, p.height) * 0.35);
   return {

@@ -9,6 +9,7 @@ import { askConfirm } from '../dialog';
 import { replayIntro } from '../assistant/Assistant';
 import { APP_VERSION } from '../assistant/engine';
 import { WardenCB } from '../components/WardenCB';
+import { AiButton } from '../ai/Chat';
 import type { Project } from '../types';
 
 export function Thumb({ p, size = 80, t = 0.6, round = false }: { p: Project; size?: number; t?: number; round?: boolean }) {
@@ -58,7 +59,7 @@ export function Home() {
       <header className="home-top">
         <button className="ib" aria-label="Ayarlar menüsü" onClick={() => setDrawer(true)}><Icon name="menu" size={26} stroke={2} /></button>
         <div className="brand">Warden Motion{lite && <span className="badge" style={{ fontSize: 11 }}>Lite</span>}<img src="logo.png" alt="" /></div>
-        <div className="avatar" aria-hidden="true">W</div>
+        <AiButton size={40} />
       </header>
 
       <main className="home-body">

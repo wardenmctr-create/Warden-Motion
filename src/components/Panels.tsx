@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Icon } from './Icon';
 import { EASES, keyAt, segmentKey, setAnim, setEase, toggleKey, uid, valueAt } from '../anim';
 import { addUserFlag, addUserFolder, addUserPackItems, listUserFlags, listUserFolders, listUserPack, putMedia, removeUserPackItem, type UserFlag, type UserPackItem } from '../db';
-import { makeLayer, SHAPES } from '../factories';
+import { cbBodyLayers, makeLayer, SHAPES } from '../factories';
 import { resolveSrc } from '../render';
 import { addVertex, fillShape, regularPts, SHAPE_PARAMS, sp as shapeParam } from '../shapes';
 import { useStore } from '../store';
@@ -168,18 +168,8 @@ export function AddPanel({ tab, setTab, onClose, toast, replaceFlagOf }: { tab: 
 
   /** Gövde kur: çizgi (ebeveyn) + beyaz iç (takip eder) [+ bayrak iç'e kırpılmış] [+ gözler] */
   const buildBody = (shape: string, flagSrc?: string, flagName?: string) => {
-    const size = Math.round(Math.min(p.width, p.height) * 0.5);
-    const lineId = uid(), innerId = uid();
-    const line = { ...makeLayer(p, t, dur, { type: 'image', name: `${flagName ?? 'Gövde'} Çizgi`, src: `packs/hazir/govdeler/${shape}-cizgi.png`, w: size, h: size }), id: lineId };
-    const inner = { ...makeLayer(p, t, dur, { type: 'image', name: `${flagName ?? 'Gövde'} İç`, src: `packs/hazir/govdeler/${shape}-ic.png`, w: size, h: size }), id: innerId, parent: lineId, x: { v: 0 }, y: { v: 0 } };
-    const extra: Layer[] = [];
-    if (flagSrc) {
-      // Basık gövde: bayrak alt kısımda (üstü beyaz), gözler kendi göz setinden ve gövdeye göre ölçülü yerinde
-      const wb = shape === 'wardencb';
-      extra.push({ ...makeLayer(p, t, dur, { type: 'image', name: `${flagName} Bayrak`, src: flagSrc, w: Math.round(size * (wb ? 1 : 1.34)), h: Math.round(size * (wb ? 0.68 : 1)) }), id: uid(), parent: lineId, mask: innerId, x: { v: 0 }, y: { v: wb ? Math.round(size * 0.1) : 0 } });
-      extra.push({ ...makeLayer(p, t, dur, { type: 'image', name: `${flagName} Gözler`, src: wb ? 'packs/hazir/gozler/wardencb-bakan.png' : 'packs/hazir/gozler/normal.png', w: Math.round(size * (wb ? 0.95 : 0.62)), h: Math.round(size * (wb ? 0.95 : 0.62)) }), id: uid(), parent: lineId, x: { v: wb ? -Math.round(size * 0.0375) : 0 }, y: { v: wb ? Math.round(size * 0.1125) : -Math.round(size * 0.06) } });
-    }
-    s.update((pp) => ({ ...pp, layers: [...pp.layers, inner, ...extra.slice(0, 1), line, ...extra.slice(1)] }));
+    const { layers: made, rootId: lineId } = cbBodyLayers(p, t, dur, shape, flagSrc, flagName);
+    s.update((pp) => ({ ...pp, layers: [...pp.layers, ...made] }));
     s.select(lineId);
     toast(flagSrc ? 'CB hazır: çizgiyi taşıyınca hepsi birlikte hareket eder.' : 'Gövde kuruldu: iç, çizgiyi takip ediyor.');
     onClose();
