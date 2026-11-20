@@ -29,7 +29,7 @@ const useNow = () => {
 function Img({ src, alt }: { src: string; alt: string }) {
   const [url, setUrl] = useState(src.startsWith('media:') ? '' : src);
   useEffect(() => { if (src.startsWith('media:')) resolveSrc(src).then(setUrl); }, [src]);
-  return url ? <img src={url} alt={alt} loading="lazy" draggable={false} /> : null;
+  return url ? <img src={url} alt={alt} loading="lazy" decoding="async" draggable={false} /> : null;
 }
 
 function loadSize(src: string): Promise<{ w: number; h: number }> {
@@ -398,6 +398,8 @@ function FlagsTab({ onPick, toast, replace }: { onPick: (src: string, name: stri
   const [cont, setCont] = useState('Tümü');
   const [mine, setMine] = useState<UserFlag[]>([]);
   const [ask, setAsk] = useState<{ src: string; name: string } | null>(null);
+  const [showN, setShowN] = useState(25);
+  useEffect(() => setShowN(25), [q, cont]);
   const fileRef = useRef<HTMLInputElement>(null);
   useEffect(() => { fetch('flags/flags.json').then((r) => r.json()).then(setAll); listUserFlags().then(setMine); }, []);
   const dn = useMemo(() => { try { return new Intl.DisplayNames(['tr'], { type: 'region' }); } catch { return null; } }, []);
@@ -435,10 +437,11 @@ function FlagsTab({ onPick, toast, replace }: { onPick: (src: string, name: stri
           ...list.map((f) => ({ key: f.code, src: `flags/${f.code}.svg`, name: f.name })),
         ];
         if (!flagItems.length) return <p style={{ color: 'var(--d-text2)', fontSize: 13 }}>"{q}" için bayrak bulunamadı.</p>;
-        // Bayraklar aşağı kaydırılarak gezilir (arama + kıta filtresi üstte sabit)
+        // Bayraklar aşağı kaydırılarak gezilir (arama + kıta filtresi üstte sabit).
+        // Zayıf telefonlarda donmasın diye hepsi birden değil, kaydırdıkça parça parça çizilir.
         return (
-          <div className="flag-scroll">
-            {flagItems.map((f) => f.key === '__add' ? (
+          <div className="flag-scroll" onScroll={(e) => { const el = e.currentTarget; if (el.scrollTop + el.clientHeight > el.scrollHeight - 160) setShowN((n) => (n < flagItems.length ? n + 25 : n)); }}>
+            {flagItems.slice(0, showN).map((f) => f.key === '__add' ? (
               <button key={f.key} className="flag" onClick={() => fileRef.current?.click()}>
                 <span style={{ width: '100%', aspectRatio: '4/3', borderRadius: 4, border: '2px dashed var(--d-line)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--turq)' }}><Icon name="plus" /></span>Bayrak ekle
               </button>

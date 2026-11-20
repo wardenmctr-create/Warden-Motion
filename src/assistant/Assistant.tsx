@@ -112,12 +112,14 @@ export function Assistant() {
     setShown(0);
     if (!full) return;
     let i = 0;
+    // Zayıf cihazda (Lite) her adımda 3 harf: yazı takılmadan çıkar
+    const step = useStore.getState().settings.lite ? 3 : 1;
     const id = setInterval(() => {
-      i++;
-      if (i % 2) blip(full[i - 1] ?? '');
-      setShown(i);
+      i += step;
+      if (i % 2 || step > 1) blip(full[i - 1] ?? '');
+      setShown(Math.min(i, full.length));
       if (i >= full.length) clearInterval(id);
-    }, 26);
+    }, 22);
     return () => clearInterval(id);
   }, [full]);
   useEffect(() => {
@@ -231,7 +233,7 @@ export function Assistant() {
   const n = run.script.steps.length;
 
   return (
-    <div className="wa" aria-live="polite">
+    <div className={'wa' + (useStore.getState().settings.lite ? ' lite' : '')} aria-live="polite">
       {r && <div className={'wa-ring' + (view.recover ? ' warn' : '')} style={{ left: r.x - 6, top: r.y - 6, width: r.w + 12, height: r.h + 12 }} />}
       {arrow && (
         <svg className="wa-arrow" width={vw} height={vh} aria-hidden="true">
