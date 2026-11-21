@@ -95,11 +95,18 @@ export async function exportBackup(extra: Record<string, unknown> = {}, onlyIds?
   return { blob: new Blob([JSON.stringify(data)], { type: 'application/json' }), info: { projects: projects.length, media: Object.keys(media).length, pack: pack.index.length, flags: flags.length } };
 }
 /** Yedeği geri yükler: var olanlar silinmez, aynı projeler yedekteki hâliyle güncellenir */
-export async function importBackup(file: Blob): Promise<BackupInfo & { extra: Record<string, unknown> }> {
+/** keepBoth: aynı proje zaten varsa üstüne yazmak yerine yanına kopya olarak eklenir (proje dosyası açarken) */
+export async function importBackup(file: Blob, keepBoth = false): Promise<BackupInfo & { extra: Record<string, unknown>; names: string[] }> {
   const d = JSON.parse(await file.text());
   if (d?.app !== 'warden-motion') throw new Error('Bu bir Warden Motion yedeği değil.');
   for (const [k, v] of Object.entries((d.media ?? {}) as Record<string, string>)) await set(k, await dataToBlob(v), mediaStore);
-  for (const p of (d.projects ?? []) as Project[]) await saveProject(p);
+  const have = keepBoth ? new Set((await listProjects()).map((p) => p.id)) : null;
+  const names: string[] = [];
+  for (const p of (d.projects ?? []) as Project[]) {
+    if (have?.has(p.id)) await saveProject({ ...p, id: uid(), name: `${p.name} (dosyadan)`.slice(0, 40), updatedAt: Date.now() });
+    else await saveProject(p);
+    names.push(p.name);
+  }
   const idx = await listUserPack();
   const newItems = ((d.pack?.index ?? []) as UserPackItem[]).filter((i) => !idx.some((x) => x.id === i.id));
   await set('index', [...idx, ...newItems], packStore);
@@ -108,5 +115,5 @@ export async function importBackup(file: Blob): Promise<BackupInfo & { extra: Re
   const fl = await listUserFlags();
   await set('index', [...fl, ...((d.flags ?? []) as UserFlag[]).filter((f) => !fl.some((x) => x.id === f.id))], flagStore);
   const { app: _a, v: _v, date: _d, projects, media, pack, flags, ...extra } = d;
-  return { projects: projects?.length ?? 0, media: Object.keys(media ?? {}).length, pack: pack?.index?.length ?? 0, flags: flags?.length ?? 0, extra };
+  return { projects: projects?.length ?? 0, media: Object.keys(media ?? {}).length, pack: pack?.index?.length ?? 0, flags: flags?.length ?? 0, extra, names };
 }

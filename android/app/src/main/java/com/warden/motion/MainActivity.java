@@ -23,6 +23,7 @@ public class MainActivity extends BridgeActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        registerPlugin(SaveToPlugin.class); // proje dosyasını Drive / Files'a kaydetme
         super.onCreate(savedInstanceState);
         picker = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             ValueCallback<Uri[]> cb = pending;

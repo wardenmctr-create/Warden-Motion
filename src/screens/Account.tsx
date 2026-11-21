@@ -97,7 +97,7 @@ export function AccountScreen() {
       <div className="acc-card">
         <div className="acc-row"><Icon name="undo" size={22} /><div><b>Yedekten geri yükle</b><span>Yeni telefona geçince ya da uygulamayı silip yükleyince yedeğini Drive'dan seç.</span></div></div>
         <button className="btn ghost" disabled={!!busy} onClick={() => restoreRef.current?.click()}>Yedek dosyası seç</button>
-        <input ref={restoreRef} type="file" accept="application/json,.json" hidden onChange={(e) => { const f = e.target.files?.[0]; if (f) restore(f); e.target.value = ''; }} />
+        <input ref={restoreRef} type="file" accept=".wmproje,application/json,.json" hidden onChange={(e) => { const f = e.target.files?.[0]; if (f) restore(f); e.target.value = ''; }} />
       </div>
 
       {msg && <div className="acc-msg" role="status">{msg}</div>}

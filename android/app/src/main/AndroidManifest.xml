@@ -39,4 +39,9 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!-- Google Drive yüklü mü bakabilmek için -->
+    <queries>
+        <package android:name="com.google.android.apps.docs" />
+    </queries>
+
 </manifest>
