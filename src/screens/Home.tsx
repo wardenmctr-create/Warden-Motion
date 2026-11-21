@@ -408,7 +408,7 @@ function LiteBadge() {
         {/* harflerin kenarından içeri yayılan ışık */}
         <text x="22" y="15.6" textAnchor="middle" fontSize="13.5" fontWeight="800" fontFamily="Inter, system-ui, sans-serif" fill="none" stroke="#5FD8FF" strokeWidth="3.2" letterSpacing=".3" filter="url(#liteblur)" opacity=".85">Lite</text>
         {/* rozetin kenarında içe doğru hafif ışık */}
-        <rect x=".5" y=".5" width="43" height="21" rx="6.5" fill="none" stroke="#4FC3FF" strokeWidth="1.6" filter="url(#liteblur)" opacity=".55" />
+        <rect width="44" height="22" rx="7" fill="none" stroke="#5FD8FF" strokeWidth="4.4" filter="url(#liteblur)" opacity=".85" />
       </g>
     </svg>
   );
