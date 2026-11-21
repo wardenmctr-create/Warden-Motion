@@ -8,7 +8,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 13
-        versionName "0.13"
+        versionName "0.11.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
@@ -17,24 +17,8 @@ android {
         }
     }
     // Sabit imza: güncellemeler eskisinin üstüne kurulur; WardenCB Beyin ile köprü aynı imzaya güvenir
-    // Sabit imza anahtarı keystore/ klasöründe durur ve depoya gönderilmez. Yoksa normal hata ayıklama imzası kullanılır.
-    def ksProps = new Properties()
-    def ksFile = file('../../keystore/keystore.properties')
-    if (ksFile.exists()) ksFile.withInputStream { ksProps.load(it) }
-    signingConfigs {
-        warden {
-            if (ksFile.exists()) {
-                storeFile file('../../keystore/' + ksProps['storeFile'])
-                storePassword ksProps['storePassword']
-                keyAlias ksProps['keyAlias']
-                keyPassword ksProps['keyPassword']
-            }
-        }
-    }
     buildTypes {
-        debug { if (ksFile.exists()) signingConfig signingConfigs.warden }
         release {
-            if (ksFile.exists()) signingConfig signingConfigs.warden
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }

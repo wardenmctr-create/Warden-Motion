@@ -9,7 +9,6 @@ import { askConfirm } from '../dialog';
 import { replayIntro } from '../assistant/Assistant';
 import { APP_VERSION } from '../assistant/engine';
 import { WardenCB } from '../components/WardenCB';
-import { AiButton } from '../ai/Chat';
 import { AccountAvatar, AccountScreen } from './Account';
 import type { Project } from '../types';
 
@@ -61,7 +60,7 @@ export function Home() {
       <header className="home-top">
         <button className="ib" aria-label="Ayarlar menüsü" onClick={() => setDrawer(true)}><Icon name="menu" size={26} stroke={2} /></button>
         <div className="brand">Warden Motion{lite && <span className="badge" style={{ fontSize: 11 }}>Lite</span>}<img src="logo.png" alt="" /></div>
-        <AiButton size={40} />
+        <button className="ib" aria-label="Hesap" onClick={() => go('account')} style={{ width: 44, height: 44 }}><AccountAvatar size={34} /></button>
       </header>
 
       <main className="home-body">

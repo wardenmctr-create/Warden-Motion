@@ -23,7 +23,6 @@ public class MainActivity extends BridgeActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        registerPlugin(BrainPlugin.class); // WardenCB Beyin köprüsü
         super.onCreate(savedInstanceState);
         picker = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             ValueCallback<Uri[]> cb = pending;

@@ -39,10 +39,4 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
-    <!-- WardenCB Beyin köprüsü: aynı imzalı iki uygulama arasında (hangisi önce yüklenirse yüklensin izin tanımlı olsun) -->
-    <permission android:name="com.warden.permission.BRAIN" android:protectionLevel="signature" />
-    <uses-permission android:name="com.warden.permission.BRAIN" />
-    <queries>
-        <package android:name="com.warden.brain" />
-    </queries>
 </manifest>
