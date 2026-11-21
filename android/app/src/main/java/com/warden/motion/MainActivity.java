@@ -44,6 +44,8 @@ public class MainActivity extends BridgeActivity {
             cb.onReceiveValue(uris);
         });
         WebView wv = getBridge().getWebView();
+        // Telefonun yazı boyutu ayarı uygulamanın düzenini bozmasın (her telefonda aynı görünüm)
+        wv.getSettings().setTextZoom(100);
         wv.setWebChromeClient(new BridgeWebChromeClient(getBridge()) {
             @Override
             public boolean onShowFileChooser(WebView view, ValueCallback<Uri[]> callback, WebChromeClient.FileChooserParams params) {

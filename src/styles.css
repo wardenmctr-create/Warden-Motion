@@ -788,3 +788,8 @@ body.psel-on .nav { visibility: hidden; }
 .ms-add { position: absolute; left: 50%; bottom: calc(16px + var(--safe-bottom)); transform: translateX(-50%); min-width: 160px; }
 .ms-busy { position: absolute; inset: 0; background: rgba(18, 29, 64, .82); display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: 700; }
 .ms-spin { width: 22px; height: 22px; border-radius: 50%; border: 3px solid #2C3E78; border-top-color: #22D3C5; animation: acc-spin .8s linear infinite; }
+/* Sayfa asla yana kaymaz, sadece yukarı-aşağı */
+html, body { overflow-x: hidden; max-width: 100%; }
+#root, .home { max-width: 100vw; overflow-x: clip; }
+.home-body { overflow-x: clip; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
