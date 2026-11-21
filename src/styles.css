@@ -751,5 +751,5 @@ body.psel-on .nav { visibility: hidden; }
 .home-top { position: relative; }
 .home-top > .brand { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); padding-left: 0; display: block; line-height: 1.2; white-space: nowrap; }
 .brand-text { position: relative; z-index: 3; }
-.home-top > .brand .brand-mark { left: -49px; top: calc(50% - 26px); width: 45px !important; z-index: 2; }
+.home-top > .brand .brand-mark { left: -1.12em; top: -0.66em; width: 2.5em !important; z-index: 2; }
 .lite-badge { position: absolute; left: calc(100% + 7px); top: 50%; transform: translateY(-50%); display: block; }
