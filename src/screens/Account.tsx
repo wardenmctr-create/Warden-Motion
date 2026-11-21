@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Icon } from '../components/Icon';
 import { downscale, exportBackup, importBackup, listProjects, listUserFlags, listUserPack } from '../db';
 import { saveFile } from '../export';
+import { pickInto } from '../gallery';
 import { askConfirm } from '../dialog';
 
 // ---------- Profil (bu cihazda) ----------
@@ -70,7 +71,7 @@ export function AccountScreen() {
   return (
     <div className="acc">
       <div className="acc-head">
-        <button className="acc-photo" aria-label="Profil fotoğrafını değiştir" onClick={() => photoRef.current?.click()}>
+        <button className="acc-photo" aria-label="Profil fotoğrafını değiştir" onClick={() => pickInto(photoRef.current, { kind: 'image', title: 'Profil fotoğrafı' })}>
           <AccountAvatar size={104} profile={p} />
           <span className="acc-cam"><Icon name="image" size={16} /></span>
         </button>

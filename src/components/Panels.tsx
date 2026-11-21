@@ -7,6 +7,7 @@ import { resolveSrc } from '../render';
 import { addVertex, fillShape, regularPts, SHAPE_PARAMS, sp as shapeParam } from '../shapes';
 import { useStore } from '../store';
 import { askText } from '../dialog';
+import { pickInto } from '../gallery';
 import { FEATURED, FX, FX_CATS, fxMeta, fxVal, makeEffect, paramKeys, type FxParam } from '../effects';
 import type { AnimProp, Effect, FxType, Layer, Project, ShapeKind } from '../types';
 
@@ -257,7 +258,7 @@ function MediaTab({ onPick }: { onPick: (src: string, name: string, kind: 'image
       </div>
       <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 6 }}>
         <div className="mstrip">
-          <button className="mthumb add" aria-label="Galeriden seç" onClick={() => ref.current?.click()}><Icon name="plus" size={24} /></button>
+          <button className="mthumb add" aria-label="Galeriden seç" onClick={() => pickInto(ref.current, { kind: 'any', title: 'Görsel ya da video ekle' })}><Icon name="plus" size={24} /></button>
           {recent.map((m) => (
             <button key={m.src} className="mthumb" aria-label={m.name} onClick={() => onPick(m.src, m.name, m.kind)}>
               {m.kind === 'video' ? <span className="vbadge"><Icon name="play" size={12} /></span> : null}
@@ -265,7 +266,7 @@ function MediaTab({ onPick }: { onPick: (src: string, name: string, kind: 'image
             </button>
           ))}
         </div>
-        <button className="mall" onClick={() => ref.current?.click()}><Icon name="grid" size={16} />Tüm fotoğraf ve videoları görüntüle</button>
+        <button className="mall" onClick={() => pickInto(ref.current, { kind: 'any', title: 'Görsel ya da video ekle' })}><Icon name="grid" size={16} />Tüm fotoğraf ve videoları görüntüle</button>
       </div>
       <input ref={ref} type="file" accept="image/*,video/*" hidden onChange={async (e) => { const f = e.target.files?.[0]; if (f) await pickFile(f); e.target.value = ''; }} />
     </div>
@@ -360,7 +361,7 @@ function CBTab({ onPick, onBody, toast }: { onPick: (it: PackItem) => void; onBo
         keyOf={(it) => it.src}
         render={(it) => it.src === '__upload' ? (
           <>
-            <button className="thumb upl" style={{ width: '100%' }} onClick={() => fileRef.current?.click()}><Icon name="upload" size={22} /></button>
+            <button className="thumb upl" style={{ width: '100%' }} onClick={() => pickInto(fileRef.current, { kind: 'image', multiple: true, title: 'PNG yükle' })}><Icon name="upload" size={22} /></button>
             <div className="tlabel">Galeriden yükle</div>
           </>
         ) : (
@@ -432,7 +433,7 @@ function FlagsTab({ onPick, toast, replace }: { onPick: (src: string, name: stri
         return (
           <div className="flag-scroll" onScroll={(e) => { const el = e.currentTarget; if (el.scrollTop + el.clientHeight > el.scrollHeight - 160) setShowN((n) => (n < flagItems.length ? n + 25 : n)); }}>
             {flagItems.slice(0, showN).map((f) => f.key === '__add' ? (
-              <button key={f.key} className="flag" onClick={() => fileRef.current?.click()}>
+              <button key={f.key} className="flag" onClick={() => pickInto(fileRef.current, { kind: 'image', title: 'Bayrak ekle' })}>
                 <span style={{ width: '100%', aspectRatio: '4/3', borderRadius: 4, border: '2px dashed var(--d-line)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--turq)' }}><Icon name="plus" /></span>Bayrak ekle
               </button>
             ) : (

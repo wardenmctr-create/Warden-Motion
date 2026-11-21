@@ -753,3 +753,38 @@ body.psel-on .nav { visibility: hidden; }
 .brand-text { position: relative; z-index: 3; }
 .home-top > .brand .brand-mark { left: -1.12em; top: -0.66em; width: 2.5em !important; z-index: 2; }
 .lite-badge { position: absolute; left: calc(100% + 7px); top: 50%; transform: translateY(-50%); display: block; }
+
+/* ---------- Uygulama içi galeri (ekranın 3/4'ü) ---------- */
+.ms-scrim { position: fixed; inset: 0; z-index: 960; background: rgba(11, 20, 48, .45); display: flex; align-items: flex-end; justify-content: center; animation: pm-fade .15s; }
+.ms { position: relative; width: min(620px, 100%); height: 75vh; background: #121D40; color: #DCE9FF; border-radius: 20px 20px 0 0; display: flex; flex-direction: column; overflow: hidden; padding-bottom: var(--safe-bottom); animation: aic-up .22s ease-out; }
+.ms-grab { width: 42px; height: 5px; border-radius: 3px; background: #2C3E78; margin: 8px auto 0; flex: none; }
+.ms-head { display: flex; align-items: center; padding: 4px 8px 0 18px; height: 48px; flex: none; }
+.ms-head b { font-size: 18px; }
+.ms-head .ib { color: #8FA6D6; }
+.ms-btns { display: flex; gap: 10px; padding: 4px 14px 10px; flex: none; }
+.ms-btns button { flex: 1; height: 46px; border-radius: 14px; border: 1.5px solid #2C3E78; background: #1E2A55; color: #DCE9FF; font: inherit; font-size: 14.5px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; }
+.ms-btns button:active { background: #22D3C5; color: #0B1430; }
+.ms-gp { width: 20px; height: 20px; border-radius: 50%; background: conic-gradient(#EA4335 0 25%, #FBBC05 0 50%, #34A853 0 75%, #4285F4 0); -webkit-mask: radial-gradient(circle, transparent 4px, #000 5px); mask: radial-gradient(circle, transparent 4px, #000 5px); }
+.ms-albums { display: flex; gap: 6px; overflow-x: auto; padding: 0 14px 10px; scrollbar-width: none; flex: none; }
+.ms-albums button { flex: none; height: 32px; padding: 0 14px; border-radius: 16px; border: 0; background: #1E2A55; color: #8FA6D6; font: inherit; font-size: 13px; font-weight: 600; white-space: nowrap; cursor: pointer; }
+.ms-albums button.on { background: #22D3C5; color: #0B1430; }
+.ms-grid { flex: 1; overflow-y: auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; padding: 0 2px 80px; align-content: start; overscroll-behavior: contain; }
+.ms-tile { position: relative; aspect-ratio: 1; border: 0; padding: 0; background: #1E2A55; overflow: hidden; cursor: pointer; }
+.ms-tile img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ms-tile.on img { transform: scale(.86); border-radius: 8px; }
+.ms-tile.on { background: #22D3C5; }
+.ms-ph { display: block; width: 100%; height: 100%; background: linear-gradient(110deg, #1E2A55 40%, #26346A 50%, #1E2A55 60%); background-size: 200% 100%; animation: ms-shine 1.2s linear infinite; }
+@keyframes ms-shine { to { background-position: -200% 0; } }
+.ms-dur { position: absolute; right: 4px; bottom: 4px; display: flex; align-items: center; gap: 2px; font-size: 11px; font-weight: 700; color: #EEF4FF; background: rgba(11, 20, 48, .6); padding: 1px 5px; border-radius: 6px; }
+.ms-num { position: absolute; right: 5px; top: 5px; width: 22px; height: 22px; border-radius: 50%; background: #22D3C5; color: #0B1430; font-size: 12px; font-weight: 800; display: flex; align-items: center; justify-content: center; border: 2px solid #121D40; }
+.ms-perm { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 24px; text-align: center; color: #8FA6D6; }
+.ms-perm b { color: #DCE9FF; font-size: 17px; }
+.ms-perm span { font-size: 13.5px; line-height: 1.45; max-width: 320px; }
+.ms-partial { display: flex; align-items: center; gap: 8px; margin: 0 14px 10px; padding: 8px 10px; border-radius: 12px; background: #1E2A55; font-size: 12.5px; color: #8FA6D6; flex: none; }
+.ms-partial span { flex: 1; }
+.ms-partial button { border: 0; background: none; color: #22D3C5; font: inherit; font-weight: 700; cursor: pointer; }
+.ms-empty { grid-column: 1 / -1; text-align: center; color: #8FA6D6; font-size: 13px; padding: 30px 0; }
+.ms-err { position: absolute; left: 14px; right: 14px; bottom: 74px; background: #3A2A10; color: #F7D774; border-radius: 12px; padding: 8px 12px; font-size: 13px; }
+.ms-add { position: absolute; left: 50%; bottom: calc(16px + var(--safe-bottom)); transform: translateX(-50%); min-width: 160px; }
+.ms-busy { position: absolute; inset: 0; background: rgba(18, 29, 64, .82); display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: 700; }
+.ms-spin { width: 22px; height: 22px; border-radius: 50%; border: 3px solid #2C3E78; border-top-color: #22D3C5; animation: acc-spin .8s linear infinite; }

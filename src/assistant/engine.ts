@@ -7,7 +7,7 @@ import { useStore } from '../store';
 import { newProject, TUTORIALS } from '../factories';
 import { setAnim, valueAt } from '../anim';
 
-export const APP_VERSION = '0.13';
+export const APP_VERSION = '0.14';
 /** Sürüm karşılaştırma: '0.10' > '0.9' */
 export const verGt = (a: string, b: string) => { const x = a.split('.').map(Number), y = b.split('.').map(Number); for (let i = 0; i < Math.max(x.length, y.length); i++) { if ((x[i] ?? 0) !== (y[i] ?? 0)) return (x[i] ?? 0) > (y[i] ?? 0); } return false; };
 
@@ -255,6 +255,12 @@ const INTRO_END: Step[] = [WHAT_NOW(false), pickTutorial()];
 /** Her güncellemede "yeni neler var" (en yeni en sonda) */
 type News = { v: string; items: Step[] };
 export const WHATS_NEW: News[] = [
+  {
+    v: '0.14', items: [
+      { say: 'Fotoğraf ya da video eklerken artık uygulamadan çıkmıyorsun: galerin uygulamanın içinde açılıyor, albümlere göre de bakabiliyorsun.', mood: 'excited' },
+      { say: 'Galerinin üstünde iki düğme var: "Dosyalar" klasörlerden seçtirir, "Google Fotoğraflar" da Google Fotoğraflar\'ı açar.', mood: 'happy' },
+    ],
+  },
   {
     v: '0.13', items: [
       { say: '⋯ menüsündeki "Hesaba Ekle" ile projenin kendisini (video değil) Google Drive\'a ya da Google Files ile telefonuna kaydedebilirsin.', mood: 'happy', target: () => find('.pmore') },
