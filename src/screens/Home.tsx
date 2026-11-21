@@ -393,15 +393,23 @@ function ProjectImport({ onDone }: { onDone: () => void }) {
   );
 }
 
-/** Lite rozeti: elektrik mavisi, "Lite" yazısı oyuk (arkası görünür), etrafı parlar */
+/** Lite rozeti: elektrik mavisi, "Lite" yazısı oyuk; parlama dışa değil, harflerin kenarından rozetin içine doğru */
 function LiteBadge() {
   return (
     <svg className="lite-badge" width="44" height="22" viewBox="0 0 44 22" role="img" aria-label="Lite">
       <defs>
-        <linearGradient id="liteg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#3FD0FF" /><stop offset="1" stopColor="#1F6BFF" /></linearGradient>
+        <linearGradient id="liteg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#2A7BEA" /><stop offset="1" stopColor="#1D55C9" /></linearGradient>
         <mask id="litem"><rect width="44" height="22" fill="#fff" /><text x="22" y="15.6" textAnchor="middle" fontSize="13.5" fontWeight="800" fontFamily="Inter, system-ui, sans-serif" fill="#000" letterSpacing=".3">Lite</text></mask>
+        <filter id="liteblur" x="-20%" y="-40%" width="140%" height="180%"><feGaussianBlur stdDeviation="1.6" /></filter>
+        <clipPath id="liteclip"><rect width="44" height="22" rx="7" /></clipPath>
       </defs>
-      <rect width="44" height="22" rx="7" fill="url(#liteg)" mask="url(#litem)" />
+      <g clipPath="url(#liteclip)" mask="url(#litem)">
+        <rect width="44" height="22" fill="url(#liteg)" />
+        {/* harflerin kenarından içeri yayılan ışık */}
+        <text x="22" y="15.6" textAnchor="middle" fontSize="13.5" fontWeight="800" fontFamily="Inter, system-ui, sans-serif" fill="none" stroke="#5FD8FF" strokeWidth="3.2" letterSpacing=".3" filter="url(#liteblur)" opacity=".85">Lite</text>
+        {/* rozetin kenarında içe doğru hafif ışık */}
+        <rect x=".5" y=".5" width="43" height="21" rx="6.5" fill="none" stroke="#4FC3FF" strokeWidth="1.6" filter="url(#liteblur)" opacity=".55" />
+      </g>
     </svg>
   );
 }

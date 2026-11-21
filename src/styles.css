@@ -750,7 +750,6 @@ body.psel-on .nav { visibility: hidden; }
 /* Başlık: "Warden Motion" tam ortada; logo ve Lite ortalamayı etkilemez */
 .home-top { position: relative; }
 .home-top > .brand { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); padding-left: 0; display: block; line-height: 1.2; white-space: nowrap; }
-.brand-text { position: relative; z-index: 3; text-shadow: 0 0 2px var(--l-bg), 0 0 2px var(--l-bg), 0 0 3px var(--l-bg); }
-.home-top > .brand .brand-mark { left: -15px; top: calc(50% - 26px); width: 45px !important; z-index: 2; }
-.lite-badge { position: absolute; left: calc(100% + 7px); top: 50%; transform: translateY(-50%); display: block; filter: drop-shadow(0 0 3px rgba(63, 208, 255, .95)) drop-shadow(0 0 9px rgba(31, 107, 255, .75)); animation: lite-glow 2.4s ease-in-out infinite; }
-@keyframes lite-glow { 50% { filter: drop-shadow(0 0 5px rgba(63, 208, 255, 1)) drop-shadow(0 0 14px rgba(31, 107, 255, .9)); } }
+.brand-text { position: relative; z-index: 3; }
+.home-top > .brand .brand-mark { left: -49px; top: calc(50% - 26px); width: 45px !important; z-index: 2; }
+.lite-badge { position: absolute; left: calc(100% + 7px); top: 50%; transform: translateY(-50%); display: block; }
