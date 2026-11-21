@@ -3,6 +3,7 @@ import { create } from 'zustand';
 import { WardenCB, POSES, type Mood } from '../components/WardenCB';
 import { Icon } from '../components/Icon';
 import { useStore } from '../store';
+import { AI_ENABLED } from '../features';
 import { AiError, aiConfigured, askAI, DEFAULT_MODEL, KEY_URL, loadAi, type Msg, type Provider, saveAi } from './client';
 import { brainStatus, brainSupported, openBrain, type BrainStatus } from './brain';
 import { systemPrompt } from './prompt';
@@ -127,6 +128,11 @@ function Settings({ onDone }: { onDone: () => void }) {
 }
 
 export function AiChat() {
+  if (!AI_ENABLED) return null;
+  return <AiChatInner />;
+}
+
+function AiChatInner() {
   const { open, msgs, busy, partial, setOpen, clear } = useChat();
   const [text, setText] = useState('');
   const [settings, setSettings] = useState(false);
@@ -186,6 +192,7 @@ export function AiChat() {
 
 /** WardenCB ile konuşma düğmesi (ana sayfa ve editörün üst çubuğu) */
 export function AiButton({ size = 34 }: { size?: number }) {
+  if (!AI_ENABLED) return null;
   const setOpen = useChat((s) => s.setOpen);
   return (
     <button className="ib aic-btn" aria-label="WardenCB ile konuş" onClick={() => { useStore.getState().setPlaying(false); setOpen(true); }}>
