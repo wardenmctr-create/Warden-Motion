@@ -7,7 +7,7 @@ import { useStore } from '../store';
 import { newProject, TUTORIALS } from '../factories';
 import { setAnim, valueAt } from '../anim';
 
-export const APP_VERSION = '0.11';
+export const APP_VERSION = '0.12';
 /** Sürüm karşılaştırma: '0.10' > '0.9' */
 export const verGt = (a: string, b: string) => { const x = a.split('.').map(Number), y = b.split('.').map(Number); for (let i = 0; i < Math.max(x.length, y.length); i++) { if ((x[i] ?? 0) !== (y[i] ?? 0)) return (x[i] ?? 0) > (y[i] ?? 0); } return false; };
 
@@ -255,6 +255,12 @@ const INTRO_END: Step[] = [WHAT_NOW(false), pickTutorial()];
 /** Her güncellemede "yeni neler var" (en yeni en sonda) */
 type News = { v: string; items: Step[] };
 export const WHATS_NEW: News[] = [
+  {
+    v: '0.12', items: [
+      { say: 'Projelerin yanında artık ⋯ var: dokununca Seç, Dışa Aktar, Çoğalt, Buluta Yükle ve Sil çıkar.', mood: 'happy', target: () => find('.pmore') },
+      { say: 'Bir projeye basılı tutunca seçilir. Sonra diğerlerine dokunarak seçip kaldırabilir; alttan hepsini birden çoğaltıp, dışa aktarıp silebilirsin.', mood: 'wink' },
+    ],
+  },
   {
     v: '0.11', items: [
       { say: 'Artık bir hesabın var! Alttaki dönen halkalı simgeye dokun: adını yaz, profil fotoğrafını seç.', mood: 'excited', target: () => find('.nav .accbtn') },

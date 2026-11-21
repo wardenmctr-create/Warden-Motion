@@ -83,12 +83,14 @@ const dataToBlob = async (d: string) => (await fetch(d)).blob();
 
 export interface BackupInfo { projects: number; media: number; pack: number; flags: number }
 /** Bütün projeler, galeriden eklenenler, yüklediğim pack ve bayraklar tek dosyada */
-export async function exportBackup(extra: Record<string, unknown> = {}): Promise<{ blob: Blob; info: BackupInfo }> {
-  const projects = await listProjects();
+export async function exportBackup(extra: Record<string, unknown> = {}, onlyIds?: string[]): Promise<{ blob: Blob; info: BackupInfo }> {
+  const projects = (await listProjects()).filter((p) => !onlyIds || onlyIds.includes(p.id));
+  // Sadece seçilen projeler yedekleniyorsa yalnızca onların kullandığı görseller eklenir
+  const used = onlyIds ? new Set(projects.flatMap((p) => p.layers.map((l) => l.src ?? '')).filter((s) => s.startsWith('media:')).map((s) => s.slice(6))) : null;
   const media: Record<string, string> = {};
-  for (const k of await keys(mediaStore)) { const b = await get<Blob>(k, mediaStore); if (b) media[String(k)] = await blobToData(b); }
-  const pack = { index: await listUserPack(), folders: (await get<string[]>('folders', packStore)) ?? [] };
-  const flags = await listUserFlags();
+  for (const k of await keys(mediaStore)) { if (used && !used.has(String(k))) continue; const b = await get<Blob>(k, mediaStore); if (b) media[String(k)] = await blobToData(b); }
+  const pack = onlyIds ? { index: [], folders: [] } : { index: await listUserPack(), folders: (await get<string[]>('folders', packStore)) ?? [] };
+  const flags = onlyIds ? [] : await listUserFlags();
   const data = { app: 'warden-motion', v: 1, date: Date.now(), projects, media, pack, flags, ...extra };
   return { blob: new Blob([JSON.stringify(data)], { type: 'application/json' }), info: { projects: projects.length, media: Object.keys(media).length, pack: pack.index.length, flags: flags.length } };
 }

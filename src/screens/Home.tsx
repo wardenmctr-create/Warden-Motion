@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Icon } from '../components/Icon';
-import { deleteProject, listProjects } from '../db';
+import { deleteProject, exportBackup, listProjects, saveProject } from '../db';
+import { uid } from '../anim';
+import { saveFile } from '../export';
 import { newProject, TEMPLATES, TUTORIALS, type Tutorial } from '../factories';
 import { fmtTime, projectDuration } from '../anim';
 import { renderFrame, setImageLoadedHandler } from '../render';
@@ -105,21 +107,7 @@ export function Home() {
 
             <div className="sec-head"><h2>Son projeler</h2><span>{projects.length} proje</span></div>
             <button className="new-card" onClick={() => setSheet(true)}><span className="dot-plus"><Icon name="plus" size={18} stroke={2.4} /></span>Yeni Proje Oluştur</button>
-            <div className="plist">
-              {projects.map((p) => (
-                <div key={p.id} style={{ position: 'relative' }}>
-                  <button className="pcard" data-pid={p.id} onClick={() => open(p)}>
-                    <div className="pthumb"><Thumb p={p} /><span className="dur">{fmtTime(projectDuration(p), p.fps)}</span></div>
-                    <div className="pmeta">
-                      <b>{p.name}</b>
-                      <span>{p.width}x{p.height} · {p.fps}fps</span>
-                      <span>{p.layers.length} katman · {new Date(p.updatedAt).toLocaleDateString('tr-TR')}</span>
-                    </div>
-                  </button>
-                  <button className="ib pdel" aria-label={`${p.name} projesini sil`} onClick={async () => { if (await askConfirm('Proje silinsin mi?', `"${p.name}" kalıcı olarak silinecek.`, 'Sil')) { await deleteProject(p.id); refresh(); } }}><Icon name="trash" size={18} /></button>
-                </div>
-              ))}
-            </div>
+            <ProjectList projects={projects} refresh={refresh} />
             {!projects.length && <p className="empty">Henüz proje yok. Yukarıdaki şablonlardan birini aç ya da yeni proje oluştur.</p>}
           </>
         )}
@@ -233,6 +221,130 @@ function SettingsDrawer({ onClose }: { onClose: () => void }) {
           <span style={{ fontSize: 13, color: 'var(--l-text2)' }}>React, Zustand, Capacitor, idb-keyval, flag-icons (MIT)</span>
         </div>
       </aside>
+    </>
+  );
+}
+
+// ---------- Projeler: ⋯ menüsü ve basılı tutarak çoklu seçim ----------
+function ProjectList({ projects, refresh }: { projects: Project[]; refresh: () => void }) {
+  const open = useStore((x) => x.open);
+  const [sel, setSel] = useState<Set<string> | null>(null);
+  const [menu, setMenu] = useState<{ p: Project; x: number; y: number; up: boolean } | null>(null);
+  const [note, setNote] = useState('');
+  const press = useRef<{ id: string; t: ReturnType<typeof setTimeout>; x: number; y: number; fired: boolean } | null>(null);
+  const say = (m: string) => { setNote(m); setTimeout(() => setNote(''), 3200); };
+  // Android geri tuşu: önce menü, sonra seçim kapanır
+  const st = useRef({ sel, menu }); st.current = { sel, menu };
+  useEffect(() => {
+    const fn = (e: Event) => {
+      if (st.current.menu) { setMenu(null); e.preventDefault(); }
+      else if (st.current.sel) { setSel(null); e.preventDefault(); }
+    };
+    addEventListener('wm-back', fn);
+    return () => removeEventListener('wm-back', fn);
+  }, []);
+
+  const toggle = (id: string) => setSel((s0) => {
+    const s1 = new Set(s0 ?? []);
+    if (s1.has(id)) s1.delete(id); else s1.add(id);
+    return s1.size ? s1 : null;
+  });
+  const duplicate = async (ps: Project[]) => {
+    for (const p of ps) await saveProject({ ...structuredClone(p), id: uid(), name: `${p.name} (kopya)`.slice(0, 40), updatedAt: Date.now() });
+    refresh(); say(ps.length > 1 ? `${ps.length} proje çoğaltıldı.` : 'Proje çoğaltıldı.');
+  };
+  const remove = async (ps: Project[]) => {
+    const one = ps.length === 1;
+    if (!(await askConfirm(one ? 'Proje silinsin mi?' : `${ps.length} proje silinsin mi?`, one ? `"${ps[0].name}" kalıcı olarak silinecek.` : 'Seçilen projeler kalıcı olarak silinecek.', 'Sil'))) return;
+    for (const p of ps) await deleteProject(p.id);
+    setSel(null); refresh();
+  };
+  const upload = async (ps: Project[]) => {
+    say('Hazırlanıyor…');
+    const { blob } = await exportBackup({}, ps.map((p) => p.id));
+    const safe = (ps.length === 1 ? ps[0].name : `${ps.length}-proje`).replace(/[^\p{L}\p{N}]+/gu, '-').slice(0, 30);
+    const r = await saveFile(blob, `WardenMotion-${safe}.json`);
+    say(r.includes('Paylaşım') ? 'Açılan menüden "Drive\'a kaydet"i seç.' : r);
+  };
+  const exportVideo = (p: Project) => { useStore.setState({ autoExport: true }); open(p); };
+
+  const down = (e: React.PointerEvent, p: Project) => {
+    const t = setTimeout(() => {
+      if (!press.current) return;
+      press.current.fired = true;
+      navigator.vibrate?.(25);
+      toggle(p.id);
+    }, 450);
+    press.current = { id: p.id, t, x: e.clientX, y: e.clientY, fired: false };
+  };
+  const move = (e: React.PointerEvent) => { const pr = press.current; if (pr && Math.hypot(e.clientX - pr.x, e.clientY - pr.y) > 10) { clearTimeout(pr.t); press.current = null; } };
+  const up = () => { if (press.current && !press.current.fired) clearTimeout(press.current.t); };
+  const click = (p: Project) => {
+    const pr = press.current; press.current = null;
+    if (pr?.fired) return; // basılı tutma seçti, tıklama sayılmaz
+    if (sel) toggle(p.id); else open(p);
+  };
+  const chosen = projects.filter((p) => sel?.has(p.id));
+  useEffect(() => { document.body.classList.toggle('psel-on', !!sel); return () => document.body.classList.remove('psel-on'); }, [!!sel]);
+
+  return (
+    <>
+      {sel && (
+        <div className="selbar" role="toolbar" aria-label="Seçili projeler">
+          <b>{sel.size} seçildi</b>
+          <span style={{ flex: 1 }} />
+          <button className="seltxt" onClick={() => setSel(null)}>İptal</button>
+        </div>
+      )}
+      {sel && (
+        <div className="selacts" role="toolbar" aria-label="Seçilenlerle yap">
+          <button onClick={() => upload(chosen)}><Icon name="share" size={24} stroke={1.7} />Dışa Aktar</button>
+          <button onClick={() => duplicate(chosen)}><Icon name="copy" size={24} stroke={1.7} />Çoğalt</button>
+          <button onClick={() => remove(chosen)}><Icon name="trash" size={24} stroke={1.7} />Sil</button>
+        </div>
+      )}
+      <div className="plist">
+        {projects.map((p) => {
+          const on = !!sel?.has(p.id);
+          return (
+            <div key={p.id} className={'projrow' + (sel ? ' selmode' : '') + (sel && !on ? ' dim' : '')}>
+              {sel && <span className={'pradio' + (on ? ' on' : '')} aria-hidden="true" onClick={() => toggle(p.id)} />}
+              <button className={'pcard' + (on ? ' sel' : '')} data-pid={p.id} aria-pressed={sel ? on : undefined}
+                onPointerDown={(e) => down(e, p)} onPointerMove={move} onPointerUp={up} onPointerCancel={up} onContextMenu={(e) => e.preventDefault()} onClick={() => click(p)}>
+                <div className="pthumb"><Thumb p={p} /><span className="dur">{fmtTime(projectDuration(p), p.fps)}</span></div>
+                <div className="pmeta">
+                  <b>{p.name}</b>
+                  <span>{p.width}x{p.height} · {p.fps}fps</span>
+                  <span>{p.layers.length} katman · {new Date(p.updatedAt).toLocaleDateString('tr-TR')}</span>
+                </div>
+              </button>
+              {!sel && (
+                <button className="ib pmore" aria-label={`${p.name} seçenekleri`} onClick={(e) => {
+                  const r = (e.currentTarget as HTMLElement).getBoundingClientRect();
+                  setMenu({ p, x: innerWidth - r.right, y: r.bottom, up: r.bottom > innerHeight - 330 });
+                }}><Icon name="more" size={24} stroke={3} /></button>
+              )}
+            </div>
+          );
+        })}
+      </div>
+      {menu && (
+        <div className="pmenu-scrim" onClick={() => setMenu(null)}>
+          <div className="pmenu" role="menu" aria-label={`${menu.p.name} seçenekleri`} onClick={(e) => e.stopPropagation()}
+            style={menu.up ? { right: Math.max(12, menu.x), bottom: innerHeight - menu.y + 44 } : { right: Math.max(12, menu.x), top: menu.y + 4 }}>
+            {([
+              ['Seç', 'hand', () => setSel(new Set([menu.p.id]))],
+              ['Dışa Aktar', 'share', () => exportVideo(menu.p)],
+              ['Çoğalt', 'copy', () => duplicate([menu.p])],
+              ['Buluta Yükle', 'cloudUp', () => upload([menu.p])],
+              ['Sil', 'trash', () => remove([menu.p])],
+            ] as [string, string, () => void][]).map(([label, icon, fn]) => (
+              <button key={label} role="menuitem" onClick={() => { setMenu(null); fn(); }}><span>{label}</span><Icon name={icon} size={26} stroke={1.6} /></button>
+            ))}
+          </div>
+        </div>
+      )}
+      {note && <div className="hnote" role="status">{note}</div>}
     </>
   );
 }

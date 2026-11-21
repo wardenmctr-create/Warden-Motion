@@ -380,6 +380,7 @@ export function Editor() {
   }, []);
 
   const [exDlg, setExDlg] = useState(false);
+  useEffect(() => { if (useStore.getState().autoExport) { useStore.setState({ autoExport: false }); setTimeout(() => setExDlg(true), 300); } }, []);
   const openExport = () => { s.setPlaying(false); s.select(null); setProjMenu(false); if (!p.layers.length) { show('Önce bir katman ekle.'); return; } setExDlg(true); };
   const doExport = useCallback(async (fxq = 0.5) => {
     s.setPlaying(false); s.select(null); setProjMenu(false);

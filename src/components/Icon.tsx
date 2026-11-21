@@ -52,6 +52,9 @@ const P: Record<string, string> = {
   loop: 'M17 2l4 4-4 4M3 11V9a3 3 0 0 1 3-3h15M7 22l-4-4 4-4M21 13v2a3 3 0 0 1-3 3H3',
   pen: 'M4 20l4-1 11-11-3-3L5 16z',
   layers: 'M12 3l9 5-9 5-9-5zM3 13l9 5 9-5',
+  hand: 'M9 12V5.5a1.5 1.5 0 0 1 3 0V11M12 10.5V4.5a1.5 1.5 0 0 1 3 0V11M15 10.5V6.5a1.5 1.5 0 0 1 3 0V14a6 6 0 0 1-6 6h-1.2a5 5 0 0 1-4-2l-3-4.2a1.5 1.5 0 0 1 2.4-1.8L9 14',
+  share: 'M12 15V3M8 7l4-4 4 4M5 11v9h14v-9',
+  cloudUp: 'M7 18.5a4.5 4.5 0 0 1-.5-9 6 6 0 0 1 11.5-1.6A4.5 4.5 0 0 1 17.5 18.5M12 12v9M9 15l3-3 3 3',
 };
 
 export function Icon({ name, size = 22, fill = false, stroke = 1.8 }: { name: keyof typeof P | string; size?: number; fill?: boolean; stroke?: number }) {

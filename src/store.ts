@@ -60,6 +60,8 @@ interface State {
   time: number;
   playing: boolean;
   tutorialStep: number;
+  /** Ana sayfadaki ⋯ → Dışa Aktar: proje açılınca dışa aktarma penceresi açılsın */
+  autoExport: boolean;
   go: (s: Screen) => void;
   setSettings: (s: Partial<Settings>) => void;
   open: (p: Project) => void;
@@ -101,6 +103,7 @@ export const useStore = create<State>((set, get) => ({
   time: 0,
   playing: false,
   tutorialStep: 0,
+  autoExport: false,
   go: (screen) => set({ screen }),
   setSettings: (s) => {
     const settings = { ...get().settings, ...s };
