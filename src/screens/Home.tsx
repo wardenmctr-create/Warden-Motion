@@ -61,7 +61,7 @@ export function Home() {
     <div className="home">
       <header className="home-top">
         <button className="ib" aria-label="Ayarlar menüsü" onClick={() => setDrawer(true)}><Icon name="menu" size={26} stroke={2} /></button>
-        <div className="brand"><img className="brand-mark" src="logo-mark.png" alt="" />Warden Motion{lite && <span className="badge" style={{ fontSize: 11 }}>Lite</span>}</div>
+        <div className="brand"><img className="brand-mark" src="logo-mark.png" alt="" /><span className="brand-text">Warden Motion</span>{lite && <LiteBadge />}</div>
         <button className="ib" aria-label="Hesap" onClick={() => go('account')} style={{ width: 44, height: 44 }}><AccountAvatar size={34} /></button>
       </header>
 
@@ -390,5 +390,18 @@ function ProjectImport({ onDone }: { onDone: () => void }) {
       }} />
       {note && <div className="hnote" role="status">{note}</div>}
     </>
+  );
+}
+
+/** Lite rozeti: elektrik mavisi, "Lite" yazısı oyuk (arkası görünür), etrafı parlar */
+function LiteBadge() {
+  return (
+    <svg className="lite-badge" width="44" height="22" viewBox="0 0 44 22" role="img" aria-label="Lite">
+      <defs>
+        <linearGradient id="liteg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#3FD0FF" /><stop offset="1" stopColor="#1F6BFF" /></linearGradient>
+        <mask id="litem"><rect width="44" height="22" fill="#fff" /><text x="22" y="15.6" textAnchor="middle" fontSize="13.5" fontWeight="800" fontFamily="Inter, system-ui, sans-serif" fill="#000" letterSpacing=".3">Lite</text></mask>
+      </defs>
+      <rect width="44" height="22" rx="7" fill="url(#liteg)" mask="url(#litem)" />
+    </svg>
   );
 }
