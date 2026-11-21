@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Köprü izni: sadece aynı anahtarla imzalanmış uygulamalar (Warden Motion) kullanabilir -->
+    <permission
+        android:name="com.warden.permission.BRAIN"
+        android:label="WardenCB Beyin'e bağlan"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="com.warden.permission.BRAIN" />
+
+    <application
+        android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher"
+        android:label="WardenCB Beyin"
+        android:largeHeap="true"
+        android:theme="@android:style/Theme.Material.NoActionBar">
+
+        <activity android:name=".MainActivity" android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <service
+            android:name=".BrainService"
+            android:exported="true"
+            android:permission="com.warden.permission.BRAIN">
+            <intent-filter>
+                <action android:name="com.warden.brain.BIND" />
+            </intent-filter>
+        </service>
+
+    </application>
+</manifest>

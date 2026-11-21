@@ -8,6 +8,7 @@ import { saveProject } from '../db';
 import { useStore } from '../store';
 import type { AnimProp, Key, Layer, Project, ShapeKind } from '../types';
 import { buildScript, find, type Goal, type Step, useAssistant } from '../assistant/engine';
+import { expandRecipe } from './recipes';
 
 export type Act = Record<string, unknown> & { do: string };
 
@@ -125,7 +126,11 @@ export async function runActions(acts: Act[], say: string): Promise<RunResult> {
   };
   const put = (a: Act, l: Layer) => { if (a.id) ids.set(str(a.id), l.id); };
 
-  for (const a of acts.slice(0, 120)) {
+  // Sıra: tarifler açıldıkça yerine kendi işleri girer
+  const queue: Act[] = acts.slice(0, 60);
+  let guard = 0;
+  while (queue.length && guard++ < 400) {
+    const a = queue.shift()!;
     try {
       switch (a.do) {
         case 'new_project': {
@@ -177,7 +182,8 @@ export async function runActions(acts: Act[], say: string): Promise<RunResult> {
           if (!it) { skipped.push(`"${str(a.item)}" pack'te yok`); break; }
           const parts = it.parts ?? [{ name: '', src: it.src }], root = it.root ?? 0;
           const { w, h } = await imgSize(parts[root].src);
-          const k = num(a.size, Math.min(pr.width, pr.height) * 0.4) / Math.max(w, h);
+          const onto0 = a.on ? layerOf(a.on) : undefined;
+          const k = num(a.size, onto0 ? onto0.w * (it.parts ? 1.2 : 0.75) : Math.min(pr.width, pr.height) * 0.4) / Math.max(w, h);
           const pid = parts.map(() => uid());
           const made: Layer[] = parts.map((pt, i) => ({
             ...makeLayer(pr, start, end - start, { type: 'image', name: `${it.name}${pt.name ? ' ' + pt.name : ''}`, src: pt.src, w: Math.round(w * k), h: Math.round(h * k) }),
@@ -190,7 +196,7 @@ export async function runActions(acts: Act[], say: string): Promise<RunResult> {
             const r = made[root], ox = valueAt(onto.x, start), oy = valueAt(onto.y, start);
             r.parent = onto.id;
             r.x = { v: a.x !== undefined ? Math.round(num(a.x, ox) - ox) : 0 };
-            r.y = { v: a.y !== undefined ? Math.round(num(a.y, oy) - oy) : -Math.round(onto.h * 0.32) };
+            r.y = { v: a.y !== undefined ? Math.round(num(a.y, oy) - oy) : -Math.round(onto.h * (it.parts ? 0.32 : 0.5)) };
           }
           let at = pr.layers.length;
           if (backs.length && onto) {
@@ -251,6 +257,11 @@ export async function runActions(acts: Act[], say: string): Promise<RunResult> {
           break;
         }
         case 'play': play = true; break;
+        case 'recipe': {
+          const more = expandRecipe(a, (ref) => { const l = layerOf(ref); return l ? { x: valueAt(l.x, l.start), y: valueAt(l.y, l.start), end: l.end } : null; });
+          if (more.length) { queue.unshift(...more); done.push(`tarif: ${str(a.name ?? a.tarif)}`); } else skipped.push(`"${str(a.name ?? a.tarif)}" tarifi`);
+          break;
+        }
         case 'show': if (SHOW[str(a.target)]) show = str(a.target); break;
         default: skipped.push(`bilinmeyen iş: ${a.do}`);
       }

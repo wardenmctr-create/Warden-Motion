@@ -7,7 +7,7 @@ import { useStore } from '../store';
 import { newProject, TUTORIALS } from '../factories';
 import { setAnim, valueAt } from '../anim';
 
-export const APP_VERSION = '0.11';
+export const APP_VERSION = '0.12';
 /** Sürüm karşılaştırma: '0.10' > '0.9' */
 export const verGt = (a: string, b: string) => { const x = a.split('.').map(Number), y = b.split('.').map(Number); for (let i = 0; i < Math.max(x.length, y.length); i++) { if ((x[i] ?? 0) !== (y[i] ?? 0)) return (x[i] ?? 0) > (y[i] ?? 0); } return false; };
 
@@ -254,6 +254,12 @@ const INTRO_END: Step[] = [WHAT_NOW(false), pickTutorial()];
 
 /** Her güncellemede "yeni neler var" (en yeni en sonda) */
 export const WHATS_NEW: { v: string; items: Step[] }[] = [
+  {
+    v: '0.12', items: [
+      { say: 'Artık internetsiz de konuşabiliyorum! "WardenCB Beyin" uygulamasını yükleyip modeli bir kere indirirsen, anahtarsız ve limitsiz cevap veririm. Warden Motion\'ın boyutu da büyümez.', mood: 'excited', target: () => find('[aria-label="WardenCB ile konuş"]') },
+      { say: 'Ayrıca hazır tariflerim var: CB sohbeti, zıplayan top, giriş yazısı, CB tanıtımı… "Türkiye ile Japonya konuşsun" de, saniyeler içinde kurayım.', mood: 'proud' },
+    ],
+  },
   {
     v: '0.11', items: [
       { say: 'Artık bir hesabın var! Alttaki dönen halkalı simgeye dokun: adını yaz, profil fotoğrafını seç.', mood: 'excited', target: () => find('.nav .accbtn') },

@@ -3,14 +3,16 @@ import { create } from 'zustand';
 import { WardenCB, POSES, type Mood } from '../components/WardenCB';
 import { Icon } from '../components/Icon';
 import { useStore } from '../store';
-import { AiError, askAI, DEFAULT_MODEL, KEY_URL, loadAi, type Msg, type Provider, saveAi } from './client';
+import { AiError, aiConfigured, askAI, DEFAULT_MODEL, KEY_URL, loadAi, type Msg, type Provider, saveAi } from './client';
+import { brainStatus, brainSupported, openBrain, type BrainStatus } from './brain';
 import { systemPrompt } from './prompt';
 import { type Act, runActions } from './actions';
 
 interface ChatMsg { role: 'user' | 'model'; text: string; raw?: string; mood?: Mood; note?: string; err?: boolean }
-interface ChatState { open: boolean; msgs: ChatMsg[]; busy: boolean; setOpen: (b: boolean) => void; push: (m: ChatMsg) => void; setBusy: (b: boolean) => void; clear: () => void }
+interface ChatState { open: boolean; msgs: ChatMsg[]; busy: boolean; partial: number; setPartial: (n: number) => void; setOpen: (b: boolean) => void; push: (m: ChatMsg) => void; setBusy: (b: boolean) => void; clear: () => void }
 export const useChat = create<ChatState>((set) => ({
-  open: false, msgs: [], busy: false,
+  open: false, msgs: [], busy: false, partial: 0,
+  setPartial: (partial) => set({ partial }),
   setOpen: (open) => set({ open }),
   push: (m) => set((s) => ({ msgs: [...s.msgs, m].slice(-40) })),
   setBusy: (busy) => set({ busy }),
@@ -47,7 +49,9 @@ export async function sendToAI(text: string) {
   c.setBusy(true);
   try {
     const hist: Msg[] = useChat.getState().msgs.filter((m) => !m.err).slice(-12).map((m) => ({ role: m.role, text: m.role === 'model' ? m.raw ?? m.text : m.text }));
-    const raw = await askAI(await systemPrompt(), hist);
+    const ai = loadAi();
+    useChat.getState().setPartial(0);
+    const raw = await askAI(await systemPrompt(ai.provider === 'offline'), hist, ai, (t) => useChat.getState().setPartial(t.length));
     const r = parse(raw);
     let note = '';
     if (r.actions.length) {
@@ -65,17 +69,45 @@ export async function sendToAI(text: string) {
   }
 }
 
+function OfflineInfo() {
+  const [st, setSt] = useState<BrainStatus | null>(null);
+  useEffect(() => {
+    let on = true;
+    const tick = () => brainStatus().then((x) => on && setSt(x));
+    tick();
+    const id = setInterval(tick, 3000);
+    return () => { on = false; clearInterval(id); };
+  }, []);
+  if (!brainSupported()) return <p className="aic-help">İnternetsiz WardenCB sadece Android uygulamasında çalışır.</p>;
+  if (!st) return <p className="aic-help">WardenCB Beyin aranıyor…</p>;
+  if (!st.installed) return (
+    <p className="aic-help">WardenCB Beyin bu telefonda yüklü değil. Sana verdiğim <b>WardenCB-Beyin.apk</b> dosyasını yükle, sonra buraya dön. Warden Motion'ın boyutu büyümez; model ayrı uygulamada durur.</p>
+  );
+  return (
+    <div className="aic-brain">
+      <span className={'aic-dot ' + (st.downloaded ? 'ok' : 'wait')} />
+      <div>
+        <b>{st.downloaded ? 'WardenCB Beyin hazır' : 'Model indirilmedi'}</b>
+        <span>{st.downloaded ? `${st.model}${st.loaded ? ` · bellekte (${st.backend})` : ' · ilk soruda belleğe yüklenir'}` : 'Beyin uygulamasını açıp "Modeli indir"e dokun (yaklaşık 1,6 GB, Wi‑Fi önerilir).'}</span>
+      </div>
+      <button className="btn ghost" onClick={() => openBrain()}>WardenCB Beyin'i aç</button>
+    </div>
+  );
+}
+
 function Settings({ onDone }: { onDone: () => void }) {
   const [s, setS] = useState(loadAi);
   return (
     <div className="aic-set">
-      <div className="aic-bub model"><WardenCB size={54} mood="think" /><p>Konuşabilmem için ücretsiz bir yapay zekâ anahtarı lazım. Bir kere yapıştırırsın, sadece bu telefonda saklanır.</p></div>
+      <div className="aic-bub model"><WardenCB size={54} mood="think" /><p>Konuşabilmem için ya internetsiz beynimi (WardenCB Beyin uygulaması) ya da ücretsiz bir yapay zekâ anahtarını seç.</p></div>
       <label className="aic-field"><span>Servis</span>
         <select className="sel" value={s.provider} onChange={(e) => { const provider = e.target.value as Provider; setS({ ...s, provider, model: DEFAULT_MODEL[provider] }); }}>
           <option value="gemini">Google Gemini (ücretsiz kota)</option>
           <option value="groq">Groq (ücretsiz kota)</option>
+          <option value="offline">İnternetsiz (WardenCB Beyin)</option>
         </select>
       </label>
+      {s.provider === 'offline' ? <OfflineInfo /> : <>
       <p className="aic-help">1) Şu adrese gir ve ücretsiz anahtar oluştur:<br /><a href={KEY_URL[s.provider]} target="_blank" rel="noreferrer">{KEY_URL[s.provider].replace('https://', '')}</a><br />2) Anahtarı kopyalayıp aşağıya yapıştır.</p>
       <label className="aic-field"><span>Anahtar</span>
         <input className="dinput" type="password" autoComplete="off" placeholder="Anahtarı yapıştır" value={s.key} onChange={(e) => setS({ ...s, key: e.target.value.trim() })} />
@@ -84,21 +116,27 @@ function Settings({ onDone }: { onDone: () => void }) {
         <input className="dinput" value={s.model} onChange={(e) => setS({ ...s, model: e.target.value.trim() })} />
       </label>
       <p className="aic-help small">Ücretsiz kotada yazdıkların servis tarafından incelenebilir; kişisel bilgi yazma. İnternet yoksa öğreticiler yine çalışır.</p>
+      </>}
       <div className="aic-row">
-        {s.key && <button className="btn ghost" onClick={() => { saveAi({ ...s, key: '' }); setS({ ...s, key: '' }); }}>Anahtarı sil</button>}
+        {s.key && s.provider !== 'offline' && <button className="btn ghost" onClick={() => { saveAi({ ...s, key: '' }); setS({ ...s, key: '' }); }}>Anahtarı sil</button>}
         <span style={{ flex: 1 }} />
-        <button className="btn" disabled={!s.key} onClick={() => { saveAi({ ...s, model: s.model || DEFAULT_MODEL[s.provider] }); onDone(); }}>Kaydet</button>
+        <button className="btn" disabled={!aiConfigured(s)} onClick={() => { saveAi({ ...s, model: s.model || DEFAULT_MODEL[s.provider] }); onDone(); }}>Kaydet</button>
       </div>
     </div>
   );
 }
 
 export function AiChat() {
-  const { open, msgs, busy, setOpen, clear } = useChat();
+  const { open, msgs, busy, partial, setOpen, clear } = useChat();
   const [text, setText] = useState('');
   const [settings, setSettings] = useState(false);
   const [, setVer] = useState(0);
   const listRef = useRef<HTMLDivElement>(null);
+  // Anahtar yoksa ve Beyin hazırsa kendiliğinden internetsiz WardenCB'yi seç
+  useEffect(() => {
+    if (!open || aiConfigured()) return;
+    brainStatus().then((st) => { if (st.installed && st.downloaded) { saveAi({ ...loadAi(), provider: 'offline', model: DEFAULT_MODEL.offline }); setVer((v) => v + 1); } });
+  }, [open]);
   useEffect(() => { listRef.current?.scrollTo({ top: 1e6, behavior: 'smooth' }); }, [msgs.length, busy, open]);
   useEffect(() => {
     if (!open) return;
@@ -107,7 +145,7 @@ export function AiChat() {
     return () => removeEventListener('wm-back', fn);
   }, [open]);
   if (!open) return null;
-  const noKey = !loadAi().key;
+  const noKey = !aiConfigured();
   const last = [...msgs].reverse().find((m) => m.role === 'model');
   const send = () => { if (text.trim()) { sendToAI(text); setText(''); } };
   return (
@@ -133,7 +171,7 @@ export function AiChat() {
               {msgs.map((m, i) => m.role === 'user'
                 ? <div key={i} className="aic-bub user"><p>{m.text}</p></div>
                 : <div key={i} className={'aic-bub model' + (m.err ? ' err' : '')}><WardenCB size={54} mood={m.mood ?? 'idle'} autoBlink={i === msgs.length - 1} /><p>{m.text}{m.note && <small>{m.note}</small>}</p></div>)}
-              {busy && <div className="aic-bub model"><WardenCB size={54} mood="think" /><p className="aic-dots"><i /><i /><i /></p></div>}
+              {busy && <div className="aic-bub model"><WardenCB size={54} mood="think" /><p className="aic-dots"><i /><i /><i />{partial > 0 && <small style={{ margin: '0 0 0 6px' }}>{partial} harf</small>}</p></div>}
             </div>
             <div className="aic-in">
               <textarea rows={1} placeholder="WardenCB'ye yaz…" value={text} onChange={(e) => setText(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); } }} />

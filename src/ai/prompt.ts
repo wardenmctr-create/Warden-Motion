@@ -5,13 +5,14 @@ import { SHAPE_PARAMS } from '../shapes';
 import { POSES } from '../components/WardenCB';
 import { useStore } from '../store';
 import { packFolders, SHOW_KEYS } from './actions';
+import { RECIPES } from './recipes';
 
-function projectInfo(): string {
+function projectInfo(max = 40): string {
   const st = useStore.getState();
   const p = st.project;
   if (st.screen !== 'editor' || !p) return `Kullanıcı şu an ${st.screen === 'tutorials' ? 'Öğreticiler' : 'ana sayfa'} ekranında, açık proje yok.`;
   const t = st.time;
-  const ls = p.layers.slice(-40).map((l) => {
+  const ls = p.layers.slice(-max).map((l) => {
     const par = l.parent ? ` takip:${l.parent}` : '';
     const what = l.type === 'shape' ? `şekil:${l.shape}` : l.type === 'text' ? `yazı:"${(l.text ?? '').slice(0, 30)}"` : l.type;
     return `- id:${l.id} "${l.name}" ${what} x:${Math.round(valueAt(l.x, t))} y:${Math.round(valueAt(l.y, t))} w:${l.w} h:${l.h} süre:${l.start}-${l.end}s${par}${l.effects.length ? ' efekt:' + l.effects.map((e) => e.type).join(',') : ''}`;
@@ -21,7 +22,36 @@ Katmanlar (alttan üste):
 ${ls || '(boş)'}`;
 }
 
-export async function systemPrompt(): Promise<string> {
+const recipeList = () => RECIPES.map((r) => `- {"do":"recipe","name":"${r.name}",${r.params}}  → ${r.desc}`).join('\n');
+
+/** Küçük (internetsiz) model için kısa talimat: daha az okuma = daha hızlı cevap */
+function compactPrompt(): string {
+  const moods = 'idle, happy, joy, laugh, wink, think, wow, sad, angry, proud, excited, curious, point, wave, confused';
+  return `Sen WardenCB'sin: Warden Motion animasyon uygulamasının neşeli asistanı (lacivert ushankalı bir countryball). Türkçe, kısa (1-3 cümle), samimi konuş.
+Görevin: 1) Uygulama sorularını kısaca cevapla. 2) İstenirse video/şablon yap: ÖNCE hazır tarifleri kullan.
+
+UYGULAMA: Sağ alttaki + ile katman eklenir (Şekil, Medya, Metin, CB, Bayrak). Katman seçilince altta: Taşı ve Çevir (◆+ keyframe), Efektler, Renk, Şekli Düzenle. Köşeden büyütülür, kenardan kırpılır. Sağ üstten dışa aktarılır. Bayrağa dokunup "CB olarak ekle" ile countryball kurulur.
+
+${projectInfo(15)}
+
+SADECE şu JSON'u yaz: {"say":"kısa söz","mood":"duygu","actions":[...]}
+mood: ${moods}
+TARİFLER (video isteğinde bunlardan birini seç):
+${recipeList()}
+DİĞER İŞLER:
+- {"do":"show","target":"${SHOW_KEYS.join('|')}"}  (soru cevaplarken ekranda gösterir)
+- {"do":"add_text","id":"..","text":"..","x":..,"y":..,"size":60,"color":"#RRGGBB"}
+- {"do":"add_cb","id":"..","flag":"ülke","x":..,"y":..,"size":300}
+- {"do":"effect","id":"..","type":"sway|shake|glow|blur|shadow","params":{"amount":6}}
+- {"do":"play"}
+ÖRNEK: Kullanıcı "Türkiye ile Almanya konuşsun" derse:
+{"say":"Hemen kuruyorum aga!","mood":"excited","actions":[{"do":"recipe","name":"cb_sohbet","sol":"Türkiye","sag":"Almanya","replikler":[{"kim":"sol","yazi":"Merhaba komşu!"},{"kim":"sag","yazi":"Guten Tag!"}]}]}
+ÖRNEK: "Keyframe nasıl eklenir?" derse:
+{"say":"Katmanı seç, Taşı ve Çevir'e gir, ◆+ düğmesine bas.","mood":"point","actions":[{"do":"show","target":"keyframe"}]}`;
+}
+
+export async function systemPrompt(compact = false): Promise<string> {
+  if (compact) return compactPrompt();
   const folders = await packFolders().catch(() => []);
   const pack = folders.map((f) => `${f.name}: ${f.items.map((i) => i.name).join(', ')}`).join('\n');
   const fx = FX.map((f) => `${f.type} (${f.name}${f.params.length ? '; ' + f.params.filter((p) => !p.two).map((p) => `${p.key} ${p.min}..${p.max}`).join(', ') : ''})`).join('\n');
@@ -64,6 +94,8 @@ ${fx}
 - {"do":"set","id":"..","color":"#..","name":"..","start":..,"end":..,"parent":"başka id","flipX":true}
 - {"do":"delete","id":".."}
 - {"do":"play"}  (videoyu baştan oynatır)
+TARİFLER (hazır, düzgün çalışan hareketler; uygun olduğunda tercih et, gerekirse sonra başka işler ekle):
+${recipeList()}
 - {"do":"show","target":"${SHOW_KEYS.join('|')}"}  (ekranda okla/çemberle gösterir; soru cevaplarken kullan, "say" gösterirken söylenir)
 
 KURALLAR:

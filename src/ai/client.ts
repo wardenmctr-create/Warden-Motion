@@ -2,16 +2,16 @@
 // Anahtar sadece bu cihazda saklanır. Cevap her zaman JSON: { say, mood, actions }.
 import { Capacitor, CapacitorHttp } from '@capacitor/core';
 
-export type Provider = 'gemini' | 'groq';
+export type Provider = 'gemini' | 'groq' | 'offline';
 export interface AiSettings { provider: Provider; key: string; model: string }
-export const DEFAULT_MODEL: Record<Provider, string> = { gemini: 'gemini-2.5-flash', groq: 'llama-3.3-70b-versatile' };
-export const KEY_URL: Record<Provider, string> = { gemini: 'https://aistudio.google.com/apikey', groq: 'https://console.groq.com/keys' };
+export const DEFAULT_MODEL: Record<Provider, string> = { gemini: 'gemini-2.5-flash', groq: 'llama-3.3-70b-versatile', offline: 'Qwen2.5 1.5B' };
+export const KEY_URL: Record<Provider, string> = { gemini: 'https://aistudio.google.com/apikey', groq: 'https://console.groq.com/keys', offline: '' };
 
 const KEY = 'wm-ai';
 export function loadAi(): AiSettings {
   try {
     const s = JSON.parse(localStorage.getItem(KEY) || '{}');
-    const provider: Provider = s.provider === 'groq' ? 'groq' : 'gemini';
+    const provider: Provider = s.provider === 'groq' || s.provider === 'offline' ? s.provider : 'gemini';
     return { provider, key: s.key ?? '', model: s.model || DEFAULT_MODEL[provider] };
   } catch { return { provider: 'gemini', key: '', model: DEFAULT_MODEL.gemini }; }
 }
@@ -43,7 +43,16 @@ function explain(status: number, data: unknown): string {
 }
 
 /** Sohbeti gönderir, modelin JSON metnini döndürür */
-export async function askAI(system: string, history: Msg[], s: AiSettings = loadAi()): Promise<string> {
+export async function askAI(system: string, history: Msg[], s: AiSettings = loadAi(), onPartial?: (t: string) => void): Promise<string> {
+  if (s.provider === 'offline') {
+    // İnternetsiz: telefondaki WardenCB Beyin uygulaması
+    const { askBrain, brainStatus, chatml } = await import('./brain');
+    const st = await brainStatus();
+    if (!st.installed) throw new AiError('WardenCB Beyin uygulaması bu telefonda yüklü değil.');
+    if (!st.downloaded) throw new AiError('WardenCB Beyin\'in modeli henüz indirilmedi. Ayarlardan "WardenCB Beyin\'i aç"a dokunup modeli indir.');
+    try { return await askBrain(chatml(system, history), onPartial); }
+    catch (e) { throw new AiError(e instanceof Error ? e.message : String(e)); }
+  }
   if (!s.key) throw new AiError('Önce yapay zekâ anahtarını gir.');
   let res: { status: number; data: unknown };
   try {
@@ -71,3 +80,6 @@ export async function askAI(system: string, history: Msg[], s: AiSettings = load
   if (!text) throw new AiError('Yapay zekâ boş cevap verdi. Tekrar dene.');
   return text;
 }
+
+/** Konuşmaya hazır mı (anahtar ya da internetsiz seçili) */
+export const aiConfigured = (s: AiSettings = loadAi()) => s.provider === 'offline' || !!s.key;
