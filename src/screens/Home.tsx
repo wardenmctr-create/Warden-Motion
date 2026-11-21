@@ -61,7 +61,7 @@ export function Home() {
     <div className="home">
       <header className="home-top">
         <button className="ib" aria-label="Ayarlar menüsü" onClick={() => setDrawer(true)}><Icon name="menu" size={26} stroke={2} /></button>
-        <div className="brand">Warden Motion{lite && <span className="badge" style={{ fontSize: 11 }}>Lite</span>}<img src="logo.png" alt="" /></div>
+        <div className="brand"><img className="brand-mark" src="logo-mark.png" alt="" />Warden Motion{lite && <span className="badge" style={{ fontSize: 11 }}>Lite</span>}</div>
         <button className="ib" aria-label="Hesap" onClick={() => go('account')} style={{ width: 44, height: 44 }}><AccountAvatar size={34} /></button>
       </header>
 

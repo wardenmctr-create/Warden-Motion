@@ -742,3 +742,8 @@ body.psel-on .nav { visibility: hidden; }
 .pmenu-head b { font-size: 16px; padding-left: 10px; }
 .pmenu-head .ib { width: 36px; height: 36px; color: var(--l-text); }
 .pmenu-head .ib { padding: 0; justify-content: center; }
+/* Başlık logosu: yazının solunda, büyük karesi "Wa"nın altına girer, çubuğun altına biraz taşar */
+.brand { position: relative; padding-left: 25px; }
+.brand-mark { position: absolute; left: 0; top: -14px; width: 45px !important; height: auto !important; border-radius: 0 !important; pointer-events: none; z-index: 2; }
+.home-top { position: relative; z-index: 3; overflow: visible; }
+.brand .badge { background: var(--l-primary); color: var(--l-on-primary); box-shadow: 0 0 8px rgba(31, 104, 224, .45); }
