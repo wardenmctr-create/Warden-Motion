@@ -44,6 +44,7 @@ dependencies {
     implementation("androidx.compose.material:material-icons-core")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+    implementation("com.caverock:androidsvg-aar:1.4")
     // Bilgisayarda ekran görüntüsü testleri (telefon olmadan kontrol)
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.robolectric:robolectric:4.11.1")

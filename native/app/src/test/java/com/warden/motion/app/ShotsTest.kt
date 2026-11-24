@@ -6,6 +6,9 @@ import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onRoot
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.performClick
 import androidx.test.core.app.ApplicationProvider
 import com.warden.motion.app.data.Store
 import com.warden.motion.app.model.*
@@ -50,10 +53,13 @@ class ShotsTest {
         val ctx = ApplicationProvider.getApplicationContext<android.content.Context>()
         val store = Store.get(ctx)
         runBlocking { store.save(sample()); store.save(newProject("Boş Proje", 1080, 1920, 60, "#0B1430")) }
-        rule.waitForIdle()
-        Thread.sleep(300)
-        rule.waitForIdle()
-        save(shot(), "home")
+        fun settle() { repeat(4) { rule.mainClock.advanceTimeBy(400); rule.waitForIdle(); Thread.sleep(150) } }
+        rule.mainClock.autoAdvance = false
+        settle(); save(shot(), "home")
+        rule.onNodeWithText("Öğreticiler").performClick(); settle(); save(shot(), "tut")
+        rule.onAllNodesWithText("Hesap")[0].performClick(); settle(); save(shot(), "acc")
+        rule.onAllNodesWithText("Ana Sayfa")[0].performClick(); settle()
+        rule.onAllNodesWithText("Yeni Proje Oluştur")[0].performClick(); settle(); save(shot(), "new")
     }
 
     @Test fun importOld() {

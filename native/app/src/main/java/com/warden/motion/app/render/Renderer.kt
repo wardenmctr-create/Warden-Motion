@@ -74,12 +74,14 @@ fun parseCol(hex: String?, def: Int = 0xFF8F7CF0.toInt()): Int = runCatching { a
  * Çizim motoru: bir projenin t anındaki karesini Android Canvas'a çizer (donanım hızlandırmalı).
  * Görseller önbellekte tutulur; önizlemede küçültülmüş (maxSide), dışa aktarmada asıl hâliyle.
  */
-class Renderer(private val ctx: Context, private val maxSide: Int = 2048) {
+class Renderer(private val ctx: Context, private val maxSide: Int = 2048, private val sync: Boolean = false, cacheMb: Int = 64) {
     private val store = Store.get(ctx)
-    private val cache = object : LruCache<String, Bitmap>(64 * 1024 * 1024) { override fun sizeOf(key: String, value: Bitmap) = value.byteCount }
+    private val cache = object : LruCache<String, Bitmap>(cacheMb * 1024 * 1024) { override fun sizeOf(key: String, value: Bitmap) = value.byteCount }
     private val loading = HashSet<String>()
     private val failed = HashSet<String>()
-    private val io = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+    // Aynı anda en fazla 2 görsel çözülür (bellek ve işlemci taşmasın)
+    @OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
+    private val io = CoroutineScope(SupervisorJob() + Dispatchers.IO.limitedParallelism(2))
     private val _version = MutableStateFlow(0)
     /** Bir görsel yüklendiğinde artar (ekran yeniden çizilsin) */
     val version: StateFlow<Int> = _version
@@ -87,6 +89,12 @@ class Renderer(private val ctx: Context, private val maxSide: Int = 2048) {
     fun image(src: String): Bitmap? {
         cache.get(src)?.let { return it }
         if (src in failed) return null
+        if (sync) {
+            // Arka plan çizimi (küçük resim, dışa aktarma): beklemeden yükle
+            val bmp = runCatching { decode(src) }.getOrNull()
+            if (bmp != null) cache.put(src, bmp) else failed.add(src)
+            return bmp
+        }
         synchronized(loading) { if (!loading.add(src)) return null }
         io.launch {
             val bmp = runCatching { decode(src) }.getOrNull()
@@ -98,6 +106,18 @@ class Renderer(private val ctx: Context, private val maxSide: Int = 2048) {
     }
 
     private fun decode(src: String): Bitmap? {
+        if (src.endsWith(".svg")) {
+            // Bayraklar SVG: istenen boyutta resme çevrilir
+            val svg = ctx.assets.open(src.removePrefix("/")).use { com.caverock.androidsvg.SVG.getFromInputStream(it) }
+            val vb = svg.documentViewBox
+            val aw = (vb?.width() ?: svg.documentWidth).takeIf { it > 0 } ?: 640f
+            val ah = (vb?.height() ?: svg.documentHeight).takeIf { it > 0 } ?: 480f
+            val k = minOf(maxSide, 1024) / maxOf(aw, ah)
+            val b = Bitmap.createBitmap((aw * k).toInt().coerceAtLeast(1), (ah * k).toInt().coerceAtLeast(1), Bitmap.Config.ARGB_8888)
+            svg.setDocumentWidth("100%"); svg.setDocumentHeight("100%")
+            svg.renderToCanvas(Canvas(b), android.graphics.RectF(0f, 0f, b.width.toFloat(), b.height.toFloat()))
+            return b
+        }
         val opts = BitmapFactory.Options().apply { inJustDecodeBounds = true }
         val open = { if (src.startsWith("media:")) store.mediaFile(src.removePrefix("media:")).inputStream() else ctx.assets.open(src.removePrefix("/")) }
         open().use { BitmapFactory.decodeStream(it, null, opts) }

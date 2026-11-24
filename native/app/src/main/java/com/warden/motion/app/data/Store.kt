@@ -27,7 +27,93 @@ class Store(private val ctx: Context) {
 
     private val _lite = MutableStateFlow(prefs.getBoolean("lite", false))
     val lite: StateFlow<Boolean> = _lite
-    fun setLite(on: Boolean) { prefs.edit().putBoolean("lite", on).apply(); _lite.value = on }
+    fun setLite(on: Boolean) { prefs.edit().putBoolean("lite", on).putString("liteSource", "user").apply(); _lite.value = on; _liteSource.value = "user" }
+    /** 'user' ya da 'auto' (cihaza göre) */
+    private val _liteSource = MutableStateFlow(prefs.getString("liteSource", "auto") ?: "auto")
+    val liteSource: StateFlow<String> = _liteSource
+    fun setLiteAuto() { val on = weakDevice(); prefs.edit().putBoolean("lite", on).putString("liteSource", "auto").apply(); _lite.value = on; _liteSource.value = "auto" }
+    /** Zayıf cihaz: az bellek ya da az çekirdek */
+    fun weakDevice(): Boolean {
+        val am = ctx.getSystemService(Context.ACTIVITY_SERVICE) as android.app.ActivityManager
+        val mi = android.app.ActivityManager.MemoryInfo().also { am.getMemoryInfo(it) }
+        return am.isLowRamDevice || mi.totalMem < 3L * 1024 * 1024 * 1024 || Runtime.getRuntime().availableProcessors() < 6
+    }
+
+    /** Lite ayarları (çubuklar): res, fps, blur, warp, light, color, img, vid, aud */
+    private val _liteCfg = MutableStateFlow(readCfg())
+    val liteCfg: StateFlow<Map<String, Double>> = _liteCfg
+    private fun readCfg(): Map<String, Double> = runCatching {
+        val o = org.json.JSONObject(prefs.getString("liteCfg", "{}")!!); o.keys().asSequence().associateWith { o.getDouble(it) }
+    }.getOrDefault(emptyMap())
+    fun setLiteCfg(m: Map<String, Double>) { prefs.edit().putString("liteCfg", org.json.JSONObject(m).toString()).apply(); _liteCfg.value = m }
+
+    private val _defDur = MutableStateFlow(prefs.getFloat("defDur", 2f).toDouble())
+    val defaultDuration: StateFlow<Double> = _defDur
+    fun setDefaultDuration(v: Double) { prefs.edit().putFloat("defDur", v.toFloat()).apply(); _defDur.value = v }
+
+    // ---------- Profil (bu cihazda) ----------
+    data class Profile(val name: String = "", val photo: String? = null, val lastBackup: Long = 0)
+    private val _profile = MutableStateFlow(Profile(prefs.getString("pName", "") ?: "", prefs.getString("pPhoto", null), prefs.getLong("pBackup", 0)))
+    val profile: StateFlow<Profile> = _profile
+    fun setProfile(p: Profile) {
+        prefs.edit().putString("pName", p.name).putString("pPhoto", p.photo).putLong("pBackup", p.lastBackup).apply(); _profile.value = p
+    }
+    /** Profil fotoğrafı: 256 px'e küçültülüp kaydedilir */
+    suspend fun setPhoto(uri: Uri?) = withContext(Dispatchers.IO) {
+        if (uri == null) { setProfile(_profile.value.copy(photo = null)); return@withContext }
+        val src = ctx.contentResolver.openInputStream(uri)!!.use { android.graphics.BitmapFactory.decodeStream(it) } ?: return@withContext
+        val k = 256f / maxOf(src.width, src.height)
+        val b = if (k < 1) android.graphics.Bitmap.createScaledBitmap(src, (src.width * k).toInt(), (src.height * k).toInt(), true) else src
+        val f = File(ctx.filesDir, "profile_${System.currentTimeMillis()}.jpg")
+        f.outputStream().use { b.compress(android.graphics.Bitmap.CompressFormat.JPEG, 88, it) }
+        _profile.value.photo?.let { File(it).delete() }
+        setProfile(_profile.value.copy(photo = f.absolutePath))
+    }
+
+    /** Yedek: eski uygulamayla aynı biçim (projeler + medya data URL olarak). onlyIds verilirse sadece o projeler */
+    suspend fun exportBackup(out: Uri, onlyIds: Set<String>? = null): Int = withContext(Dispatchers.IO) {
+        val ps = _projects.value.filter { onlyIds == null || it.id in onlyIds }
+        val used = ps.flatMap { p -> p.layers.mapNotNull { it.src } }.filter { it.startsWith("media:") }.map { it.removePrefix("media:") }.toSet()
+        ctx.contentResolver.openOutputStream(out, "wt")!!.bufferedWriter().use { w ->
+            w.write("{\"app\":\"warden-motion\",\"v\":1,\"date\":${System.currentTimeMillis()},\"projects\":")
+            w.write(JSON.encodeToString(kotlinx.serialization.builtins.ListSerializer(Project.serializer()), ps))
+            w.write(",\"media\":{")
+            var first = true
+            for (id in used) {
+                val f = mediaFile(id)
+                if (!f.exists()) continue
+                if (!first) w.write(",")
+                first = false
+                val mime = sniffMime(f)
+                w.write("\"$id\":\"data:$mime;base64,")
+                w.write(Base64.encodeToString(f.readBytes(), Base64.NO_WRAP))
+                w.write("\"")
+            }
+            w.write("},\"pack\":{\"index\":[],\"folders\":[]},\"flags\":[]")
+            if (onlyIds == null) w.write(",\"profile\":{\"name\":${org.json.JSONObject.quote(_profile.value.name)}}")
+            w.write("}")
+        }
+        if (onlyIds == null) setProfile(_profile.value.copy(lastBackup = System.currentTimeMillis()))
+        ps.size
+    }
+
+    /** Dosyanın türü (ilk baytlarından) */
+    fun sniffMime(f: File): String {
+        val h = ByteArray(12); f.inputStream().use { it.read(h) }
+        fun at(i: Int, vararg b: Int) = b.withIndex().all { (j, v) -> h[i + j].toInt() and 0xFF == v }
+        return when {
+            at(0, 0x89, 0x50, 0x4E, 0x47) -> "image/png"
+            at(0, 0xFF, 0xD8) -> "image/jpeg"
+            at(0, 0x47, 0x49, 0x46) -> "image/gif"
+            at(0, 0x52, 0x49, 0x46, 0x46) && at(8, 0x57, 0x45, 0x42, 0x50) -> "image/webp"
+            at(0, 0x52, 0x49, 0x46, 0x46) -> "audio/wav"
+            at(4, 0x66, 0x74, 0x79, 0x70) -> if (at(8, 0x4D, 0x34, 0x41)) "audio/mp4" else "video/mp4"
+            at(0, 0x49, 0x44, 0x33) || at(0, 0xFF, 0xFB) -> "audio/mpeg"
+            at(0, 0x4F, 0x67, 0x67) -> "audio/ogg"
+            at(0, 0x1A, 0x45, 0xDF, 0xA3) -> "video/webm"
+            else -> "application/octet-stream"
+        }
+    }
 
     suspend fun load() = withContext(Dispatchers.IO) {
         val list = projDir.listFiles { f -> f.extension == "json" }.orEmpty().mapNotNull { f ->
@@ -77,7 +163,8 @@ class Store(private val ctx: Context) {
             }
         }
         val have = _projects.value.map { it.id }.toSet()
-        for (p in b.projects) save(if (p.id in have) p.copy(id = uid(), name = "${p.name} (yedekten)".take(40)) else p, touch = false)
+        for (p in b.projects) save(if (p.id in have) p.copy(id = uid(), name = "${p.name} (dosyadan)".take(40)) else p, touch = false)
+        runCatching { b.profile?.let { pr -> val n = (pr as kotlinx.serialization.json.JsonObject)["name"]?.toString()?.trim('"'); if (!n.isNullOrBlank() && _profile.value.name.isBlank()) setProfile(_profile.value.copy(name = n)) } }
         ImportResult(b.projects.size, media, b.projects.map { it.name })
     }
 
