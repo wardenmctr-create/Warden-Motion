@@ -176,20 +176,22 @@ fun AddPanel(s: EditorState, tab: String?, setTab: (String) -> Unit, replaceFlag
             } else Row(Modifier.fillMaxWidth().padding(4.dp), horizontalArrangement = Arrangement.spacedBy(2.dp), verticalAlignment = Alignment.CenterVertically) {
                 TABS.forEach { (id, lb) ->
                     val on = tab == id
-                    Column(Modifier.weight(1f).height(52.dp).clip(RoundedCornerShape(10.dp)).background(if (on) Color(0xFF2E3F7E) else Color.Transparent).tap { setTab(id) },
+                    Column(Modifier.weight(1f).height(52.dp).target("atab:${lb.first}") { setTab(id) }.clip(RoundedCornerShape(10.dp)).background(if (on) Color(0xFF2E3F7E) else Color.Transparent).tap { setTab(id) },
                         horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
                         Ico(lb.second, if (on) C.turq else C.dText, 22.dp)
                         Spacer(Modifier.height(3.dp))
                         Text(lb.first, fontSize = 10.5.sp, fontWeight = FontWeight.SemiBold, color = if (on) C.turq else C.dText)
                     }
                 }
-                Box(Modifier.size(44.dp).tap(onClick = onClose), contentAlignment = Alignment.Center) { Ico("close", C.dText, 20.dp, 2.2f) }
+                Box(Modifier.size(44.dp).target("add-close", onClose).tap(onClick = onClose), contentAlignment = Alignment.Center) { Ico("close", C.dText, 20.dp, 2.2f) }
             }
+            LaunchedEffect(tab) { UiState.addTab = TABS.find { it.first == tab }?.second?.first }
             val tb = if (replaceFlagOf != null) "flags" else tab
             if (tb != null) Column(Modifier.fillMaxWidth().drawBehind { drawLine(C.dLine, Offset(0f, 0f), Offset(size.width, 0f), 1.dp.toPx()) }.padding(start = 10.dp, end = 10.dp, top = 6.dp, bottom = 10.dp)) {
                 when (tb) {
                     "shape" -> Pager(SHAPES, 7) { sh ->
-                        Box(Modifier.fillMaxWidth().height(44.dp).tap {
+                        val addShape = { s.addLayer(makeLayer(p, t, defDur, "shape", sh.name) { it.copy(shape = sh.kind, w = sh.w ?: 240.0, h = sh.h ?: 240.0, pts = sh.pts) }); onClose() }
+                        Box(Modifier.fillMaxWidth().height(44.dp).target("cell:${sh.name}", addShape).tap {
                             s.addLayer(makeLayer(p, t, defDur, "shape", sh.name) { it.copy(shape = sh.kind, w = sh.w ?: 240.0, h = sh.h ?: 240.0, pts = sh.pts) }); onClose()
                         }, contentAlignment = Alignment.Center) { ShapeIcon(sh) }
                     }
@@ -320,7 +322,7 @@ private fun CBTab(toast: (String) -> Unit, onPick: (PackItem) -> Unit, onBody: (
         Spacer(Modifier.height(8.dp))
         Row(Modifier.horizontalScroll(rememberScrollState()).padding(bottom = 8.dp), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
             if (recent.isNotEmpty()) Chip("Son kullanılanlar", folder == "Son", "undo") { folder = "Son" }
-            (listOf("Tümü") + folders).forEach { f -> Chip(f, folder == f, if (f != "Tümü") "folder" else null) { folder = f } }
+            (listOf("Tümü") + folders).forEach { f -> Box(Modifier.target("chip:$f") { folder = f }) { Chip(f, folder == f, if (f != "Tümü") "folder" else null) { folder = f } } }
             if (which == "mine") {
                 Chip("Klasör", false, "plus") { newFolder = true }
                 if (mine.isNotEmpty()) Chip(if (edit) "Bitti" else "Düzenle", edit) { edit = !edit }
@@ -331,8 +333,11 @@ private fun CBTab(toast: (String) -> Unit, onPick: (PackItem) -> Unit, onBody: (
                 Chip("$n gövdesi kur", false, "ball", C.turq) { onBody(k) }
             }
         }
+        LaunchedEffect(folder) { PackUi.folder = folder }
         val items: List<PackItem> = (if (which == "mine") listOf(PackItem("PNG Yükle", "__upload")) else emptyList()) + shown
-        Pager(items, 5) { it ->
+        // Asistan "Ushanka"yı bulabilsin: listede varsa ilk sayfadaymış gibi hedef olur
+        items.find { it.name == "Ushanka" }?.let { u -> Box(Modifier.size(1.dp).target("pack:Ushanka") { onPick(u) }) }
+        Box(Modifier.target("pack-grid")) { Pager(items, 5) { it ->
             Column {
                 if (it.src == "__upload") {
                     Box(Modifier.fillMaxWidth().aspectRatio(1f).clip(RoundedCornerShape(10.dp)).background(C.dPanel2).border(2.dp, C.dLine, RoundedCornerShape(10.dp))
@@ -348,7 +353,7 @@ private fun CBTab(toast: (String) -> Unit, onPick: (PackItem) -> Unit, onBody: (
                     Text(it.name, fontSize = 10.sp, color = C.dText2, maxLines = 1, overflow = TextOverflow.Ellipsis, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth().padding(top = 3.dp))
                 }
             }
-        }
+        } }
         if (which == "mine" && mine.isEmpty()) Text("Kendi PNG'lerini yükle, klasörlere ayır; burada hızlıca kullan.", color = C.dText2, fontSize = 12.sp, modifier = Modifier.padding(top = 6.dp))
     }
     if (newFolder) AskText("Yeni klasör adı", "", "Oluştur", { newFolder = false }) { n -> newFolder = false; if (n.isNotBlank()) { Packs.addUserFolder(ctx, n.trim()); myFolders = Packs.userFolders(ctx); folder = n.trim() } }
@@ -418,11 +423,11 @@ private fun FlagsTab(replace: Boolean, toast: (String) -> Unit, onPick: (String,
             mine.filter { ql.isEmpty() || it.name.lowercase(tr).contains(ql) }.map { FI(it.id, "media:" + it.id, it.name) } +
             list.map { FI(it.code, "flags/${it.code}.svg", it.name) }
         if (items.isEmpty()) Text("\"$q\" için bayrak bulunamadı.", color = C.dText2, fontSize = 13.sp)
-        else androidx.compose.foundation.lazy.grid.LazyVerticalGrid(androidx.compose.foundation.lazy.grid.GridCells.Fixed(5), Modifier.fillMaxWidth().heightIn(max = 190.dp),
+        else androidx.compose.foundation.lazy.grid.LazyVerticalGrid(androidx.compose.foundation.lazy.grid.GridCells.Fixed(5), Modifier.fillMaxWidth().heightIn(max = 190.dp).target("flags-grid"),
             horizontalArrangement = Arrangement.spacedBy(6.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             items(items.size, key = { items[it].key }) { i ->
                 val f = items[i]
-                Column(Modifier.tap { if (f.key == "__add") pickFlag.launch(androidx.activity.result.PickVisualMediaRequest(androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia.ImageOnly)) else choose(f.src, f.name) }) {
+                Column(Modifier.target("flag:${f.key}") { choose(f.src, f.name) }.tap { if (f.key == "__add") pickFlag.launch(androidx.activity.result.PickVisualMediaRequest(androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia.ImageOnly)) else choose(f.src, f.name) }) {
                     if (f.key == "__add") Box(Modifier.fillMaxWidth().aspectRatio(4f / 3).clip(RoundedCornerShape(4.dp)).border(2.dp, C.dLine, RoundedCornerShape(4.dp)), contentAlignment = Alignment.Center) { Ico("plus", C.turq, 22.dp) }
                     else Box(Modifier.fillMaxWidth().aspectRatio(4f / 3).clip(RoundedCornerShape(4.dp))) { AssetImg(f.src, Modifier.fillMaxSize(), 120, crop = true) }
                     Text(f.name, fontSize = 10.sp, color = C.dText2, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.padding(top = 3.dp))

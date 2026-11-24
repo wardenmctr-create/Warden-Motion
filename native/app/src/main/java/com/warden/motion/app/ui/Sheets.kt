@@ -112,7 +112,7 @@ fun NewProjectSheet(count: Int, onClose: () -> Unit, onCreate: (Project) -> Unit
                 scope.launch { store.save(p); onCreate(p) }
             }.padding(start = 16.dp, top = 12.dp, bottom = 12.dp))
         }
-        Box(Modifier.fillMaxWidth().padding(top = 18.dp), contentAlignment = Alignment.Center) { Box(Modifier.size(44.dp).tap(onClick = onClose), contentAlignment = Alignment.Center) { Ico("close", C.text, 24.dp, 2f) } }
+        Box(Modifier.fillMaxWidth().padding(top = 18.dp), contentAlignment = Alignment.Center) { Box(Modifier.size(44.dp).target("sheet-close", onClose).tap(onClick = onClose), contentAlignment = Alignment.Center) { Ico("close", C.text, 24.dp, 2f) } }
     }
     if (picker) ColorPickerDialog(bg, onDismiss = { picker = false }) { bg = it; picker = false }
 }
@@ -150,7 +150,7 @@ fun SettingsDrawer(store: Store, onClose: () -> Unit) {
     var liteOpen by remember { mutableStateOf(false) }
     val haptic = LocalHapticFeedback.current
     Column(
-        Modifier.fillMaxHeight().widthIn(max = 320.dp).fillMaxWidth(0.82f).background(C.card).tap { }.statusBarsPadding()
+        Modifier.fillMaxHeight().widthIn(max = 320.dp).fillMaxWidth(0.82f).target("drawer", onClose).background(C.card).tap { }.statusBarsPadding()
             .verticalScroll(rememberScrollState()).padding(start = 10.dp, end = 10.dp, top = 18.dp, bottom = 14.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {

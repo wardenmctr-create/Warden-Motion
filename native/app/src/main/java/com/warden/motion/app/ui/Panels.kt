@@ -79,7 +79,7 @@ private fun LCol(onBack: () -> Unit, kf: Boolean? = null, onKf: () -> Unit = {},
     Column(Modifier.width(48.dp).fillMaxHeight().drawBehind { drawLine(LCOL_LINE, Offset(size.width, 0f), Offset(size.width, size.height), 1.dp.toPx()) }.padding(top = 6.dp),
         horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(4.dp)) {
         Box(Modifier.size(44.dp).tap(onClick = onBack), contentAlignment = Alignment.Center) { Ico("back", C.dText, 22.dp) }
-        if (kf != null) Box(Modifier.size(44.dp).tap(onClick = onKf), contentAlignment = Alignment.Center) { KfIcon(kf) }
+        if (kf != null) Box(Modifier.size(44.dp).target("kf-btn", onKf).tap(onClick = onKf), contentAlignment = Alignment.Center) { KfIcon(kf) }
         Spacer(Modifier.weight(1f))
         bottom?.invoke()
     }
@@ -539,7 +539,7 @@ private fun EffectsPanel(s: EditorState, layer: Layer, onClose: () -> Unit) {
                     }
                 }
             }
-            Row(Modifier.fillMaxWidth().height(44.dp).clip(RoundedCornerShape(8.dp)).background(Color(0xFF2E3F7E)).tap { browse = true }, horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
+            Row(Modifier.fillMaxWidth().height(44.dp).target("addfx") { browse = true }.clip(RoundedCornerShape(8.dp)).background(Color(0xFF2E3F7E)).tap { browse = true }, horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
                 Ico("plus", C.dText, 18.dp, 2.2f); Spacer(Modifier.width(8.dp)); Text("Efekt Ekle", color = C.dText, fontWeight = FontWeight.SemiBold)
             }
         }
@@ -586,6 +586,7 @@ fun EffectBrowser(onClose: () -> Unit, onPick: (String) -> Unit) {
     var search by remember { mutableStateOf(false) }
     var cat by remember { mutableStateOf<String?>(null) }
     androidx.activity.compose.BackHandler { if (cat != null) cat = null else onClose() }
+    DisposableEffect(Unit) { UiState.fxb = true; onDispose { UiState.fxb = false } }
     val ql = q.lowercase(java.util.Locale("tr"))
     val list = FX.filter { (cat == null || it.cat == cat) && (ql.isEmpty() || it.name.lowercase(java.util.Locale("tr")).contains(ql)) }
     val thumb = @Composable { type: String, size: Int ->
@@ -595,7 +596,7 @@ fun EffectBrowser(onClose: () -> Unit, onPick: (String) -> Unit) {
     }
     Column(Modifier.fillMaxSize().background(Color(0xFF2A3560)).statusBarsPadding()) {
         Row(Modifier.fillMaxWidth().height(60.dp).background(Color(0xFF2E3A6A)).padding(horizontal = 10.dp), verticalAlignment = Alignment.CenterVertically) {
-            Box(Modifier.size(44.dp).tap { if (cat != null) cat = null else onClose() }, contentAlignment = Alignment.Center) { Ico(if (cat != null) "back" else "close", C.dText, 26.dp, 2f) }
+            Box(Modifier.size(44.dp).target("fxb-close") { if (cat != null) cat = null else onClose() }.tap { if (cat != null) cat = null else onClose() }, contentAlignment = Alignment.Center) { Ico(if (cat != null) "back" else "close", C.dText, 26.dp, 2f) }
             if (search) BasicTextField(q, { q = it }, singleLine = true, textStyle = TextStyle(color = C.dText, fontSize = 16.sp, fontFamily = Inter),
                 modifier = Modifier.weight(1f).height(38.dp).clip(RoundedCornerShape(10.dp)).border(1.dp, C.dLine, RoundedCornerShape(10.dp)).background(C.dDeep).padding(horizontal = 12.dp, vertical = 9.dp))
             else Text(cat ?: "Efekt Tarayıcısı", fontSize = 19.sp, fontWeight = FontWeight.Medium, color = C.dText, textAlign = TextAlign.Center, modifier = Modifier.weight(1f))
@@ -608,7 +609,7 @@ fun EffectBrowser(onClose: () -> Unit, onPick: (String) -> Unit) {
             Column(Modifier.padding(horizontal = 14.dp, vertical = 20.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
                 list.chunked(4).forEach { row ->
                     Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                        row.forEach { f -> Column(Modifier.weight(1f).tap { onPick(f.type) }, horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(6.dp)) { thumb(f.type, 72); Text(f.name, fontSize = 11.5.sp, lineHeight = 14.sp, color = C.dText, textAlign = TextAlign.Center) } }
+                        row.forEach { f -> Column(Modifier.weight(1f).target("fxb:${f.name}") { onPick(f.type) }.tap { onPick(f.type) }, horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(6.dp)) { thumb(f.type, 72); Text(f.name, fontSize = 11.5.sp, lineHeight = 14.sp, color = C.dText, textAlign = TextAlign.Center) } }
                         repeat(4 - row.size) { Spacer(Modifier.weight(1f)) }
                     }
                 }

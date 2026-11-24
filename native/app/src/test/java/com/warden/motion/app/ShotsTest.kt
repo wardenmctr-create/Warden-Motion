@@ -101,6 +101,17 @@ class ShotsTest {
         for (tab in listOf("Şekil", "Medya", "Ses", "CB", "Bayrak")) { rule.onAllNodesWithText(tab)[0].performClick(); settle(); save(shot(), "add_" + tab) }
     }
 
+    @Test fun assistant() {
+        fun settle(n: Int = 5) { repeat(n) { rule.mainClock.advanceTimeBy(400); rule.waitForIdle(); Thread.sleep(150) } }
+        rule.mainClock.autoAdvance = false
+        settle(8); save(shot(), "wa_1")
+        rule.onAllNodesWithText("Geç")[0].performClick(); settle(); save(shot(), "wa_2")
+        // Öğretici: Temel Animasyon
+        com.warden.motion.app.ui.openTutorial("g1"); settle(10); save(shot(), "wa_3")
+        rule.onAllNodesWithText("Anlamadım")[0].performClick(); settle(12); save(shot(), "wa_4")
+        settle(12); save(shot(), "wa_5")
+    }
+
     @Test fun importOld() {
         val ctx = ApplicationProvider.getApplicationContext<android.content.Context>()
         val store = Store.get(ctx)
@@ -133,6 +144,12 @@ class ShotsTest {
         val b = Bitmap.createBitmap(900, 600, Bitmap.Config.ARGB_8888)
         r.exporting = true
         r.draw(Canvas(b), p, 0.5, 1f); save(b, "fx")
+    }
+
+    @Test fun gif() {
+        val ctx = ApplicationProvider.getApplicationContext<android.content.Context>()
+        val p = TEMPLATES[0].make()
+        File(dir, "top.gif").outputStream().use { com.warden.motion.app.export.Exporter(ctx).gif(p, it, 240, 10) { } }
     }
 
     @Test fun frame() {

@@ -13,8 +13,8 @@ android {
         applicationId = "com.warden.motion.glow"
         minSdk = 26
         targetSdk = 34
-        versionCode = 1
-        versionName = "Glow 0.1"
+        versionCode = 2
+        versionName = "Glow 0.2"
     }
     buildTypes {
         release { isMinifyEnabled = false }

@@ -14,6 +14,10 @@ import com.warden.motion.app.ui.GlowTheme
 import com.warden.motion.app.ui.HomeScreen
 import com.warden.motion.app.ui.LocalRenderer
 import com.warden.motion.app.ui.Tab
+import com.warden.motion.app.ui.UiState
+import com.warden.motion.app.ui.OverlayHost
+import com.warden.motion.app.ui.AssistantLayer
+import androidx.compose.foundation.layout.fillMaxSize
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
@@ -30,8 +34,13 @@ class MainActivity : ComponentActivity() {
                     var tab by rememberSaveable { mutableStateOf(Tab.HOME) }
                     var open by remember { mutableStateOf<Project?>(null) }
                     val cur = open
-                    if (cur == null) HomeScreen(store, tab, { tab = it }) { p -> scope.launch { if (store.projects.value.none { it.id == p.id }) store.save(p) }; open = p }
-                    else EditorScreen(cur) { open = null }
+                    androidx.compose.foundation.layout.Box(androidx.compose.ui.Modifier.fillMaxSize()) {
+                        if (cur == null) HomeScreen(store, tab, { tab = it }) { p -> scope.launch { if (store.projects.value.none { it.id == p.id }) store.save(p) }; open = p }
+                        else androidx.compose.runtime.key(cur.id) { EditorScreen(cur) { open = null; UiState.screen = when (tab) { Tab.HOME -> "home"; Tab.TUTORIALS -> "tutorials"; Tab.ACCOUNT -> "account" } } }
+                        // Açılan pencereler ve WardenCB her şeyin üstünde
+                        OverlayHost()
+                        AssistantLayer()
+                    }
                 }
             }
         }

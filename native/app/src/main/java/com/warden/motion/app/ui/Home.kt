@@ -72,12 +72,16 @@ fun HomeScreen(store: Store, tab: Tab, setTab: (Tab) -> Unit, onOpen: (Project) 
         when { sheet -> sheet = false; drawer -> drawer = false; else -> setTab(Tab.HOME) }
     }
     val startTutorial = { tu: Tutorial -> onOpen(newProject(tu.title, tu.w, tu.h, 30, tu.bg).copy(tutorial = tu.id)) }
+    LaunchedEffect(tab) { UiState.screen = when (tab) { Tab.HOME -> "home"; Tab.TUTORIALS -> "tutorials"; Tab.ACCOUNT -> "account" } }
+    LaunchedEffect(drawer, sheet) { UiState.drawer = drawer; UiState.sheet = sheet }
+    UiState.setTab = setTab; UiState.openNew = onOpen
+    UiState.openProject = { id -> projects.find { it.id == id }?.let(onOpen) }
     val tpls = remember { TEMPLATES.map { it to it.make() } }
 
     Box(Modifier.fillMaxSize().background(C.bg).statusBarsPadding()) {
         Column(Modifier.fillMaxSize()) {
             Box(Modifier.fillMaxWidth().padding(start = 12.dp, end = 12.dp, top = 12.dp, bottom = 6.dp).height(44.dp)) {
-                Box(Modifier.align(Alignment.CenterStart).size(44.dp).tap { drawer = true }, contentAlignment = Alignment.Center) { Ico("menu", C.text, 26.dp, 2f) }
+                Box(Modifier.align(Alignment.CenterStart).size(44.dp).target("menu-btn") { drawer = true }.tap { drawer = true }, contentAlignment = Alignment.Center) { Ico("menu", C.text, 26.dp, 2f) }
                 Brand(lite, Modifier.align(Alignment.Center))
                 Box(Modifier.align(Alignment.CenterEnd).size(44.dp).tap { setTab(Tab.ACCOUNT) }, contentAlignment = Alignment.Center) { AccountAvatar(34.dp, profile) }
             }
@@ -90,7 +94,7 @@ fun HomeScreen(store: Store, tab: Tab, setTab: (Tab) -> Unit, onOpen: (Project) 
                     }
                     Tab.HOME -> {
                         SecHead("Yeni Şablonlar", "Dokun ve aç")
-                        Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(bottom = 4.dp), horizontalArrangement = Arrangement.spacedBy(14.dp)) {
+                        Row(Modifier.fillMaxWidth().target("tpl-row").horizontalScroll(rememberScrollState()).padding(bottom = 4.dp), horizontalArrangement = Arrangement.spacedBy(14.dp)) {
                             tpls.forEach { (t, p) -> TplItem(t.name, { onOpen(t.make()) }) { Thumb(p, 1.6, Modifier.fillMaxSize().clip(CircleShape), cover = true, px = 160) } }
                             TUTORIALS.filter { it.ready }.forEach { tu ->
                                 TplItem(tu.title, { startTutorial(tu) }) {
@@ -102,7 +106,7 @@ fun HomeScreen(store: Store, tab: Tab, setTab: (Tab) -> Unit, onOpen: (Project) 
                         NewCard { sheet = true }
                         ProjectImport(store)
                         ProjectList(store, projects, onOpen) { selecting = it }
-                        if (projects.isEmpty()) Text("Henüz proje yok. Yukarıdaki şablonlardan birini aç ya da yeni proje oluştur.", color = C.text2, fontSize = 14.sp, modifier = Modifier.padding(vertical = 18.dp, horizontal = 4.dp))
+                        if (projects.isEmpty()) Text("Henüz proje yok. Yukarıdaki şablonlardan birini aç ya da yeni proje oluştur.", color = C.text2, fontSize = 14.sp, modifier = Modifier.target("empty").padding(vertical = 18.dp, horizontal = 4.dp))
                     }
                 }
             }
@@ -173,7 +177,7 @@ fun Badge(t: String, bg: Color, fg: Color) {
 
 @Composable
 private fun NewCard(onClick: () -> Unit) {
-    Box(Modifier.fillMaxWidth().height(68.dp).clip(RoundedCornerShape(16.dp)).background(C.card).tap(onClick = onClick), contentAlignment = Alignment.Center) {
+    Box(Modifier.fillMaxWidth().height(68.dp).target("new-card", onClick).clip(RoundedCornerShape(16.dp)).background(C.card).tap(onClick = onClick), contentAlignment = Alignment.Center) {
         Canvas(Modifier.matchParentSize()) {
             val w = 2.dp.toPx()
             drawRoundRect(Color(0xFFA9B6C9), topLeft = Offset(w / 2, w / 2), size = Size(size.width - w, size.height - w),
@@ -201,7 +205,7 @@ private fun ProjectImport(store: Store) {
         }
     }
     Row(
-        Modifier.fillMaxWidth().padding(top = 10.dp).height(44.dp).clip(RoundedCornerShape(14.dp)).background(C.card).border(1.dp, C.line, RoundedCornerShape(14.dp))
+        Modifier.fillMaxWidth().padding(top = 10.dp).height(44.dp).target("pimport").clip(RoundedCornerShape(14.dp)).background(C.card).border(1.dp, C.line, RoundedCornerShape(14.dp))
             .tap { pick.launch(arrayOf("*/*")) },
         horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -244,9 +248,9 @@ private fun ProjectList(store: Store, projects: List<Project>, onOpen: (Project)
     }
 
     Column(Modifier.padding(top = 12.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        projects.forEach { p ->
+        projects.forEachIndexed { pi, p ->
             val on = sel?.contains(p.id) == true
-            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            Row(Modifier.fillMaxWidth().target("pcard:${p.id}") { onOpen(p) }.then(if (pi == 0) Modifier.target("pcard-first") else Modifier), verticalAlignment = Alignment.CenterVertically) {
                 if (sel != null) {
                     Box(Modifier.padding(end = 10.dp).size(24.dp).border(2.dp, C.text, CircleShape).tap { toggle(p.id) }, contentAlignment = Alignment.Center) {
                         if (on) Box(Modifier.size(14.dp).clip(CircleShape).background(C.text))
@@ -270,7 +274,7 @@ private fun ProjectList(store: Store, projects: List<Project>, onOpen: (Project)
                         Text("${p.width}x${p.height} · ${p.fps}fps", fontSize = 12.sp, color = Color(0xFF6A7891))
                         Text("${p.layers.size} katman · ${SimpleDateFormat("d.MM.yyyy", Locale("tr")).format(Date(p.updatedAt))}", fontSize = 12.sp, color = Color(0xFF6A7891))
                     }
-                    if (sel == null) Box(Modifier.size(44.dp).tap { menu = p }, contentAlignment = Alignment.Center) { Ico("more", C.text, 24.dp, 3f) }
+                    if (sel == null) Box(Modifier.size(44.dp).then(if (pi == 0) Modifier.target("pmore") else Modifier).tap { menu = p }, contentAlignment = Alignment.Center) { Ico("more", C.text, 24.dp, 3f) }
                 }
             }
         }
@@ -322,14 +326,6 @@ private fun SelAct(icon: String, label: String, onClick: () -> Unit) {
     }
 }
 
-/** Ekranın tamamını kaplayan katman (web'deki position:fixed gibi) */
-@Composable
-fun Overlay(content: @Composable () -> Unit) {
-    androidx.compose.ui.window.Popup(properties = androidx.compose.ui.window.PopupProperties(focusable = false, clippingEnabled = false)) {
-        Box(Modifier.fillMaxSize()) { content() }
-    }
-}
-
 /** Menü (eski uygulamadaki .pmenu): yuvarlak köşeli kart, ikonlar sağda */
 @Composable
 fun PMenu(onDismiss: () -> Unit, title: String? = null, content: @Composable ColumnScope.() -> Unit) {
@@ -376,10 +372,10 @@ private fun BottomNav(modifier: Modifier, tab: Tab, setTab: (Tab) -> Unit, profi
             Modifier.align(Alignment.BottomCenter).fillMaxWidth().shadow(10.dp).background(C.card).navigationBarsPadding().height(72.dp).padding(start = 4.dp, end = 4.dp, bottom = 10.dp),
             horizontalArrangement = Arrangement.SpaceAround, verticalAlignment = Alignment.Bottom,
         ) {
-            NavItem("Ana Sayfa", tab == Tab.HOME, { setTab(Tab.HOME) }) { Ico("home", if (tab == Tab.HOME) C.text else C.text2, 24.dp, fill = tab == Tab.HOME) }
-            NavItem("Öğreticiler", tab == Tab.TUTORIALS, { setTab(Tab.TUTORIALS) }) { Ico("cap", if (tab == Tab.TUTORIALS) C.text else C.text2, 24.dp) }
+            NavItem("Ana Sayfa", tab == Tab.HOME, { setTab(Tab.HOME) }, "nav-home") { Ico("home", if (tab == Tab.HOME) C.text else C.text2, 24.dp, fill = tab == Tab.HOME) }
+            NavItem("Öğreticiler", tab == Tab.TUTORIALS, { setTab(Tab.TUTORIALS) }, "nav-tut") { Ico("cap", if (tab == Tab.TUTORIALS) C.text else C.text2, 24.dp) }
             Spacer(Modifier.width(64.dp))
-            NavItem("Hesap", tab == Tab.ACCOUNT, { setTab(Tab.ACCOUNT) }) { AccountAvatar(28.dp, profile) }
+            NavItem("Hesap", tab == Tab.ACCOUNT, { setTab(Tab.ACCOUNT) }, "nav-acc") { AccountAvatar(28.dp, profile) }
             NavItem("Şablonlar", false, { setTab(Tab.HOME) }) { Ico("grid", C.text2, 24.dp) }
         }
         Box(
@@ -391,8 +387,8 @@ private fun BottomNav(modifier: Modifier, tab: Tab, setTab: (Tab) -> Unit, profi
 }
 
 @Composable
-private fun NavItem(label: String, on: Boolean, onClick: () -> Unit, icon: @Composable () -> Unit) {
-    Column(Modifier.widthIn(min = 64.dp).tap(onClick = onClick), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(4.dp)) {
+private fun NavItem(label: String, on: Boolean, onClick: () -> Unit, tid: String? = null, icon: @Composable () -> Unit) {
+    Column(Modifier.widthIn(min = 64.dp).then(if (tid != null) Modifier.target(tid, onClick) else Modifier).tap(onClick = onClick), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(4.dp)) {
         icon()
         Text(label, fontSize = 12.sp, fontWeight = if (on) FontWeight.Bold else FontWeight.Medium, color = if (on) C.text else C.text2)
     }

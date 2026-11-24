@@ -116,7 +116,9 @@ fun EditorScreen(initial: Project, onClose: () -> Unit) {
     var PPS by remember { mutableFloatStateOf(100f) }
     val tickStep = listOf(1, 2, 3, 5, 6, 10, 15, 30, 60).filter { p.fps % it == 0 || it >= p.fps }.firstOrNull { it * PPS / p.fps >= 6 } ?: p.fps
 
-    DisposableEffect(Unit) { onDispose { s.flush() } }
+    DisposableEffect(Unit) { UiState.editor = s; UiState.screen = "editor"; onDispose { s.flush(); if (UiState.editor === s) { UiState.editor = null; UiState.panel = null; UiState.menu = false; UiState.multi = false } } }
+    LaunchedEffect(panel, sel?.id) { UiState.panel = if (panel == Panel.ADD) "add" else if (panel != null && sel != null) panel!!.title else null }
+    LaunchedEffect(menu, projMenu, mmenu, s.multi) { UiState.menu = menu || projMenu || mmenu; UiState.multi = s.multi != null }
     val close = { s.playing = false; s.flush(); onClose() }
 
     // ---------- Geri tuşu ----------
@@ -232,8 +234,9 @@ fun EditorScreen(initial: Project, onClose: () -> Unit) {
         Column(Modifier.fillMaxSize().statusBarsPadding()) {
             // ---------- Üst çubuk ----------
             Row(Modifier.fillMaxWidth().height(wd(0.117f)).background(C.dBar).padding(horizontal = 4.dp), verticalAlignment = Alignment.CenterVertically) {
+                val tids = mapOf("Seçimi bitir" to "multi-close", "Geri" to "back", "Seçimi kaldır" to "desel", "Diğer" to "more", "Projeden çık" to "exit", "Proje ayarları" to "projmenu", "Dışa aktar" to "export")
                 val ib = @Composable { icon: String, label: String, size: Float, stroke: Float, tint: Color, on: () -> Unit ->
-                    Box(Modifier.width(wd(0.12f)).fillMaxHeight().tap(onClick = on), contentAlignment = Alignment.Center) { Ico(icon, tint, size.dp, stroke) }
+                    Box(Modifier.width(wd(0.12f)).fillMaxHeight().then(tids[label]?.let { Modifier.target(it, on) } ?: Modifier).semantics { contentDescription = label }.tap(onClick = on), contentAlignment = Alignment.Center) { Ico(icon, tint, size.dp, stroke) }
                 }
                 val m = s.multi
                 when {
@@ -267,7 +270,8 @@ fun EditorScreen(initial: Project, onClose: () -> Unit) {
             // ---------- Oynatma düğmeleri ----------
             Row(Modifier.fillMaxWidth().height(wd(0.122f)).padding(horizontal = 2.dp), verticalAlignment = Alignment.CenterVertically) {
                 val ib = @Composable { icon: String, enabled: Boolean, size: Float, tint: Color, bg: Color, on: () -> Unit ->
-                    Box(Modifier.size(wd(0.11f)).clip(RoundedCornerShape(12.dp)).background(bg).tap(enabled, on), contentAlignment = Alignment.Center) { Ico(icon, if (enabled) tint else C.dDim, size.dp) }
+                    val tid = when (icon) { "undo" -> "undo"; "play", "pause" -> "play"; "toStart" -> "toStart"; else -> null }
+                    Box(Modifier.size(wd(0.11f)).then(if (tid != null) Modifier.target(tid, on) else Modifier).clip(RoundedCornerShape(12.dp)).background(bg).tap(enabled, on), contentAlignment = Alignment.Center) { Ico(icon, if (enabled) tint else C.dDim, size.dp) }
                 }
                 ib("undo", s.past.isNotEmpty(), 22f, C.dText, Color.Transparent) { s.undo() }
                 ib("redo", s.future.isNotEmpty(), 22f, C.dText, Color.Transparent) { s.redo() }
@@ -289,7 +293,7 @@ fun EditorScreen(initial: Project, onClose: () -> Unit) {
         // Katman ekle düğmesi
         if (panel == null && sel == null) Box(
             Modifier.align(Alignment.BottomEnd).navigationBarsPadding().padding(end = wd(0.0375f), bottom = wd(0.044f)).size(wd(0.128f))
-                .shadow(8.dp, CircleShape).clip(CircleShape).background(C.turq).semantics { contentDescription = "Katman ekle" }.tap { openAdd(null) },
+                .target("fab") { openAdd(null) }.shadow(8.dp, CircleShape).clip(CircleShape).background(C.turq).semantics { contentDescription = "Katman ekle" }.tap { openAdd(null) },
             contentAlignment = Alignment.Center,
         ) { Ico("plus", C.dDeep, 28.dp, 2.4f) }
         if (panel == Panel.ADD) AddPanel(s, addTab, { addTab = it }, replaceFlagOf, W, onClose = { panel = null; replaceFlagOf = null }, toast = show)
@@ -369,7 +373,6 @@ fun EditorScreen(initial: Project, onClose: () -> Unit) {
         if (toast.isNotEmpty()) Box(Modifier.fillMaxSize().navigationBarsPadding().padding(bottom = 90.dp), contentAlignment = Alignment.BottomCenter) {
             Text(toast, color = C.dText, fontSize = 14.sp, modifier = Modifier.widthIn(max = 340.dp).clip(RoundedCornerShape(10.dp)).background(Color(0xFF1B2A55)).padding(horizontal = 16.dp, vertical = 10.dp))
         }
-        TutorialOverlay(s)
     }
 }
 
@@ -394,7 +397,7 @@ private fun Stage(s: EditorState, panel: Panel?, perf: Map<String, Double>, ver:
     Box(modifier.onSizeChanged { box = it }, contentAlignment = Alignment.Center) {
         val fit = min(box.width.toFloat() / p.width, box.height.toFloat() / p.height)
         val dw = with(LocalDensity.current) { (p.width * fit).toDp() }; val dh = with(LocalDensity.current) { (p.height * fit).toDp() }
-        Canvas(Modifier.size(dw, dh).shadow(12.dp)
+        Canvas(Modifier.size(dw, dh).target("stage").shadow(12.dp)
             .pointerInput(p.id) { stageGestures(s, { panel }, { fxSel }, { swiping = it }, onEmptyTap) }) {
             ver.hashCode()
             val q = size.width / s.project.width
@@ -593,7 +596,7 @@ private fun Timeline(s: EditorState, PPS: Float, setPPS: (Float) -> Unit, tickSt
     }
     // PPS: saniye başına dp
     val P = PPS
-    Box(modifier.clipToBounds().onSizeChanged { tlW = it.width / dens }
+    Box(modifier.target("tl").clipToBounds().onSizeChanged { tlW = it.width / dens }
         .pointerInput(p.fps, tickStep) {
             // Yatay kaydırma: kare kare zaman; iki parmak: yakınlaştır
             awaitEachGesture {
@@ -699,7 +702,7 @@ private fun Timeline(s: EditorState, PPS: Float, setPPS: (Float) -> Unit, tickSt
         if (sel == null && p.layers.isNotEmpty()) Box(Modifier.fillMaxHeight().width(56.dp).graphicsLayer { translationY = -vScroll.value.toFloat() }) {
             rows.forEachIndexed { i, l ->
                 val on = s.multi?.contains(l.id) == true
-                Box(Modifier.offset(y = (TOP + i * ROW).dp).size(if (on) 52.dp else 40.dp, (W * 0.0625f).dp).clip(RoundedCornerShape(topEnd = 10.dp, bottomEnd = 10.dp)).background(if (on) C.turq else Color(0xFF26386C))
+                Box(Modifier.offset(y = (TOP + i * ROW).dp).target("pill:${l.id}") { s.selectedId = l.id }.size(if (on) 52.dp else 40.dp, (W * 0.0625f).dp).clip(RoundedCornerShape(topEnd = 10.dp, bottomEnd = 10.dp)).background(if (on) C.turq else Color(0xFF26386C))
                     .layerPress(s, l.id, haptic), contentAlignment = Alignment.Center) { LayerDot(l) }
             }
         }
@@ -913,7 +916,7 @@ private fun Tools(s: EditorState, sel: Layer, W: Float, setPanel: (Panel) -> Uni
             }
         }
         val big = @Composable { m: Modifier, icon: String, label: String, on: (() -> Unit)? ->
-            Column(m.fillMaxHeight().clip(RoundedCornerShape(6.dp)).background(C.dPanel).tap(on != null) { on?.invoke() }, horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+            Column(m.fillMaxHeight().then(if (on != null) Modifier.target("tbig:$label", on) else Modifier).clip(RoundedCornerShape(6.dp)).background(C.dPanel).tap(on != null) { on?.invoke() }, horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
                 Ico(icon, if (on != null) C.dText else C.dDim, 24.dp)
                 Spacer(Modifier.height(4.dp))
                 Text(label, fontSize = (W * 0.031f).sp, lineHeight = (W * 0.036f).sp, color = if (on != null) C.dText else C.dDim, maxLines = 2, textAlign = androidx.compose.ui.text.style.TextAlign.Center)
@@ -957,19 +960,24 @@ fun DItem(label: String, enabled: Boolean = true, onClick: () -> Unit) {
     Text(label, fontSize = 15.sp, color = if (enabled) C.dText else C.dDim, modifier = Modifier.fillMaxWidth().tap(enabled, onClick).padding(horizontal = 20.dp, vertical = 14.dp))
 }
 
+/** Seçim penceresinin içinde mi (düğmeler asistana "choice:" olarak görünür) */
+val LocalInChoice = staticCompositionLocalOf { false }
+
 @Composable
 fun DSep() { Box(Modifier.fillMaxWidth().height(1.dp).background(C.dLine)) }
 
 @Composable
 fun ChoiceBox(onDismiss: () -> Unit, content: @Composable ColumnScope.() -> Unit) {
     Box(Modifier.fillMaxSize().background(Color(0x9903081A)).tap(onClick = onDismiss).padding(20.dp), contentAlignment = Alignment.Center) {
-        Column(Modifier.widthIn(max = 340.dp).fillMaxWidth().clip(RoundedCornerShape(16.dp)).background(C.dPanel).tap { }.padding(18.dp), verticalArrangement = Arrangement.spacedBy(10.dp), content = content)
+        CompositionLocalProvider(LocalInChoice provides true) {
+            Column(Modifier.widthIn(max = 340.dp).fillMaxWidth().clip(RoundedCornerShape(16.dp)).background(C.dPanel).tap { }.padding(18.dp), verticalArrangement = Arrangement.spacedBy(10.dp), content = content)
+        }
     }
 }
 
 @Composable
 fun DBtn(label: String, ghost: Boolean = false, icon: String? = null, enabled: Boolean = true, modifier: Modifier = Modifier.fillMaxWidth(), onClick: () -> Unit) {
-    Row(modifier.height(44.dp).clip(RoundedCornerShape(12.dp)).background(if (ghost) C.dPanel2 else C.turq).tap(enabled, onClick).padding(horizontal = 14.dp),
+    Row(modifier.height(44.dp).then(if (LocalInChoice.current) Modifier.target("choice:$label", onClick) else Modifier).clip(RoundedCornerShape(12.dp)).background(if (ghost) C.dPanel2 else C.turq).tap(enabled, onClick).padding(horizontal = 14.dp),
         verticalAlignment = Alignment.CenterVertically, horizontalArrangement = if (ghost) Arrangement.Start else Arrangement.Center) {
         if (icon != null) { Ico(icon, if (ghost) C.dText else C.dDeep, 18.dp); Spacer(Modifier.width(8.dp)) }
         Text(label, fontSize = 15.sp, fontWeight = FontWeight.SemiBold, color = (if (ghost) C.dText else C.dDeep).copy(alpha = if (enabled) 1f else .5f), maxLines = 1, overflow = TextOverflow.Ellipsis)
