@@ -51,20 +51,20 @@ function FakeWave({ seed }: { seed: number }) {
   return <svg className="ac-wave" viewBox="0 0 102 24" preserveAspectRatio="none" aria-hidden="true">{bars}</svg>;
 }
 
-/** Ses kartı: karta basınca dinlenir, alttaki + ile projeye eklenir */
+/** Ses kartı (kare): üst yarısına basınca dinlenir, alt yarısına (+) basınca projeye eklenir */
 export function AudioCard({ name, dur, recent, playing, onListen, onAdd }: { name: string; dur?: number; recent?: boolean; playing?: boolean; onListen: () => void; onAdd: () => void }) {
   const h = hash(name);
   const g = GRADS[h % GRADS.length];
   const label = name.replace(/\.[^.]+$/, '');
   return (
-    <div className={'acard' + (playing ? ' playing' : '')} role="button" tabIndex={0} aria-label={`${label} dinle`} onClick={onListen}
-      onKeyDown={(e) => e.key === 'Enter' && onListen()} style={{ background: `linear-gradient(160deg, ${g[0]}, ${g[1]} 55%, ${g[2]})` }}>
+    <div className={'acard' + (playing ? ' playing' : '')} style={{ background: `linear-gradient(160deg, ${g[0]}, ${g[1]} 55%, ${g[2]})` }}>
       <span className="ac-name">{label}</span>
       {dur !== undefined && <span className="ac-dur">{fmtSec(dur)}</span>}
       <FakeWave seed={h} />
-      {playing ? <span className="ac-recent on" aria-label="Çalıyor"><Icon name="pause" size={12} /></span>
-        : recent && <span className="ac-recent" aria-label="Son kullanılan"><Icon name="clock" size={14} /></span>}
-      <button className="ac-plus" aria-label={`${label} projeye ekle`} onClick={(e) => { e.stopPropagation(); stopListen(); onAdd(); }}><Icon name="plus" size={22} stroke={2.4} /></button>
+      {playing ? <span className="ac-recent on" aria-hidden="true"><Icon name="pause" size={12} /></span>
+        : recent && <span className="ac-recent" aria-hidden="true"><Icon name="clock" size={14} /></span>}
+      <button className="ac-top" aria-label={playing ? `${label} durdur` : `${label} dinle`} onClick={onListen} />
+      <button className="ac-plus" aria-label={`${label} projeye ekle`} onClick={() => { stopListen(); onAdd(); }}><Icon name="plus" size={24} stroke={2.4} /></button>
     </div>
   );
 }

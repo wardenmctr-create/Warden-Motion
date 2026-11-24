@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Icon } from './Icon';
-import { fileSrc, Gallery, galleryNative, type GItem, readItem, toFile, useMediaSheet } from '../gallery';
+import { addFolder, fileSrc, Gallery, galleryNative, getFolders, type GItem, isDir, readItem, setFolders, toFile, useMediaSheet, type Kind } from '../gallery';
 import { AudioCard, stopListen, toggleListen, useListening } from './AudioCard';
 
 const thumbs = new Map<string, string>(); // küçük resim önbelleği (oturum boyunca)
@@ -8,17 +8,17 @@ const PAGE = 60;
 const fmtDur = (ms: number) => { const s = Math.round(ms / 1000); return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`; };
 
 export const thumbOf = async (it: GItem) => {
-  const key = `${it.video ? 'v' : 'i'}${it.id}`;
+  const key = it.uri ?? `${it.video ? 'v' : 'i'}${it.id}`;
   const c = thumbs.get(key);
   if (c) return c;
-  const u = fileSrc((await Gallery.thumb({ id: it.id, video: it.video })).path);
+  const u = fileSrc((it.uri ? await Gallery.thumbUri({ uri: it.uri, video: it.video }) : await Gallery.thumb({ id: it.id, video: it.video })).path);
   thumbs.set(key, u);
   return u;
 };
 
 /** Galeri karesi. Basılı tutunca onLong (çoklu seçim) */
 export function Tile({ it, on, cur, onPick, onLong, root }: { it: GItem; on: number; cur?: boolean; onPick: () => void; onLong?: () => void; root: HTMLElement | null }) {
-  const key = `${it.video ? 'v' : 'i'}${it.id}`;
+  const key = it.uri ?? `${it.video ? 'v' : 'i'}${it.id}`;
   const [src, setSrc] = useState(thumbs.get(key) ?? '');
   const ref = useRef<HTMLButtonElement>(null);
   const timer = useRef(0), longed = useRef(false), start = useRef({ x: 0, y: 0 });
@@ -46,6 +46,37 @@ export function Tile({ it, on, cur, onPick, onLong, root }: { it: GItem; on: num
   );
 }
 
+/** Albüm/klasör listesinden sayfa getirir ('dir:' ile başlayan = kullanıcının eklediği klasör) */
+export function listAlbum(kind: Kind, album: string, offset: number, limit: number) {
+  if (isDir(album)) return Gallery.listFolder({ uri: album.slice(4), kind, offset, limit });
+  if (kind === 'audio') return Gallery.audioList({ offset, limit, album: album || undefined });
+  return Gallery.list({ offset, limit, kind, album: album || undefined });
+}
+export const albumLabel = (album: string, audio: boolean) => (!album ? (audio ? 'Bütün sesler' : 'Her şey') : isDir(album) ? getFolders(audio).find((f) => 'dir:' + f.uri === album)?.name ?? 'Klasör' : album);
+
+/** Telefondaki klasörler + kendi eklediğin klasörler; en altta "+ Klasör ekle" */
+export function AlbumMenu({ albums, album, audio, onPick, className, style }: { albums: { name: string; count: number }[]; album: string; audio: boolean; onPick: (a: string) => void; className?: string; style?: React.CSSProperties }) {
+  const [mine, setMine] = useState(() => getFolders(audio));
+  const add = async () => { try { const f = await addFolder(audio); if (f) { setMine(getFolders(audio)); onPick('dir:' + f.uri); } } catch { /* vazgeçti */ } };
+  const remove = (uri: string) => { const n = mine.filter((f) => f.uri !== uri); setFolders(audio, n); setMine(n); if (album === 'dir:' + uri) onPick(''); };
+  return (
+    <div className={'ms-albmenu ' + (className ?? '')} role="listbox" style={style} onClick={(e) => e.stopPropagation()}>
+      {[{ name: '', count: 0 }, ...albums].map((a) => (
+        <button key={a.name || '*'} role="option" aria-selected={album === a.name} className={album === a.name ? 'on' : ''} onClick={() => onPick(a.name)}>
+          {a.name || (audio ? 'Bütün sesler' : 'Her şey')}{a.count ? <i>{a.count}</i> : null}
+        </button>
+      ))}
+      {mine.map((f) => (
+        <div key={f.uri} className={'ms-albmine' + (album === 'dir:' + f.uri ? ' on' : '')}>
+          <button role="option" aria-selected={album === 'dir:' + f.uri} onClick={() => onPick('dir:' + f.uri)}><Icon name="folder" size={18} />{f.name}</button>
+          <button className="x" aria-label={`${f.name} klasörünü listeden kaldır`} onClick={() => remove(f.uri)}><Icon name="close" size={16} /></button>
+        </div>
+      ))}
+      <button className="ms-albadd" onClick={add}><Icon name="plus" size={20} stroke={2.4} />Klasör ekle</button>
+    </div>
+  );
+}
+
 /** Üstteki önizleme: görsel büyük hâliyle, video oynatılabilir */
 function Preview({ it, getFile }: { it: GItem; getFile: (it: GItem) => Promise<File> }) {
   const [thumb, setThumb] = useState('');
@@ -57,7 +88,7 @@ function Preview({ it, getFile }: { it: GItem; getFile: (it: GItem) => Promise<F
     thumbOf(it).then((u) => on && setThumb(u)).catch(() => {});
     if (!it.video) getFile(it).then((f) => { if (on) { made = URL.createObjectURL(f); setUrl(made); } }).catch(() => {});
     return () => { on = false; if (made) URL.revokeObjectURL(made); };
-  }, [it.id]);
+  }, [it.uri ?? it.id]);
   const playVideo = async () => {
     setLoading(true);
     try { setUrl(URL.createObjectURL(await getFile(it))); } catch { /* yok */ }
@@ -94,7 +125,7 @@ export function MediaSheet() {
   const files = useRef(new Map<string, Promise<File>>());
   const listening = useListening();
 
-  const fkey = (it: GItem) => `${it.audio ? 'a' : it.video ? 'v' : 'i'}${it.id}`;
+  const fkey = (it: GItem) => it.uri ?? `${it.audio ? 'a' : it.video ? 'v' : 'i'}${it.id}`;
   /** Dosyayı bir kez okur (önizleme ve ekleme aynı kopyayı kullanır) */
   const getFile = (it: GItem) => {
     let f = files.current.get(fkey(it));
@@ -107,7 +138,7 @@ export function MediaSheet() {
     loading.current = true;
     try {
       const off = reset ? 0 : items.length;
-      const r = req.kind === 'audio' ? await Gallery.audioList({ offset: off, limit: PAGE, album: album || undefined }) : await Gallery.list({ offset: off, limit: PAGE, kind: req.kind, album: album || undefined });
+      const r = await listAlbum(req.kind, album, off, PAGE);
       setItems((x) => (reset ? r.items : [...x, ...r.items]));
       if (reset && req.kind !== 'audio') setPrev(r.items[0] ?? null);
       setEnd(r.items.length < PAGE);
@@ -146,10 +177,10 @@ export function MediaSheet() {
     try { close(await Promise.all(list.map(getFile))); }
     catch { setBusy(''); setErr('Dosya okunamadı.'); }
   };
-  const toggleSel = (it: GItem) => setSel((s) => (s.some((x) => x.id === it.id) ? s.filter((x) => x.id !== it.id) : [...s, it]));
+  const toggleSel = (it: GItem) => setSel((s) => (s.some((x) => fkey(x) === fkey(it)) ? s.filter((x) => fkey(x) !== fkey(it)) : [...s, it]));
   // Dokununca üstte önizlenir; çoklu seçimdeyken seçime de eklenir/çıkarılır
   const tap = (it: GItem) => { setPrev(it); if (multi) toggleSel(it); };
-  const long = (it: GItem) => { if (!req.multiple) { setPrev(it); return; } setMulti(true); setPrev(it); if (!sel.some((x) => x.id === it.id)) setSel((s) => [...s, it]); };
+  const long = (it: GItem) => { if (!req.multiple) { setPrev(it); return; } setMulti(true); setPrev(it); if (!sel.some((x) => fkey(x) === fkey(it))) setSel((s) => [...s, it]); };
   const add = () => { if (multi && sel.length) pick(sel); else if (prev) pick([prev]); };
   const photos = async () => {
     try {
@@ -162,7 +193,6 @@ export function MediaSheet() {
   const accept = req.kind === 'image' ? 'image/*' : req.kind === 'video' ? 'video/*' : req.kind === 'audio' ? 'audio/*' : 'image/*,video/*';
   const aud = req.kind === 'audio';
   const ok = access === 'full' || access === 'partial';
-  const allName = aud ? 'Bütün sesler' : 'Her şey';
 
   return (
     <div className="ms-scrim" onClick={() => close()}>
@@ -170,8 +200,8 @@ export function MediaSheet() {
         <div className="ms-grab" />
         <header className="ms-head">
           <button className="ib" aria-label="Kapat" onClick={() => close()}><Icon name="close" size={24} /></button>
-          {ok && albums.length > 0 ? (
-            <button className="ms-album" aria-haspopup="listbox" aria-expanded={albMenu} onClick={() => setAlbMenu(!albMenu)}>{album || allName}<Icon name="chevD" size={18} /></button>
+          {ok ? (
+            <button className="ms-album" aria-haspopup="listbox" aria-expanded={albMenu} onClick={() => setAlbMenu(!albMenu)}>{albumLabel(album, aud)}<Icon name="chevD" size={18} /></button>
           ) : <b>{req.title}</b>}
           <span style={{ flex: 1 }} />
           {!aud && ok && req.multiple && (
@@ -179,15 +209,7 @@ export function MediaSheet() {
           )}
           {!aud && ok && <button className="ib ms-plus" aria-label={multi && sel.length ? `Seçilen ${sel.length} dosyayı ekle` : 'Ekle'} disabled={!(multi ? sel.length : prev)} onClick={add}><Icon name="plus" size={26} stroke={2.4} />{multi && sel.length > 0 && <span className="ms-cnt">{sel.length}</span>}</button>}
         </header>
-        {albMenu && (
-          <div className="ms-albmenu" role="listbox" onClick={() => setAlbMenu(false)}>
-            {[{ name: '', count: 0 }, ...albums].map((a) => (
-              <button key={a.name || '*'} role="option" aria-selected={album === a.name} className={album === a.name ? 'on' : ''} onClick={() => { setAlbum(a.name); setAlbMenu(false); }}>
-                {a.name || allName}{a.count ? <i>{a.count}</i> : null}
-              </button>
-            ))}
-          </div>
-        )}
+        {albMenu && <AlbumMenu albums={albums} album={album} audio={aud} onPick={(x) => { setAlbum(x); setAlbMenu(false); }} />}
         {!aud && ok && prev && <Preview it={prev} getFile={getFile} />}
         <div className="ms-btns">
           <button onClick={() => fileRef.current?.click()}><Icon name="folder" size={20} />Dosyalar</button>
@@ -212,10 +234,10 @@ export function MediaSheet() {
         {ok && (
           <div className={'ms-grid' + (aud ? ' aud' : '')} ref={gridRef} onScroll={(e) => { const el = e.currentTarget; if (el.scrollTop + el.clientHeight > el.scrollHeight - 400) load(); }}>
             {items.map((it) => aud
-              ? <AudioCard key={'a' + it.id} name={it.name} dur={it.duration / 1000} playing={listening === 'g' + it.id}
-                  onListen={() => toggleListen('g' + it.id, async () => URL.createObjectURL(await getFile(it)))}
+              ? <AudioCard key={fkey(it)} name={it.name} dur={it.duration / 1000} playing={listening === 'g' + fkey(it)}
+                  onListen={() => toggleListen('g' + fkey(it), async () => URL.createObjectURL(await getFile(it)))}
                   onAdd={() => pick([it])} />
-              : <Tile key={fkey(it)} it={it} root={gridRef.current} cur={prev?.id === it.id} on={multi ? sel.findIndex((x) => x.id === it.id) + 1 : 0} onPick={() => tap(it)} onLong={() => long(it)} />)}
+              : <Tile key={fkey(it)} it={it} root={gridRef.current} cur={!!prev && fkey(prev) === fkey(it)} on={multi ? sel.findIndex((x) => fkey(x) === fkey(it)) + 1 : 0} onPick={() => tap(it)} onLong={() => long(it)} />)}
             {!items.length && end && <p className="ms-empty">{aud ? 'Telefonda ses dosyası bulunamadı.' : 'Burada fotoğraf yok.'}</p>}
           </div>
         )}

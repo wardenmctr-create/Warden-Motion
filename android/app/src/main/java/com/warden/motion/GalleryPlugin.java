@@ -332,6 +332,129 @@ public class GalleryPlugin extends Plugin {
         });
     }
 
+    // ---------- Kullanıcının eklediği klasörler (Klasör ekle) ----------
+    /** Klasör seçtirir; izni kalıcı alır */
+    @PluginMethod
+    public void pickFolder(PluginCall call) {
+        Intent i = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+        i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
+        try { startActivityForResult(call, i, "folderDone"); }
+        catch (Exception e) { call.reject("Klasör seçici açılamadı"); }
+    }
+
+    @ActivityCallback
+    private void folderDone(PluginCall call, ActivityResult res) {
+        if (call == null) return;
+        Intent d = res.getData();
+        JSObject r = new JSObject();
+        if (res.getResultCode() != Activity.RESULT_OK || d == null || d.getData() == null) { call.resolve(r); return; }
+        Uri tree = d.getData();
+        try { getContext().getContentResolver().takePersistableUriPermission(tree, Intent.FLAG_GRANT_READ_URI_PERMISSION); } catch (Exception ignored) {}
+        String name = "Klasör";
+        try {
+            Uri doc = android.provider.DocumentsContract.buildDocumentUriUsingTree(tree, android.provider.DocumentsContract.getTreeDocumentId(tree));
+            try (Cursor c = getContext().getContentResolver().query(doc, new String[] { android.provider.DocumentsContract.Document.COLUMN_DISPLAY_NAME }, null, null, null)) {
+                if (c != null && c.moveToFirst() && c.getString(0) != null) name = c.getString(0);
+            }
+        } catch (Exception ignored) {}
+        r.put("uri", tree.toString());
+        r.put("name", name);
+        call.resolve(r);
+    }
+
+    /** Eklenen klasördeki görsel/video/sesler (alt klasörler dahil, yeniden eskiye) */
+    @PluginMethod
+    public void listFolder(PluginCall call) {
+        final String treeStr = call.getString("uri", "");
+        final String kind = call.getString("kind", "any");
+        final int offset = call.getInt("offset", 0), limit = call.getInt("limit", 60);
+        pool.execute(() -> {
+            java.util.ArrayList<Object[]> all = new java.util.ArrayList<>();
+            try {
+                Uri tree = Uri.parse(treeStr);
+                walk(tree, android.provider.DocumentsContract.getTreeDocumentId(tree), kind, all, 0);
+            } catch (Exception e) { call.reject("Klasör okunamadı"); return; }
+            all.sort((a, b) -> Long.compare((Long) b[3], (Long) a[3]));
+            JSArray items = new JSArray();
+            for (int k = offset; k < Math.min(all.size(), offset + limit); k++) {
+                Object[] o = all.get(k);
+                String mime = (String) o[2];
+                JSObject j = new JSObject();
+                j.put("id", ((String) o[0]).hashCode() & 0x7fffffffL);
+                j.put("uri", o[0]);
+                j.put("name", o[1]);
+                j.put("mime", mime);
+                j.put("video", mime.startsWith("video/"));
+                j.put("audio", mime.startsWith("audio/"));
+                j.put("album", "");
+                j.put("duration", 0);
+                items.put(j);
+            }
+            JSObject r = new JSObject(); r.put("items", items); call.resolve(r);
+        });
+    }
+
+    private void walk(Uri tree, String docId, String kind, java.util.ArrayList<Object[]> out, int depth) {
+        if (depth > 4 || out.size() > 3000) return;
+        Uri kids = android.provider.DocumentsContract.buildChildDocumentsUriUsingTree(tree, docId);
+        String[] cols = { android.provider.DocumentsContract.Document.COLUMN_DOCUMENT_ID, android.provider.DocumentsContract.Document.COLUMN_DISPLAY_NAME,
+            android.provider.DocumentsContract.Document.COLUMN_MIME_TYPE, android.provider.DocumentsContract.Document.COLUMN_LAST_MODIFIED };
+        try (Cursor c = getContext().getContentResolver().query(kids, cols, null, null, null)) {
+            while (c != null && c.moveToNext()) {
+                String id = c.getString(0), name = c.getString(1), mime = c.getString(2);
+                if (mime == null) continue;
+                if (android.provider.DocumentsContract.Document.MIME_TYPE_DIR.equals(mime)) { walk(tree, id, kind, out, depth + 1); continue; }
+                boolean ok = "audio".equals(kind) ? mime.startsWith("audio/")
+                    : "image".equals(kind) ? mime.startsWith("image/")
+                    : "video".equals(kind) ? mime.startsWith("video/")
+                    : mime.startsWith("image/") || mime.startsWith("video/");
+                if (!ok) continue;
+                out.add(new Object[] { android.provider.DocumentsContract.buildDocumentUriUsingTree(tree, id).toString(), name, mime, c.isNull(3) ? 0L : c.getLong(3) });
+            }
+        } catch (Exception ignored) {}
+    }
+
+    /** Klasördeki dosyanın küçük resmi */
+    @PluginMethod
+    public void thumbUri(PluginCall call) {
+        final String u = call.getString("uri", "");
+        final boolean video = call.getBoolean("video", false);
+        pool.execute(() -> {
+            try {
+                File dir = new File(getContext().getCacheDir(), "wmthumbs");
+                dir.mkdirs();
+                File f = new File(dir, "u" + (u.hashCode() & 0x7fffffffL) + ".jpg");
+                if (!f.exists()) {
+                    Uri uri = Uri.parse(u);
+                    Bitmap b = null;
+                    try { b = android.provider.DocumentsContract.getDocumentThumbnail(getContext().getContentResolver(), uri, new android.graphics.Point(240, 240), null); } catch (Exception ignored) {}
+                    if (b == null && video) {
+                        android.media.MediaMetadataRetriever mr = new android.media.MediaMetadataRetriever();
+                        try { mr.setDataSource(getContext(), uri); b = mr.getFrameAtTime(0); } finally { try { mr.release(); } catch (Exception ignored) {} }
+                        if (b != null) b = Bitmap.createScaledBitmap(b, 240, Math.max(1, 240 * b.getHeight() / Math.max(1, b.getWidth())), true);
+                    }
+                    if (b == null && !video) {
+                        android.graphics.BitmapFactory.Options o = new android.graphics.BitmapFactory.Options();
+                        o.inSampleSize = 8;
+                        try (InputStream in = getContext().getContentResolver().openInputStream(uri)) { b = android.graphics.BitmapFactory.decodeStream(in, null, o); }
+                    }
+                    if (b == null) { call.reject("yok"); return; }
+                    try (OutputStream o = new FileOutputStream(f)) { b.compress(Bitmap.CompressFormat.JPEG, 82, o); }
+                }
+                JSObject r = new JSObject(); r.put("path", f.getAbsolutePath()); call.resolve(r);
+            } catch (Exception e) { call.reject("Küçük resim alınamadı"); }
+        });
+    }
+
+    @PluginMethod
+    public void readUri(PluginCall call) {
+        final String u = call.getString("uri", "");
+        pool.execute(() -> {
+            try { call.resolve(copy(Uri.parse(u))); }
+            catch (Exception e) { call.reject("Dosya okunamadı"); }
+        });
+    }
+
     @Override
     protected void handleOnDestroy() { pool.shutdown(); }
 }

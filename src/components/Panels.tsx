@@ -10,7 +10,7 @@ import { useStore } from '../store';
 import { askText } from '../dialog';
 import { Gallery, galleryNative, type GItem, pickInto, pickMedia, readItem } from '../gallery';
 import { AudioCard, stopListen, toggleListen, useListening } from './AudioCard';
-import { Tile } from './MediaSheet';
+import { AlbumMenu, albumLabel, listAlbum, Tile } from './MediaSheet';
 import { FEATURED, FX, FX_CATS, fxMeta, fxVal, makeEffect, paramKeys, type FxParam } from '../effects';
 import type { AnimProp, Effect, FxType, Layer, Project, ShapeKind } from '../types';
 
@@ -274,7 +274,7 @@ function MediaTab({ onPick, onAudio }: { onPick: (src: string, name: string, kin
     Gallery.status().then((st) => { setAccess(st.access === 'none' ? 'none' : 'ok'); if (st.access !== 'none') Gallery.albums().then((r) => setAlbums(r.albums)).catch(() => {}); }).catch(() => setAccess('none'));
   }, []);
   useEffect(() => {
-    if (native && access === 'ok') Gallery.list({ offset: 0, limit: 90, kind: 'any', album: album || undefined }).then((r) => setItems(r.items)).catch(() => {});
+    if (native && access === 'ok') listAlbum('any', album, 0, 90).then((r) => setItems(r.items)).catch(() => setItems([]));
   }, [access, album]);
   const pickFile = async (f: File) => {
     const kind = f.type.startsWith('video/') ? 'video' : 'image';
@@ -291,11 +291,11 @@ function MediaTab({ onPick, onAudio }: { onPick: (src: string, name: string, kin
     <div className={'mediatab gal' + (busy ? ' busy' : '')}>
       <div className="mg-side">
         <button className="mg-all" onClick={all}><Icon name="apps" size={24} />{access === 'none' ? 'Galeriyi aç' : 'Tümünü görüntüle'}</button>
-        {access === 'ok' && <button className="mg-alb" aria-haspopup="listbox" onClick={(e) => setAlbMenu(albMenu ? null : e.currentTarget.getBoundingClientRect())}><span>{album || 'Her şey'}</span><Icon name="chevD" size={14} /></button>}
+        {access === 'ok' && <button className="mg-alb" aria-haspopup="listbox" onClick={(e) => setAlbMenu(albMenu ? null : e.currentTarget.getBoundingClientRect())}><span>{albumLabel(album, false)}</span><Icon name="chevD" size={14} /></button>}
       </div>
       {access === 'ok' ? (
         <div className="mg-grid" ref={gridRef}>
-          {items.map((it) => <Tile key={(it.video ? 'v' : 'i') + it.id} it={it} on={0} root={gridRef.current} onPick={() => fromGallery(it)} />)}
+          {items.map((it) => <Tile key={it.uri ?? (it.video ? 'v' : 'i') + it.id} it={it} on={0} root={gridRef.current} onPick={() => fromGallery(it)} />)}
         </div>
       ) : (
         <div className="audperm" style={{ flex: 1 }}>
@@ -306,11 +306,7 @@ function MediaTab({ onPick, onAudio }: { onPick: (src: string, name: string, kin
       {albMenu && createPortal(
         // Telefondaki bütün klasörler: tuvalin üstüne doğru açılır, kaydırılabilir
         <div className="mg-scrim" onClick={() => setAlbMenu(null)}>
-          <div className="ms-albmenu mg-menu" role="listbox" style={{ left: 8, bottom: innerHeight - albMenu.top + 6, maxHeight: Math.max(160, albMenu.top - 70) }} onClick={(e) => e.stopPropagation()}>
-            {[{ name: '', count: 0 }, ...albums].map((a) => (
-              <button key={a.name || '*'} role="option" aria-selected={album === a.name} className={album === a.name ? 'on' : ''} onClick={() => { setAlbum(a.name); setAlbMenu(null); }}>{a.name || 'Her şey'}{a.count ? <i>{a.count}</i> : null}</button>
-            ))}
-          </div>
+          <AlbumMenu albums={albums} album={album} audio={false} className="mg-menu" style={{ left: 8, bottom: innerHeight - albMenu.top + 6, maxHeight: Math.max(160, albMenu.top - 70) }} onPick={(x) => { setAlbum(x); setAlbMenu(null); }} />
         </div>, document.body)}
     </div>
   );

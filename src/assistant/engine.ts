@@ -7,7 +7,7 @@ import { useStore } from '../store';
 import { newProject, TUTORIALS } from '../factories';
 import { setAnim, valueAt } from '../anim';
 
-export const APP_VERSION = '0.16';
+export const APP_VERSION = '0.17';
 /** Sürüm karşılaştırma: '0.10' > '0.9' */
 export const verGt = (a: string, b: string) => { const x = a.split('.').map(Number), y = b.split('.').map(Number); for (let i = 0; i < Math.max(x.length, y.length); i++) { if ((x[i] ?? 0) !== (y[i] ?? 0)) return (x[i] ?? 0) > (y[i] ?? 0); } return false; };
 
@@ -255,6 +255,12 @@ const INTRO_END: Step[] = [WHAT_NOW(false), pickTutorial()];
 /** Her güncellemede "yeni neler var" (en yeni en sonda) */
 type News = { v: string; items: Step[] };
 export const WHATS_NEW: News[] = [
+  {
+    v: '0.17', items: [
+      { say: 'Ses kartları artık kare ve iki satır; yana kaydırarak hepsine bakabilirsin. Kartın üst yarısına basınca dinlersin, alt yarısına (+) basınca projeye eklersin.', mood: 'happy' },
+      { say: 'Klasör listesinin en altında "+ Klasör ekle" var: telefondan istediğin klasörü seçersin, listede kalır. İstemezsen yanındaki × ile kaldırırsın.', mood: 'excited' },
+    ],
+  },
   {
     v: '0.16', items: [
       { say: 'Ses desteği geldi! Katman ekle\'de yeni "Ses" sekmesi var: telefondaki sesler kart kart görünür. Karta basınca dinlersin, altındaki + ile projeye eklersin.', mood: 'excited' },

@@ -890,3 +890,20 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 .ms-btns button { height: 36px; border-radius: 10px; font-size: 13px; white-space: nowrap; }
 .ms-prev { height: 25vh; }
 .ms-hint { padding-bottom: 6px; }
+/* Ses kartları: kare; Ses sekmesinde 2 satır, yana kaydırılır */
+.acard { aspect-ratio: 1; cursor: default; }
+.acard::after { inset: 50% 0 0; background: rgba(0,0,0,.2); }
+.ac-top { position: absolute; left: 0; right: 0; top: 0; height: 50%; z-index: 2; background: transparent; border: 0; padding: 0; cursor: pointer; }
+.ac-top:active { background: rgba(255,255,255,.12); }
+.ac-plus { position: absolute; left: 0; right: 0; top: 50%; bottom: 0; height: auto; z-index: 2; display: flex; align-items: center; justify-content: center; padding-top: 14%; background: transparent; border: 0; color: #fff; cursor: pointer; }
+.ac-plus:active { background: rgba(0,0,0,.18); }
+.ac-wave { top: 38%; height: 24%; }
+.audgrid { --cs: min(108px, calc((100vw - 60px) / 3.2)); grid-auto-flow: column; grid-template-columns: none; grid-template-rows: repeat(2, var(--cs)); grid-auto-columns: var(--cs); overflow-x: auto; overflow-y: hidden; max-height: none; overscroll-behavior-x: contain; scrollbar-width: none; }
+.audgrid .acard { width: var(--cs); height: var(--cs); }
+.audgrid .audnote { grid-row: 1 / span 2; grid-column: auto; width: 200px; align-self: center; }
+.ms-grid.aud { grid-auto-rows: auto; }
+.ms-albmine { display: flex; align-items: center; border-bottom: 1px solid rgba(255,255,255,.07); }
+.ms-albmine button { border-bottom: 0 !important; gap: 10px; }
+.ms-albmine button.x { width: 48px; flex: none; justify-content: center; padding: 0; color: #8FA6D6; }
+.ms-albmine.on button:first-child { color: #22D3C5; }
+.ms-albmenu .ms-albadd { gap: 10px; color: #22D3C5; font-weight: 600; }

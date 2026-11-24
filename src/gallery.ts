@@ -2,7 +2,7 @@
 import { Capacitor, registerPlugin } from '@capacitor/core';
 import { create } from 'zustand';
 
-export interface GItem { id: number; video: boolean; audio?: boolean; mime: string; name: string; album: string; duration: number }
+export interface GItem { id: number; video: boolean; audio?: boolean; uri?: string; mime: string; name: string; album: string; duration: number }
 interface GalleryPlugin {
   status(): Promise<{ access: 'full' | 'partial' | 'none'; photos: boolean }>;
   request(o?: { again?: boolean }): Promise<{ access: 'full' | 'partial' | 'none'; photos: boolean }>;
@@ -16,6 +16,10 @@ interface GalleryPlugin {
   audioList(o: { offset: number; limit: number; album?: string }): Promise<{ items: GItem[] }>;
   audioAlbums(): Promise<{ albums: { name: string; count: number }[] }>;
   readAudio(o: { id: number }): Promise<{ path: string; mime: string; name: string }>;
+  pickFolder(): Promise<{ uri?: string; name?: string }>;
+  listFolder(o: { uri: string; kind: Kind; offset: number; limit: number }): Promise<{ items: GItem[] }>;
+  thumbUri(o: { uri: string; video: boolean }): Promise<{ path: string }>;
+  readUri(o: { uri: string }): Promise<{ path: string; mime: string; name: string }>;
 }
 // Testlerde sahte galeri verilebilir (window.__wmGalleryMock)
 const mock = (globalThis as { __wmGalleryMock?: GalleryPlugin }).__wmGalleryMock;
@@ -54,5 +58,21 @@ export async function pickInto(input: HTMLInputElement | null, o: { kind?: Kind;
 
 /** Galerideki bir öğeyi File olarak okur (ses de olur) */
 export async function readItem(it: GItem): Promise<File> {
-  return toFile(it.audio ? await Gallery.readAudio({ id: it.id }) : await Gallery.read({ id: it.id, video: it.video }));
+  return toFile(it.uri ? await Gallery.readUri({ uri: it.uri }) : it.audio ? await Gallery.readAudio({ id: it.id }) : await Gallery.read({ id: it.id, video: it.video }));
 }
+
+// ---------- Kullanıcının eklediği klasörler (albüm listesinde "+ Klasör ekle") ----------
+export interface UserFolder { uri: string; name: string }
+const FKEY = (audio: boolean) => (audio ? 'wm-folders-audio' : 'wm-folders-media');
+export const getFolders = (audio: boolean): UserFolder[] => { try { return JSON.parse(localStorage.getItem(FKEY(audio)) || '[]'); } catch { return []; } };
+export const setFolders = (audio: boolean, f: UserFolder[]) => { try { localStorage.setItem(FKEY(audio), JSON.stringify(f)); } catch { /* yok */ } };
+/** Klasör seçtirip listeye ekler; eklenen klasörü döndürür */
+export async function addFolder(audio: boolean): Promise<UserFolder | null> {
+  const r = await Gallery.pickFolder();
+  if (!r.uri) return null;
+  const f = { uri: r.uri, name: r.name || 'Klasör' };
+  setFolders(audio, [...getFolders(audio).filter((x) => x.uri !== f.uri), f]);
+  return f;
+}
+/** Albüm anahtarı: 'dir:<uri>' ise eklenen klasör, değilse telefondaki albüm adı */
+export const isDir = (a: string) => a.startsWith('dir:');
