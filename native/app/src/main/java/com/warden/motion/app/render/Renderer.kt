@@ -126,11 +126,27 @@ class Renderer(private val ctx: Context, private val maxSide: Int = 2048, privat
         return open().use { BitmapFactory.decodeStream(it, null, BitmapFactory.Options().apply { inSampleSize = s }) }
     }
 
+    // ---------- Videolar ----------
+    private val videos = HashMap<String, VideoSource?>()
+    /** Oynatılıyor mu (videolar ileriden toplu çözülür) */
+    @Volatile var playing = false
+    private var curT = 0.0
+    /** Videonun kısa kenarı (0 = asıl) — önizlemede Lite ayarından */
+    var videoSide = 720
+    fun video(src: String): VideoSource? = synchronized(videos) {
+        videos.getOrPut(src) {
+            val f = store.mediaFile(src.removePrefix("media:"))
+            if (!f.exists()) null else runCatching { VideoSource(f, if (sync) 0 else if (videoSide <= 0) 1920 else videoSide * 16 / 9) { _version.value++ } }.getOrNull()
+        }
+    }
+    fun releaseVideos() = synchronized(videos) { videos.values.forEach { it?.release() }; videos.clear() }
+
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG or Paint.FILTER_BITMAP_FLAG)
     private val bold = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
 
     /** scale: proje pikselinden ekran pikseline oran */
     fun draw(c: Canvas, p: Project, t: Double, scale: Float) {
+        curT = t
         c.save()
         c.scale(scale, scale)
         paint.reset(); paint.isAntiAlias = true
@@ -214,7 +230,12 @@ class Renderer(private val ctx: Context, private val maxSide: Int = 2048, privat
                 lines.forEachIndexed { i, ln -> c.drawText(ln, 0f, (i - (lines.size - 1) / 2f) * lh + mid, fp) }
             }
             "image" -> l.src?.let { s -> image(s)?.let { drawBitmap(c, it, RectF(-w / 2, -h / 2, w / 2, h / 2)) } }
-            "video" -> { paint.reset(); paint.color = 0xFF26386C.toInt(); c.drawRect(-w / 2, -h / 2, w / 2, h / 2, paint) }
+            "video" -> {
+                val v = l.src?.let { video(it) }
+                val fr = v?.let { if (sync) it.frameSync(curT - l.start) else it.frame(curT - l.start, playing) }
+                if (fr != null) drawBitmap(c, fr, RectF(-w / 2, -h / 2, w / 2, h / 2))
+                else { paint.reset(); paint.color = 0xFF26386C.toInt(); c.drawRect(-w / 2, -h / 2, w / 2, h / 2, paint) }
+            }
             "cb" -> {
                 val r = min(w, h) / 2
                 c.save()

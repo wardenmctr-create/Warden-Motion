@@ -9,6 +9,9 @@ import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.performTouchInput
+import androidx.compose.ui.test.click
 import androidx.test.core.app.ApplicationProvider
 import com.warden.motion.app.data.Store
 import com.warden.motion.app.model.*
@@ -50,6 +53,13 @@ class ShotsTest {
         return b
     }
 
+    private fun androidx.compose.ui.test.junit4.AndroidComposeTestRule<*, *>.onNodeWithContentDescriptionCompat(d: String) {
+        // + düğmesinin yazısı yok: sağ alttaki turkuaz düğmeye dokun
+        val v = activity.window.decorView
+        onRoot().performTouchInput { click(androidx.compose.ui.geometry.Offset(width - 60f * density, height - 70f * density)) }
+        v.hashCode(); d.hashCode()
+    }
+
     @Test fun home() {
         val ctx = ApplicationProvider.getApplicationContext<android.content.Context>()
         val store = Store.get(ctx)
@@ -78,6 +88,17 @@ class ShotsTest {
         rule.onAllNodesWithText("CB Selam")[1].performClick(); settle(); save(shot(), "ed_open")
         rule.onAllNodesWithText("Yıldız")[0].performClick(); settle(); save(shot(), "ed_sel")
         rule.onAllNodesWithText("Taşı ve Çevir")[0].performClick(); settle(); save(shot(), "ed_move")
+    }
+
+    @Test fun addTabs() {
+        val ctx = ApplicationProvider.getApplicationContext<android.content.Context>()
+        runBlocking { Store.get(ctx).save(newProject("Boş", 720, 900, 30, "#FFFFFF")) }
+        fun settle() { repeat(5) { rule.mainClock.advanceTimeBy(400); rule.waitForIdle(); Thread.sleep(200) } }
+        rule.mainClock.autoAdvance = false
+        settle()
+        rule.onAllNodesWithText("Boş")[0].performClick(); settle()
+        rule.onNodeWithContentDescription("Katman ekle").performClick(); settle()
+        for (tab in listOf("Şekil", "Medya", "Ses", "CB", "Bayrak")) { rule.onAllNodesWithText(tab)[0].performClick(); settle(); save(shot(), "add_" + tab) }
     }
 
     @Test fun importOld() {

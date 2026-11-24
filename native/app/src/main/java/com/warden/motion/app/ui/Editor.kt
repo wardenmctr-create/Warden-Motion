@@ -48,6 +48,8 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import com.warden.motion.app.data.Store
 import com.warden.motion.app.model.*
 import com.warden.motion.app.render.LayerThumbs
@@ -132,15 +134,19 @@ fun EditorScreen(initial: Project, onClose: () -> Unit) {
     }
 
     // ---------- Oynatma ----------
+    LaunchedEffect(perf["vid"]) { r.videoSide = (perf["vid"] ?: 0.0).toInt() }
+    DisposableEffect(Unit) { onDispose { com.warden.motion.app.render.Player.stop(); r.playing = false } }
     LaunchedEffect(s.playing) {
-        if (!s.playing) { s.time = (s.time * s.project.fps).roundToInt().toDouble() / s.project.fps; return@LaunchedEffect }
+        r.playing = s.playing
+        if (!s.playing) { com.warden.motion.app.render.Player.stop(); s.time = (s.time * s.project.fps).roundToInt().toDouble() / s.project.fps; return@LaunchedEffect }
+        com.warden.motion.app.render.Player.play(ctx, s.project, s.time)
         var last = withFrameNanos { it }
         while (isActive && s.playing) {
             val now = withFrameNanos { it }
             var t = s.time + (now - last) / 1e9
             last = now
             val d = s.project.duration
-            if (t >= d) { if (loop) t = 0.0 else { s.time = d; s.playing = false; break } }
+            if (t >= d) { if (loop) { t = 0.0; com.warden.motion.app.render.Player.play(ctx, s.project, 0.0) } else { s.time = d; s.playing = false; break } }
             s.time = t
         }
     }
@@ -282,7 +288,7 @@ fun EditorScreen(initial: Project, onClose: () -> Unit) {
         // Katman ekle düğmesi
         if (panel == null && sel == null) Box(
             Modifier.align(Alignment.BottomEnd).navigationBarsPadding().padding(end = wd(0.0375f), bottom = wd(0.044f)).size(wd(0.128f))
-                .shadow(8.dp, CircleShape).clip(CircleShape).background(C.turq).tap { openAdd(null) },
+                .shadow(8.dp, CircleShape).clip(CircleShape).background(C.turq).semantics { contentDescription = "Katman ekle" }.tap { openAdd(null) },
             contentAlignment = Alignment.Center,
         ) { Ico("plus", C.dDeep, 28.dp, 2.4f) }
         if (panel == Panel.ADD) AddPanel(s, addTab, { addTab = it }, replaceFlagOf, W, onClose = { panel = null; replaceFlagOf = null }, toast = show)
@@ -773,6 +779,7 @@ private fun Track(s: EditorState, l: Layer, i: Int, left: Float, width: Float, t
         .then(if (isMulti) Modifier.border(2.dp, Color(0xFFDCE9FF), RoundedCornerShape(3.dp)) else Modifier)
         .clip(RoundedCornerShape(3.dp)).then(bg).layerPress(s, l.id, haptic).padding(horizontal = if (isSel) 26.dp else 8.dp),
         contentAlignment = Alignment.CenterStart) {
+        if (l.type == "audio" && l.src != null) Wave(l, P)
         Row(verticalAlignment = Alignment.CenterVertically) {
             l.tag?.let { Box(Modifier.padding(end = 5.dp).size(8.dp).clip(RoundedCornerShape(2.dp)).background(colorOf(it))) }
             Text((if (l.mask != null) "◐ " else "") + l.name, fontSize = (W * 0.034f).sp, fontWeight = FontWeight.SemiBold, maxLines = 1, overflow = TextOverflow.Ellipsis,
@@ -821,6 +828,28 @@ private fun Track(s: EditorState, l: Layer, i: Int, left: Float, width: Float, t
                     setTrimming(null)
                 }
             }, contentAlignment = Alignment.Center) { Box(Modifier.size(2.dp, h / 2).background(C.dText)) }
+    }
+}
+
+/** Ses katmanının dalga şekli */
+@Composable
+private fun BoxScope.Wave(l: Layer, P: Float) {
+    val ctx = LocalContext.current
+    var pk by remember(l.src) { mutableStateOf<FloatArray?>(null) }
+    LaunchedEffect(l.src) { pk = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) { com.warden.motion.app.render.AudioDecode.peaks(Store.get(ctx).mediaFile(l.src!!.removePrefix("media:"))) } }
+    val a = pk ?: return
+    Canvas(Modifier.matchParentSize().padding(vertical = 1.dp)) {
+        val len = l.end - l.start
+        var x = 0f
+        while (x < size.width) {
+            val t0 = x / (P * density); val t1 = (x + 2 * density) / (P * density)
+            val i0 = (t0 * 100).toInt(); val i1 = minOf(a.size, (t1 * 100).toInt() + 1)
+            var m = 0f; for (i in i0 until i1) if (i in a.indices && a[i] > m) m = a[i]
+            if (t0 > len) break
+            val hh = maxOf(1f, minOf(1f, m) * size.height)
+            drawRect(Color.White.copy(alpha = .55f), Offset(x, (size.height - hh) / 2), androidx.compose.ui.geometry.Size(1.4f * density, hh))
+            x += 2 * density
+        }
     }
 }
 
