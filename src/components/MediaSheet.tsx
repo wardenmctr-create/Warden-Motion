@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Icon } from './Icon';
-import { addFolder, fileSrc, Gallery, galleryNative, getFolders, type GItem, isDir, readItem, setFolders, toFile, useMediaSheet, type Kind } from '../gallery';
+import { addFolder, errText, fileSrc, Gallery, galleryNative, getFolders, type GItem, isDir, readItem, setFolders, toFile, useMediaSheet, type Kind } from '../gallery';
 import { AudioCard, stopListen, toggleListen, useListening } from './AudioCard';
 
 const thumbs = new Map<string, string>(); // küçük resim önbelleği (oturum boyunca)
@@ -11,7 +11,8 @@ export const thumbOf = async (it: GItem) => {
   const key = it.uri ?? `${it.video ? 'v' : 'i'}${it.id}`;
   const c = thumbs.get(key);
   if (c) return c;
-  const u = fileSrc((it.uri ? await Gallery.thumbUri({ uri: it.uri, video: it.video }) : await Gallery.thumb({ id: it.id, video: it.video })).path);
+  const r = it.uri ? await Gallery.thumbUri({ uri: it.uri, video: it.video }) : await Gallery.thumb({ id: it.id, video: it.video });
+  const u = r.data || fileSrc(r.path);
   thumbs.set(key, u);
   return u;
 };
@@ -142,7 +143,7 @@ export function MediaSheet() {
       setItems((x) => (reset ? r.items : [...x, ...r.items]));
       if (reset && req.kind !== 'audio') setPrev(r.items[0] ?? null);
       setEnd(r.items.length < PAGE);
-    } catch { setErr('Galeri okunamadı.'); }
+    } catch (e) { setErr('Galeri okunamadı: ' + errText(e)); }
     loading.current = false;
   };
   const refreshAccess = async (ask: boolean, again = false) => {
@@ -175,7 +176,7 @@ export function MediaSheet() {
   const pick = async (list: GItem[]) => {
     setBusy(list.length > 1 ? `${list.length} dosya hazırlanıyor…` : 'Hazırlanıyor…');
     try { close(await Promise.all(list.map(getFile))); }
-    catch { setBusy(''); setErr('Dosya okunamadı.'); }
+    catch (e) { setBusy(''); setErr('Dosya okunamadı: ' + errText(e)); }
   };
   const toggleSel = (it: GItem) => setSel((s) => (s.some((x) => fkey(x) === fkey(it)) ? s.filter((x) => fkey(x) !== fkey(it)) : [...s, it]));
   // Dokununca üstte önizlenir; çoklu seçimdeyken seçime de eklenir/çıkarılır

@@ -8,7 +8,8 @@ interface GalleryPlugin {
   request(o?: { again?: boolean }): Promise<{ access: 'full' | 'partial' | 'none'; photos: boolean }>;
   list(o: { offset: number; limit: number; kind: Kind; album?: string }): Promise<{ items: GItem[] }>;
   albums(): Promise<{ albums: { name: string; count: number }[] }>;
-  thumb(o: { id: number; video: boolean }): Promise<{ path: string }>;
+  thumb(o: { id: number; video: boolean }): Promise<{ path: string; data?: string }>;
+  readChunk(o: { path: string; offset: number; length: number }): Promise<{ data: string; size: number }>;
   read(o: { id: number; video: boolean }): Promise<{ path: string; mime: string; name: string }>;
   photos(o: { kind: Kind; multiple: boolean }): Promise<{ files: { path: string; mime: string; name: string }[] }>;
   audioStatus(): Promise<{ ok: boolean }>;
@@ -18,7 +19,7 @@ interface GalleryPlugin {
   readAudio(o: { id: number }): Promise<{ path: string; mime: string; name: string }>;
   pickFolder(): Promise<{ uri?: string; name?: string }>;
   listFolder(o: { uri: string; kind: Kind; offset: number; limit: number }): Promise<{ items: GItem[] }>;
-  thumbUri(o: { uri: string; video: boolean }): Promise<{ path: string }>;
+  thumbUri(o: { uri: string; video: boolean }): Promise<{ path: string; data?: string }>;
   readUri(o: { uri: string }): Promise<{ path: string; mime: string; name: string }>;
 }
 // Testlerde sahte galeri verilebilir (window.__wmGalleryMock)
@@ -28,11 +29,29 @@ export type Kind = 'image' | 'video' | 'any' | 'audio';
 export const galleryNative = () => !!mock || (Capacitor.isNativePlatform() && Capacitor.getPlatform() === 'android');
 export const fileSrc = (path: string) => (mock ? path : Capacitor.convertFileSrc(path));
 
-/** Önbellekteki dosyayı File'a çevirir */
-export async function toFile(f: { path: string; mime: string; name: string }): Promise<File> {
-  const blob = await (await fetch(fileSrc(f.path))).blob();
+/** Önbellekteki dosyayı File'a çevirir: önce uygulamanın dosya sunucusundan, olmazsa parça parça doğrudan okuyarak */
+export async function toFile(f: { path: string; mime: string; name: string; size?: number }): Promise<File> {
+  let blob: Blob | null = null;
+  try {
+    const r = await fetch(fileSrc(f.path));
+    if (r.ok) { blob = await r.blob(); if (f.size && blob.size !== f.size) blob = null; }
+  } catch { blob = null; }
+  if (!blob) {
+    const parts: BlobPart[] = [];
+    const CH = 1 << 20;
+    for (let off = 0; ; off += CH) {
+      const c = await Gallery.readChunk({ path: f.path, offset: off, length: CH });
+      const bin = atob(c.data), u = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i);
+      parts.push(u);
+      if (off + CH >= c.size || !bin.length) break;
+    }
+    blob = new Blob(parts, { type: f.mime });
+  }
   return new File([blob], f.name, { type: f.mime || blob.type });
 }
+/** Hata mesajı (ekranda gösterilir, sorunu bulmak için) */
+export const errText = (e: unknown) => (e instanceof Error ? e.message : typeof e === 'object' && e && 'message' in e ? String((e as { message: unknown }).message) : String(e));
 
 interface Req { kind: Kind; multiple: boolean; title: string; resolve: (f: File[]) => void }
 export const useMediaSheet = create<{ req: Req | null; set: (r: Req | null) => void }>((set) => ({ req: null, set: (req) => set({ req }) }));

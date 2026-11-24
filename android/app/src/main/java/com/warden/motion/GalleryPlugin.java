@@ -239,7 +239,7 @@ public class GalleryPlugin extends Plugin {
         final long id = call.getLong("id", 0L);
         pool.execute(() -> {
             try { call.resolve(copy(ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, id))); }
-            catch (Exception e) { call.reject("Dosya okunamadı"); }
+            catch (Exception e) { call.reject("Dosya okunamadı: " + e); }
         });
     }
 
@@ -265,8 +265,8 @@ public class GalleryPlugin extends Plugin {
                     if (b == null) { call.reject("yok"); return; }
                     try (OutputStream o = new FileOutputStream(f)) { b.compress(Bitmap.CompressFormat.JPEG, 82, o); }
                 }
-                JSObject r = new JSObject(); r.put("path", f.getAbsolutePath()); call.resolve(r);
-            } catch (Exception e) { call.reject("Küçük resim alınamadı"); }
+                call.resolve(thumbResult(f));
+            } catch (Exception e) { call.reject("Küçük resim alınamadı: " + e); }
         });
     }
 
@@ -277,7 +277,38 @@ public class GalleryPlugin extends Plugin {
         final boolean video = call.getBoolean("video", false);
         pool.execute(() -> {
             try { call.resolve(copy(itemUri(id, video))); }
-            catch (Exception e) { call.reject("Dosya okunamadı"); }
+            catch (Exception e) { call.reject("Dosya okunamadı: " + e); }
+        });
+    }
+
+    /** Küçük resim: yolu + doğrudan veri (data URL; dosya sunucusuna gerek kalmaz) */
+    private JSObject thumbResult(File f) throws Exception {
+        JSObject r = new JSObject();
+        r.put("path", f.getAbsolutePath());
+        byte[] all = new byte[(int) f.length()];
+        try (InputStream in = new java.io.FileInputStream(f)) { int off = 0, n; while (off < all.length && (n = in.read(all, off, all.length - off)) > 0) off += n; }
+        r.put("data", "data:image/jpeg;base64," + android.util.Base64.encodeToString(all, android.util.Base64.NO_WRAP));
+        return r;
+    }
+
+    /** Önbelleğe kopyalanmış dosyadan parça okur (base64). Yedek yol: dosya sunucusu çalışmazsa */
+    @PluginMethod
+    public void readChunk(PluginCall call) {
+        final String path = call.getString("path", "");
+        final long offset = call.getLong("offset", 0L);
+        final int length = call.getInt("length", 1 << 20);
+        pool.execute(() -> {
+            try {
+                File f = new File(path);
+                File cache = getContext().getCacheDir();
+                if (!f.getCanonicalPath().startsWith(cache.getCanonicalPath())) { call.reject("Bu dosya okunamaz"); return; }
+                byte[] buf = new byte[(int) Math.max(0, Math.min(length, f.length() - offset))];
+                try (java.io.RandomAccessFile ra = new java.io.RandomAccessFile(f, "r")) { ra.seek(offset); ra.readFully(buf); }
+                JSObject r = new JSObject();
+                r.put("data", android.util.Base64.encodeToString(buf, android.util.Base64.NO_WRAP));
+                r.put("size", f.length());
+                call.resolve(r);
+            } catch (Exception e) { call.reject("Parça okunamadı: " + e); }
         });
     }
 
@@ -291,7 +322,7 @@ public class GalleryPlugin extends Plugin {
         if (!name.contains(".") && mime != null) { String ext = MimeTypeMap.getSingleton().getExtensionFromMimeType(mime); if (ext != null) name += "." + ext; }
         File dir = new File(getContext().getCacheDir(), "wmpick");
         dir.mkdirs();
-        File f = new File(dir, System.nanoTime() + "-" + name.replaceAll("[^\\p{L}\\p{N}._-]", "_"));
+        File f = new File(dir, System.nanoTime() + "-" + name.replaceAll("[^A-Za-z0-9._-]", "_"));
         try (InputStream in = cr.openInputStream(uri); OutputStream out = new FileOutputStream(f)) {
             byte[] buf = new byte[1 << 16];
             int n;
@@ -301,6 +332,7 @@ public class GalleryPlugin extends Plugin {
         r.put("path", f.getAbsolutePath());
         r.put("mime", mime == null ? "application/octet-stream" : mime);
         r.put("name", name);
+        r.put("size", f.length());
         return r;
     }
 
@@ -441,8 +473,8 @@ public class GalleryPlugin extends Plugin {
                     if (b == null) { call.reject("yok"); return; }
                     try (OutputStream o = new FileOutputStream(f)) { b.compress(Bitmap.CompressFormat.JPEG, 82, o); }
                 }
-                JSObject r = new JSObject(); r.put("path", f.getAbsolutePath()); call.resolve(r);
-            } catch (Exception e) { call.reject("Küçük resim alınamadı"); }
+                call.resolve(thumbResult(f));
+            } catch (Exception e) { call.reject("Küçük resim alınamadı: " + e); }
         });
     }
 
@@ -451,7 +483,7 @@ public class GalleryPlugin extends Plugin {
         final String u = call.getString("uri", "");
         pool.execute(() -> {
             try { call.resolve(copy(Uri.parse(u))); }
-            catch (Exception e) { call.reject("Dosya okunamadı"); }
+            catch (Exception e) { call.reject("Dosya okunamadı: " + e); }
         });
     }
 

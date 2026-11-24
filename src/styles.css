@@ -907,3 +907,9 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 .ms-albmine button.x { width: 48px; flex: none; justify-content: center; padding: 0; color: #8FA6D6; }
 .ms-albmine.on button:first-child { color: #22D3C5; }
 .ms-albmenu .ms-albadd { gap: 10px; color: #22D3C5; font-weight: 600; }
+.mediatab.gal { height: auto; min-height: 0; display: block; }
+.mediatab.gal .mg-grid { height: 34vh; min-height: 190px; grid-template-columns: repeat(3, 1fr); grid-auto-rows: calc((100vw - 40px) / 3); }
+.mg-first { display: flex; flex-direction: column; gap: 2px; min-height: 0; }
+.mg-first .mg-all { flex: 1; border-radius: 4px 0 0 0; font-size: 0; gap: 0; }
+.mg-first .mg-alb { flex: 1; border-radius: 0; font-size: 12.5px; }
+.mg-perm { grid-column: 2 / -1; grid-row: 1 / span 2; padding: 6px; font-size: 13px; gap: 10px; }

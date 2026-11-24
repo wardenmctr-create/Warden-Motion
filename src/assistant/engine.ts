@@ -7,7 +7,7 @@ import { useStore } from '../store';
 import { newProject, TUTORIALS } from '../factories';
 import { setAnim, valueAt } from '../anim';
 
-export const APP_VERSION = '0.17';
+export const APP_VERSION = '0.18';
 /** Sürüm karşılaştırma: '0.10' > '0.9' */
 export const verGt = (a: string, b: string) => { const x = a.split('.').map(Number), y = b.split('.').map(Number); for (let i = 0; i < Math.max(x.length, y.length); i++) { if ((x[i] ?? 0) !== (y[i] ?? 0)) return (x[i] ?? 0) > (y[i] ?? 0); } return false; };
 
@@ -255,6 +255,12 @@ const INTRO_END: Step[] = [WHAT_NOW(false), pickTutorial()];
 /** Her güncellemede "yeni neler var" (en yeni en sonda) */
 type News = { v: string; items: Step[] };
 export const WHATS_NEW: News[] = [
+  {
+    v: '0.18', items: [
+      { say: 'Galerideki fotoğraf ve videoların görünmemesi ve seslerin açılamaması düzeltildi.', mood: 'happy' },
+      { say: 'Medya sekmesinde ilk kare ikiye bölündü: üst yarısı bütün galeriyi, alt yarısı klasör listesini açar.', mood: 'happy' },
+    ],
+  },
   {
     v: '0.17', items: [
       { say: 'Ses kartları artık kare ve iki satır; yana kaydırarak hepsine bakabilirsin. Kartın üst yarısına basınca dinlersin, alt yarısına (+) basınca projeye eklersin.', mood: 'happy' },

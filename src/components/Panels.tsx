@@ -8,7 +8,7 @@ import { resolveSrc } from '../render';
 import { addVertex, fillShape, regularPts, SHAPE_PARAMS, sp as shapeParam } from '../shapes';
 import { useStore } from '../store';
 import { askText } from '../dialog';
-import { Gallery, galleryNative, type GItem, pickInto, pickMedia, readItem } from '../gallery';
+import { errText, Gallery, galleryNative, type GItem, pickInto, pickMedia, readItem } from '../gallery';
 import { AudioCard, stopListen, toggleListen, useListening } from './AudioCard';
 import { AlbumMenu, albumLabel, listAlbum, Tile } from './MediaSheet';
 import { FEATURED, FX, FX_CATS, fxMeta, fxVal, makeEffect, paramKeys, type FxParam } from '../effects';
@@ -221,7 +221,7 @@ export function AddPanel({ tab, setTab, onClose, toast, replaceFlagOf }: { tab: 
             </button>
           )} />
         )}
-        {tab === 'media' && <MediaTab onAudio={() => setTab('audio')} onPick={(src, name, kind) => (kind === 'video' ? addVideo(src, name) : addImage(src, name, 0.7))} />}
+        {tab === 'media' && <MediaTab toast={toast} onAudio={() => setTab('audio')} onPick={(src, name, kind) => (kind === 'video' ? addVideo(src, name) : addImage(src, name, 0.7))} />}
         {tab === 'audio' && <AudioTab onPick={addAudio} toast={toast} />}
         {tab === 'text' && <TextTab onAdd={(text) => { s.addLayer(makeLayer(p, t, dur, { type: 'text', name: text.slice(0, 18) || 'Metin', text, fontSize: Math.round(p.height / 12), fill: '#0D1631', w: Math.round(p.width * 0.6), h: Math.round(p.height / 8) })); onClose(); }} />}
         {tab === 'cb' && <CBTab onPick={(it) => (it.parts ? addParts(it) : addImage(it.src, it.name))} onBody={(shape) => buildBody(shape)} toast={toast} />}
@@ -258,7 +258,7 @@ const getRecentMedia = (): RecentMedia[] => { try { return JSON.parse(localStora
 const pushRecentMedia = (m: RecentMedia) => { try { localStorage.setItem(MEDIA_RECENT, JSON.stringify([m, ...getRecentMedia().filter((x) => x.src !== m.src)].slice(0, 20))); } catch { /* yok */ } };
 
 /** Medya sekmesi: telefonda galeri burada açılır (solda Tümünü görüntüle + albüm); tarayıcıda son eklenenler şeridi */
-function MediaTab({ onPick, onAudio }: { onPick: (src: string, name: string, kind: 'image' | 'video') => void; onAudio: () => void }) {
+function MediaTab({ onPick, onAudio, toast }: { onPick: (src: string, name: string, kind: 'image' | 'video') => void; onAudio: () => void; toast: (m: string) => void }) {
   const ref = useRef<HTMLInputElement>(null);
   const [recent] = useState(getRecentMedia);
   const native = galleryNative();
@@ -285,24 +285,25 @@ function MediaTab({ onPick, onAudio }: { onPick: (src: string, name: string, kin
   };
   const pickFiles = async (fs: File[]) => { setBusy(true); try { for (const f of fs) await pickFile(f); } finally { setBusy(false); } };
   const all = async () => { const fs = await pickMedia({ kind: 'any', multiple: true, title: 'Görsel ya da video ekle' }); if (fs.length) pickFiles(fs); };
-  const fromGallery = async (it: GItem) => { if (busy) return; setBusy(true); try { await pickFile(await readItem(it)); } catch { /* okunamadı */ } setBusy(false); };
+  const fromGallery = async (it: GItem) => { if (busy) return; setBusy(true); try { await pickFile(await readItem(it)); } catch (e) { toast('Dosya okunamadı: ' + errText(e)); } setBusy(false); };
 
   if (native && access !== 'loading') return (
     <div className={'mediatab gal' + (busy ? ' busy' : '')}>
-      <div className="mg-side">
-        <button className="mg-all" onClick={all}><Icon name="apps" size={24} />{access === 'none' ? 'Galeriyi aç' : 'Tümünü görüntüle'}</button>
-        {access === 'ok' && <button className="mg-alb" aria-haspopup="listbox" onClick={(e) => setAlbMenu(albMenu ? null : e.currentTarget.getBoundingClientRect())}><span>{albumLabel(album, false)}</span><Icon name="chevD" size={14} /></button>}
+      <div className="mg-grid" ref={gridRef}>
+        {/* İlk kare ikiye bölünür: üst yarı bütün galeriyi açar, alt yarı klasör listesini */}
+        <div className="mg-first">
+          <button className="mg-all" aria-label="Tümünü görüntüle" onClick={all}><Icon name="apps" size={22} /></button>
+          {access === 'ok' && <button className="mg-alb" aria-haspopup="listbox" onClick={(e) => setAlbMenu(albMenu ? null : e.currentTarget.getBoundingClientRect())}><span>{albumLabel(album, false)}</span><Icon name="chevD" size={14} /></button>}
+        </div>
+        {access === 'ok'
+          ? items.map((it) => <Tile key={it.uri ?? (it.video ? 'v' : 'i') + it.id} it={it} on={0} root={gridRef.current} onPick={() => fromGallery(it)} />)
+          : (
+            <div className="audperm mg-perm">
+              <span>Projende görsel ve video kullanmak için galerine erişim gerekir.</span>
+              <button className="audperm-btn" onClick={() => Gallery.request().then((st) => { setAccess(st.access === 'none' ? 'none' : 'ok'); if (st.access !== 'none') Gallery.albums().then((r) => setAlbums(r.albums)).catch(() => {}); })}>ERİŞİME İZİN VER</button>
+            </div>
+          )}
       </div>
-      {access === 'ok' ? (
-        <div className="mg-grid" ref={gridRef}>
-          {items.map((it) => <Tile key={it.uri ?? (it.video ? 'v' : 'i') + it.id} it={it} on={0} root={gridRef.current} onPick={() => fromGallery(it)} />)}
-        </div>
-      ) : (
-        <div className="audperm" style={{ flex: 1 }}>
-          <span>Projende görsel ve video kullanmak için galerine erişim gerekir.</span>
-          <button className="audperm-btn" onClick={() => Gallery.request().then((st) => { setAccess(st.access === 'none' ? 'none' : 'ok'); if (st.access !== 'none') Gallery.albums().then((r) => setAlbums(r.albums)).catch(() => {}); })}>ERİŞİME İZİN VER</button>
-        </div>
-      )}
       {albMenu && createPortal(
         // Telefondaki bütün klasörler: tuvalin üstüne doğru açılır, kaydırılabilir
         <div className="mg-scrim" onClick={() => setAlbMenu(null)}>
@@ -372,7 +373,7 @@ function AudioTab({ onPick, toast }: { onPick: (src: string, name: string) => vo
   const fromDevice = async (it: GItem) => {
     if (busy) return;
     setBusy(true);
-    try { await useFile(await fileOf(it)); } catch { toast('Ses dosyası okunamadı.'); }
+    try { await useFile(await fileOf(it)); } catch (e) { toast('Ses dosyası okunamadı: ' + errText(e)); }
     setBusy(false);
   };
   const all = async () => {
@@ -394,7 +395,7 @@ function AudioTab({ onPick, toast }: { onPick: (src: string, name: string) => vo
       {recent.map((r) => <AudioCard key={r.src} name={r.name} dur={r.dur} recent playing={listening === r.src}
         onListen={() => toggleListen(r.src, () => resolveSrc(r.src))} onAdd={() => onPick(r.src, r.name)} />)}
       {items.filter((it) => !seen.has(it.name.replace(/\.[^.]+$/, ''))).map((it) => <AudioCard key={it.id} name={it.name} dur={it.duration / 1000} playing={listening === 'g' + it.id}
-        onListen={() => toggleListen('g' + it.id, async () => URL.createObjectURL(await fileOf(it)))} onAdd={() => fromDevice(it)} />)}
+        onListen={() => toggleListen('g' + it.id, async () => { try { return URL.createObjectURL(await fileOf(it)); } catch (e) { toast('Ses açılamadı: ' + errText(e)); throw e; } })} onAdd={() => fromDevice(it)} />)}
       {access === 'loading' && <span className="audnote">Yükleniyor…</span>}
       {!native && !recent.length && <span className="audnote">Karta basınca dinlersin, altındaki + ile projeye eklersin. MP3, WAV, M4A, OGG… Videoların kendi sesini katmanın "Ses Düzeyi" bölümünden ayarlarsın.</span>}
     </div>
