@@ -1,8 +1,9 @@
 import { Capacitor } from '@capacitor/core';
 import { projectDuration } from './anim';
-import { getVideo, pauseAllVideos, preloadImages, renderFrame } from './render';
+import { getVideo, pauseAllVideos, preloadImages, renderFrame, setFullMedia } from './render';
 import type { Project } from './types';
 import { ArrayBufferTarget, Muxer } from 'mp4-muxer';
+import { encodeAudio, mixAudio, pickAudioEncoder } from './audio';
 
 // ---------- WebCodecs: tarayıcının kendi video kodlayıcısıyla hızlı aktarma ----------
 type EncPick = { config: VideoEncoderConfig; mux: 'avc' | 'vp9' };
@@ -76,7 +77,14 @@ export async function estimateExport(p: Project, fxQuality: number): Promise<num
   return fast ? frames * (per + 0.006) + 0.5 : frames * (per + 1 / p.fps + 0.012);
 }
 
+/** Dışa aktarma: önizlemedeki küçük kopyalar yerine ASIL dosyalar kullanılır */
 export async function exportVideo(p: Project, onProgress: (i: ExportInfo) => void, fxQuality = 0.5): Promise<{ blob: Blob; ext: string }> {
+  setFullMedia(true);
+  try { return await exportVideoInner(p, onProgress, fxQuality); }
+  finally { setFullMedia(false); }
+}
+
+async function exportVideoInner(p: Project, onProgress: (i: ExportInfo) => void, fxQuality = 0.5): Promise<{ blob: Blob; ext: string }> {
   const heavy = heavyEffects(p);
   const srcs = p.layers.flatMap((l) => [l.src, l.cb?.eyes]).filter(Boolean) as string[];
   await preloadImages(srcs.filter((s) => !p.layers.some((l) => l.type === 'video' && l.src === s)));
@@ -108,8 +116,13 @@ export async function exportVideo(p: Project, onProgress: (i: ExportInfo) => voi
   if (enc) {
     // Hızlı yol: kareler beklemeden doğrudan MP4'e kodlanır
     try {
+      // Ses: bütün ses katmanları ve videoların sesleri asıl kalitede karıştırılır
+      let mix: AudioBuffer | null = null, aenc: Awaited<ReturnType<typeof pickAudioEncoder>> = null;
+      try { mix = await mixAudio(p, dur); if (mix) aenc = await pickAudioEncoder(mix.sampleRate); } catch (e) { console.warn('Ses karıştırılamadı:', e); }
       const target = new ArrayBufferTarget();
-      const muxer = new Muxer({ target, video: { codec: enc.mux, width: EW, height: EH, frameRate: p.fps }, fastStart: 'in-memory', firstTimestampBehavior: 'offset' });
+      const muxer = new Muxer({ target, video: { codec: enc.mux, width: EW, height: EH, frameRate: p.fps },
+        ...(mix && aenc ? { audio: { codec: aenc.mux, numberOfChannels: 2, sampleRate: mix.sampleRate } } : {}),
+        fastStart: 'in-memory', firstTimestampBehavior: 'offset' });
       let encErr: unknown = null;
       const encoder = new VideoEncoder({ output: (chunk, meta) => muxer.addVideoChunk(chunk, meta), error: (e) => { encErr = e; } });
       encoder.configure(enc.config);
@@ -128,13 +141,14 @@ export async function exportVideo(p: Project, onProgress: (i: ExportInfo) => voi
       await encoder.flush();
       encoder.close();
       if (encErr) throw encErr;
+      if (mix && aenc) await encodeAudio(mix, aenc.config, (c, m) => muxer.addAudioChunk(c, m));
       muxer.finalize();
       pauseAllVideos();
       return { blob: new Blob([target.buffer], { type: 'video/mp4' }), ext: 'mp4' };
     } catch (e) {
       console.warn('WebCodecs aktarma başarısız, eski yönteme geçiliyor:', e);
       encCache = new Map([[`${EW}x${EH}@${p.fps}`, null]]);
-      return exportVideo(p, onProgress, fxQuality);
+      return exportVideoInner(p, onProgress, fxQuality);
     }
   }
   // Kare kare kayıt: her kare hazırlanırken kaydedici duraklatılır, sonra tam 1/fps süre açık kalır.

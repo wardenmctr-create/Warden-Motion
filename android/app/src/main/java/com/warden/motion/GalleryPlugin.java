@@ -43,6 +43,7 @@ import java.util.concurrent.Executors;
         @Permission(alias = "media33", strings = { Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_VIDEO }),
         @Permission(alias = "media34", strings = { Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_VIDEO, Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED }),
         @Permission(alias = "storage", strings = { Manifest.permission.READ_EXTERNAL_STORAGE }),
+        @Permission(alias = "audio33", strings = { Manifest.permission.READ_MEDIA_AUDIO }),
     }
 )
 public class GalleryPlugin extends Plugin {
@@ -163,6 +164,82 @@ public class GalleryPlugin extends Plugin {
             JSArray a = new JSArray();
             for (java.util.Map.Entry<String, Integer> e : m.entrySet()) { JSObject o = new JSObject(); o.put("name", e.getKey()); o.put("count", e.getValue()); a.put(o); }
             JSObject r = new JSObject(); r.put("albums", a); call.resolve(r);
+        });
+    }
+
+    // ---------- Sesler (müzik, kayıtlar, WhatsApp sesleri…) ----------
+    private boolean audioOk() {
+        return granted(Build.VERSION.SDK_INT >= 33 ? Manifest.permission.READ_MEDIA_AUDIO : Manifest.permission.READ_EXTERNAL_STORAGE);
+    }
+
+    @PluginMethod
+    public void audioStatus(PluginCall call) { JSObject r = new JSObject(); r.put("ok", audioOk()); call.resolve(r); }
+
+    @PluginMethod
+    public void audioRequest(PluginCall call) {
+        if (audioOk()) { audioStatus(call); return; }
+        requestPermissionForAlias(Build.VERSION.SDK_INT >= 33 ? "audio33" : "storage", call, "audioDone");
+    }
+
+    @PermissionCallback
+    private void audioDone(PluginCall call) { audioStatus(call); }
+
+    /** Ses dosyaları (yeniden eskiye) */
+    @PluginMethod
+    public void audioList(PluginCall call) {
+        if (!audioOk()) { call.reject("İzin yok"); return; }
+        final int offset = call.getInt("offset", 0), limit = call.getInt("limit", 60);
+        final String album = call.getString("album", "");
+        pool.execute(() -> {
+            JSArray items = new JSArray();
+            String sel = MediaStore.Audio.Media.SIZE + ">0";
+            String[] args = null;
+            if (!album.isEmpty() && Build.VERSION.SDK_INT >= 29) { sel += " AND bucket_display_name=?"; args = new String[] { album }; }
+            String[] cols = { MediaStore.Audio.Media._ID, MediaStore.Audio.Media.MIME_TYPE, MediaStore.Audio.Media.DISPLAY_NAME, "duration", MediaStore.Audio.Media.ARTIST };
+            try (Cursor c = query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, cols, sel, args, MediaStore.Audio.Media.DATE_ADDED + " DESC", offset, limit)) {
+                if (c != null) {
+                    int skip = Build.VERSION.SDK_INT >= 26 ? 0 : offset;
+                    while (c.moveToNext()) {
+                        if (skip-- > 0) continue;
+                        if (Build.VERSION.SDK_INT < 26 && items.length() >= limit) break;
+                        JSObject o = new JSObject();
+                        o.put("id", c.getLong(0));
+                        o.put("video", false);
+                        o.put("audio", true);
+                        o.put("mime", c.getString(1));
+                        o.put("name", c.getString(2));
+                        String ar = c.getString(4);
+                        o.put("album", ar == null || "<unknown>".equals(ar) ? "" : ar);
+                        o.put("duration", c.getLong(3));
+                        items.put(o);
+                    }
+                }
+            } catch (Exception e) { call.reject("Sesler okunamadı: " + e.getMessage()); return; }
+            JSObject r = new JSObject(); r.put("items", items); call.resolve(r);
+        });
+    }
+
+    /** Ses klasörleri (Müzik, Recordings, WhatsApp Audio, Download…) */
+    @PluginMethod
+    public void audioAlbums(PluginCall call) {
+        if (!audioOk() || Build.VERSION.SDK_INT < 29) { JSObject r = new JSObject(); r.put("albums", new JSArray()); call.resolve(r); return; }
+        pool.execute(() -> {
+            java.util.LinkedHashMap<String, Integer> m = new java.util.LinkedHashMap<>();
+            try (Cursor c = getContext().getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, new String[] { "bucket_display_name" }, MediaStore.Audio.Media.SIZE + ">0", null, MediaStore.Audio.Media.DATE_ADDED + " DESC")) {
+                while (c != null && c.moveToNext()) { String b = c.getString(0); if (b != null) { Integer v = m.get(b); m.put(b, v == null ? 1 : v + 1); } }
+            } catch (Exception ignored) {}
+            JSArray a = new JSArray();
+            for (java.util.Map.Entry<String, Integer> e : m.entrySet()) { JSObject o = new JSObject(); o.put("name", e.getKey()); o.put("count", e.getValue()); a.put(o); }
+            JSObject r = new JSObject(); r.put("albums", a); call.resolve(r);
+        });
+    }
+
+    @PluginMethod
+    public void readAudio(PluginCall call) {
+        final long id = call.getLong("id", 0L);
+        pool.execute(() -> {
+            try { call.resolve(copy(ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, id))); }
+            catch (Exception e) { call.reject("Dosya okunamadı"); }
         });
     }
 

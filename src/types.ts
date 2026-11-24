@@ -9,7 +9,7 @@ export type FxType = 'blur' | 'sway' | 'shake' | 'glow' | 'brightness' | 'contra
 /** v: keyframe'lenebilir parametreler (2B parametreler 'posX' / 'posY' gibi iki anahtar). amount/speed eski projeler için. */
 export interface Effect { id: string; type: FxType; amount: number; speed?: number; color?: string; v?: Record<string, Anim>; closed?: boolean }
 
-export type LayerType = 'shape' | 'text' | 'image' | 'cb' | 'video';
+export type LayerType = 'shape' | 'text' | 'image' | 'cb' | 'video' | 'audio';
 
 export interface Layer {
   id: string;
@@ -39,6 +39,10 @@ export interface Layer {
   cb?: { outline: number; eyes?: string };
   effects: Effect[];
   hidden?: boolean;
+  /** Ses düzeyi (ses ve video katmanları), 1 = %100 */
+  volume?: number;
+  /** Sesi kapalı */
+  muted?: boolean;
   /** Takip edilen (ebeveyn) katman: konumu/dönüşü/ölçeği ona göre hesaplanır */
   parent?: string;
   /** Kırpma maskesi: bu katman, maske katmanının şekline kırpılır */

@@ -2,7 +2,7 @@
 import { Capacitor, registerPlugin } from '@capacitor/core';
 import { create } from 'zustand';
 
-export interface GItem { id: number; video: boolean; mime: string; name: string; album: string; duration: number }
+export interface GItem { id: number; video: boolean; audio?: boolean; mime: string; name: string; album: string; duration: number }
 interface GalleryPlugin {
   status(): Promise<{ access: 'full' | 'partial' | 'none'; photos: boolean }>;
   request(o?: { again?: boolean }): Promise<{ access: 'full' | 'partial' | 'none'; photos: boolean }>;
@@ -11,11 +11,18 @@ interface GalleryPlugin {
   thumb(o: { id: number; video: boolean }): Promise<{ path: string }>;
   read(o: { id: number; video: boolean }): Promise<{ path: string; mime: string; name: string }>;
   photos(o: { kind: Kind; multiple: boolean }): Promise<{ files: { path: string; mime: string; name: string }[] }>;
+  audioStatus(): Promise<{ ok: boolean }>;
+  audioRequest(): Promise<{ ok: boolean }>;
+  audioList(o: { offset: number; limit: number; album?: string }): Promise<{ items: GItem[] }>;
+  audioAlbums(): Promise<{ albums: { name: string; count: number }[] }>;
+  readAudio(o: { id: number }): Promise<{ path: string; mime: string; name: string }>;
 }
-export const Gallery = registerPlugin<GalleryPlugin>('Gallery');
-export type Kind = 'image' | 'video' | 'any';
-export const galleryNative = () => Capacitor.isNativePlatform() && Capacitor.getPlatform() === 'android';
-export const fileSrc = (path: string) => Capacitor.convertFileSrc(path);
+// Testlerde sahte galeri verilebilir (window.__wmGalleryMock)
+const mock = (globalThis as { __wmGalleryMock?: GalleryPlugin }).__wmGalleryMock;
+export const Gallery = mock ?? registerPlugin<GalleryPlugin>('Gallery');
+export type Kind = 'image' | 'video' | 'any' | 'audio';
+export const galleryNative = () => !!mock || (Capacitor.isNativePlatform() && Capacitor.getPlatform() === 'android');
+export const fileSrc = (path: string) => (mock ? path : Capacitor.convertFileSrc(path));
 
 /** Önbellekteki dosyayı File'a çevirir */
 export async function toFile(f: { path: string; mime: string; name: string }): Promise<File> {
@@ -43,4 +50,9 @@ export async function pickInto(input: HTMLInputElement | null, o: { kind?: Kind;
   for (const f of o.multiple ? files : files.slice(0, 1)) dt.items.add(f);
   input.files = dt.files;
   input.dispatchEvent(new Event('change', { bubbles: true }));
+}
+
+/** Galerideki bir öğeyi File olarak okur (ses de olur) */
+export async function readItem(it: GItem): Promise<File> {
+  return toFile(it.audio ? await Gallery.readAudio({ id: it.id }) : await Gallery.read({ id: it.id, video: it.video }));
 }

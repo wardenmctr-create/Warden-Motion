@@ -431,7 +431,9 @@ type Row = { key: keyof LiteCfg; label: string; info: string; stops: number[]; t
 const LITE_ROWS: Row[] = [
   { key: 'res', label: 'Önizleme çözünürlüğü', info: 'Düşükse önizleme biraz bulanık ama çok daha akıcı olur.', stops: [0.25, 0.3, 0.4, 0.5, 0.6, 0.75, 0.9, 1], text: (v) => `%${Math.round(v * 100)}` },
   { key: 'fps', label: 'Önizleme kare hızı', info: 'Oynatırken saniyede en fazla kaç kare çizilsin.', stops: [15, 24, 30, 60], text: (v) => `${v} kare/sn` },
-  { key: 'media', label: 'İçe aktarılan görsel boyutu', info: 'Galeriden eklenen görsellerin en uzun kenarı.', stops: [720, 1280, 2048], text: (v) => `${v} px` },
+  { key: 'img', label: 'Görseller', info: 'Düzenlerken görsellerin en uzun kenarı. Dışa aktarmada asıl boyutu kullanılır.', stops: [480, 720, 1280, 2048, 0], text: (v) => (v ? `${v} px` : 'Asıl boyut') },
+  { key: 'vid', label: 'Videolar', info: 'Düzenlerken videoların çözünürlüğü (küçük kopya arka planda hazırlanır). Dışa aktarmada asıl video kullanılır.', stops: [360, 480, 720, 1080, 0], text: (v) => (v ? `${v}p` : 'Asıl boyut') },
+  { key: 'aud', label: 'Sesler', info: 'Düzenlerken seslerin kalitesi (düşükse bellek az dolar). Videoların içindeki ses de buna dahil. Dışa aktarmada asıl kalitesi kullanılır.', stops: [16000, 22050, 32000, 0], text: (v) => (v ? `${Math.round(v / 100) / 10} kHz` : 'Asıl kalite') },
 ];
 /** Efekt grupları: her efekt değil, genel gruplar */
 const FX_ROWS: Row[] = [
@@ -482,6 +484,7 @@ function LiteSheet({ onClose }: { onClose: () => void }) {
               <span><b>Efektler</b><small>{fxSummary}</small></span>
               <Icon name="chevR" size={22} />
             </button>
+            <div className="lite-sec">Dosya sıkıştırma (düzenlerken)</div>
             {LITE_ROWS.slice(2).map(row)}
           </>
         ) : (

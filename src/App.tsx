@@ -3,15 +3,19 @@ import { Capacitor } from '@capacitor/core';
 import { Editor } from './screens/Editor';
 import { Home } from './screens/Home';
 import { perfOf, useStore } from './store';
-import { setMediaMax } from './db';
+import { setProxyLevel } from './proxy';
+import { setAudioRate } from './audio';
 import { Assistant } from './assistant/Assistant';
 import { MediaSheet } from './components/MediaSheet';
 
 export function App() {
   const screen = useStore((s) => s.screen);
   const hasProject = useStore((s) => !!s.project);
-  const media = useStore((s) => perfOf(s.settings).media);
-  useEffect(() => setMediaMax(media), [media]);
+  const img = useStore((s) => perfOf(s.settings).img), vid = useStore((s) => perfOf(s.settings).vid);
+  // Düzenlerken küçük kopyalar (dışa aktarmada asıl dosyalar)
+  useEffect(() => setProxyLevel(img, vid), [img, vid]);
+  const aud = useStore((s) => perfOf(s.settings).aud);
+  useEffect(() => setAudioRate(aud), [aud]);
 
   // Android geri tuşu: önce açık paneli/menüyü kapatır, sonra editörden çıkar, en son uygulamadan.
   useEffect(() => {

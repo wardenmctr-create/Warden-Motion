@@ -12,10 +12,12 @@ export interface LiteCfg {
   /** Bükme (fraktal bükme): 0 kapalı, 1 düşük, 2 tam */ warp: number;
   /** Işık ve gölge (parlama, gölge): 0 kapalı, 1 açık */ light: number;
   /** Renk ve ışık (parlaklık, kontrast, ton…): 0 kapalı, 1 açık */ color: number;
-  /** İçe aktarılan görsellerin en uzun kenarı (px) */ media: number;
+  /** Düzenlerken görsellerin en uzun kenarı (px, 0 = asıl hâli) */ img: number;
+  /** Düzenlerken videoların kısa kenarı (px, 0 = asıl hâli) */ vid: number;
+  /** Düzenlerken seslerin örnekleme hızı (Hz, 0 = asıl kalite) */ aud: number;
 }
-export const LITE_DEFAULT: LiteCfg = { res: 0.4, fps: 30, blur: 1, warp: 1, light: 1, color: 1, media: 1280 };
-export const FULL_QUALITY: LiteCfg = { res: 1, fps: 60, blur: 3, warp: 2, light: 1, color: 1, media: 2048 };
+export const LITE_DEFAULT: LiteCfg = { res: 0.4, fps: 30, blur: 1, warp: 1, light: 1, color: 1, img: 1280, vid: 480, aud: 22050 };
+export const FULL_QUALITY: LiteCfg = { res: 1, fps: 60, blur: 3, warp: 2, light: 1, color: 1, img: 2048, vid: 0, aud: 0 };
 /** O anki geçerli performans ayarı: Lite kapalıyken tam kalite */
 export const perfOf = (s: Settings): LiteCfg => (s.lite ? { ...LITE_DEFAULT, ...s.liteCfg } : FULL_QUALITY);
 

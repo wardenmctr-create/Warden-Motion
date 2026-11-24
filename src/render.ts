@@ -1,6 +1,7 @@
 import { fillShape, layerHandles, visBox, type Handle } from './shapes';
 import { valueAt } from './anim';
 import { getMedia } from './db';
+import { getPreviewMedia, proxyTag } from './proxy';
 import type { Layer, Project, ShapeKind } from './types';
 import { applyFractalWarp, fxFilter, fxVal } from './effects';
 
@@ -9,23 +10,36 @@ const cache = new Map<string, HTMLImageElement | 'loading' | 'error'>();
 let onLoaded: () => void = () => {};
 export const setImageLoadedHandler = (fn: () => void) => { onLoaded = fn; };
 
-export function resolveSrc(src: string): Promise<string> {
+/** Dışa aktarma sırasında asıl dosyalar kullanılır (önizlemede küçük kopyalar) */
+let fullMedia = false;
+export const setFullMedia = (b: boolean) => { fullMedia = b; };
+const mkey = (src: string) => (src.startsWith('media:') ? `${fullMedia ? 'F' : 'P' + proxyTag()}|${src}` : src);
+
+export function resolveSrc(src: string, full = fullMedia): Promise<string> {
   if (src.startsWith('media:')) {
-    return getMedia(src.slice(6)).then((b) => (b ? URL.createObjectURL(b) : ''));
+    const id = src.slice(6);
+    return (full ? getMedia(id) : getPreviewMedia(id)).then((b) => (b ? URL.createObjectURL(b) : ''));
   }
   return Promise.resolve(src);
 }
+// Video kopyası hazır olunca / seviye değişince önizleme yeniden yüklensin
+addEventListener('wm-proxy-ready', () => {
+  for (const k of [...cache.keys()]) if (k.startsWith('P')) cache.delete(k);
+  for (const [k, v] of [...vcache.entries()]) if (k.startsWith('P')) { if (v instanceof HTMLVideoElement) { v.pause(); v.removeAttribute('src'); } vcache.delete(k); }
+  onLoaded();
+});
 
 export function getImage(src: string): HTMLImageElement | null {
-  const c = cache.get(src);
+  const key = mkey(src);
+  const c = cache.get(key);
   if (c instanceof HTMLImageElement) return c;
   if (c) return null;
-  cache.set(src, 'loading');
+  cache.set(key, 'loading');
   resolveSrc(src).then((url) => {
-    if (!url) { cache.set(src, 'error'); return; }
+    if (!url) { cache.set(key, 'error'); return; }
     const img = new Image();
-    img.onload = () => { cache.set(src, img); onLoaded(); };
-    img.onerror = () => cache.set(src, 'error');
+    img.onload = () => { cache.set(key, img); onLoaded(); };
+    img.onerror = () => cache.set(key, 'error');
     img.src = url;
   });
   return null;
@@ -34,14 +48,15 @@ export function getImage(src: string): HTMLImageElement | null {
 // ---------- Video önbelleği ----------
 const vcache = new Map<string, HTMLVideoElement | 'loading'>();
 export function getVideo(src: string): HTMLVideoElement | null {
-  const c = vcache.get(src);
+  const key = mkey(src);
+  const c = vcache.get(key);
   if (c instanceof HTMLVideoElement) return c.readyState >= 2 ? c : null;
   if (c) return null;
-  vcache.set(src, 'loading');
+  vcache.set(key, 'loading');
   resolveSrc(src).then((url) => {
     const v = document.createElement('video');
     v.muted = true; v.playsInline = true; v.preload = 'auto'; v.crossOrigin = 'anonymous';
-    v.onloadeddata = () => { vcache.set(src, v); onLoaded(); };
+    v.onloadeddata = () => { vcache.set(key, v); onLoaded(); };
     v.onseeked = () => onLoaded();
     v.src = url;
   });
@@ -54,7 +69,7 @@ export function preloadImages(srcs: string[]): Promise<void> {
   return Promise.all(srcs.map((s) => new Promise<void>((res) => {
     if (getImage(s)) return res();
     const iv = setInterval(() => {
-      const c = cache.get(s);
+      const c = cache.get(mkey(s));
       if (c instanceof HTMLImageElement || c === 'error') { clearInterval(iv); res(); }
     }, 30);
   }))).then(() => undefined);
@@ -282,7 +297,7 @@ function motionBlur(ab: CanvasRenderingContext2D, p: Project, l: Layer, t: numbe
   ab.putImageData(out, x0, y0);
 }
 
-const visible = (l: Layer, t: number) => !l.hidden && t >= l.start && t < l.end;
+const visible = (l: Layer, t: number) => l.type !== 'audio' && !l.hidden && t >= l.start && t < l.end;
 
 export function renderFrame(ctx: CanvasRenderingContext2D, p: Project, t: number, opts: RenderOpts = {}) {
   const q = opts.quality ?? 1;
@@ -478,7 +493,7 @@ export function hitTest(p: Project, t: number, px: number, py: number, only?: st
   for (let i = p.layers.length - 1; i >= 0; i--) {
     const l = p.layers[i];
     if (only && l.id !== only) continue;
-    if (l.hidden || t < l.start || t >= l.end) continue;
+    if (l.type === 'audio' || l.hidden || t < l.start || t >= l.end) continue;
     const tr = worldTransform(p, l, t);
     const a = -tr.rot * Math.PI / 180;
     const dx = px - tr.x, dy = py - tr.y;
@@ -513,4 +528,42 @@ function drawMotionPath(ctx: CanvasRenderingContext2D, p: Project, l: Layer, q: 
     ctx.fillStyle = '#22D3C5'; ctx.fill();
   }
   ctx.restore();
+}
+
+// ---------- Zaman çizelgesi küçük resimleri ----------
+const thumbCache = new Map<string, string>();
+/**
+ * Katmanın kendisinin küçük resmi (efektsiz, kırpılmışsa kırpılmış hâli). Yüksekliği H px.
+ * Görsel/video henüz yüklenmediyse null (yüklenince editör yeniden çizilir).
+ */
+export function layerThumb(l: Layer, H = 40): string | null {
+  if (l.type === 'audio') return null;
+  const media = l.type === 'image' || l.type === 'cb' || l.type === 'video';
+  const key = JSON.stringify([H, l.type, l.src, l.crop, l.shape, l.sp, l.pts, l.fill, l.fill2, l.grad, l.gtype, l.noFill, l.w, l.h, l.text, l.fontSize, l.cb, l.flipX, l.flipY]);
+  const hit = thumbCache.get(key);
+  if (hit) return hit;
+  let vid: HTMLVideoElement | null = null;
+  if (media && l.src) {
+    if (l.type === 'video') { vid = getVideo(l.src); if (!vid) return null; }
+    else if (!getImage(l.src)) return null;
+  }
+  const b = l.crop && media ? visBox(l) : { x0: -l.w / 2, y0: -l.h / 2, x1: l.w / 2, y1: l.h / 2 };
+  const bw = Math.max(1, b.x1 - b.x0), bh = Math.max(1, b.y1 - b.y0);
+  const k = H / bh;
+  const c = document.createElement('canvas');
+  c.width = Math.max(4, Math.min(H * 4, Math.round(bw * k))); c.height = H;
+  const x = c.getContext('2d')!;
+  x.translate(c.width / 2, H / 2);
+  x.scale(k * (l.flipX ? -1 : 1), k * (l.flipY ? -1 : 1));
+  x.translate(-(b.x0 + b.x1) / 2, -(b.y0 + b.y1) / 2);
+  if (vid) {
+    // Video: oynatılan anı bozmamak için sadece o anki kare çizilir (sarma yok)
+    x.beginPath(); x.rect(b.x0, b.y0, bw, bh); x.clip();
+    x.drawImage(vid, -l.w / 2, -l.h / 2, l.w, l.h);
+  } else drawLayer(x, { ...l, effects: [] });
+  let url = '';
+  try { url = c.toDataURL('image/png'); } catch { return null; }
+  if (thumbCache.size > 300) thumbCache.clear();
+  thumbCache.set(key, url);
+  return url;
 }

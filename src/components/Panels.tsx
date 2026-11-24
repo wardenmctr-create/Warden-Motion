@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Icon } from './Icon';
 import { EASES, keyAt, segmentKey, setAnim, setEase, toggleKey, uid, valueAt } from '../anim';
 import { addUserFlag, addUserFolder, addUserPackItems, listUserFlags, listUserFolders, listUserPack, putMedia, removeUserPackItem, type UserFlag, type UserPackItem } from '../db';
@@ -7,7 +8,9 @@ import { resolveSrc } from '../render';
 import { addVertex, fillShape, regularPts, SHAPE_PARAMS, sp as shapeParam } from '../shapes';
 import { useStore } from '../store';
 import { askText } from '../dialog';
-import { pickInto } from '../gallery';
+import { Gallery, galleryNative, type GItem, pickInto, pickMedia, readItem } from '../gallery';
+import { AudioCard, stopListen, toggleListen, useListening } from './AudioCard';
+import { Tile } from './MediaSheet';
 import { FEATURED, FX, FX_CATS, fxMeta, fxVal, makeEffect, paramKeys, type FxParam } from '../effects';
 import type { AnimProp, Effect, FxType, Layer, Project, ShapeKind } from '../types';
 
@@ -90,7 +93,7 @@ function Pager<T>({ items, cols, rows = 2, render, keyOf, empty }: { items: T[];
 }
 
 // ---------- Ekle paneli ----------
-export type AddTab = 'shape' | 'media' | 'text' | 'cb' | 'flags';
+export type AddTab = 'shape' | 'media' | 'audio' | 'text' | 'cb' | 'flags';
 
 interface PackPart { name: string; src: string; back?: boolean; parent?: number }
 interface PackItem { name: string; src: string; id?: string; parts?: PackPart[]; root?: number }
@@ -120,6 +123,20 @@ export function AddPanel({ tab, setTab, onClose, toast, replaceFlagOf }: { tab: 
     });
     const k = Math.min(p.width / meta.w, p.height / meta.h); // proje alanına sığdır
     s.addLayer(makeLayer(p, t, Math.round(meta.d * 100) / 100, { type: 'video', name, src, w: Math.round(meta.w * k), h: Math.round(meta.h * k) }));
+    onClose();
+  };
+
+  const addAudio = async (src: string, name: string) => {
+    const url = await resolveSrc(src);
+    const d = await new Promise<number>((res) => {
+      const a = document.createElement('audio');
+      a.preload = 'metadata';
+      a.onloadedmetadata = () => res(isFinite(a.duration) && a.duration > 0 ? a.duration : 5);
+      a.onerror = () => res(5);
+      a.src = url;
+    });
+    s.addLayer(makeLayer(p, t, Math.round(d * 100) / 100, { type: 'audio', name, src, w: 0, h: 0, fill: '#2FAE8E' }));
+    toast(`"${name}" eklendi. Oynatınca duyulur, dışa aktarınca videoya eklenir.`);
     onClose();
   };
 
@@ -177,7 +194,7 @@ export function AddPanel({ tab, setTab, onClose, toast, replaceFlagOf }: { tab: 
   };
 
   const tabs: { id: AddTab; label: string; icon: string }[] = [
-    { id: 'shape', label: 'Şekil', icon: 'shapes' }, { id: 'media', label: 'Medya', icon: 'image' },
+    { id: 'shape', label: 'Şekil', icon: 'shapes' }, { id: 'media', label: 'Medya', icon: 'image' }, { id: 'audio', label: 'Ses', icon: 'music' },
     { id: 'text', label: 'Metin', icon: 'text' }, { id: 'cb', label: 'CB', icon: 'ball' }, { id: 'flags', label: 'Bayrak', icon: 'flag' },
   ];
 
@@ -204,7 +221,8 @@ export function AddPanel({ tab, setTab, onClose, toast, replaceFlagOf }: { tab: 
             </button>
           )} />
         )}
-        {tab === 'media' && <MediaTab onPick={(src, name, kind) => (kind === 'video' ? addVideo(src, name) : addImage(src, name, 0.7))} />}
+        {tab === 'media' && <MediaTab onAudio={() => setTab('audio')} onPick={(src, name, kind) => (kind === 'video' ? addVideo(src, name) : addImage(src, name, 0.7))} />}
+        {tab === 'audio' && <AudioTab onPick={addAudio} toast={toast} />}
         {tab === 'text' && <TextTab onAdd={(text) => { s.addLayer(makeLayer(p, t, dur, { type: 'text', name: text.slice(0, 18) || 'Metin', text, fontSize: Math.round(p.height / 12), fill: '#0D1631', w: Math.round(p.width * 0.6), h: Math.round(p.height / 8) })); onClose(); }} />}
         {tab === 'cb' && <CBTab onPick={(it) => (it.parts ? addParts(it) : addImage(it.src, it.name))} onBody={(shape) => buildBody(shape)} toast={toast} />}
         {tab === 'flags' && (
@@ -239,10 +257,25 @@ type RecentMedia = { src: string; kind: 'image' | 'video'; name: string };
 const getRecentMedia = (): RecentMedia[] => { try { return JSON.parse(localStorage.getItem(MEDIA_RECENT) || '[]'); } catch { return []; } };
 const pushRecentMedia = (m: RecentMedia) => { try { localStorage.setItem(MEDIA_RECENT, JSON.stringify([m, ...getRecentMedia().filter((x) => x.src !== m.src)].slice(0, 20))); } catch { /* yok */ } };
 
-/** Videodaki Medya sekmesi: solda tür, ortada son eklenenler şeridi, altta "tümünü görüntüle" */
-function MediaTab({ onPick }: { onPick: (src: string, name: string, kind: 'image' | 'video') => void }) {
+/** Medya sekmesi: telefonda galeri burada açılır (solda Tümünü görüntüle + albüm); tarayıcıda son eklenenler şeridi */
+function MediaTab({ onPick, onAudio }: { onPick: (src: string, name: string, kind: 'image' | 'video') => void; onAudio: () => void }) {
   const ref = useRef<HTMLInputElement>(null);
   const [recent] = useState(getRecentMedia);
+  const native = galleryNative();
+  const [access, setAccess] = useState<'loading' | 'ok' | 'none'>('loading');
+  const [items, setItems] = useState<GItem[]>([]);
+  const [albums, setAlbums] = useState<{ name: string; count: number }[]>([]);
+  const [album, setAlbum] = useState('');
+  const [albMenu, setAlbMenu] = useState<DOMRect | null>(null);
+  const [busy, setBusy] = useState(false);
+  const gridRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!native) return;
+    Gallery.status().then((st) => { setAccess(st.access === 'none' ? 'none' : 'ok'); if (st.access !== 'none') Gallery.albums().then((r) => setAlbums(r.albums)).catch(() => {}); }).catch(() => setAccess('none'));
+  }, []);
+  useEffect(() => {
+    if (native && access === 'ok') Gallery.list({ offset: 0, limit: 90, kind: 'any', album: album || undefined }).then((r) => setItems(r.items)).catch(() => {});
+  }, [access, album]);
   const pickFile = async (f: File) => {
     const kind = f.type.startsWith('video/') ? 'video' : 'image';
     const src = await putMedia(f);
@@ -250,15 +283,46 @@ function MediaTab({ onPick }: { onPick: (src: string, name: string, kind: 'image
     pushRecentMedia({ src, kind, name });
     onPick(src, name, kind);
   };
+  const pickFiles = async (fs: File[]) => { setBusy(true); try { for (const f of fs) await pickFile(f); } finally { setBusy(false); } };
+  const all = async () => { const fs = await pickMedia({ kind: 'any', multiple: true, title: 'Görsel ya da video ekle' }); if (fs.length) pickFiles(fs); };
+  const fromGallery = async (it: GItem) => { if (busy) return; setBusy(true); try { await pickFile(await readItem(it)); } catch { /* okunamadı */ } setBusy(false); };
+
+  if (native && access !== 'loading') return (
+    <div className={'mediatab gal' + (busy ? ' busy' : '')}>
+      <div className="mg-side">
+        <button className="mg-all" onClick={all}><Icon name="apps" size={24} />{access === 'none' ? 'Galeriyi aç' : 'Tümünü görüntüle'}</button>
+        {access === 'ok' && <button className="mg-alb" aria-haspopup="listbox" onClick={(e) => setAlbMenu(albMenu ? null : e.currentTarget.getBoundingClientRect())}><span>{album || 'Her şey'}</span><Icon name="chevD" size={14} /></button>}
+      </div>
+      {access === 'ok' ? (
+        <div className="mg-grid" ref={gridRef}>
+          {items.map((it) => <Tile key={(it.video ? 'v' : 'i') + it.id} it={it} on={0} root={gridRef.current} onPick={() => fromGallery(it)} />)}
+        </div>
+      ) : (
+        <div className="audperm" style={{ flex: 1 }}>
+          <span>Projende görsel ve video kullanmak için galerine erişim gerekir.</span>
+          <button className="audperm-btn" onClick={() => Gallery.request().then((st) => { setAccess(st.access === 'none' ? 'none' : 'ok'); if (st.access !== 'none') Gallery.albums().then((r) => setAlbums(r.albums)).catch(() => {}); })}>ERİŞİME İZİN VER</button>
+        </div>
+      )}
+      {albMenu && createPortal(
+        // Telefondaki bütün klasörler: tuvalin üstüne doğru açılır, kaydırılabilir
+        <div className="mg-scrim" onClick={() => setAlbMenu(null)}>
+          <div className="ms-albmenu mg-menu" role="listbox" style={{ left: 8, bottom: innerHeight - albMenu.top + 6, maxHeight: Math.max(160, albMenu.top - 70) }} onClick={(e) => e.stopPropagation()}>
+            {[{ name: '', count: 0 }, ...albums].map((a) => (
+              <button key={a.name || '*'} role="option" aria-selected={album === a.name} className={album === a.name ? 'on' : ''} onClick={() => { setAlbum(a.name); setAlbMenu(null); }}>{a.name || 'Her şey'}{a.count ? <i>{a.count}</i> : null}</button>
+            ))}
+          </div>
+        </div>, document.body)}
+    </div>
+  );
   return (
     <div className="mediatab">
       <div className="mcol">
         <button className="ib on" aria-label="Görsel ve video"><Icon name="image" size={20} /></button>
-        <button className="ib" aria-label="Ses (yakında)" disabled><Icon name="music" size={20} /></button>
+        <button className="ib" aria-label="Ses" onClick={onAudio}><Icon name="music" size={20} /></button>
       </div>
       <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 6 }}>
         <div className="mstrip">
-          <button className="mthumb add" aria-label="Galeriden seç" onClick={() => pickInto(ref.current, { kind: 'any', title: 'Görsel ya da video ekle' })}><Icon name="plus" size={24} /></button>
+          <button className="mthumb add" aria-label="Galeriden seç" onClick={all}><Icon name="plus" size={24} /></button>
           {recent.map((m) => (
             <button key={m.src} className="mthumb" aria-label={m.name} onClick={() => onPick(m.src, m.name, m.kind)}>
               {m.kind === 'video' ? <span className="vbadge"><Icon name="play" size={12} /></span> : null}
@@ -266,9 +330,77 @@ function MediaTab({ onPick }: { onPick: (src: string, name: string, kind: 'image
             </button>
           ))}
         </div>
-        <button className="mall" onClick={() => pickInto(ref.current, { kind: 'any', title: 'Görsel ya da video ekle' })}><Icon name="grid" size={16} />Tüm fotoğraf ve videoları görüntüle</button>
+        <button className="mall" onClick={all}><Icon name="grid" size={16} />Tüm fotoğraf ve videoları görüntüle</button>
       </div>
-      <input ref={ref} type="file" accept="image/*,video/*" hidden onChange={async (e) => { const f = e.target.files?.[0]; if (f) await pickFile(f); e.target.value = ''; }} />
+      <input ref={ref} type="file" accept="image/*,video/*" multiple hidden onChange={async (e) => { const fs = [...(e.target.files ?? [])]; e.target.value = ''; if (fs.length) await pickFiles(fs); }} />
+    </div>
+  );
+}
+
+const AUDIO_RECENT = 'wm-audio-recent';
+type RecentAudio = { src: string; name: string; dur: number };
+const getRecentAudio = (): RecentAudio[] => { try { return JSON.parse(localStorage.getItem(AUDIO_RECENT) || '[]'); } catch { return []; } };
+const pushRecentAudio = (m: RecentAudio) => { try { localStorage.setItem(AUDIO_RECENT, JSON.stringify([m, ...getRecentAudio().filter((x) => x.src !== m.src)].slice(0, 12))); } catch { /* yok */ } };
+const fileDur = (f: Blob) => new Promise<number>((res) => {
+  const a = document.createElement('audio'), u = URL.createObjectURL(f);
+  a.preload = 'metadata';
+  a.onloadedmetadata = () => { res(isFinite(a.duration) ? a.duration : 0); URL.revokeObjectURL(u); };
+  a.onerror = () => { res(0); URL.revokeObjectURL(u); };
+  a.src = u;
+});
+
+/** Ses sekmesi: telefondaki sesler kart kart (basınca dinlenir, + ile eklenir); en başta "Tümünü görüntüle" */
+function AudioTab({ onPick, toast }: { onPick: (src: string, name: string) => void; toast: (m: string) => void }) {
+  const native = galleryNative();
+  const [access, setAccess] = useState<'loading' | 'ok' | 'none'>(native ? 'loading' : 'ok');
+  const [items, setItems] = useState<GItem[]>([]);
+  const [recent] = useState(getRecentAudio);
+  const [busy, setBusy] = useState(false);
+  const listening = useListening();
+  const files = useRef(new Map<number, File>());
+  useEffect(() => {
+    if (!native) return;
+    Gallery.audioStatus().then((r) => setAccess(r.ok ? 'ok' : 'none')).catch(() => setAccess('none'));
+  }, []);
+  useEffect(() => {
+    if (native && access === 'ok') Gallery.audioList({ offset: 0, limit: 15 }).then((r) => setItems(r.items)).catch(() => {});
+  }, [access]);
+  useEffect(() => () => stopListen(), []);
+  const fileOf = async (it: GItem) => { let f = files.current.get(it.id); if (!f) { f = await readItem(it); files.current.set(it.id, f); } return f; };
+  const useFile = async (f: File) => {
+    const name = f.name.replace(/\.[^.]+$/, '') || 'Ses';
+    const [src, dur] = await Promise.all([putMedia(f), fileDur(f)]);
+    pushRecentAudio({ src, name, dur });
+    onPick(src, name);
+  };
+  const fromDevice = async (it: GItem) => {
+    if (busy) return;
+    setBusy(true);
+    try { await useFile(await fileOf(it)); } catch { toast('Ses dosyası okunamadı.'); }
+    setBusy(false);
+  };
+  const all = async () => {
+    stopListen();
+    const fs = await pickMedia({ kind: 'audio', title: 'Sesler' });
+    if (fs[0]) { setBusy(true); try { await useFile(fs[0]); } catch { toast('Ses dosyası okunamadı.'); } setBusy(false); }
+  };
+  if (access === 'none') return (
+    <div className="audperm">
+      <span>Projende müzik ve ses kullanmak için seslerine erişim gerekir.</span>
+      <button className="audperm-btn" onClick={() => Gallery.audioRequest().then((r) => { setAccess(r.ok ? 'ok' : 'none'); if (!r.ok) toast('İzin verilmedi. İstersen "Dosyalardan seç" ile ekleyebilirsin.'); })}>ERİŞİME İZİN VER</button>
+      <button className="audperm-link" onClick={all}>Dosyalardan seç</button>
+    </div>
+  );
+  const seen = new Set(recent.map((r) => r.name));
+  return (
+    <div className={'audgrid' + (busy ? ' busy' : '')}>
+      <button className="acard all" onClick={all}><Icon name="apps" size={26} />Tümünü görüntüle</button>
+      {recent.map((r) => <AudioCard key={r.src} name={r.name} dur={r.dur} recent playing={listening === r.src}
+        onListen={() => toggleListen(r.src, () => resolveSrc(r.src))} onAdd={() => onPick(r.src, r.name)} />)}
+      {items.filter((it) => !seen.has(it.name.replace(/\.[^.]+$/, ''))).map((it) => <AudioCard key={it.id} name={it.name} dur={it.duration / 1000} playing={listening === 'g' + it.id}
+        onListen={() => toggleListen('g' + it.id, async () => URL.createObjectURL(await fileOf(it)))} onAdd={() => fromDevice(it)} />)}
+      {access === 'loading' && <span className="audnote">Yükleniyor…</span>}
+      {!native && !recent.length && <span className="audnote">Karta basınca dinlersin, altındaki + ile projeye eklersin. MP3, WAV, M4A, OGG… Videoların kendi sesini katmanın "Ses Düzeyi" bölümünden ayarlarsın.</span>}
     </div>
   );
 }
@@ -715,6 +847,33 @@ export function OpacityPanel({ layer, onClose }: { layer: Layer; onClose: () => 
           <input className="slider" type="range" min={0} max={1000} value={Math.round(v * 1000)} aria-label="Opaklık" onPointerDown={() => s.checkpoint()} onChange={(e) => s.updateLayer(layer.id, (l) => ({ ...l, opacity: setAnim(l.opacity, t, +e.target.value / 1000) }), false)} />
           <b>{v.toFixed(3)}</b>
         </div>
+      </div>
+    </div>
+  );
+}
+
+/** Ses Düzeyi: ses ve video katmanlarının sesi (%0–200) */
+export function VolumePanel({ layer, onClose }: { layer: Layer; onClose: () => void }) {
+  const { s } = useNow();
+  const v = layer.volume ?? 1;
+  const muted = !!layer.muted;
+  return (
+    <div className="dpanel side2" role="dialog" aria-label="Ses Düzeyi">
+      <div className="lcol">
+        <button className="ib" aria-label="Geri" onClick={onClose}><Icon name="back" /></button>
+        <button className="ib" aria-label={muted ? 'Sesi aç' : 'Sessize al'} onClick={() => s.updateLayer(layer.id, (l) => ({ ...l, muted: !l.muted }))} style={{ color: muted ? 'var(--turq)' : 'var(--d-text)' }}><Icon name={muted ? 'volOff' : 'music'} /></button>
+      </div>
+      <div className="dbody" style={{ paddingLeft: 4 }}>
+        <div className="oprow">
+          <Icon name="music" size={18} />
+          <input className="slider" type="range" min={0} max={200} value={Math.round(v * 100)} disabled={muted} aria-label="Ses düzeyi" onPointerDown={() => s.checkpoint()} onChange={(e) => s.updateLayer(layer.id, (l) => ({ ...l, volume: +e.target.value / 100 }), false)} />
+          <b>{muted ? 'Sessiz' : `%${Math.round(v * 100)}`}</b>
+        </div>
+        <div className="volpre">
+          {[0.5, 1, 1.5, 2].map((x) => <button key={x} className={!muted && Math.abs(v - x) < 0.005 ? 'on' : ''} onClick={() => s.updateLayer(layer.id, (l) => ({ ...l, volume: x, muted: false }))}>%{x * 100}</button>)}
+          <button className={muted ? 'on' : ''} onClick={() => s.updateLayer(layer.id, (l) => ({ ...l, muted: !l.muted }))}>Sessiz</button>
+        </div>
+        {layer.type === 'video' && <span className="volnote">Videonun kendi sesi. Önizlemede oynatırken duyulur, dışa aktarınca videoya eklenir.</span>}
       </div>
     </div>
   );

@@ -35,10 +35,11 @@ let mediaMax = 2048;
 /** Lite modda içe aktarılan görseller daha çok küçültülür */
 export const setMediaMax = (n: number) => { mediaMax = n; };
 
-/** Galeriden eklenen görseller */
+/** Galeriden eklenen görsel/videolar: ASIL hâliyle saklanır (düzenlerken küçük kopyası kullanılır, bkz. proxy.ts) */
 export async function putMedia(blob: Blob): Promise<string> {
   const id = uid();
-  await set(id, await downscale(blob, mediaMax), mediaStore);
+  // Çok büyük fotoğraflar (ör. 50 MP) yine de makul bir üst sınıra indirilir; videolar olduğu gibi
+  await set(id, await downscale(blob, Math.max(mediaMax, 4096)), mediaStore);
   return 'media:' + id;
 }
 export const getMedia = (id: string) => get<Blob>(id, mediaStore);

@@ -7,7 +7,7 @@ import { useStore } from '../store';
 import { newProject, TUTORIALS } from '../factories';
 import { setAnim, valueAt } from '../anim';
 
-export const APP_VERSION = '0.15';
+export const APP_VERSION = '0.16';
 /** Sürüm karşılaştırma: '0.10' > '0.9' */
 export const verGt = (a: string, b: string) => { const x = a.split('.').map(Number), y = b.split('.').map(Number); for (let i = 0; i < Math.max(x.length, y.length); i++) { if ((x[i] ?? 0) !== (y[i] ?? 0)) return (x[i] ?? 0) > (y[i] ?? 0); } return false; };
 
@@ -255,6 +255,16 @@ const INTRO_END: Step[] = [WHAT_NOW(false), pickTutorial()];
 /** Her güncellemede "yeni neler var" (en yeni en sonda) */
 type News = { v: string; items: Step[] };
 export const WHATS_NEW: News[] = [
+  {
+    v: '0.16', items: [
+      { say: 'Ses desteği geldi! Katman ekle\'de yeni "Ses" sekmesi var: telefondaki sesler kart kart görünür. Karta basınca dinlersin, altındaki + ile projeye eklersin.', mood: 'excited' },
+      { say: '"Tümünü görüntüle"ye basınca bütün seslerin klasör klasör açılır; Warden Motion kapanmaz, arkada bekler.', mood: 'happy' },
+      { say: 'Ses katmanını seçince "Ses Düzeyi" ile sesini %0 ile %200 arasında ayarlarsın ya da sessize alırsın. Videoların kendi sesi de çalar, onu da aynı yerden ayarlarsın. Dışa aktarınca bütün sesler videoya eklenir.', mood: 'happy' },
+      { say: 'Medya sekmesinde galerin artık doğrudan görünüyor; soldaki "Her şey" menüsünden telefondaki bütün klasörlere bakabilirsin. "Tümünü görüntüle"de dokunduğun fotoğraf ya da video üstte önizlenir, basılı tutunca çoklu seçime geçer, + ile eklersin.', mood: 'excited' },
+      { say: 'Zaman çizelgesi de yenilendi: uygulamanın kendi nesneleri mavi tonlarında, sesler mor tonlarında ve dalgalı; görsel ve videolarda şeridin üstünde kendi kareleri görünür. Soldaki küçük simgede de nesnenin kendisi var, kırptıysan kırpılmış hâli.', mood: 'excited' },
+      { say: 'Lite ayarlarında artık dosya sıkıştırma da var: düzenlerken görseller, videolar ve sesler ne kadar küçülsün sen seçersin. Dışa aktarırken hep asıl kalitesi kullanılır.', mood: 'happy', target: () => find('[aria-label="Ayarlar menüsü"]') },
+    ],
+  },
   {
     v: '0.15', items: [
       { say: 'Bulanıklık efektleri artık çok daha hızlı: hareket bulanıklığı ve Gauss bulanıklığı önizlemede uygulamayı dondurmuyor.', mood: 'excited' },

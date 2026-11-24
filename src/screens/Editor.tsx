@@ -1,17 +1,18 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Icon } from '../components/Icon';
-import { AddPanel, type AddTab, ColorPanel, CBPanel, EffectsPanel, MovePanel, OpacityPanel, ShapeEditPanel, TextPanel } from '../components/Panels';
+import { AddPanel, type AddTab, ColorPanel, CBPanel, EffectsPanel, MovePanel, OpacityPanel, ShapeEditPanel, TextPanel, VolumePanel } from '../components/Panels';
 import { applyHandle } from '../shapes';
 import { fmtTime, projectDuration, setAnim, valueAt } from '../anim';
 import { groupLabel, layerMarkers, moveMarker, type Marker } from '../markers';
+import { audioBuffer, playAudio, stopAudio, warmAudio } from '../audio';
 import { estimateExport, exportVideo, heavyEffects, saveFile, type ExportInfo } from '../export';
 import { fxMeta, fxVal } from '../effects';
-import { hitTest, pickHandle, parentWorld, pauseAllVideos, renderFrame, setImageLoadedHandler, toLocal, worldTransform, type TR } from '../render';
+import { hitTest, layerThumb, pickHandle, parentWorld, pauseAllVideos, renderFrame, setImageLoadedHandler, toLocal, worldTransform, type TR } from '../render';
 import { perfOf, useStore } from '../store';
 import type { Project } from '../types';
 
-export type Panel = null | 'add' | 'move' | 'color' | 'opacity' | 'effects' | 'cb' | 'text' | 'shape';
-const PANEL_TITLE: Record<string, string> = { move: 'Taşı ve Çevir', color: 'Renk ve Dolgu', opacity: 'Karıştırma ve Opaklık', effects: 'Efektler', text: 'Metni Düzenle', cb: 'CB Ayarları', shape: 'Şekli Düzenle' };
+export type Panel = null | 'add' | 'move' | 'color' | 'opacity' | 'effects' | 'cb' | 'text' | 'shape' | 'volume';
+const PANEL_TITLE: Record<string, string> = { move: 'Taşı ve Çevir', color: 'Renk ve Dolgu', opacity: 'Karıştırma ve Opaklık', effects: 'Efektler', text: 'Metni Düzenle', cb: 'CB Ayarları', shape: 'Şekli Düzenle', volume: 'Ses Düzeyi' };
 
 const PPS_MIN = 15, PPS_MAX = 1200; // zaman çizelgesi yakınlaştırma sınırları (saniye başına piksel)
 const TOP = 44, ROW = 26; // katman şeritlerinin başladığı yer ve satır aralığı
@@ -53,6 +54,7 @@ export function Editor() {
   const show = (m: string) => { setToast(m); setTimeout(() => setToast(''), 2600); };
 
   useEffect(() => setImageLoadedHandler(() => force((x) => x + 1)), []);
+  useEffect(() => { warmAudio(p); }, [p.id, p.layers.length]);
 
   // ---------- Önizleme ----------
   const stageRef = useRef<HTMLDivElement>(null);
@@ -90,13 +92,14 @@ export function Editor() {
   useEffect(() => {
     if (!s.playing) return;
     let raf = 0, last = performance.now(), lastDraw = 0;
+    playAudio(useStore.getState().project!, timeRef.current);
     const tick = (now: number) => {
       const st = { ...useStore.getState(), loopOn: loopRef.current };
       const pr = st.project!;
       const d = projectDuration(pr);
       let t = timeRef.current + (now - last) / 1000;
       last = now;
-      if (t >= d) { if (st.loopOn) t = 0; else { timeRef.current = d; st.setPlaying(false); return; } }
+      if (t >= d) { if (st.loopOn) { t = 0; playAudio(pr, 0); } else { timeRef.current = d; st.setPlaying(false); return; } }
       timeRef.current = t;
       const c = canvasRef.current;
       // Kare hızı sınırı (Lite ayarı): zaman ilerler ama tuval daha seyrek çizilir
@@ -111,7 +114,7 @@ export function Editor() {
       raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
-    return () => { cancelAnimationFrame(raf); pauseAllVideos(); useStore.getState().setTime(Math.round(timeRef.current * p.fps) / p.fps); };
+    return () => { cancelAnimationFrame(raf); stopAudio(); pauseAllVideos(); useStore.getState().setTime(Math.round(timeRef.current * p.fps) / p.fps); };
   }, [s.playing]);
 
   // ---------- Önizlemede sürükleme ----------
@@ -576,6 +579,7 @@ export function Editor() {
   ) : sel && panel === 'move' ? <MovePanel layer={sel} onClose={() => setPanel(null)} />
     : sel && panel === 'color' ? <ColorPanel layer={sel} onClose={() => setPanel(null)} />
     : sel && panel === 'opacity' ? <OpacityPanel layer={sel} onClose={() => setPanel(null)} />
+    : sel && panel === 'volume' ? <VolumePanel layer={sel} onClose={() => setPanel(null)} />
     : sel && panel === 'effects' ? <EffectsPanel layer={sel} onClose={() => setPanel(null)} />
     : sel && panel === 'text' ? <TextPanel layer={sel} onClose={() => setPanel(null)} />
     : sel && panel === 'shape' && sel.shape ? <ShapeEditPanel layer={sel} onClose={() => setPanel(null)} />
@@ -612,18 +616,29 @@ export function Editor() {
         <button aria-label="Çoğalt" onClick={() => s.duplicateLayer(sel.id)}><Icon name="copy" size={20} /></button>
         <button aria-label={sel.hidden ? 'Göster' : 'Gizle'} onClick={() => s.updateLayer(sel.id, (l) => ({ ...l, hidden: !l.hidden }))}><Icon name={sel.hidden ? 'eyeOff' : 'eye'} size={20} /></button>
       </div>
-      <div className="tbigs">
+      {sel.type === 'audio' ? <div className="tbigs">
+        {big('music', 'Ses Düzeyi', () => setPanel('volume'))}
+        {big(sel.muted ? 'volOff' : 'music', sel.muted ? 'Sesi Aç' : 'Sessize Al', () => s.updateLayer(sel.id, (l) => ({ ...l, muted: !l.muted })))}
+      </div> : <div className="tbigs">
         {big('bucket', 'Renk ve Dolgu', sel.type === 'shape' || sel.type === 'text' ? () => setPanel('color') : null)}
-        {sel.type === 'cb' ? big('ball', 'CB Ayarları', () => setPanel('cb')) : big('border', 'Kenarlık ve Gölge', null)}
+        {sel.type === 'cb' ? big('ball', 'CB Ayarları', () => setPanel('cb')) : sel.type === 'video' ? big('music', 'Ses Düzeyi', () => setPanel('volume')) : big('border', 'Kenarlık ve Gölge', null)}
         {big('layers', 'Karıştırma ve Opaklık', () => setPanel('opacity'))}
         {big('move', 'Taşı ve Çevir', () => setPanel('move'))}
         {sel.type === 'text' ? big('text', 'Metni Düzenle', () => setPanel('text')) : big('pen', 'Şekli Düzenle', sel.type === 'shape' && sel.shape ? () => setPanel('shape') : null)}
         {big('sparkle', 'Efektler', () => setPanel('effects'))}
-      </div>
+      </div>}
     </div>
   ) : null
 
   const rows = [...p.layers].reverse(); // en üstteki katman zaman çizelgesinde en üstte
+  // Şerit görünümü: uygulamanın nesneleri mavi tonları, sesler mor tonları (sırayla farklı ton), görsel/video kendi kareleri
+  const trackLook = new Map<string, React.CSSProperties>();
+  { let nb = 0, na = 0;
+    for (const l of p.layers) {
+      if (l.type === 'audio') { const g = PURPLES[na++ % PURPLES.length]; trackLook.set(l.id, { background: `linear-gradient(90deg, ${g[0]}, ${g[1]})` }); }
+      else if (isMedia(l)) { const u = layerThumb(l, 40); trackLook.set(l.id, { background: u ? `url(${u}) left center / auto 100% repeat-x, #1B2547` : '#26386C' }); }
+      else { const g = BLUES[nb++ % BLUES.length]; trackLook.set(l.id, { background: `linear-gradient(90deg, ${g[0]}, ${g[1]})` }); }
+    } }
   const multi = s.multi;
   const [mmenu, setMmenu] = useState(false);
 
@@ -716,9 +731,10 @@ export function Editor() {
               ))}
               {reord && <div className="rowline" style={{ top: TOP + reord.cur * ROW - 3 }} />}
               {(sel ? [sel] : rows).map((l, i) => (
-                <button key={l.id} data-lid={l.id} className={'track' + (l.id === s.selectedId ? ' sel' : multi?.includes(l.id) ? ' msel' : ' off') + (reord?.from === i && !sel ? ' drag' : '')}
-                  style={{ left: half + l.start * PPS, width: Math.max(8, (l.end - l.start) * PPS), top: TOP + i * ROW, opacity: l.hidden ? 0.45 : 1, transform: sel ? undefined : `translateY(${rowOffset(i)}px)` }}
+                <button key={l.id} data-lid={l.id} className={'track' + (l.type === 'audio' ? ' aud' : isMedia(l) ? ' film' : '') + (l.id === s.selectedId ? ' sel' : multi?.includes(l.id) ? ' msel' : ' off') + (reord?.from === i && !sel ? ' drag' : '')}
+                  style={{ left: half + l.start * PPS, width: Math.max(8, (l.end - l.start) * PPS), top: TOP + i * ROW, opacity: l.hidden ? 0.45 : 1, transform: sel ? undefined : `translateY(${rowOffset(i)}px)`, ...trackLook.get(l.id) }}
                   {...pressHandlers(l.id)}>
+                  {l.type === 'audio' && l.src && <Wave src={l.src} len={l.end - l.start} w={Math.max(8, (l.end - l.start) * PPS)} />}
                   <span className="tname">{l.tag && <i className="ttag" style={{ background: l.tag }} />}{l.mask ? '◐ ' : ''}{l.name}</span>
                   {!(trimming && l.id === s.selectedId) && layerMarkers(l)
                     .filter((m) => m.t >= l.start - 1e-6 && m.t <= l.end + 1e-6) // çubuğun dışında kalanlar görünmez
@@ -867,11 +883,40 @@ export function Editor() {
   );
 }
 
+const BLUES = [['#3FB4DA', '#3B7FE0'], ['#5BD0E8', '#2FA6D6'], ['#4C8DF0', '#3A5FD8'], ['#2FC4C8', '#2E8FC8'], ['#6FA8F5', '#4F7CE8']];
+const PURPLES = [['#7B4FD6', '#5A36B8'], ['#A066E0', '#7E44C8'], ['#6248C8', '#4430A6'], ['#B57AE6', '#9150CC'], ['#8A5CF0', '#6C3FD6']];
+const isMedia = (l: import('../types').Layer) => (l.type === 'image' || l.type === 'video' || l.type === 'cb') && !!l.src;
+
+/** Ses katmanının dalga şekli (zaman çizelgesinde) */
+function Wave({ src, len, w }: { src: string; len: number; w: number }) {
+  const ref = useRef<HTMLCanvasElement>(null);
+  const [buf, setBuf] = useState<AudioBuffer | null>(null);
+  useEffect(() => { let on = true; audioBuffer(src).then((b) => on && setBuf(b)); return () => { on = false; }; }, [src]);
+  useEffect(() => {
+    const c = ref.current;
+    if (!c || !buf) return;
+    const W = Math.min(4096, Math.round(w)), H = 24;
+    c.width = W; c.height = H;
+    const x = c.getContext('2d')!;
+    x.clearRect(0, 0, W, H);
+    x.fillStyle = 'rgba(255,255,255,.55)';
+    const d = buf.getChannelData(0), sr = buf.sampleRate;
+    for (let i = 0; i < W; i += 2) {
+      const a = Math.floor((i / W) * len * sr), b = Math.min(d.length, Math.floor(((i + 2) / W) * len * sr));
+      let m = 0;
+      for (let k = a; k < b; k += 16) { const v = Math.abs(d[k]); if (v > m) m = v; }
+      const h = Math.max(1, Math.min(1, m) * H);
+      x.fillRect(i, (H - h) / 2, 1.4, h);
+    }
+  }, [buf, w, len]);
+  return <canvas ref={ref} className="wave" aria-hidden="true" />;
+}
+
 /** Zaman çizelgesinin solundaki küçük katman simgesi */
 function LayerDot({ l }: { l: import('../types').Layer }) {
-  if (l.type === 'shape') return <span className="dot" style={{ background: l.fill2 ? `linear-gradient(135deg, ${l.fill}, ${l.fill2})` : l.fill }} />;
-  if (l.type === 'text') return <span className="dot txt">T</span>;
-  if (l.src && !l.src.startsWith('media:')) return <img className="dot" src={l.src} alt="" />;
+  if (l.type === 'audio') return <span className="dot aud"><Icon name="music" size={12} /></span>;
+  const u = layerThumb(l, 40);
+  if (u) return <img className="dot pic" src={u} alt="" draggable={false} />;
   return <span className="dot img"><Icon name="image" size={12} /></span>;
 }
 
