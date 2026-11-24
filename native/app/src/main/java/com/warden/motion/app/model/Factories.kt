@@ -115,3 +115,25 @@ val TUTORIALS = listOf(
     Tutorial("g4", "Orta-Ayrıntılı Animasyon", "Genel", "Orta-Ayrıntılı", false, "Hareket yolu, easing eğrileri ve geçişler."),
     Tutorial("g5", "Ayrıntılı Animasyon", "Genel", "Ayrıntılı", false, "Kamera ve 3B, karmaşık sahneler, dışa aktarma taktikleri.", w = 1280, h = 720),
 )
+
+/**
+ * CB gövdesi: çizgi (kök) + beyaz iç (takip eder) [+ içe kırpılmış bayrak + gözler]. Sıra alttan üste.
+ */
+fun cbBodyLayers(p: Project, t: Double, dur: Double, shape: String, flagSrc: String? = null, flagName: String? = null, size0: Double? = null): Pair<List<Layer>, String> {
+    val size = Math.round(size0 ?: (min(p.width, p.height) * 0.5)).toDouble()
+    val lineId = uid(); val innerId = uid()
+    val line = makeLayer(p, t, dur, "image", "${flagName ?: "Gövde"} Çizgi") { it.copy(id = lineId, src = "packs/hazir/govdeler/$shape-cizgi.png", w = size, h = size) }
+    val inner = makeLayer(p, t, dur, "image", "${flagName ?: "Gövde"} İç") { it.copy(id = innerId, src = "packs/hazir/govdeler/$shape-ic.png", w = size, h = size, parent = lineId, x = A(0.0), y = A(0.0)) }
+    val extra = ArrayList<Layer>()
+    if (flagSrc != null) {
+        // Basık gövde: bayrak alt kısımda (üstü beyaz), gözler kendi göz setinden ve gövdeye göre ölçülü yerinde
+        val wb = shape == "wardencb"
+        extra += makeLayer(p, t, dur, "image", "$flagName Bayrak") { it.copy(src = flagSrc, w = Math.round(size * (if (wb) 1.0 else 1.34)).toDouble(), h = Math.round(size * (if (wb) 0.68 else 1.0)).toDouble(), parent = lineId, mask = innerId, x = A(0.0), y = A(if (wb) Math.round(size * 0.1).toDouble() else 0.0)) }
+        extra += makeLayer(p, t, dur, "image", "$flagName Gözler") {
+            val s2 = Math.round(size * (if (wb) 0.95 else 0.62)).toDouble()
+            it.copy(src = if (wb) "packs/hazir/gozler/wardencb-bakan.png" else "packs/hazir/gozler/normal.png", w = s2, h = s2, parent = lineId,
+                x = A(if (wb) -Math.round(size * 0.0375).toDouble() else 0.0), y = A(if (wb) Math.round(size * 0.1125).toDouble() else -Math.round(size * 0.06).toDouble()))
+        }
+    }
+    return (listOf(inner) + extra.take(1) + line + extra.drop(1)) to lineId
+}

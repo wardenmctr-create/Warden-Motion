@@ -13,6 +13,7 @@ import androidx.test.core.app.ApplicationProvider
 import com.warden.motion.app.data.Store
 import com.warden.motion.app.model.*
 import com.warden.motion.app.render.Renderer
+import com.warden.motion.app.model.TEMPLATES
 import kotlinx.coroutines.runBlocking
 import org.junit.Rule
 import org.junit.Test
@@ -60,6 +61,23 @@ class ShotsTest {
         rule.onAllNodesWithText("Hesap")[0].performClick(); settle(); save(shot(), "acc")
         rule.onAllNodesWithText("Ana Sayfa")[0].performClick(); settle()
         rule.onAllNodesWithText("Yeni Proje Oluştur")[0].performClick(); settle(); save(shot(), "new")
+    }
+
+    @Test fun editor() {
+        val ctx = ApplicationProvider.getApplicationContext<android.content.Context>()
+        val store = Store.get(ctx)
+        var p = TEMPLATES[1].make()
+        // CB gövdesi + bayrak (maske) + şekil
+        val (body, _) = cbBodyLayers(p, 0.0, 3.0, "yumusak-top", "flags/tr.svg", "Türkiye")
+        p = p.copy(layers = p.layers + body.map { it.copy(x = if (it.parent == null) Anim(200.0) else it.x, y = if (it.parent == null) Anim(650.0) else it.y) } +
+            makeLayer(p, 0.0, 3.0, "shape", "Yıldız") { it.copy(shape = "star", fill = "#F2C94C", x = Anim(560.0, listOf(Key(0.0, 560.0), Key(2.0, 400.0))), y = Anim(700.0), w = 160.0, h = 160.0) })
+        runBlocking { store.save(p) }
+        fun settle() { repeat(5) { rule.mainClock.advanceTimeBy(400); rule.waitForIdle(); Thread.sleep(200) } }
+        rule.mainClock.autoAdvance = false
+        settle()
+        rule.onAllNodesWithText("CB Selam")[1].performClick(); settle(); save(shot(), "ed_open")
+        rule.onAllNodesWithText("Yıldız")[0].performClick(); settle(); save(shot(), "ed_sel")
+        rule.onAllNodesWithText("Taşı ve Çevir")[0].performClick(); settle(); save(shot(), "ed_move")
     }
 
     @Test fun importOld() {

@@ -139,7 +139,16 @@ class Renderer(private val ctx: Context, private val maxSide: Int = 2048, privat
         c.clipRect(0f, 0f, p.width.toFloat(), p.height.toFloat())
         for (l in p.layers) {
             if (l.type == "audio" || l.hidden == true || t < l.start || t >= l.end) continue
-            paintLayer(c, p, l, t)
+            val m = l.mask?.let { id -> p.layers.find { it.id == id } }
+            if (m != null) {
+                // Kırpma maskesi: katman ayrı katmana çizilir, maskenin şekliyle kesilir (Hariç Tutma: tersi)
+                val bp = Paint().apply { blendOf(l.blend)?.let { if (Build.VERSION.SDK_INT >= 29) blendMode = it } }
+                c.saveLayer(null, bp)
+                paintLayer(c, p, l.copy(blend = null), t)
+                c.saveLayer(null, Paint().apply { xfermode = android.graphics.PorterDuffXfermode(if (l.maskInvert == true) android.graphics.PorterDuff.Mode.DST_OUT else android.graphics.PorterDuff.Mode.DST_IN) })
+                paintLayer(c, p, m.copy(hidden = null, effects = emptyList(), blend = null), t)
+                c.restore(); c.restore()
+            } else paintLayer(c, p, l, t)
         }
         c.restore()
     }
@@ -223,4 +232,105 @@ class Renderer(private val ctx: Context, private val maxSide: Int = 2048, privat
         }
         if (crop != null && l.type != "shape" && l.type != "text") c.restore()
     }
+}
+
+val IDENT = TR(0.0, 0.0, 0.0, 1.0, 1.0)
+
+fun parentWorld(p: Project, l: Layer, t: Double): TR = l.parent?.let { id -> p.layers.find { it.id == id } }?.let { worldTransform(p, it, t) } ?: IDENT
+
+/** Sahnedeki bir değeri (dünya) ebeveynin yerel koordinatına çevirir */
+fun toLocal(pw: TR, w: TR): TR {
+    val a = -pw.rot * PI / 180
+    val dx = (w.x - pw.x) / pw.scale; val dy = (w.y - pw.y) / pw.scale
+    return TR(dx * cos(a) - dy * sin(a), dx * sin(a) + dy * cos(a), w.rot - pw.rot, w.scale / pw.scale, w.opacity)
+}
+
+/** Önizlemede dokunulan katman (üstten alta) */
+fun hitTest(p: Project, t: Double, px: Double, py: Double, only: String? = null): Layer? {
+    for (i in p.layers.indices.reversed()) {
+        val l = p.layers[i]
+        if (only != null && l.id != only) continue
+        if (l.type == "audio" || l.hidden == true || t < l.start || t >= l.end) continue
+        val tr = worldTransform(p, l, t)
+        val a = -tr.rot * PI / 180; val dx = px - tr.x; val dy = py - tr.y
+        val lx = dx * cos(a) - dy * sin(a); val ly = dx * sin(a) + dy * cos(a)
+        val b = l.visBox()
+        val ux = lx / tr.scale * (if (l.flipX == true) -1 else 1); val uy = ly / tr.scale * (if (l.flipY == true) -1 else 1)
+        if (ux >= b.left && ux <= b.right && uy >= b.top && uy <= b.bottom) return l
+    }
+    return null
+}
+
+/** Seçili katmanın tutamaçlarından noktaya en yakını */
+fun pickHandle(p: Project, l: Layer, t: Double, px: Double, py: Double, tol: Double): com.warden.motion.app.model.Handle? {
+    val tr = worldTransform(p, l, t)
+    val a = tr.rot * PI / 180; val fx = if (l.flipX == true) -1 else 1; val fy = if (l.flipY == true) -1 else 1
+    var best: com.warden.motion.app.model.Handle? = null; var bd = tol
+    for (hd in com.warden.motion.app.model.layerHandles(l)) {
+        val lx = hd.x * fx * tr.scale; val ly = hd.y * fy * tr.scale
+        val wx = tr.x + lx * cos(a) - ly * sin(a); val wy = tr.y + lx * sin(a) + ly * cos(a)
+        val d = hypot(wx - px, wy - py)
+        if (d < bd - (if (hd.kind == "special" || hd.kind == "vertex") 0.5 else 0.0)) { bd = d; best = hd }
+    }
+    return best
+}
+
+/** Seçim kutusu + tutamaçlar (+ renk geçişi noktaları). q: proje→ekran oranı */
+fun drawSelection(c: Canvas, l: Layer, tr: TR, q: Float, grad: Boolean) {
+    val pt = Paint(Paint.ANTI_ALIAS_FLAG)
+    c.save()
+    c.scale(q, q)
+    c.translate(tr.x.toFloat(), tr.y.toFloat())
+    c.rotate(tr.rot.toFloat())
+    val fx = if (l.flipX == true) -1f else 1f; val fy = if (l.flipY == true) -1f else 1f; val k = tr.scale.toFloat()
+    val lw = 2f / q
+    val b = l.visBox()
+    pt.style = Paint.Style.STROKE; pt.strokeWidth = lw; pt.color = 0xFF3B9BFF.toInt()
+    c.drawRect(minOf(b.left * fx, b.right * fx) * k, minOf(b.top * fy, b.bottom * fy) * k, maxOf(b.left * fx, b.right * fx) * k, maxOf(b.top * fy, b.bottom * fy) * k, pt)
+    val hr = lw * 3.5f
+    if (l.shape == "custom" && l.pts != null) {
+        val path = Path(); l.pts.forEachIndexed { i, p0 -> val x = (p0[0] * l.w * k * fx).toFloat(); val y = (p0[1] * l.h * k * fy).toFloat(); if (i == 0) path.moveTo(x, y) else path.lineTo(x, y) }; path.close()
+        pt.color = 0xFF22D3C5.toInt(); pt.pathEffect = android.graphics.DashPathEffect(floatArrayOf(lw * 3, lw * 2), 0f); c.drawPath(path, pt); pt.pathEffect = null
+    }
+    for (hd in com.warden.motion.app.model.layerHandles(l)) {
+        val x = (hd.x * k * fx).toFloat(); val y = (hd.y * k * fy).toFloat()
+        val special = hd.kind == "special" || hd.kind == "vertex"
+        pt.style = Paint.Style.FILL; pt.color = if (special) 0xFF22D3C5.toInt() else 0xFFDCE9FF.toInt()
+        val shape: () -> Unit = if (hd.kind == "crop") {
+            val vert = hd.id == "k-l" || hd.id == "k-r"
+            val r = RectF(x - (if (vert) hr * .6f else hr * 2.2f), y - (if (vert) hr * 2.2f else hr * .6f), x + (if (vert) hr * .6f else hr * 2.2f), y + (if (vert) hr * 2.2f else hr * .6f))
+            ({ c.drawRoundRect(r, hr * .6f, hr * .6f, pt) })
+        } else ({ c.drawCircle(x, y, if (special) hr * 1.25f else hr, pt) })
+        shape()
+        pt.style = Paint.Style.STROKE; pt.strokeWidth = lw; pt.color = if (special) 0xFF0B1430.toInt() else 0xFF3B9BFF.toInt()
+        shape()
+    }
+    val g = l.grad
+    if (grad && g != null && l.fill2 != null) {
+        val ax = (g.x1 * l.w * k).toFloat(); val ay = (g.y1 * l.h * k).toFloat(); val bx = (g.x2 * l.w * k).toFloat(); val by = (g.y2 * l.h * k).toFloat()
+        pt.style = Paint.Style.STROKE; pt.color = 0xFFF7F8FA.toInt(); pt.strokeWidth = lw; c.drawLine(ax, ay, bx, by, pt)
+        for ((x, y, col) in listOf(Triple(ax, ay, l.fill), Triple(bx, by, l.fill2))) {
+            pt.style = Paint.Style.FILL; pt.color = parseCol(col); c.drawCircle(x, y, hr * 1.6f, pt)
+            pt.style = Paint.Style.STROKE; pt.color = 0xFF0B1430.toInt(); pt.strokeWidth = lw * 1.5f; c.drawCircle(x, y, hr * 1.6f, pt)
+        }
+    }
+    c.restore()
+}
+
+/** Konum keyframe'leri arasındaki yol */
+fun drawMotionPath(c: Canvas, p: Project, l: Layer, q: Float) {
+    val ts = ((l.x.k ?: emptyList()) + (l.y.k ?: emptyList())).map { it.t }.distinct().sorted()
+    if (ts.size < 2) return
+    val t0 = ts.first(); val t1 = ts.last()
+    val lw = 1.5f / q
+    c.save(); c.scale(q, q)
+    val path = Path()
+    val n = maxOf(24, ((t1 - t0) * 30).toInt())
+    for (i in 0..n) { val w = worldTransform(p, l, t0 + (t1 - t0) * i / n); if (i == 0) path.moveTo(w.x.toFloat(), w.y.toFloat()) else path.lineTo(w.x.toFloat(), w.y.toFloat()) }
+    val pt = Paint(Paint.ANTI_ALIAS_FLAG).apply { style = Paint.Style.STROKE }
+    pt.color = 0x800D1631.toInt(); pt.strokeWidth = lw * 2.2f; c.drawPath(path, pt)
+    pt.color = 0xFFF7F8FA.toInt(); pt.strokeWidth = lw; c.drawPath(path, pt)
+    pt.style = Paint.Style.FILL; pt.color = 0xFF22D3C5.toInt()
+    for (kt in ts) { val w = worldTransform(p, l, kt); c.drawCircle(w.x.toFloat(), w.y.toFloat(), lw * 3, pt) }
+    c.restore()
 }

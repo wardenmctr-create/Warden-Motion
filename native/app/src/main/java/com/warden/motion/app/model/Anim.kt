@@ -69,16 +69,11 @@ fun fmtTime(t: Double, fps: Int = 30): String {
     return "%02d:%02d:%02d".format(s / 60, s % 60, f)
 }
 
-/** Efekt parametresi (keyframe'li olabilir) */
+/** Efekt parametresi (keyframe'li olabilir; eski projelerdeki amount/speed da okunur) */
 fun Effect.value(key: String, t: Double): Double {
     v?.get(key)?.let { return it.at(t) }
     if (key == "amount") return amount
     if (key == "speed" && speed != null) return speed
-    return FX_DEFAULTS[type]?.get(key) ?: 0.0
+    val pr = fxMeta(type).params.find { it.key == key || it.key + "X" == key || it.key + "Y" == key } ?: return 0.0
+    return if (key.endsWith("Y") && pr.two) (pr.defY ?: pr.def) else pr.def
 }
-
-/** Şimdilik bilinen varsayılanlar (efekt paneli Glow 4'te gelecek) */
-val FX_DEFAULTS = mapOf(
-    "sway" to mapOf("amount" to 6.0, "speed" to 0.8),
-    "shake" to mapOf("amount" to 8.0, "speed" to 1.5),
-)
