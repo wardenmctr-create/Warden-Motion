@@ -115,6 +115,26 @@ class ShotsTest {
         org.junit.Assert.assertEquals("Eski Proje", store.projects.value.first { it.id == "abc" }.name)
     }
 
+    @Test fun fx() {
+        val ctx = ApplicationProvider.getApplicationContext<android.content.Context>()
+        val r = Renderer(ctx, sync = true)
+        var p = newProject("Efekt", 900, 600, 30, "#FFFFFF")
+        fun sh(name: String, x: Double, y: Double, fx: List<Effect>, color: String = "#2F7BF6", xa: Anim? = null) = makeLayer(p, 0.0, 3.0, "shape", name) { it.copy(shape = "star", fill = color, x = xa ?: Anim(x), y = Anim(y), w = 150.0, h = 150.0, effects = fx) }
+        fun e(type: String, vararg kv: Pair<String, Double>) = makeEffect(type).let { ef -> ef.copy(v = (ef.v ?: emptyMap()) + kv.associate { it.first to Anim(it.second) }, amount = kv.toMap()["amount"] ?: ef.amount) }
+        p = p.copy(layers = listOf(
+            sh("blur", 120.0, 120.0, listOf(e("blur", "amount" to 10.0))),
+            sh("glow", 330.0, 120.0, listOf(e("glow", "amount" to 18.0))),
+            sh("shadow", 540.0, 120.0, listOf(e("shadow", "amount" to 18.0))),
+            sh("gray", 750.0, 120.0, listOf(e("grayscale")), "#E2342D"),
+            sh("hue", 120.0, 400.0, listOf(e("hue", "amount" to 120.0)), "#E2342D"),
+            sh("mb", 0.0, 400.0, listOf(e("motionblur", "tune" to 2.0)), xa = Anim(250.0, listOf(Key(0.0, 250.0), Key(1.0, 550.0)))),
+            sh("frac", 750.0, 400.0, listOf(e("fractal", "mag" to 0.15))),
+        ))
+        val b = Bitmap.createBitmap(900, 600, Bitmap.Config.ARGB_8888)
+        r.exporting = true
+        r.draw(Canvas(b), p, 0.5, 1f); save(b, "fx")
+    }
+
     @Test fun frame() {
         val ctx = ApplicationProvider.getApplicationContext<android.content.Context>()
         val r = Renderer(ctx)

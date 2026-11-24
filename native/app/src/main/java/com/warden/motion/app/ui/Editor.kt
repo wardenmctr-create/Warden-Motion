@@ -135,6 +135,7 @@ fun EditorScreen(initial: Project, onClose: () -> Unit) {
 
     // ---------- Oynatma ----------
     LaunchedEffect(perf["vid"]) { r.videoSide = (perf["vid"] ?: 0.0).toInt() }
+    LaunchedEffect(perf) { r.limits = perf.filterKeys { it in setOf("blur", "warp", "light", "color") } }
     DisposableEffect(Unit) { onDispose { com.warden.motion.app.render.Player.stop(); r.playing = false } }
     LaunchedEffect(s.playing) {
         r.playing = s.playing
