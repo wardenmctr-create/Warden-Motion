@@ -7,7 +7,7 @@ import { groupLabel, layerMarkers, moveMarker, type Marker } from '../markers';
 import { estimateExport, exportVideo, heavyEffects, saveFile, type ExportInfo } from '../export';
 import { fxMeta, fxVal } from '../effects';
 import { hitTest, pickHandle, parentWorld, pauseAllVideos, renderFrame, setImageLoadedHandler, toLocal, worldTransform, type TR } from '../render';
-import { useStore } from '../store';
+import { perfOf, useStore } from '../store';
 import type { Project } from '../types';
 
 export type Panel = null | 'add' | 'move' | 'color' | 'opacity' | 'effects' | 'cb' | 'text' | 'shape';
@@ -67,7 +67,9 @@ export function Editor() {
   const fit = Math.min(box.w / p.width, box.h / p.height);
   const dispW = Math.max(10, Math.floor(p.width * fit)), dispH = Math.max(10, Math.floor(p.height * fit));
   const lite = s.settings.lite;
-  const dpr = lite ? Math.min(1, window.devicePixelRatio || 1) * 0.75 : Math.min(2, window.devicePixelRatio || 1);
+  const perf = perfOf(s.settings);
+  // Önizleme keskinliği: Lite ayarlarındaki çözünürlük oranı
+  const dpr = Math.max(0.3, Math.min(2, window.devicePixelRatio || 1) * perf.res);
   // Oynatma sırasında zaman React'e her karede yazılmaz; bu ref'te tutulur (kasmayı önler)
   const timeRef = useRef(s.time);
   if (!s.playing) timeRef.current = s.time;
@@ -78,7 +80,7 @@ export function Editor() {
     if (!c) return;
     const W = Math.round(dispW * dpr), H = Math.round(dispH * dpr);
     if (c.width !== W || c.height !== H) { c.width = W; c.height = H; }
-    renderFrame(c.getContext('2d')!, p, timeRef.current, { lite, selectedId: s.playing ? null : s.selectedId, quality: c.width / p.width, fast: s.playing && lite, gradHandles: panel === 'color', motionPath: panel === 'move' });
+    renderFrame(c.getContext('2d')!, p, timeRef.current, { lite, fxLimit: perf, selectedId: s.playing ? null : s.selectedId, quality: c.width / p.width, gradHandles: panel === 'color', motionPath: panel === 'move' });
   });
 
   const loopRef = useRef(loop);
@@ -87,7 +89,7 @@ export function Editor() {
   // Tuval, zaman çizelgesi ve zaman göstergesi doğrudan güncellenir; editörün geri kalanı yeniden çizilmez.
   useEffect(() => {
     if (!s.playing) return;
-    let raf = 0, last = performance.now();
+    let raf = 0, last = performance.now(), lastDraw = 0;
     const tick = (now: number) => {
       const st = { ...useStore.getState(), loopOn: loopRef.current };
       const pr = st.project!;
@@ -97,7 +99,12 @@ export function Editor() {
       if (t >= d) { if (st.loopOn) t = 0; else { timeRef.current = d; st.setPlaying(false); return; } }
       timeRef.current = t;
       const c = canvasRef.current;
-      if (c) renderFrame(c.getContext('2d')!, pr, t, { quality: c.width / pr.width, fast: st.settings.lite, lite: st.settings.lite, playing: true });
+      // Kare hızı sınırı (Lite ayarı): zaman ilerler ama tuval daha seyrek çizilir
+      const pf = perfOf(st.settings);
+      if (c && now - lastDraw >= 1000 / pf.fps - 4) {
+        lastDraw = now;
+        renderFrame(c.getContext('2d')!, pr, t, { quality: c.width / pr.width, lite: st.settings.lite, fxLimit: pf, playing: true });
+      }
       const el = tlRef.current;
       if (el && innerRef.current) innerRef.current.style.transform = `translateX(${-Math.round(t * ppsRef.current)}px)`;
       if (timecodeRef.current) timecodeRef.current.textContent = fmtTime(t, pr.fps);

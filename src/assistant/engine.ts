@@ -7,7 +7,7 @@ import { useStore } from '../store';
 import { newProject, TUTORIALS } from '../factories';
 import { setAnim, valueAt } from '../anim';
 
-export const APP_VERSION = '0.14';
+export const APP_VERSION = '0.15';
 /** Sürüm karşılaştırma: '0.10' > '0.9' */
 export const verGt = (a: string, b: string) => { const x = a.split('.').map(Number), y = b.split('.').map(Number); for (let i = 0; i < Math.max(x.length, y.length); i++) { if ((x[i] ?? 0) !== (y[i] ?? 0)) return (x[i] ?? 0) > (y[i] ?? 0); } return false; };
 
@@ -255,6 +255,12 @@ const INTRO_END: Step[] = [WHAT_NOW(false), pickTutorial()];
 /** Her güncellemede "yeni neler var" (en yeni en sonda) */
 type News = { v: string; items: Step[] };
 export const WHATS_NEW: News[] = [
+  {
+    v: '0.15', items: [
+      { say: 'Bulanıklık efektleri artık çok daha hızlı: hareket bulanıklığı ve Gauss bulanıklığı önizlemede uygulamayı dondurmuyor.', mood: 'excited' },
+      { say: 'Ayarlar\'da Lite\'a dokununca açılıp kapanır, basılı tutunca Lite ayarları açılır: önizleme kalitesini, kare hızını ve Efektler\'de bulanıklık, bükme, ışık-gölge ve renk efektlerinin ne kadar kısıtlanacağını çubuklarla sen seçersin.', mood: 'happy', target: () => find('[aria-label="Ayarlar menüsü"]') },
+    ],
+  },
   {
     v: '0.14', items: [
       { say: 'Fotoğraf ya da video eklerken artık uygulamadan çıkmıyorsun: galerin uygulamanın içinde açılıyor, albümlere göre de bakabiliyorsun.', mood: 'excited' },

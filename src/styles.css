@@ -793,3 +793,23 @@ html, body { overflow-x: hidden; max-width: 100%; }
 #root, .home { max-width: 100vw; overflow-x: clip; }
 .home-body { overflow-x: clip; }
 html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+/* Lite ayarları */
+.lite-hint { font-weight: 600; color: var(--l-primary); }
+.lite-scrim { z-index: 950; }
+.lite-sheet { max-height: 86vh; overflow-y: auto; padding-bottom: calc(18px + var(--safe-bottom)); }
+.lite-head { display: flex; align-items: center; justify-content: space-between; }
+.lite-head b { font-size: 19px; }
+.lite-note { margin: 4px 0 12px; font-size: 13px; color: var(--l-text2); line-height: 1.45; }
+.lite-row { display: flex; flex-direction: column; gap: 6px; padding: 12px 0; border-top: 1px solid var(--l-line); }
+.lite-row .top { display: flex; justify-content: space-between; font-size: 15px; font-weight: 600; color: var(--l-text); }
+.lite-row .top b { color: var(--l-primary); }
+.lite-row small { font-size: 12px; color: var(--l-text2); }
+.lite-row .slider { width: 100%; accent-color: var(--l-primary); }
+.lite-btns { display: flex; justify-content: space-between; gap: 10px; margin-top: 14px; }
+.lite-head { gap: 4px; }
+.lite-head .ib { width: 40px; height: 40px; }
+.lite-link { display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; padding: 14px 0; border: 0; border-top: 1px solid var(--l-line); background: none; font: inherit; color: var(--l-text); text-align: left; cursor: pointer; }
+.lite-link span { display: flex; flex-direction: column; gap: 4px; }
+.lite-link b { font-size: 15px; }
+.lite-link small { font-size: 12px; color: var(--l-text2); line-height: 1.4; }
+.lite-link svg { color: var(--l-text2); flex: none; }

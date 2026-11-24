@@ -110,7 +110,9 @@ export function toLocal(pw: TR, w: TR): TR {
   return { x: dx * Math.cos(a) - dy * Math.sin(a), y: dx * Math.sin(a) + dy * Math.cos(a), rot: w.rot - pw.rot, scale: w.scale / pw.scale, opacity: w.opacity };
 }
 
-export interface RenderOpts { /** Efekt kalitesi 0..1 (dışa aktarmada kullanıcı seçer) */ fxQuality?: number; /** Lite modu: hareket bulanıklığı az parçalı kopyalarla */ lite?: boolean; /** Dışa aktarma: en yüksek kalite */ exporting?: boolean; /** Oynatma/dışa aktarma sırasında videolar gerçekten oynar */ playing?: boolean; selectedId?: string | null; quality?: number; /** Lite oynatma: bulanıklık/parlama atlanır */ fast?: boolean; /** Renk panelinde geçiş tutamaçlarını göster */ gradHandles?: boolean; /** Taşı ve Çevir açıkken seçili katmanın hareket yolu */ motionPath?: boolean }
+export interface RenderOpts { /** Efekt kalitesi 0..1 (dışa aktarmada kullanıcı seçer) */ fxQuality?: number; /** Lite modu: hareket bulanıklığı az parçalı kopyalarla */ lite?: boolean; /** Dışa aktarma: en yüksek kalite */ exporting?: boolean; /** Oynatma/dışa aktarma sırasında videolar gerçekten oynar */ playing?: boolean; selectedId?: string | null; quality?: number; /** Lite oynatma: bulanıklık/parlama atlanır */ fast?: boolean; /** Renk panelinde geçiş tutamaçlarını göster */ gradHandles?: boolean; /** Taşı ve Çevir açıkken seçili katmanın hareket yolu */ motionPath?: boolean;
+  /** Efekt grupları (önizleme, Lite ayarları): bulanıklık 0..3, bükme 0..2, ışık/gölge ve renk 0..1 */
+  fxLimit?: { blur: number; warp: number; light: number; color: number } }
 
 let bufA: HTMLCanvasElement | null = null, bufB: HTMLCanvasElement | null = null;
 const buf = (c: HTMLCanvasElement | null, w: number, h: number) => {
@@ -123,8 +125,43 @@ const buf = (c: HTMLCanvasElement | null, w: number, h: number) => {
   return b;
 };
 
+let bufD: HTMLCanvasElement | null = null, bufS: HTMLCanvasElement | null = null;
+/** Dışa aktarılıyor mu (önizleme hızlandırmaları sadece önizlemede) */
+let frameExport = false;
+/** Önizlemede efekt grubu sınırları (dışa aktarmada yok) */
+let frameLimit = { blur: 3, warp: 2, light: 1, color: 1 };
+const LIGHT_FX = ['glow', 'shadow'], COLOR_FX = ['brightness', 'contrast', 'saturate', 'hue', 'grayscale', 'sepia', 'invert'];
+
 function paint(ctx: CanvasRenderingContext2D, p: Project, l: Layer, t: number, q: number, fast = false, trOver?: TR) {
   const tr = trOver ?? worldTransform(p, l, t);
+  // Gauss bulanıklığı önizlemede: katman küçültülüp bulanıklaştırılır, sonra büyütülür (göze aynı, çok daha hızlı)
+  const blurE = !fast && !frameExport ? l.effects.find((e) => e.type === 'blur') : undefined;
+  const bpx = blurE ? fxVal(blurE, 'amount', t) * q : 0;
+  if (blurE && bpx > (frameLimit.blur <= 1 ? 3 : 6)) {
+    const W = ctx.canvas.width, H = ctx.canvas.height;
+    const R = Math.hypot(l.w, l.h) / 2 * Math.abs(tr.scale) * q + bpx * 3 + 4;
+    const x0 = Math.max(0, Math.floor(tr.x * q - R)), y0 = Math.max(0, Math.floor(tr.y * q - R));
+    const x1 = Math.min(W, Math.ceil(tr.x * q + R)), y1 = Math.min(H, Math.ceil(tr.y * q + R));
+    const bw = x1 - x0, bh = y1 - y0;
+    if (bw <= 0 || bh <= 0) return tr;
+    bufD = buf(bufD, W, H);
+    paint(bufD.getContext('2d')!, p, { ...l, effects: l.effects.filter((e) => e !== blurE), blend: undefined }, t, q, fast, tr);
+    const k = Math.min(8, Math.max(1, bpx / [2, 2, 3, 4][frameLimit.blur]));
+    const sw = Math.max(1, Math.ceil(bw / k)), sh = Math.max(1, Math.ceil(bh / k));
+    bufS = buf(bufS, sw, sh);
+    const sx = bufS.getContext('2d')!;
+    sx.filter = `blur(${bpx / k}px)`;
+    sx.drawImage(bufD, x0, y0, bw, bh, 0, 0, sw, sh);
+    sx.filter = 'none';
+    ctx.save();
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    if (l.blend && l.blend !== 'normal' && !l.mask) ctx.globalCompositeOperation = l.blend as GlobalCompositeOperation;
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
+    ctx.drawImage(bufS, 0, 0, sw, sh, x0, y0, bw, bh);
+    ctx.restore();
+    return tr;
+  }
   ctx.save();
   ctx.setTransform(q, 0, 0, q, 0, 0);
   ctx.translate(tr.x, tr.y);
@@ -134,6 +171,7 @@ function paint(ctx: CanvasRenderingContext2D, p: Project, l: Layer, t: number, q
   const filters: string[] = [];
   for (const e of l.effects) {
     if (fast && (e.type === 'blur' || e.type === 'glow' || e.type === 'shadow')) continue;
+    if ((e.type === 'blur' && frameLimit.blur === 0) || (frameLimit.light === 0 && LIGHT_FX.includes(e.type)) || (frameLimit.color === 0 && COLOR_FX.includes(e.type))) continue;
     const f = fxFilter(e, q, t);
     if (f) filters.push(f);
   }
@@ -147,6 +185,7 @@ function paint(ctx: CanvasRenderingContext2D, p: Project, l: Layer, t: number, q
 }
 
 let bufC: HTMLCanvasElement | null = null;
+let bufG: HTMLCanvasElement | null = null, bufH: HTMLCanvasElement | null = null; // ekran kartında kalan ara tuvaller (okunmaz)
 
 /**
  * Hareket bulanıklığı. Katman, o anın etrafındaki ara anlarda çizilir.
@@ -154,7 +193,7 @@ let bufC: HTMLCanvasElement | null = null;
  * - preview / export: her ara an ayrı çizilip piksel piksel (kayan sayıyla) ortalanır = gerçek bulanıklık
  */
 function motionBlur(ab: CanvasRenderingContext2D, p: Project, l: Layer, t: number, q: number, fast: boolean, trw: TR, span: number,
-  use: { usePos: boolean; useScl: boolean; useAng: boolean }, mode: 'lite' | 'preview' | 'export', fxq = 0.25) {
+  use: { usePos: boolean; useScl: boolean; useAng: boolean }, mode: 'lite' | 'preview' | 'play' | 'export', fxq = 0.25) {
   const W = ab.canvas.width, H = ab.canvas.height;
   const tAt = (u: number) => Math.min(l.end - 1e-4, Math.max(l.start, t + span * (u - 0.5))); // anın etrafında ortalı
   const trAt = (u: number): TR => {
@@ -180,7 +219,37 @@ function motionBlur(ab: CanvasRenderingContext2D, p: Project, l: Layer, t: numbe
     return;
   }
 
-  // Gerçek bulanıklık: piksel başına 1 (önizleme 1,5) adımdan az olacak kadar ara an
+  if (mode === 'preview' || mode === 'play') {
+    // Önizleme: her ara an eşit ağırlıkla ekran kartında toplanır ("lighter"). Renk kaymasın diye küçük gruplar
+    // hâlinde toplanıp sonra gruplar birleştirilir (24 kopyada bile en fazla ~4 renk seviyesi hata).
+    // Piksel piksel okuma yok, bu yüzden donmaz. Oynatırken daha az ara an.
+    const G = mode === 'play' ? 2 : Math.max(2, Math.min(4, Math.ceil(dist / 15)));
+    const S = mode === 'play' ? Math.max(3, Math.min(5, Math.ceil(dist / 12))) : 6;
+    const N = G * S;
+    const samples: TR[] = []; for (let i = 0; i < N; i++) samples.push(trAt(i / (N - 1)));
+    const rr = (r * Math.max(...samples.map((x) => Math.abs(x.scale))) + 60) * q;
+    const x0 = Math.max(0, Math.floor(Math.min(...samples.map((x) => x.x)) * q - rr)), y0 = Math.max(0, Math.floor(Math.min(...samples.map((x) => x.y)) * q - rr));
+    const x1 = Math.min(W, Math.ceil(Math.max(...samples.map((x) => x.x)) * q + rr)), y1 = Math.min(H, Math.ceil(Math.max(...samples.map((x) => x.y)) * q + rr));
+    const bw = x1 - x0, bh = y1 - y0;
+    if (bw <= 0 || bh <= 0) return;
+    const g = (bufG = buf(bufG, W, H)), gc = g.getContext('2d')!;
+    const h = (bufH = buf(bufH, W, H)), hc = h.getContext('2d')!;
+    ab.save(); ab.setTransform(1, 0, 0, 1, 0, 0); ab.globalCompositeOperation = 'lighter'; ab.globalAlpha = 1 / G;
+    for (let gi = 0; gi < G; gi++) {
+      hc.setTransform(1, 0, 0, 1, 0, 0); hc.globalCompositeOperation = 'source-over'; hc.globalAlpha = 1; hc.clearRect(x0, y0, bw, bh);
+      for (let si = 0; si < S; si++) {
+        gc.setTransform(1, 0, 0, 1, 0, 0); gc.globalCompositeOperation = 'source-over'; gc.globalAlpha = 1; gc.clearRect(x0, y0, bw, bh);
+        paint(gc, p, lay, t, q, fast, samples[gi * S + si]);
+        hc.globalCompositeOperation = 'lighter'; hc.globalAlpha = 1 / S;
+        hc.drawImage(g, x0, y0, bw, bh, x0, y0, bw, bh);
+      }
+      ab.drawImage(h, x0, y0, bw, bh, x0, y0, bw, bh);
+    }
+    ab.restore();
+    return;
+  }
+
+  // Dışa aktarma: gerçek bulanıklık, piksel başına 1 (önizleme 1,5) adımdan az olacak kadar ara an
   // Kalite 0..1: önizleme sabit orta kalite; dışa aktarmada kullanıcının seçtiği kalite
   const N = Math.max(6, Math.min(Math.round(12 + fxq * 148), Math.ceil(dist / (1.6 - fxq * 1.0))));
   const samples: TR[] = []; for (let i = 0; i < N; i++) samples.push(trAt(N === 1 ? 0.5 : i / (N - 1)));
@@ -218,7 +287,7 @@ const visible = (l: Layer, t: number) => !l.hidden && t >= l.start && t < l.end;
 export function renderFrame(ctx: CanvasRenderingContext2D, p: Project, t: number, opts: RenderOpts = {}) {
   const q = opts.quality ?? 1;
   const fast = !!opts.fast;
-  frameT = t; framePlaying = !!opts.playing;
+  frameT = t; framePlaying = !!opts.playing; frameExport = !!opts.exporting; frameLimit = opts.exporting || !opts.fxLimit ? { blur: 3, warp: 2, light: 1, color: 1 } : opts.fxLimit;
   ctx.setTransform(q, 0, 0, q, 0, 0);
   ctx.globalAlpha = 1;
   ctx.filter = 'none';
@@ -228,8 +297,9 @@ export function renderFrame(ctx: CanvasRenderingContext2D, p: Project, t: number
   for (const l of p.layers) {
     if (!visible(l, t)) continue;
     const m = l.mask ? p.layers.find((x) => x.id === l.mask) : undefined;
-    const warps = fast ? [] : l.effects.filter((e) => e.type === 'fractal');
-    const mb = l.effects.find((e) => e.type === 'motionblur');
+    const warps = fast || frameLimit.warp === 0 ? [] : l.effects.filter((e) => e.type === 'fractal');
+    const mbLevel = opts.exporting ? 3 : frameLimit.blur;
+    const mb = mbLevel > 0 ? l.effects.find((e) => e.type === 'motionblur') : undefined;
     if (m || warps.length || mb) {
       // Kırpma maskesi: katmanı ayrı tuvale çiz, maskenin şekliyle kes, sonra sahneye bas
       const W = ctx.canvas.width, H = ctx.canvas.height;
@@ -240,13 +310,13 @@ export function renderFrame(ctx: CanvasRenderingContext2D, p: Project, t: number
         // Hareket bulanıklığı: önceki anlardaki görüntüleri ortalayarak üst üste çiz
         const span = fxVal(mb, 'tune', t) / p.fps * 2;
         const usePos = fxVal(mb, 'pos', t) >= 0.5, useScl = fxVal(mb, 'scl', t) >= 0.5, useAng = fxVal(mb, 'ang', t) >= 0.5;
-        if (span > 0) motionBlur(ab, p, l, t, q, fast, trw, span, { usePos, useScl, useAng }, opts.exporting ? 'export' : (opts.lite || fast) ? 'lite' : 'preview', opts.exporting ? (opts.fxQuality ?? 0.5) : 0.25);
+        if (span > 0) motionBlur(ab, p, l, t, q, fast, trw, span, { usePos, useScl, useAng }, opts.exporting ? 'export' : mbLevel === 1 ? 'lite' : mbLevel === 2 || opts.playing ? 'play' : 'preview', opts.exporting ? (opts.fxQuality ?? 0.5) : 0.25);
       }
       if (warps.length) {
         // Katmanın tuvaldeki kutusu (dönüşle birlikte)
         const r = Math.hypot(l.w, l.h) / 2 * trw.scale * q;
         const box = { x0: trw.x * q - r, y0: trw.y * q - r, x1: trw.x * q + r, y1: trw.y * q + r };
-        for (const e of warps) applyFractalWarp(bufA, e, t, q, box, opts.exporting ? (opts.fxQuality ?? 0.5) : 0.3);
+        for (const e of warps) applyFractalWarp(bufA, e, t, q, box, opts.exporting ? (opts.fxQuality ?? 0.5) : frameLimit.warp === 1 ? 0.15 : 0.3);
       }
       const a = bufA.getContext('2d')!;
       if (m) {

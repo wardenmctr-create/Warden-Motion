@@ -6,7 +6,7 @@ import { driveInstalled, saveTo, type Dest } from '../saveTo';
 import { newProject, TEMPLATES, TUTORIALS, type Tutorial } from '../factories';
 import { fmtTime, projectDuration } from '../anim';
 import { renderFrame, setImageLoadedHandler } from '../render';
-import { detectWeakDevice, useStore } from '../store';
+import { detectWeakDevice, LITE_DEFAULT, type LiteCfg, useStore } from '../store';
 import { askConfirm } from '../dialog';
 import { replayIntro } from '../assistant/Assistant';
 import { APP_VERSION } from '../assistant/engine';
@@ -183,6 +183,16 @@ function NewProjectSheet({ onClose, count }: { onClose: () => void; count: numbe
 
 function SettingsDrawer({ onClose }: { onClose: () => void }) {
   const { settings, setSettings } = useStore();
+  const [liteOpen, setLiteOpen] = useState(false);
+  // Lite: dokununca aç/kapat, basılı tutunca Lite ayarları
+  const hold = useRef<{ t: ReturnType<typeof setTimeout>; fired: boolean } | null>(null);
+  const liteHold = {
+    onPointerDown: () => { hold.current = { fired: false, t: setTimeout(() => { if (hold.current) { hold.current.fired = true; navigator.vibrate?.(25); setLiteOpen(true); } }, 450) }; },
+    onPointerUp: () => { if (hold.current && !hold.current.fired) clearTimeout(hold.current.t); },
+    onPointerLeave: () => { if (hold.current && !hold.current.fired) { clearTimeout(hold.current.t); hold.current = null; } },
+    onContextMenu: (e: React.MouseEvent) => e.preventDefault(),
+    onClick: () => { const h = hold.current; hold.current = null; if (h?.fired) return; setSettings({ lite: !settings.lite, liteSource: 'user' }); },
+  };
   return (
     <>
       <div className="drawer-scrim" onClick={onClose} />
@@ -192,11 +202,12 @@ function SettingsDrawer({ onClose }: { onClose: () => void }) {
           <div className="row" style={{ alignItems: 'flex-start', paddingTop: 12 }}>
             <span>Warden Motion Lite
               <span style={{ display: 'block', fontSize: 12, fontWeight: 400, color: 'var(--l-text2)', marginTop: 4 }}>
-                Zayıf telefonlarda kasmayı önler: önizleme daha düşük çözünürlükte olur, oynatırken bulanıklık/parlama gösterilmez (dışa aktarılan videoda vardır).
+                Zayıf telefonlarda kasmayı önler: önizleme daha hafif çizilir, ağır efektler sınırlanır. Dışa aktarılan video her zaman tam kalitededir.
+                <b className="lite-hint"> Basılı tut: Lite ayarları.</b>
                 {settings.liteSource === 'auto' ? (settings.lite ? ' Cihazın için otomatik açıldı.' : ' Cihazın güçlü görünüyor, otomatik kapalı.') : ''}
               </span>
             </span>
-            <button className={'switch' + (settings.lite ? ' on' : '')} role="switch" aria-checked={settings.lite} aria-label="Warden Motion Lite" onClick={() => setSettings({ lite: !settings.lite, liteSource: 'user' })} style={{ marginTop: 4 }} />
+            <button className={'switch' + (settings.lite ? ' on' : '')} role="switch" aria-checked={settings.lite} aria-label="Warden Motion Lite" {...liteHold} style={{ marginTop: 4 }} />
           </div>
           {settings.liteSource === 'user' && (
             <div className="row"><span style={{ fontWeight: 400, fontSize: 13 }}>Lite'ı yine cihaza göre otomatik seç</span>
@@ -222,6 +233,7 @@ function SettingsDrawer({ onClose }: { onClose: () => void }) {
           <span style={{ fontSize: 13, color: 'var(--l-text2)' }}>React, Zustand, Capacitor, idb-keyval, flag-icons (MIT)</span>
         </div>
       </aside>
+      {liteOpen && <LiteSheet onClose={() => setLiteOpen(false)} />}
     </>
   );
 }
@@ -411,5 +423,81 @@ function LiteBadge() {
         <rect width="44" height="22" rx="7" fill="none" stroke="#5FD8FF" strokeWidth="4.4" filter="url(#liteblur)" opacity=".85" />
       </g>
     </svg>
+  );
+}
+
+// ---------- Lite ayarları: Lite neyi ne kadar kısıtlasın (çubuklarla) ----------
+type Row = { key: keyof LiteCfg; label: string; info: string; stops: number[]; text: (v: number) => string };
+const LITE_ROWS: Row[] = [
+  { key: 'res', label: 'Önizleme çözünürlüğü', info: 'Düşükse önizleme biraz bulanık ama çok daha akıcı olur.', stops: [0.25, 0.3, 0.4, 0.5, 0.6, 0.75, 0.9, 1], text: (v) => `%${Math.round(v * 100)}` },
+  { key: 'fps', label: 'Önizleme kare hızı', info: 'Oynatırken saniyede en fazla kaç kare çizilsin.', stops: [15, 24, 30, 60], text: (v) => `${v} kare/sn` },
+  { key: 'media', label: 'İçe aktarılan görsel boyutu', info: 'Galeriden eklenen görsellerin en uzun kenarı.', stops: [720, 1280, 2048], text: (v) => `${v} px` },
+];
+/** Efekt grupları: her efekt değil, genel gruplar */
+const FX_ROWS: Row[] = [
+  { key: 'blur', label: 'Bulanıklık', info: 'Gauss bulanıklığı ve hareket bulanıklığı.', stops: [0, 1, 2, 3], text: (v) => ['Kapalı', 'Düşük', 'Orta', 'Tam'][v] },
+  { key: 'warp', label: 'Bükme', info: 'Fraktal bükme.', stops: [0, 1, 2], text: (v) => ['Kapalı', 'Düşük', 'Tam'][v] },
+  { key: 'light', label: 'Işık ve Gölge', info: 'Parlama ve gölge.', stops: [0, 1], text: (v) => (v ? 'Açık' : 'Kapalı') },
+  { key: 'color', label: 'Renk ve Işık', info: 'Parlaklık, kontrast, doygunluk, ton, siyah beyaz…', stops: [0, 1], text: (v) => (v ? 'Açık' : 'Kapalı') },
+];
+
+function LiteSheet({ onClose }: { onClose: () => void }) {
+  const { settings, setSettings } = useStore();
+  const [page, setPage] = useState<'main' | 'fx'>('main');
+  const cfg: LiteCfg = { ...LITE_DEFAULT, ...settings.liteCfg };
+  const set = (k: keyof LiteCfg, v: number) => setSettings({ liteCfg: { ...settings.liteCfg, [k]: v } });
+  const near = (stops: number[], v: number) => stops.reduce((bi, x, i) => (Math.abs(x - v) < Math.abs(stops[bi] - v) ? i : bi), 0);
+  const pageRef = useRef(page); pageRef.current = page;
+  useEffect(() => {
+    const fn = (e: Event) => { e.preventDefault(); if (pageRef.current === 'fx') setPage('main'); else onClose(); };
+    addEventListener('wm-back', fn);
+    return () => removeEventListener('wm-back', fn);
+  }, []);
+  const row = (r: Row) => {
+    const i = near(r.stops, cfg[r.key]);
+    return (
+      <label key={r.key} className="lite-row">
+        <span className="top"><span>{r.label}</span><b>{r.text(r.stops[i])}</b></span>
+        <input className="slider" type="range" min={0} max={r.stops.length - 1} step={1} value={i} aria-label={r.label}
+          onChange={(e) => set(r.key, r.stops[+e.target.value])} />
+        <small>{r.info}</small>
+      </label>
+    );
+  };
+  const fxSummary = FX_ROWS.map((r) => `${r.label} ${r.text(r.stops[near(r.stops, cfg[r.key])]).toLocaleLowerCase('tr')}`).join(' · ');
+  return (
+    <div className="scrim lite-scrim" onClick={onClose}>
+      <div className="sheet lite-sheet" role="dialog" aria-label="Lite ayarları" onClick={(e) => e.stopPropagation()}>
+        <div className="lite-head">
+          {page === 'fx' && <button className="ib" aria-label="Geri" onClick={() => setPage('main')}><Icon name="back" size={22} /></button>}
+          <b>{page === 'fx' ? 'Efektler' : 'Lite ayarları'}</b>
+          <span style={{ flex: 1 }} />
+          <button className="ib" aria-label="Kapat" onClick={onClose}><Icon name="close" size={22} /></button>
+        </div>
+        {page === 'main' ? (
+          <>
+            <p className="lite-note">{settings.lite ? 'Lite açık: aşağıdaki kısıtlamalar uygulanıyor.' : 'Lite şu an kapalı. Bu ayarlar Lite açılınca uygulanır.'} Dışa aktarılan video her zaman tam kalitede olur.</p>
+            {LITE_ROWS.slice(0, 2).map(row)}
+            <button className="lite-link" onClick={() => setPage('fx')}>
+              <span><b>Efektler</b><small>{fxSummary}</small></span>
+              <Icon name="chevR" size={22} />
+            </button>
+            {LITE_ROWS.slice(2).map(row)}
+          </>
+        ) : (
+          <>
+            <p className="lite-note">Lite açıkken önizlemede hangi efekt grubunun ne kadar gösterileceğini seç. Dışa aktarılan videoda hepsi tam kalitededir.</p>
+            {FX_ROWS.map(row)}
+          </>
+        )}
+        <div className="lite-btns">
+          <button className="btn ghost" onClick={() => {
+            if (page === 'fx') { const c = { ...settings.liteCfg }; for (const r of FX_ROWS) delete c[r.key]; setSettings({ liteCfg: c }); }
+            else setSettings({ liteCfg: {} });
+          }}>Varsayılana dön</button>
+          <button className="btn" onClick={() => (page === 'fx' ? setPage('main') : onClose())}>Tamam</button>
+        </div>
+      </div>
+    </div>
   );
 }

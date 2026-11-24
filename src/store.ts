@@ -3,7 +3,25 @@ import type { Layer, Project } from './types';
 import { saveProject } from './db';
 import { uid } from './anim';
 
+/** Lite'ın neyi ne kadar kısıtlayacağı (Lite ayarları) */
+export interface LiteCfg {
+  /** Önizleme çözünürlüğü: ekranın tam keskinliğine oranı (0.25..1) */ res: number;
+  /** Oynatırken en fazla kare/sn */ fps: number;
+  /** Efekt grupları (önizlemede) */
+  /** Bulanıklık (Gauss + hareket bulanıklığı): 0 kapalı, 1 düşük, 2 orta, 3 tam */ blur: number;
+  /** Bükme (fraktal bükme): 0 kapalı, 1 düşük, 2 tam */ warp: number;
+  /** Işık ve gölge (parlama, gölge): 0 kapalı, 1 açık */ light: number;
+  /** Renk ve ışık (parlaklık, kontrast, ton…): 0 kapalı, 1 açık */ color: number;
+  /** İçe aktarılan görsellerin en uzun kenarı (px) */ media: number;
+}
+export const LITE_DEFAULT: LiteCfg = { res: 0.4, fps: 30, blur: 1, warp: 1, light: 1, color: 1, media: 1280 };
+export const FULL_QUALITY: LiteCfg = { res: 1, fps: 60, blur: 3, warp: 2, light: 1, color: 1, media: 2048 };
+/** O anki geçerli performans ayarı: Lite kapalıyken tam kalite */
+export const perfOf = (s: Settings): LiteCfg => (s.lite ? { ...LITE_DEFAULT, ...s.liteCfg } : FULL_QUALITY);
+
 export interface Settings {
+  /** Lite ayarları (çubuklarla) */
+  liteCfg?: Partial<LiteCfg>;
   /** Warden Motion Lite: zayıf cihazlar için hafif mod */
   lite: boolean;
   /** 'auto' = uygulama karar verdi, 'user' = kullanıcı ayarladı */

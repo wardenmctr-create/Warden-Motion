@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { Capacitor } from '@capacitor/core';
 import { Editor } from './screens/Editor';
 import { Home } from './screens/Home';
-import { useStore } from './store';
+import { perfOf, useStore } from './store';
 import { setMediaMax } from './db';
 import { Assistant } from './assistant/Assistant';
 import { MediaSheet } from './components/MediaSheet';
@@ -10,8 +10,8 @@ import { MediaSheet } from './components/MediaSheet';
 export function App() {
   const screen = useStore((s) => s.screen);
   const hasProject = useStore((s) => !!s.project);
-  const lite = useStore((s) => s.settings.lite);
-  useEffect(() => setMediaMax(lite ? 1280 : 2048), [lite]);
+  const media = useStore((s) => perfOf(s.settings).media);
+  useEffect(() => setMediaMax(media), [media]);
 
   // Android geri tuşu: önce açık paneli/menüyü kapatır, sonra editörden çıkar, en son uygulamadan.
   useEffect(() => {
