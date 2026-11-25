@@ -75,12 +75,47 @@ fun LiteBadge() {
     Image(painterResource(R.drawable.lite_badge), "Lite", Modifier.size(44.dp, 22.dp))
 }
 
-/** WardenCB (eski uygulamadaki çizimin resmi, ruh hâline göre) */
+/** Duruşunda bakış yönü olan ruh hâlleri (eski uygulamadaki POSES.look) */
+private val POSE_LOOK = mapOf(
+    "think" to (0.8f to -0.6f), "sad" to (0f to 0.6f), "shy" to (-0.7f to 0.8f), "suspicious" to (-1f to 0f), "worried" to (0.4f to 0.3f),
+    "smug" to (0.8f to 0f), "curious" to (0.6f to -0.2f), "disappointed" to (0f to 1f), "point" to (1f to 0.2f), "bored" to (-0.6f to 0f),
+)
+
+/**
+ * WardenCB: eski uygulamadaki çizimin katmanları (gövde, gözler, şapka + duygu işaretleri).
+ * Gözler ayrı katman: kendiliğinden göz kırpar ve etrafa bakınır; look verilirse oraya bakar (-1..1).
+ */
 @Composable
-fun WardenCBImg(mood: String, size: Dp, modifier: Modifier = Modifier) {
+fun WardenCBImg(mood: String, size: Dp, modifier: Modifier = Modifier, look: Pair<Float, Float>? = null, autoBlink: Boolean = true) {
     val ctx = androidx.compose.ui.platform.LocalContext.current
-    val id = remember(mood) { ctx.resources.getIdentifier("wcb_${mood.lowercase()}", "drawable", ctx.packageName).takeIf { it != 0 } ?: R.drawable.wcb_idle }
-    Image(painterResource(id), "WardenCB", modifier.size(size))
+    val m = mood.lowercase()
+    fun res(k: String) = ctx.resources.getIdentifier("wcb${k}_$m", "drawable", ctx.packageName).takeIf { it != 0 }
+        ?: ctx.resources.getIdentifier("wcb${k}_idle", "drawable", ctx.packageName)
+    val ids = remember(m) { listOf(res("a"), res("e"), ctx.resources.getIdentifier("wcbb_$m", "drawable", ctx.packageName), res("h")) }
+    var blink by remember { mutableStateOf(false) }
+    var wander by remember { mutableStateOf(0f to 0f) }
+    val poseLook = POSE_LOOK[m]
+    LaunchedEffect(autoBlink) {
+        if (!autoBlink) return@LaunchedEffect
+        while (true) { kotlinx.coroutines.delay(2200 + (Math.random() * 3200).toLong()); blink = true; kotlinx.coroutines.delay(140); blink = false }
+    }
+    LaunchedEffect(m, look == null, autoBlink) {
+        if (look != null || poseLook != null || !autoBlink) return@LaunchedEffect
+        while (true) {
+            kotlinx.coroutines.delay(1400 + (Math.random() * 2600).toLong())
+            wander = if (Math.random() < 0.35) 0f to 0f else ((Math.random() * 2 - 1).toFloat() to (Math.random() * 1.4 - 0.6).toFloat())
+        }
+    }
+    val (lx, ly) = look ?: poseLook ?: wander
+    // Çizimdeki birimle: bakış x*14, y*8 (580 birim genişlik)
+    val k = size.value / 580f
+    val ex by androidx.compose.animation.core.animateFloatAsState(lx * 14 * k, androidx.compose.animation.core.tween(300, easing = androidx.compose.animation.core.LinearOutSlowInEasing), label = "ex")
+    val ey by androidx.compose.animation.core.animateFloatAsState(ly * 8 * k, androidx.compose.animation.core.tween(300, easing = androidx.compose.animation.core.LinearOutSlowInEasing), label = "ey")
+    Box(modifier.size(size)) {
+        Image(painterResource(ids[0]), "WardenCB", Modifier.fillMaxSize())
+        Image(painterResource(if (blink && ids[2] != 0) ids[2] else ids[1]), null, Modifier.fillMaxSize().offset(ex.dp, ey.dp))
+        Image(painterResource(ids[3]), null, Modifier.fillMaxSize())
+    }
 }
 
 /** Eski uygulamadaki anahtar (switch) */
@@ -129,3 +164,10 @@ fun Scrim(color: Color = Color(0x8C0D1631), onClick: () -> Unit) {
     Box(Modifier.fillMaxSize().background(color).tap(onClick = onClick))
 }
 
+/** Saydamlık deseni (eski uygulamadaki .thumb: 14 px'lik dama) */
+fun Modifier.checker(): Modifier = drawBehind {
+    val c = 7.dp.toPx(); val a = Color(0xFFC9D3E3); val b = Color(0xFFE3E9F2)
+    drawRect(b)
+    var y = 0f; var row = 0
+    while (y < size.height) { var x = if (row % 2 == 0) 0f else c; while (x < size.width) { drawRect(a, androidx.compose.ui.geometry.Offset(x, y), androidx.compose.ui.geometry.Size(c, c)); x += 2 * c }; y += c; row++ }
+}

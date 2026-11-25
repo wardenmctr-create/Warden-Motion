@@ -191,7 +191,7 @@ fun SettingsDrawer(store: Store, onClose: () -> Unit) {
                 Text("Asistanı ve uygulama turunu yeniden başlat", fontSize = 12.sp, color = C.text2)
             }
         }
-        InfoCard("Hakkında", "Warden Motion: Glow ${APP_VERSION} · Deneme sürümü. Projelerin ve yüklediğin pack'ler bu cihazda saklanır.")
+        InfoCard("Hakkında", "Warden Motion ${APP_VERSION} · Deneme sürümü. Projelerin ve yüklediğin pack'ler bu cihazda saklanır.")
         InfoCard("Açık Kaynak Kütüphaneleri", "Jetpack Compose, Kotlin, AndroidSVG, Inter yazı tipi (OFL), flag-icons (MIT)")
     }
     if (liteOpen) LiteSheet(store) { liteOpen = false }

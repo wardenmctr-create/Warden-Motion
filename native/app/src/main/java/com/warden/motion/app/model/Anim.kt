@@ -3,6 +3,8 @@ package com.warden.motion.app.model
 import kotlin.math.abs
 import kotlin.math.floor
 import kotlin.math.pow
+import kotlin.math.max
+import kotlin.math.min
 
 /** cubic-bezier(x1,y1,x2,y2) eğrisinde x=p için y (CSS ile aynı) */
 fun bezier(e: List<Double>?, p: Double): Double {
@@ -76,4 +78,25 @@ fun Effect.value(key: String, t: Double): Double {
     if (key == "speed" && speed != null) return speed
     val pr = fxMeta(type).params.find { it.key == key || it.key + "X" == key || it.key + "Y" == key } ?: return 0.0
     return if (key.endsWith("Y") && pr.two) (pr.defY ?: pr.def) else pr.def
+}
+
+/** Ses ve video: kaynağı zamanla akan katmanlar */
+fun Layer.isTimed() = (type == "audio" || type == "video") && src != null
+
+/**
+ * Katmanın başını t'ye taşır. Ses/videoda kaynak da kayar (kesilen kısım atlanır, gerisi aynı yerde kalır);
+ * kaynağın başından öteye uzatılamaz.
+ */
+fun Layer.trimStart(t: Double): Layer {
+    if (!isTimed()) return copy(start = t)
+    val inn = srcIn ?: 0.0
+    val nt = max(t, start - inn)
+    return copy(start = nt, srcIn = (inn + nt - start).coerceAtLeast(0.0))
+}
+
+/** Ses/videoda şeridin sonu, kaynağın bittiği yeri geçemez */
+fun Layer.maxEnd(e: Double): Double {
+    val d = srcDur ?: return e
+    if (!isTimed()) return e
+    return min(e, start + d - (srcIn ?: 0.0)).coerceAtLeast(start + 0.1)
 }

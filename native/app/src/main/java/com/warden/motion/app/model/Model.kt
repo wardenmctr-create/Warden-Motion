@@ -65,6 +65,10 @@ data class Layer(
     val effects: List<Effect> = emptyList(),
     val hidden: Boolean? = null,
     val volume: Double? = null,
+    /** Ses/video: kaynağın katman başına denk gelen anı (sn). Baştan kırpınca ya da bölünce ilerler */
+    val srcIn: Double? = null,
+    /** Ses/video: kaynağın tam süresi (sn); şerit bundan uzun olamaz */
+    val srcDur: Double? = null,
     val muted: Boolean? = null,
     val parent: String? = null,
     val mask: String? = null,

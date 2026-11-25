@@ -75,8 +75,11 @@ fun parseCol(hex: String?, def: Int = 0xFF8F7CF0.toInt()): Int = runCatching { a
  * Çizim motoru: bir projenin t anındaki karesini Android Canvas'a çizer (donanım hızlandırmalı).
  * Görseller önbellekte tutulur; önizlemede küçültülmüş (maxSide), dışa aktarmada asıl hâliyle.
  */
-class Renderer(private val ctx: Context, private val maxSide: Int = 2048, private val sync: Boolean = false, cacheMb: Int = 64) {
+class Renderer(private val ctx: Context, maxSide: Int = 2048, private val sync: Boolean = false, cacheMb: Int = 64) {
     private val store = Store.get(ctx)
+    /** Önizlemedeki görsellerin en uzun kenarı (Lite ayarı 'img'); değişince görseller yeniden çözülür */
+    var maxSide: Int = maxSide
+        set(v) { if (v != field && !sync) { field = v; cache.evictAll(); failed.clear(); _version.value++ } else field = v }
     private val cache = object : LruCache<String, Bitmap>(cacheMb * 1024 * 1024) { override fun sizeOf(key: String, value: Bitmap) = value.byteCount }
     private val loading = HashSet<String>()
     private val failed = HashSet<String>()
@@ -143,7 +146,8 @@ class Renderer(private val ctx: Context, private val maxSide: Int = 2048, privat
     fun releaseVideos() = synchronized(videos) { videos.values.forEach { it?.release() }; videos.clear() }
 
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG or Paint.FILTER_BITMAP_FLAG)
-    private val bold = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+    // Eski uygulamadaki gibi Inter Bold (700)
+    private val bold = runCatching { androidx.core.content.res.ResourcesCompat.getFont(ctx, com.warden.motion.app.R.font.inter_bold) }.getOrNull() ?: Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
 
     /** scale: proje pikselinden ekran pikseline oran */
     fun draw(c: Canvas, p: Project, t: Double, scale: Float) {
@@ -334,7 +338,7 @@ class Renderer(private val ctx: Context, private val maxSide: Int = 2048, privat
             "image" -> l.src?.let { s -> image(s)?.let { drawBitmap(c, it, RectF(-w / 2, -h / 2, w / 2, h / 2)) } }
             "video" -> {
                 val v = l.src?.let { video(it) }
-                val fr = v?.let { if (sync) it.frameSync(curT - l.start) else it.frame(curT - l.start, playing) }
+                val fr = v?.let { if (sync) it.frameSync(curT - l.start + (l.srcIn ?: 0.0)) else it.frame(curT - l.start + (l.srcIn ?: 0.0), playing) }
                 if (fr != null) drawBitmap(c, fr, RectF(-w / 2, -h / 2, w / 2, h / 2))
                 else { paint.reset(); paint.color = 0xFF26386C.toInt(); c.drawRect(-w / 2, -h / 2, w / 2, h / 2, paint) }
             }

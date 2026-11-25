@@ -60,7 +60,9 @@ suspend fun mediaInfo(ctx: Context, src: String): MediaInfo = withContext(Dispat
         }
         val f = if (src.startsWith("media:")) Store.get(ctx).mediaFile(src.removePrefix("media:")) else null
         val mime = f?.let { Store.get(ctx).sniffMime(it) } ?: "image/png"
-        if (f != null && (mime.startsWith("video/") || mime.startsWith("audio/"))) {
+        // Görsel değilse (ya da türü tanınmadıysa ve görsel olarak açılmıyorsa) telefonun çözücüsüyle süresi okunur
+        val notImage = f != null && !mime.startsWith("image/") && run { val o = BitmapFactory.Options().apply { inJustDecodeBounds = true }; f.inputStream().use { BitmapFactory.decodeStream(it, null, o) }; o.outWidth <= 0 }
+        if (f != null && notImage) {
             val r = MediaMetadataRetriever()
             try {
                 r.setDataSource(f.absolutePath)
@@ -103,14 +105,14 @@ fun AddPanel(s: EditorState, tab: String?, setTab: (String) -> Unit, replaceFlag
         scope.launch {
             val i = mediaInfo(ctx, src)
             val k = min(p.width / i.w, p.height / i.h)
-            s.addLayer(makeLayer(p, t, Math.round(i.dur * 100) / 100.0, "video", name) { it.copy(src = src, w = (i.w * k).roundToInt().toDouble(), h = (i.h * k).roundToInt().toDouble()) })
+            s.addLayer(makeLayer(p, t, Math.round(i.dur * 100) / 100.0, "video", name) { it.copy(src = src, srcDur = i.dur.takeIf { d -> d > 0 }, w = (i.w * k).roundToInt().toDouble(), h = (i.h * k).roundToInt().toDouble()) })
             onClose()
         }
     }
     val addAudio = { src: String, name: String ->
         scope.launch {
             val i = mediaInfo(ctx, src)
-            s.addLayer(makeLayer(p, t, Math.round((i.dur.takeIf { it > 0 } ?: 5.0) * 100) / 100.0, "audio", name) { it.copy(src = src, w = 0.0, h = 0.0, fill = "#7B4FD6") })
+            s.addLayer(makeLayer(p, t, Math.round((i.dur.takeIf { it > 0 } ?: 5.0) * 100) / 100.0, "audio", name) { it.copy(src = src, srcDur = i.dur.takeIf { d -> d > 0 }, w = 0.0, h = 0.0, fill = "#7B4FD6") })
             toast("\"$name\" eklendi. Oynatınca duyulur, dışa aktarınca videoya eklenir.")
             onClose()
         }
@@ -344,7 +346,7 @@ private fun CBTab(toast: (String) -> Unit, onPick: (PackItem) -> Unit, onBody: (
                         .tap { upload.launch(androidx.activity.result.PickVisualMediaRequest(androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia.ImageOnly)) }, contentAlignment = Alignment.Center) { Ico("upload", C.turq, 22.dp) }
                     Text("Galeriden yükle", fontSize = 10.sp, color = C.dText2, maxLines = 1, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth().padding(top = 3.dp))
                 } else {
-                    Box(Modifier.fillMaxWidth().aspectRatio(1f).clip(RoundedCornerShape(10.dp)).background(Color(0xFFDCE6F5)).tap(!edit) { onPick(it) }.padding(6.dp), contentAlignment = Alignment.Center) {
+                    Box(Modifier.fillMaxWidth().aspectRatio(1f).clip(RoundedCornerShape(10.dp)).checker().tap(!edit) { onPick(it) }.padding(6.dp), contentAlignment = Alignment.Center) {
                         AssetImg(it.src, Modifier.fillMaxSize(), 200)
                         if (edit && it.id != null) Box(Modifier.align(Alignment.TopEnd).size(24.dp).clip(CircleShape).background(Color(0xFFC8323F)).tap {
                             Packs.saveUserPack(ctx, Packs.userPack(ctx).filter { x -> x.id != it.id }); mine = Packs.userPack(ctx)

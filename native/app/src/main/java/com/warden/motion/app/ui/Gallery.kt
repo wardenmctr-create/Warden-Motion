@@ -233,7 +233,8 @@ fun MediaSheet(kind: String, multiple: Boolean, title: String, onClose: () -> Un
     var sel by remember { mutableStateOf(listOf<GItem>()) }
     var prev by remember { mutableStateOf<GItem?>(null) }
     val grid = rememberLazyGridState()
-    val ask = rememberPermission(if (aud) MediaQuery.audioPerms() else MediaQuery.visualPerms()) { access = if (aud) (if (MediaQuery.audioAccess(ctx)) "full" else "none") else MediaQuery.visualAccess(ctx) }
+    var reload by remember { mutableIntStateOf(0) }
+    val ask = rememberPermission(if (aud) MediaQuery.audioPerms() else MediaQuery.visualPerms()) { access = if (aud) (if (MediaQuery.audioAccess(ctx)) "full" else "none") else MediaQuery.visualAccess(ctx); reload++ }
     val files = rememberLauncherForActivityResult(ActivityResultContracts.OpenMultipleDocuments()) { us ->
         if (us.isNotEmpty()) onDone(us.map { u -> val m = ctx.contentResolver.getType(u) ?: ""; GItem(0, u, m.startsWith("video/"), m.startsWith("audio/"), m, "", "", 0) })
     }
@@ -244,8 +245,8 @@ fun MediaSheet(kind: String, multiple: Boolean, title: String, onClose: () -> Un
     }
     BackHandler { if (albMenu) albMenu = false else { Listen.stop(); onClose() } }
     DisposableEffect(Unit) { onDispose { Listen.stop() } }
-    LaunchedEffect(access) { if (access != "none") albums = MediaQuery.albums(ctx, aud) }
-    LaunchedEffect(access, album) {
+    LaunchedEffect(access, reload) { if (access != "none") albums = MediaQuery.albums(ctx, aud) }
+    LaunchedEffect(access, album, reload) {
         if (access == "none") return@LaunchedEffect
         val r = listAlbum(ctx, kind, album, 0, 60); items = r; end = r.size < 60
         if (!aud) prev = r.firstOrNull()
@@ -296,6 +297,10 @@ fun MediaSheet(kind: String, multiple: Boolean, title: String, onClose: () -> Un
             }
             if (access != "none") Text(if (aud) "Karta basınca dinlersin, + ile projeye eklersin." else if (multiple && !multi) "Dokun: üstte önizle · +: ekle · Basılı tut: çoklu seç" else "",
                 fontSize = 12.sp, color = C.dText2, modifier = Modifier.padding(start = 16.dp, bottom = 6.dp))
+            if (access == "partial") Row(Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 4.dp).clip(RoundedCornerShape(10.dp)).background(Color(0xFF13204A)).padding(horizontal = 12.dp, vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
+                Text("Sadece izin verdiğin fotoğraflar görünüyor.", fontSize = 12.sp, color = C.dText2, modifier = Modifier.weight(1f))
+                Text("Daha fazla seç", fontSize = 13.sp, fontWeight = FontWeight.Bold, color = C.turq, modifier = Modifier.tap { ask() }.padding(start = 8.dp))
+            }
             if (access == "none") Column(Modifier.fillMaxWidth().weight(1f).padding(24.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterVertically)) {
                 Ico(if (aud) "music" else "image", C.dText2, 36.dp)
                 Text(if (aud) "Seslerini burada göster" else "Galerini burada göster", fontSize = 17.sp, fontWeight = FontWeight.Bold, color = C.dText)

@@ -22,6 +22,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.rotate
@@ -56,9 +57,13 @@ private val PANEL_BG = Color(0xFF1E2A55)
 private val LCOL_LINE = Color(0xFF2C3E78)
 
 @Composable
-fun PanelHost(s: EditorState, layer: Layer, panel: Panel, W: Float, onClose: () -> Unit, onChangeFlag: () -> Unit, toast: (String) -> Unit) {
+fun PanelHost(s: EditorState, layer: Layer, panel: Panel, W: Float, onClose: () -> Unit, onChangeFlag: () -> Unit, toast: (String) -> Unit, sheetMax: Float = 0f) {
     val h = (W * 0.56f).dp
-    Box(Modifier.fillMaxWidth().height(h).background(PANEL_BG).navigationBarsPadding()) {
+    // Metni Düzenle ve CB Ayarları: eski uygulamadaki gibi alttan açılan sayfa (ekranın en çok yarısı)
+    val mod = if (panel.isSheet()) Modifier.fillMaxWidth().heightIn(max = sheetMax.dp).shadow(18.dp, RoundedCornerShape(topStart = 18.dp, topEnd = 18.dp))
+        .clip(RoundedCornerShape(topStart = 18.dp, topEnd = 18.dp)).background(PANEL_BG).tap { }.navigationBarsPadding()
+        else Modifier.fillMaxWidth().height(h).background(PANEL_BG).navigationBarsPadding()
+    Box(mod) {
         when (panel) {
             Panel.MOVE -> MovePanel(s, layer, onClose)
             Panel.COLOR -> ColorPanel(s, layer, onClose)
@@ -302,7 +307,7 @@ private fun ColorPanel(s: EditorState, layer: Layer, onClose: () -> Unit) {
         s.updateLayer(layer.id) { l -> when (m) { "none" -> l.copy(noFill = true); "solid" -> l.copy(noFill = false, fill2 = null, grad = null); else -> l.copy(noFill = false, fill2 = l.fill2 ?: "#F2C230", grad = l.grad ?: Grad(0.0, -0.5, 0.0, 0.5), gtype = l.gtype ?: "linear") } }
     }
     val palette = @Composable {
-        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+        Row(Modifier.fillMaxWidth().height(IntrinsicSize.Min), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                 var hex by remember(cur) { mutableStateOf(cur.uppercase()) }
                 val focus = LocalFocusManager.current
@@ -652,11 +657,13 @@ private fun PropSlider(label: String, value: String, v: Float, range: ClosedFloa
     }
 }
 
+fun Panel.isSheet() = this == Panel.TEXT || this == Panel.CB
+
 @Composable
 private fun TextPanel(s: EditorState, layer: Layer, onClose: () -> Unit) {
-    Column(Modifier.fillMaxSize()) {
+    Column(Modifier.fillMaxWidth()) {
         DHead("Metni Düzenle", onClose)
-        Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(start = 12.dp, end = 12.dp, top = 10.dp, bottom = 12.dp)) {
+        Column(Modifier.fillMaxWidth().weight(1f, false).verticalScroll(rememberScrollState()).padding(start = 12.dp, end = 12.dp, top = 10.dp, bottom = 12.dp)) {
             var started by remember { mutableStateOf(false) }
             BasicTextField(layer.text ?: "", { v -> if (!started) { s.checkpoint(); started = true }; s.updateLayer(layer.id, false) { it.copy(text = v) } },
                 textStyle = TextStyle(color = C.dText, fontSize = 15.sp, fontFamily = Inter), cursorBrush = androidx.compose.ui.graphics.SolidColor(C.turq),
@@ -671,8 +678,8 @@ private fun TextPanel(s: EditorState, layer: Layer, onClose: () -> Unit) {
 @Composable
 fun Swatches(cur: String, onPick: (String) -> Unit) {
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        SWATCHES.chunked(7).forEach { row ->
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) { row.forEach { c -> Box(Modifier.size(36.dp).clip(RoundedCornerShape(8.dp)).background(colorOf(c)).border(2.dp, if (cur.uppercase() == c) C.turq else Color.Transparent, RoundedCornerShape(8.dp)).tap { onPick(c) }) } }
+        SWATCHES.chunked(8).forEach { row ->
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) { row.forEach { c -> Box(Modifier.weight(1f).aspectRatio(1f).clip(RoundedCornerShape(8.dp)).background(colorOf(c)).border(2.dp, if (cur.uppercase() == c) C.turq else Color.Transparent, RoundedCornerShape(8.dp)).tap { onPick(c) }) }; repeat(8 - row.size) { Spacer(Modifier.weight(1f)) } }
         }
     }
 }
@@ -681,9 +688,9 @@ fun Swatches(cur: String, onPick: (String) -> Unit) {
 private fun CBPanel(s: EditorState, layer: Layer, onClose: () -> Unit, onChangeFlag: () -> Unit) {
     val ctx = LocalContext.current
     val eyes = remember { Packs.ready(ctx).find { it.name == "Gözler" }?.items ?: emptyList() }
-    Column(Modifier.fillMaxSize()) {
+    Column(Modifier.fillMaxWidth()) {
         DHead("CB Ayarları", onClose)
-        Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(start = 12.dp, end = 12.dp, top = 10.dp, bottom = 12.dp)) {
+        Column(Modifier.fillMaxWidth().weight(1f, false).verticalScroll(rememberScrollState()).padding(start = 12.dp, end = 12.dp, top = 10.dp, bottom = 12.dp)) {
             DBtn("Bayrağı Değiştir", ghost = true, icon = "flag", onClick = onChangeFlag)
             Spacer(Modifier.height(14.dp))
             PropSlider("Kontur kalınlığı", "${(layer.cb?.outline ?: 0.0).roundToInt()}", (layer.cb?.outline ?: 0.0).toFloat(), 0f..30f, { s.checkpoint() }) { v -> s.updateLayer(layer.id, false) { it.copy(cb = (it.cb ?: CbOpts()).copy(outline = v.roundToInt().toDouble())) } }
@@ -693,7 +700,7 @@ private fun CBPanel(s: EditorState, layer: Layer, onClose: () -> Unit, onChangeF
                 Row(Modifier.padding(bottom = 8.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     row.forEach { e ->
                         Column(Modifier.weight(1f)) {
-                            Box(Modifier.fillMaxWidth().aspectRatio(1f).clip(RoundedCornerShape(10.dp)).background(Color(0xFFDCE6F5)).border(2.dp, if (layer.cb?.eyes == e?.src) C.turq else Color.Transparent, RoundedCornerShape(10.dp))
+                            Box(Modifier.fillMaxWidth().aspectRatio(1f).clip(RoundedCornerShape(10.dp)).checker().border(2.dp, if (layer.cb?.eyes == e?.src) C.turq else Color.Transparent, RoundedCornerShape(10.dp))
                                 .tap { s.updateLayer(layer.id) { it.copy(cb = CbOpts(it.cb?.outline ?: 6.0, e?.src)) } }.padding(6.dp), contentAlignment = Alignment.Center) {
                                 if (e == null) Text("Yok", color = C.text2, fontSize = 13.sp) else AssetImg(e.src, Modifier.fillMaxSize())
                             }

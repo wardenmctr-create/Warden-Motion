@@ -103,7 +103,7 @@ object Player {
             if (!hasAudio(l) || l.end <= t) continue
             val f = store.mediaFile(l.src!!.removePrefix("media:"))
             if (!f.exists()) continue
-            val off = max(0.0, t - l.start); val wait = max(0.0, l.start - t)
+            val off = (l.srcIn ?: 0.0) + max(0.0, t - l.start); val wait = max(0.0, l.start - t)
             runCatching {
                 val m = MediaPlayer()
                 m.setDataSource(f.absolutePath)
@@ -216,7 +216,7 @@ object AudioDecode {
             val s0 = (l.start * rate).roundToInt(); val s1 = min(n, (l.end * rate).roundToInt())
             val k = pcm.rate.toDouble() / rate
             for (i in max(0, s0) until s1) {
-                val src = (i - s0) * k; val j = src.toInt(); if (j + 1 >= pcm.frames) break
+                val src = (i - s0) * k + (l.srcIn ?: 0.0) * pcm.rate; val j = src.toInt(); if (j + 1 >= pcm.frames) break
                 val f = (src - j).toFloat()
                 out[i * 2] += (pcm.data[j * 2] * (1 - f) + pcm.data[j * 2 + 2] * f) * vol
                 out[i * 2 + 1] += (pcm.data[j * 2 + 1] * (1 - f) + pcm.data[j * 2 + 3] * f) * vol

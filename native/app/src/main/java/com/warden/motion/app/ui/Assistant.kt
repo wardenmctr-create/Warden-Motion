@@ -42,8 +42,8 @@ import kotlin.math.hypot
 import kotlin.math.max
 import kotlin.math.min
 
-const val APP_VERSION = "Glow 0.2"
-private const val VER = "g0.2"
+const val APP_VERSION = "0.19"
+private const val VER = "g0.3"
 
 // ---------------------------------------------------------------------------------------------
 // Senaryolar
@@ -131,11 +131,19 @@ private fun INTRO() = listOf(
     Step("Adım adım öğreticiler burada: 3 CB, 5 genel animasyon. Onlarda da ben yanındayım.", need = HOME, target = { "nav-tut" }),
     Step("Ayarlar burada: zayıf telefonlar için Lite modu ve beni tekrar çağırmak için \"WardenCB ile tanış\".", need = HOME, target = { "menu-btn" }),
 )
-/** Glow'un yenilikleri */
+/** Uygulamanın yenilikleri (tanışmada) */
 private val NEWS = listOf(
-    Step("Warden Motion artık Glow: baştan sona telefonun kendi diliyle yazıldı. Çok daha hızlı, galeri ve sesler doğrudan telefondan geliyor.", "excited"),
+    Step("Warden Motion baştan sona telefonun kendi diliyle yazıldı. Çok daha hızlı, galeri ve sesler doğrudan telefondan geliyor.", "excited"),
     Step("Eski Warden Motion'daki projelerini getirmek için: eski uygulamada Hesap → \"Şimdi yedekle\", sonra burada Hesap → \"Yedek dosyası seç\".", "happy", target = { "nav-acc" }),
     Step("Dışa Aktar ekranı da yenilendi: Video (MP4 + ses), Proje Paketi, PNG kare, Görüntü Dizisi ve GIF.", "proud"),
+)
+/** Bu güncellemenin yenilikleri */
+private val UPDATE = listOf(
+    Step("Artık adım sadece Warden Motion, yeni simgemle birlikte!", "proud"),
+    Step("Ben de canlandım: göz kırpıyorum, gösterdiğim yere bakıyorum. Yazım hızlandı ve konuşurken sesim var; sesi kartımdaki 🔊 düğmesiyle kapatabilirsin.", "joy"),
+    Step("Şeritlerdeki kırpma tutamaçları artık şeridin dışında, iki yanda ‹ › olarak duruyor.", "point"),
+    Step("Ses ve videoyu baştan kırpınca ya da bölünce ses kaldığı yerden devam ediyor; şerit sesin uzunluğunu geçmiyor. Süresi yanlış okunmuş eski ses şeritleri sesin tamamına uzatıldı.", "happy"),
+    Step("Metni Düzenle ve CB Ayarları eskisi gibi alttan açılan sayfa oldu; Lite ayarlarındaki kare hızı ve görsel boyutu artık gerçekten uygulanıyor.", "think"),
 )
 fun introScript() = Script("intro", "Tanışma", INTRO() + NEWS + listOf(whatNow(false), pickTutorial()))
 
@@ -342,7 +350,7 @@ fun AssistantLayer() {
         delay(700)
         if (Assistant.run != null || UiState.screen != "home") return@LaunchedEffect
         if (!Assistant.introSeen()) Assistant.start(introScript())
-        else if (Assistant.ver() != VER) Assistant.start(Script("whatsnew", "Yeni neler var", listOf(Step("Selam! Uygulama güncellendi, yenilikleri anlatayım.", "wave")) + NEWS + Step("Bu kadar, iyi eğlenceler!", "happy", btn = "Bitir")))
+        else if (Assistant.ver() != VER) Assistant.start(Script("whatsnew", "Yeni neler var", listOf(Step("Selam! Uygulama güncellendi, yenilikleri anlatayım.", "wave")) + UPDATE + Step("Bu kadar, iyi eğlenceler!", "happy", btn = "Bitir")))
     }
     if (run == null) return
     if (Assistant.min) {
@@ -377,7 +385,18 @@ fun AssistantLayer() {
     // Yazı harf harf
     val full = say + if (sub.isNotEmpty()) "\n$sub" else ""
     var shown by remember(full) { mutableIntStateOf(0) }
-    LaunchedEffect(full) { while (shown < full.length) { delay(22); shown++ } }
+    // Zamana göre ilerler (telefon yavaşlasa bile yazı yavaşlamaz); her iki harfte bir ses
+    LaunchedEffect(full) {
+        Voice.init(ctx)
+        val t0 = withFrameMillis { it }
+        while (shown < full.length) {
+            val now = withFrameMillis { it }
+            val n = minOf(full.length, ((now - t0) / 20).toInt() + 1)
+            for (i in shown until n) if (i % 2 == 0) Voice.blip(ctx, full[i])
+            shown = n
+        }
+    }
+    var voiceOn by remember { mutableStateOf(Voice.on(ctx)) }
 
     // El (gösterim / Anlamadım)
     var handPos by remember { mutableStateOf<Offset?>(null) }
@@ -467,6 +486,7 @@ fun AssistantLayer() {
             val n = run.script.steps.size
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text("${run.script.title} · ${min(run.step + 1, n)}/$n", fontSize = 11.sp, fontWeight = FontWeight.Bold, color = C.dText2, modifier = Modifier.weight(1f))
+                Box(Modifier.size(30.dp).tap { voiceOn = !voiceOn; Voice.set(ctx, voiceOn) }, contentAlignment = Alignment.Center) { Text(if (voiceOn) "🔊" else "🔇", fontSize = 14.sp) }
                 Box(Modifier.size(30.dp).tap { Assistant.min = true }, contentAlignment = Alignment.Center) { Ico("chevD", C.dText2, 18.dp) }
                 Box(Modifier.size(30.dp).tap { Assistant.stop(false) }, contentAlignment = Alignment.Center) { Ico("close", C.dText2, 18.dp) }
             }
@@ -491,7 +511,12 @@ fun AssistantLayer() {
         }
         // WardenCB
         Box(Modifier.offset { androidx.compose.ui.unit.IntOffset(mx.toInt(), (my + bob * dens).toInt()) }.size(with(LocalDensity.current) { ms.toDp() })
-            .graphicsLayer { scaleX = if (onLeft) -1f else 1f }) { WardenCBImg(mood, with(LocalDensity.current) { ms.toDp() }) }
+            .graphicsLayer { scaleX = if (onLeft) -1f else 1f }) {
+            // Hedefe bakar (eski uygulamadaki gibi); aynalanınca bakış da ters çevrilir
+            val mcx = mx + ms / 2; val mcy = my + ms * .42f
+            val lx = ((tx - mcx) / (140 * dens)).coerceIn(-1f, 1f); val ly = ((ty - mcy) / (220 * dens)).coerceIn(-1f, 1f)
+            WardenCBImg(mood, with(LocalDensity.current) { ms.toDp() }, look = (if (onLeft) -lx else lx) to ly)
+        }
         // El
         handPos?.let { hp ->
             Canvas(Modifier.offset { androidx.compose.ui.unit.IntOffset((hp.x - 4 * dens).toInt(), (hp.y - 2 * dens).toInt()) }.size(34.dp, 40.dp).graphicsLayer { scaleX = if (press) .88f else 1f; scaleY = if (press) .88f else 1f }) {

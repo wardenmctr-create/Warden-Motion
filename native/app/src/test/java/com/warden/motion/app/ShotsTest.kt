@@ -96,9 +96,10 @@ class ShotsTest {
         fun settle() { repeat(5) { rule.mainClock.advanceTimeBy(400); rule.waitForIdle(); Thread.sleep(200) } }
         rule.mainClock.autoAdvance = false
         settle()
+        rule.runOnUiThread { com.warden.motion.app.ui.Assistant.stop(true) }; settle()
         rule.onAllNodesWithText("Boş")[0].performClick(); settle()
         rule.onNodeWithContentDescription("Katman ekle").performClick(); settle()
-        for (tab in listOf("Şekil", "Medya", "Ses", "CB", "Bayrak")) { rule.onAllNodesWithText(tab)[0].performClick(); settle(); save(shot(), "add_" + tab) }
+        for (tab in listOf("Şekil", "Medya", "Ses", "CB", "Bayrak")) { rule.onAllNodesWithText(tab)[0].performClick(); settle(); save(shot(), "add_" + tab.replace("Ş","S")) }
     }
 
     @Test fun assistant() {
@@ -158,5 +159,34 @@ class ShotsTest {
         val p = sample()
         val b = Bitmap.createBitmap(720, 900, Bitmap.Config.ARGB_8888)
         for (t in listOf(0.0, 1.0)) { r.draw(Canvas(b), p, t, 1f) ; save(b, "frame_$t") }
+    }
+
+    @Test fun cmp() {
+        val ctx = ApplicationProvider.getApplicationContext<android.content.Context>()
+        runBlocking { Store.get(ctx).save(TEMPLATES[1].make()) }
+        fun settle() { repeat(5) { rule.mainClock.advanceTimeBy(400); rule.waitForIdle(); Thread.sleep(200) } }
+        rule.mainClock.autoAdvance = false
+        settle(); rule.runOnUiThread { com.warden.motion.app.ui.Assistant.stop(true) }; settle()
+        rule.onAllNodesWithText("CB Selam")[1].performClick(); settle(); save(shot(), "n_ed_open")
+        val back = { rule.onNodeWithContentDescription("Geri").performClick(); settle() }
+        rule.onAllNodesWithText("Türkiyeball")[0].performClick(); settle(); save(shot(), "n_ed_sel")
+        for (t in listOf("Taşı ve Çevir", "Karıştırma ve Opaklık", "Efektler", "CB Ayarları")) { rule.onAllNodesWithText(t)[0].performClick(); settle(); save(shot(), "n_p_" + t.split(" ")[0].replace("ş","s").replace("ı","i")); back() }
+        rule.onNodeWithContentDescription("Diğer").performClick(); settle(); save(shot(), "n_menu")
+        rule.onNodeWithContentDescription("Diğer").performClick(); settle()
+        rule.onNodeWithContentDescription("Seçimi kaldır").performClick(); settle()
+        rule.onAllNodesWithText("Selam")[0].performClick(); settle(); save(shot(), "n_txt_sel")
+        for (t in listOf("Renk ve Dolgu", "Metni Düzenle")) { rule.onAllNodesWithText(t)[0].performClick(); settle(); save(shot(), "n_p_" + t.split(" ")[0].replace("ş","s").replace("ı","i")); back() }
+    }
+
+    @Test fun flags() {
+        val ctx = ApplicationProvider.getApplicationContext<android.content.Context>()
+        val out = File(dir, "flags").apply { mkdirs() }
+        for (f in ctx.assets.list("flags")!!.filter { it.endsWith(".svg") }) {
+            val svg = ctx.assets.open("flags/$f").use { com.caverock.androidsvg.SVG.getFromInputStream(it) }
+            val b = Bitmap.createBitmap(160, 120, Bitmap.Config.ARGB_8888)
+            svg.setDocumentWidth("100%"); svg.setDocumentHeight("100%")
+            svg.renderToCanvas(Canvas(b), android.graphics.RectF(0f, 0f, 160f, 120f))
+            File(out, f.removeSuffix(".svg") + ".png").outputStream().use { b.compress(Bitmap.CompressFormat.PNG, 100, it) }
+        }
     }
 }

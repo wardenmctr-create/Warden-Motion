@@ -94,6 +94,7 @@ fun EditorScreen(initial: Project, onClose: () -> Unit) {
     val lite by store.lite.collectAsState()
     val liteCfg by store.liteCfg.collectAsState()
     val perf = if (lite) LITE_DEFAULT + liteCfg else FULL_QUALITY
+    val perfNow by rememberUpdatedState({ perf })
     val haptic = LocalHapticFeedback.current
     val dens = LocalDensity.current
 
@@ -137,6 +138,7 @@ fun EditorScreen(initial: Project, onClose: () -> Unit) {
 
     // ---------- Oynatma ----------
     LaunchedEffect(perf["vid"]) { r.videoSide = (perf["vid"] ?: 0.0).toInt() }
+    LaunchedEffect(perf["img"]) { r.maxSide = (perf["img"] ?: 2048.0).toInt().coerceIn(256, 4096) }
     LaunchedEffect(perf) { r.limits = perf.filterKeys { it in setOf("blur", "warp", "light", "color") } }
     DisposableEffect(Unit) { onDispose { com.warden.motion.app.render.Player.stop(); r.playing = false } }
     LaunchedEffect(s.playing) {
@@ -144,13 +146,17 @@ fun EditorScreen(initial: Project, onClose: () -> Unit) {
         if (!s.playing) { com.warden.motion.app.render.Player.stop(); s.time = (s.time * s.project.fps).roundToInt().toDouble() / s.project.fps; return@LaunchedEffect }
         com.warden.motion.app.render.Player.play(ctx, s.project, s.time)
         var last = withFrameNanos { it }
+        var lastDraw = 0L
+        var t = s.time
         while (isActive && s.playing) {
             val now = withFrameNanos { it }
-            var t = s.time + (now - last) / 1e9
+            t += (now - last) / 1e9
             last = now
             val d = s.project.duration
             if (t >= d) { if (loop) { t = 0.0; com.warden.motion.app.render.Player.play(ctx, s.project, 0.0) } else { s.time = d; s.playing = false; break } }
-            s.time = t
+            // Kare hızı sınırı (Lite ayarı): zaman akar ama önizleme daha seyrek çizilir
+            val fpsCap = perfNow()["fps"] ?: 60.0
+            if (fpsCap >= 60 || (now - lastDraw) / 1e6 >= 1000 / fpsCap - 4) { lastDraw = now; s.time = t }
         }
     }
 
@@ -174,12 +180,12 @@ fun EditorScreen(initial: Project, onClose: () -> Unit) {
         val t = s.time
         if (t <= l.start || t >= l.end) { show("Oynatma çizgisini katmanın üstüne getir."); return }
         when (kind) {
-            "start" -> s.updateLayer(l.id) { it.copy(start = t) }
+            "start" -> s.updateLayer(l.id) { it.trimStart(t) }
             "end" -> s.updateLayer(l.id) { it.copy(end = t) }
             else -> s.update { pp ->
                 val i = pp.layers.indexOfFirst { it.id == l.id }
                 val ls = pp.layers.toMutableList()
-                ls[i] = l.copy(end = t); ls.add(i + 1, l.copy(id = uid(), start = t, name = l.name + " (2)"))
+                ls[i] = l.copy(end = t); ls.add(i + 1, l.trimStart(t).copy(id = uid(), name = l.name + " (2)"))
                 pp.copy(layers = ls)
             }
         }
@@ -230,6 +236,7 @@ fun EditorScreen(initial: Project, onClose: () -> Unit) {
 
     BoxWithConstraints(Modifier.fillMaxSize().background(C.dBg)) {
         val W = maxWidth.value
+        val Hmax = maxHeight.value
         val wd = { f: Float -> (W * f).dp }
         Column(Modifier.fillMaxSize().statusBarsPadding()) {
             // ---------- Üst çubuk ----------
@@ -266,7 +273,9 @@ fun EditorScreen(initial: Project, onClose: () -> Unit) {
                 }
             }
             // ---------- Önizleme ----------
-            Stage(s, panel, perf, ver, Modifier.fillMaxWidth().weight(1.042f, fill = true).heightIn(min = 120.dp).background(C.dDeep)) { if (it) { if (panel != null && panel != Panel.ADD) panel = null } }
+            // Eski uygulamadaki gibi: önizleme yüksekliği min(ekran genişliği, ekranın yarısı); panel açıkken küçülebilir
+            val stageFixed = panel == null || panel == Panel.ADD
+            Stage(s, panel, perf, ver, Modifier.fillMaxWidth().then(if (stageFixed) Modifier.height(min(W, Hmax * 0.5f).dp) else Modifier.weight(1.042f, fill = true).heightIn(min = 120.dp)).background(C.dDeep)) { if (it) { if (panel != null && panel != Panel.ADD) panel = null } }
             // ---------- Oynatma düğmeleri ----------
             Row(Modifier.fillMaxWidth().height(wd(0.122f)).padding(horizontal = 2.dp), verticalAlignment = Alignment.CenterVertically) {
                 val ib = @Composable { icon: String, enabled: Boolean, size: Float, tint: Color, bg: Color, on: () -> Unit ->
@@ -287,8 +296,12 @@ fun EditorScreen(initial: Project, onClose: () -> Unit) {
             Column(Modifier.fillMaxWidth().weight(1.2f)) {
                 Timeline(s, PPS, { PPS = it.coerceIn(PPS_MIN, PPS_MAX) }, tickStep, panel, W, Modifier.fillMaxWidth().weight(1f).heightIn(min = wd(0.2f)), haptic) { show(it) }
                 if (sel != null && panel == null) Tools(s, sel, W, { panel = it }, ::trim)
-                if (panel != null && panel != Panel.ADD && sel != null) PanelHost(s, sel, panel!!, W, onClose = { panel = null }, onChangeFlag = { addTab = "flags"; replaceFlagOf = sel.id; panel = Panel.ADD }, toast = show)
+                if (panel != null && panel != Panel.ADD && sel != null && !panel!!.isSheet()) PanelHost(s, sel, panel!!, W, onClose = { panel = null }, onChangeFlag = { addTab = "flags"; replaceFlagOf = sel.id; panel = Panel.ADD }, toast = show)
             }
+        }
+        // Alttan açılan sayfa paneller (Metni Düzenle, CB Ayarları)
+        if (panel != null && panel!!.isSheet() && sel != null) Box(Modifier.align(Alignment.BottomCenter).fillMaxWidth()) {
+            PanelHost(s, sel, panel!!, W, onClose = { panel = null }, onChangeFlag = { addTab = "flags"; replaceFlagOf = sel.id; panel = Panel.ADD }, toast = show, sheetMax = Hmax * 0.5f)
         }
         // Katman ekle düğmesi
         if (panel == null && sel == null) Box(
@@ -341,7 +354,7 @@ fun EditorScreen(initial: Project, onClose: () -> Unit) {
             if (sel.mask != null) DItem("Kırpma Maskesini Kaldır") { s.updateLayer(sel.id) { it.copy(mask = null) }; done() }
             else DItem("Kırpma Maskesi Oluştur…", p.layers.size >= 2) { pick = "mask"; done() }
             DSep()
-            DItem("Tüm Süreye Yay") { s.updateLayer(sel.id) { it.copy(start = 0.0, end = max(it.end, dur)) }; done() }
+            DItem("Tüm Süreye Yay") { s.updateLayer(sel.id) { it.trimStart(if (it.isTimed()) max(0.0, it.start - (it.srcIn ?: 0.0)) else 0.0).let { x -> x.copy(end = x.maxEnd(max(x.end, dur))) } }; done() }
         }
         if (pick != null && sel != null) ChoiceBox({ pick = null }) {
             Text(if (pick == "parent") "\"${sel.name}\" hangi katmanı takip etsin?" else "\"${sel.name}\" hangi katmanın şekline kırpılsın?", color = C.dText, fontSize = 16.sp, fontWeight = FontWeight.Bold)
@@ -781,10 +794,14 @@ private fun Track(s: EditorState, l: Layer, i: Int, left: Float, width: Float, t
     val dark = look != null && l.type != "audio"
     Box(Modifier.offset(x = left.dp, y = top.dp).width(width.dp).height(h).graphicsLayer { alpha = if (l.hidden == true) .45f else 1f }
         .then(if (isMulti) Modifier.border(2.dp, Color(0xFFDCE9FF), RoundedCornerShape(3.dp)) else Modifier)
-        .clip(RoundedCornerShape(3.dp)).then(bg).layerPress(s, l.id, haptic).padding(horizontal = if (isSel) 26.dp else 8.dp),
+        .clip(RoundedCornerShape(3.dp)).then(bg).layerPress(s, l.id, haptic),
         contentAlignment = Alignment.CenterStart) {
-        if (l.type == "audio" && l.src != null) Wave(l, P)
-        Row(verticalAlignment = Alignment.CenterVertically) {
+        // Dalga şeridin tamamına (kenar boşluğu olmadan) çizilir: zamanla birebir hizalı
+        if (l.type == "audio" && l.src != null) Wave(l, P) { d ->
+            // Eski projeler: kaynağın süresini öğren; ses eklenirken süresi okunamayıp 5 sn kalmışsa sesin tamamına uzat
+            s.updateLayer(l.id, false) { x -> if (x.srcDur != null) x else { val bug = x.srcIn == null && abs(x.end - x.start - 5.0) < 1e-6 && d > 5.05; x.copy(srcDur = d, end = if (bug) x.start + d else x.end) } }
+        }
+        Row(Modifier.padding(horizontal = 8.dp), verticalAlignment = Alignment.CenterVertically) {
             l.tag?.let { Box(Modifier.padding(end = 5.dp).size(8.dp).clip(RoundedCornerShape(2.dp)).background(colorOf(it))) }
             Text((if (l.mask != null) "◐ " else "") + l.name, fontSize = (W * 0.034f).sp, fontWeight = FontWeight.SemiBold, maxLines = 1, overflow = TextOverflow.Ellipsis,
                 color = if (dark) C.dDeep else Color.White,
@@ -811,11 +828,12 @@ private fun Track(s: EditorState, l: Layer, i: Int, left: Float, width: Float, t
                 }
             }
     }
-    // Kırpma tutamaçları
+    // Kırpma tutamaçları: şeride dahil değil, iki yanında ‹ › (Alight Motion gibi)
     if (isSel) for (side in listOf("start", "end")) {
-        val x = if (side == "start") left else left + width - 26f
-        Box(Modifier.offset(x = x.dp, y = (top - 2).dp).size(26.dp, h + 4.dp).clip(RoundedCornerShape(if (side == "start") 4.dp else 0.dp, if (side == "end") 4.dp else 0.dp, if (side == "end") 4.dp else 0.dp, if (side == "start") 4.dp else 0.dp))
-            .background(Color(0xFF3A4466))
+        val x = if (side == "start") left - 26f else left + width
+        Box(Modifier.offset(x = x.dp, y = (top - 2).dp).size(26.dp, h + 4.dp)
+            .clip(if (side == "start") RoundedCornerShape(topStart = 12.dp, bottomStart = 12.dp) else RoundedCornerShape(topEnd = 12.dp, bottomEnd = 12.dp))
+            .background(Color(0xFF4A63A8))
             .pointerInput(l.id, side) {
                 awaitEachGesture {
                     val d = awaitFirstDown(requireUnconsumed = false); d.consume()
@@ -827,27 +845,31 @@ private fun Track(s: EditorState, l: Layer, i: Int, left: Float, width: Float, t
                         val e = awaitPointerEvent(PointerEventPass.Initial); val c = e.changes.first(); c.consume()
                         if (!c.pressed) break
                         val v = ((v0 + (c.position.x - d.position.x) / density / P) * p.fps).roundToInt().toDouble() / p.fps
-                        s.updateLayer(l.id, false) { if (side == "start") it.copy(start = v.coerceIn(0.0, it.end - 0.1)) else it.copy(end = max(it.start + 0.1, v)) }
+                        s.updateLayer(l.id, false) { if (side == "start") it.trimStart(v.coerceIn(0.0, it.end - 0.1)) else it.copy(end = it.maxEnd(max(it.start + 0.1, v))) }
                     }
                     setTrimming(null)
                 }
-            }, contentAlignment = Alignment.Center) { Box(Modifier.size(2.dp, h / 2).background(C.dText)) }
+            }, contentAlignment = Alignment.Center) { Text(if (side == "start") "‹" else "›", fontSize = 17.sp, fontWeight = FontWeight.ExtraBold, color = Color(0xFF0B1430), lineHeight = 17.sp) }
     }
 }
 
 /** Ses katmanının dalga şekli */
 @Composable
-private fun BoxScope.Wave(l: Layer, P: Float) {
+private fun BoxScope.Wave(l: Layer, P: Float, onDur: (Double) -> Unit) {
     val ctx = LocalContext.current
     var pk by remember(l.src) { mutableStateOf<FloatArray?>(null) }
-    LaunchedEffect(l.src) { pk = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) { com.warden.motion.app.render.AudioDecode.peaks(Store.get(ctx).mediaFile(l.src!!.removePrefix("media:"))) } }
+    LaunchedEffect(l.src) {
+        pk = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) { com.warden.motion.app.render.AudioDecode.peaks(Store.get(ctx).mediaFile(l.src!!.removePrefix("media:"))) }
+        pk?.let { if (l.srcDur == null && it.isNotEmpty()) onDur(it.size / 100.0) }
+    }
     val a = pk ?: return
+    val off = ((l.srcIn ?: 0.0) * 100).toInt()
     Canvas(Modifier.matchParentSize().padding(vertical = 1.dp)) {
         val len = l.end - l.start
         var x = 0f
         while (x < size.width) {
             val t0 = x / (P * density); val t1 = (x + 2 * density) / (P * density)
-            val i0 = (t0 * 100).toInt(); val i1 = minOf(a.size, (t1 * 100).toInt() + 1)
+            val i0 = (t0 * 100).toInt() + off; val i1 = minOf(a.size, (t1 * 100).toInt() + 1 + off)
             var m = 0f; for (i in i0 until i1) if (i in a.indices && a[i] > m) m = a[i]
             if (t0 > len) break
             val hh = maxOf(1f, minOf(1f, m) * size.height)
