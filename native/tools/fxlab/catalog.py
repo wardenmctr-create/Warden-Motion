@@ -340,6 +340,7 @@ fx("crt", "Eski Ekran", "CRT", c, "pixel", "Kavisli tüplü televizyon ekranı."
 fx("pixelsort", "Piksel Sıralama", "Pixel Sort Streaks", c, "pixel", "Parlak bölgeleri aşağı doğru akıtır (piksel sıralama sanatı).", ["Glitch", "Sanat"], [J("len", "Uzunluk", 0, 400, 60, 0.5, 0.2), PCT("thr", "Eşik", 55), A("ang", "Açı", 90)], pad={"k": "len", "mul": 1}, heavy=True)
 fx("ascii", "Yazı Sanatı", "ASCII Art", c, "pixel", "Görüntüyü küçük karakterlerden oluşan desene çevirir.", ["Retro", "Grafik", "Hacker"], [J("size", "Karakter boyu", 3, 60, 10, 0.5, 0.2), C("col", "Renk", "#22D3C5"), C("bg", "Zemin", "#0B1430"), T("orig", "Asıl renk", 0)])
 
+exec(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'catalog_ae.py')).read())
 order_kinds = {}
 for e in E:
     for p in e["params"]:

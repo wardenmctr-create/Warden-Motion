@@ -2,6 +2,7 @@
 <canvas id="gl" width="480" height="480"></canvas>
 <script>window.FXBASE='/native/app/src/main/assets/fx/';</script>
 <script src="engine.js"></script>
+<script src="subjects.js"></script>
 <script src="scenes.js"></script>
 <script>
 const IMG = {};
@@ -10,6 +11,7 @@ async function boot() {
   const f = new FontFace('Inter', 'url(/native/app/src/main/res/font/inter_bold.otf)', { weight: '700' }); await f.load(); document.fonts.add(f);
   const f2 = new FontFace('InterX', 'url(/native/app/src/main/res/font/inter_extrabold.otf)', { weight: '800' }); await f2.load(); document.fonts.add(f2);
   await loadImg('tr', '/public/flags/tr.svg');
+  for (const [k, u] of Object.entries(SUBJ.SUBJECT_IMAGES)) await loadImg(k, u);
   for (const k of ['a', 'e', 'h', 'b']) await loadImg('wcb' + k, '/native/app/src/main/res/drawable-nodpi/wcb' + k + '_idle.png');
   window.E = new Engine(document.getElementById('gl'));
   await E.load(window.FXBASE + 'catalog.json');
@@ -25,7 +27,7 @@ function layerCanvas(L, pad, s) {
 }
 // Bir kare: sahne → piksel verisi
 async function frame(scene, p) {
-  const gl = E.gl, S = scene.size, s = 480 / S, t = p * scene.dur;
+  const gl = E.gl, S = scene.size, s = 480 / S, t = p * scene.dur; window.PHASE = p;
   gl.bindFramebuffer(gl.FRAMEBUFFER, null); gl.viewport(0, 0, 480, 480);
   gl.disable(gl.BLEND); gl.clearColor(0, 0, 0, 0); gl.clear(gl.COLOR_BUFFER_BIT);
   // arka plan
@@ -54,6 +56,6 @@ async function frame(scene, p) {
   gl.disable(gl.BLEND);
   return document.getElementById('gl').toDataURL('image/png');
 }
-async function render(name) { const sc = SCENES[name]; const n = Math.round(sc.dur * sc.fps); const out = []; for (let i = 0; i < n; i++) out.push(await frame(sc, i / n)); return out; }
+async function render(name) { const sc = SCENES[name] || window.TEST_SCENES?.[name]; const n = Math.round(sc.dur * sc.fps); const out = []; for (let i = 0; i < n; i++) out.push(await frame(sc, i / n)); return out; }
 boot().catch((e) => { window.bootErr = String(e); });
 </script></body></html>

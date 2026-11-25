@@ -43,36 +43,46 @@ function on(drawFn, w, h, type, vals, o = {}) { return { size: 240, dur: o.dur |
 
 const SCENES = {};
 const def = (t, sc) => { SCENES[t] = sc; };
-// ---- Renk ve Işık ----
-def('brightness', photo('brightness', (p) => ({ amount: osc(p, 45, 170) })));
-def('contrast', photo('contrast', (p) => ({ amount: osc(p, 40, 210) })));
-def('bricon', photo('bricon', (p) => ({ bri: osc(p, -35, 25), con: osc(p, -45, 50) })));
-def('exposure', photo('exposure', (p) => ({ exp: osc(p, -1.6, 1.4), gamma: 1 })));
-def('saturate', photo('saturate', (p) => ({ amount: osc(p, 0, 260) })));
-def('vibrance', photo('vibrance', (p) => ({ sat: osc(p, -80, 10), vib: osc(p, -60, 90) })));
-def('hue', photo('hue', (p) => ({ amount: p * 360 })));
-def('colortune', photo('colortune', (p) => ({ r: osc(p, -40, 45), g: osc(p, 20, -15), b: osc(p, 45, -40), lit: 0 })));
-def('temperature', photo('temperature', (p) => ({ temp: osc(p, -90, 90), tint: 0 })));
-def('colorize', photo('colorize', (p) => ({ col: ['#22D3C5', '#2F7BF6', '#8F7CF0', '#E84393', '#F2C230'][Math.floor(p * 4.999)], mix: 100 })));
-def('duotone', photo('duotone', (p) => ({ c1: '#0B1430', c2: p < 0.5 ? '#22D3C5' : '#FF5BA7', mix: osc((p * 2) % 1, 30, 100) })));
-def('grayscale', photo('grayscale', (p) => ({ amount: osc(p, 0, 100) })));
-def('sepia', photo('sepia', (p) => ({ amount: osc(p, 0, 100) })));
-def('invert', photo('invert', (p) => ({ amount: osc(p, 0, 100) })));
-def('threshold', photo('threshold', (p) => ({ level: osc(p, 60, 200), soft: 4 })));
-def('posterize', photo('posterize', (p) => ({ levels: Math.round(osc(p, 2, 8)) })));
-def('levels', photo('levels', (p) => ({ lo: osc(p, 0, 70), hi: osc(p, 255, 190), mid: osc(p, 0.8, 1.4) })));
-def('gradmap', photo('gradmap', (p) => ({ c1: '#1B2A55', c2: '#F2C230', mix: osc(p, 0, 100) })));
-def('palettemap', photo('palettemap', (p) => ({ pal: Math.floor(p * 4.999), cycle: 0, mix: 100 })));
-def('hotcolor', photo('hotcolor', (p) => ({ shift: osc(p, -0.3, 0.3), mix: 100 })));
-def('spectral', photo('spectral', (p) => ({ shift: p, rep: 1, mix: 100 })));
-def('fourcolor', on(wcb, 220, 220, 'fourcolor', () => ({ speed: 0.42, mix: 85 })));
-def('gradoverlay', photo('gradoverlay', (p) => ({ c1: '#2F7BF6', c2: '#E84393', ang: p * 360, gtype: 0, mix: 65 })));
-def('highshadow', photo('highshadow', (p) => ({ hi: osc(p, 0, -70), sh: osc(p, 0, 90) })));
-def('replacecolor', on(flag, 210, 140, 'replacecolor', (p) => ({ from: '#E30A17', to: ['#2F7BF6', '#22D3C5', '#8F7CF0', '#1E9C3F', '#F2C230'][Math.floor(p * 4.999)], tol: 35, soft: 20 }), { bg: bgLight }));
-def('spotcolor', photo('spotcolor', (p) => ({ keep: '#E30A17', tol: osc(p, 0, 45), soft: 15 })));
-def('solidcolor', on(wcb, 220, 220, 'solidcolor', (p) => ({ col: '#F7F8FA', mix: osc(p, 0, 100) })));
-def('longshadow', on(txt('WM', 92, WHITE), 200, 120, 'longshadow', (p) => ({ ang: osc(p, 30, 60), len: osc(p, 20, 140), col: '#0B1430', fade: 40, op: 85 }), { bg: bgCol(TURQ) }));
-def('radialshadow', on(wcb, 150, 150, 'radialshadow', (p) => ({ lightX: Math.cos(p * Math.PI * 2) * 300, lightY: -200 + Math.sin(p * Math.PI * 2) * 120, dist: 30, blur: 18, col: '#0B1430', op: 55 }), { bg: bgLight }));
-def('lightrays', photo('lightrays', (p) => ({ centerX: 60 + Math.sin(p * Math.PI * 2) * 30, centerY: -60, len: osc(p, 25, 60), amount: 110, thr: 55 })));
-def('vignette', photo('vignette', (p) => ({ amount: 90, size: osc(p, 15, 70), soft: 50, col: '#000000', round: 0 })));
+// ---- Renk ve Işık (her efekt farklı bir konu) ----
+const Sb = SUBJ;
+const full = (draw, type, vals, o = {}) => ({ size: 240, dur: o.dur || 2.4, fps: 20, bg: o.bg || bgNavy, layers: [...(o.under || []), { x: 120, y: 120, w: o.w || 240, h: o.h || 240, draw, fx: [{ type, v: vals }], tr: o.tr }, ...(o.over || [])] });
+const cbGroup = (g, w, h) => { Sb.cb('az', 'mutlu')(g, w * 0.3, h * 0.3); g.save(); g.translate(-w * 0.3, h * 0.08); Sb.cb('tr', 'normal', 'fes')(g, w * 0.36, h * 0.36); g.restore(); g.save(); g.translate(w * 0.3, h * 0.1); Sb.cb('jp', 'saskin')(g, w * 0.32, h * 0.32); g.restore(); };
+const onCol = (c, fn) => (g, w, h) => { g.fillStyle = c; g.fillRect(-w / 2, -h / 2, w, h); fn(g, w, h); };
+const lightBg = (fn) => onCol('#E3EEFC', fn);
+def('brightness', full(Sb.laleler, 'brightness', (p) => ({ amount: osc(p, 45, 170) })));
+def('contrast', full(Sb.dag, 'contrast', (p) => ({ amount: osc(p, 35, 210) })));
+def('bricon', full(Sb.istanbul, 'bricon', (p) => ({ bri: osc(p, -30, 25), con: osc(p, -50, 55) })));
+def('exposure', full(Sb.denizalti, 'exposure', (p) => ({ exp: osc(p, -1.8, 1.4), gamma: 1 })));
+def('saturate', full(Sb.aycicek, 'saturate', (p) => ({ amount: osc(p, 0, 260) })));
+def('vibrance', full(Sb.nar, 'vibrance', (p) => ({ sat: osc(p, -85, 10), vib: osc(p, -60, 100) })));
+def('hue', full(Sb.gece, 'hue', (p) => ({ amount: p * 360 })));
+def('colortune', full(Sb.cay, 'colortune', (p) => ({ r: osc(p, -40, 45), g: osc(p, 25, -15), b: osc(p, 50, -45), lit: 0 })));
+def('temperature', full(Sb.kapadokya, 'temperature', (p) => ({ temp: osc(p, -95, 85), tint: 0 })));
+def('colorize', full(lightBg(Sb.wcbPose('mutlu')), 'colorize', (p) => ({ col: ['#22D3C5', '#2F7BF6', '#8F7CF0', '#E84393', '#F2C230'][Math.floor(p * 4.999)], mix: 100 })));
+def('duotone', full(Sb.uzay, 'duotone', (p) => ({ c1: p < 0.5 ? '#0B1430' : '#2B0B4A', c2: p < 0.5 ? '#22D3C5' : '#FF8FD1', mix: osc((p * 2) % 1, 25, 100) })));
+def('grayscale', full(onCol('#DCE9FF', cbGroup), 'grayscale', (p) => ({ amount: osc(p, 0, 100) })));
+def('sepia', full(Sb.kapadokya, 'sepia', (p) => ({ amount: osc(p, 0, 100) })));
+def('invert', full(Sb.dag, 'invert', (p) => ({ amount: osc(p, 0, 100) })));
+def('threshold', full(lightBg(Sb.cb('tr', 'kizgin', 'fes')), 'threshold', (p) => ({ level: osc(p, 40, 210), soft: 3 }), { w: 200, h: 200 }));
+def('posterize', full(Sb.aycicek, 'posterize', (p) => ({ levels: Math.round(osc(p, 2, 7)) })));
+def('levels', full(Sb.cay, 'levels', (p) => ({ lo: osc(p, 0, 80), hi: osc(p, 255, 185), mid: osc(p, 0.75, 1.4) })));
+def('gradmap', full(Sb.istanbul, 'gradmap', (p) => ({ c1: '#1B2A55', c2: '#F2C230', mix: osc(p, 0, 100) })));
+def('palettemap', full(Sb.gece, 'palettemap', (p) => ({ pal: Math.floor(p * 4.999), cycle: 0, mix: 100 })));
+def('hotcolor', full(onCol('#0B1430', Sb.wcbPose('heyecanli')), 'hotcolor', (p) => ({ shift: osc(p, -0.25, 0.3), mix: osc(p, 0, 100) })));
+def('spectral', full(Sb.nar, 'spectral', (p) => ({ shift: p, rep: 1.2, mix: 100 })));
+def('fourcolor', full(Sb.word('RENK', 72, '#FFFFFF'), 'fourcolor', () => ({ speed: 0.42, mix: 100 }), { bg: bgNavy, w: 230, h: 120 }));
+def('gradoverlay', full(Sb.kapadokya, 'gradoverlay', (p) => ({ c1: '#2F7BF6', c2: '#E84393', ang: p * 360, gtype: 0, mix: 60 })));
+def('highshadow', full(Sb.denizalti, 'highshadow', (p) => ({ hi: osc(p, 0, -70), sh: osc(p, 0, 95) })));
+def('replacecolor', full(lightBg(Sb.cb('tr', 'mutlu')), 'replacecolor', (p) => ({ from: '#E30A17', to: ['#2F7BF6', '#22D3C5', '#8F7CF0', '#1E9C3F', '#F2C230'][Math.floor(p * 4.999)], tol: 35, soft: 20 }), { w: 200, h: 200 }));
+def('spotcolor', full(Sb.laleler, 'spotcolor', (p) => ({ keep: '#E8333F', tol: osc(p, 0, 40), soft: 15 })));
+def('solidcolor', full(Sb.wcbPose('selam-veriyor'), 'solidcolor', (p) => ({ col: '#F7F8FA', mix: osc(p, 0, 100) }), { bg: (g, S) => { g.fillStyle = '#2F7BF6'; g.fillRect(0, 0, S, S); }, w: 220, h: 200 }));
+def('longshadow', full(Sb.word('GÖLGE', 60, '#F7F8FA'), 'longshadow', (p) => ({ ang: osc(p, 30, 60), len: osc(p, 20, 130), col: '#0B1430', fade: 40, op: 85 }), { bg: (g, S) => { g.fillStyle = '#22D3C5'; g.fillRect(0, 0, S, S); }, w: 220, h: 90 }));
+def('radialshadow', full(Sb.cb('az', 'normal', 'silindir'), 'radialshadow', (p) => ({ lightX: Math.cos(p * Math.PI * 2) * 300, lightY: -220 + Math.sin(p * Math.PI * 2) * 120, dist: 30, blur: 18, col: '#0B1430', op: 55 }), { bg: (g, S) => { g.fillStyle = '#E3EEFC'; g.fillRect(0, 0, S, S); }, w: 130, h: 130 }));
+def('lightrays', full(Sb.istanbul, 'lightrays', (p) => ({ centerX: 30 + Math.sin(p * Math.PI * 2) * 25, centerY: 30, len: osc(p, 25, 60), amount: 120, thr: 55 })));
+def('vignette', full(Sb.cay, 'vignette', (p) => ({ amount: 92, size: osc(p, 12, 65), soft: 50, col: '#000000', round: 0 })));
 window.SCENES = SCENES;
+// Konu galerisi (efektsiz) — kontrol için
+window.TEST_SCENES = {};
+for (const [k, fn] of Object.entries({ kapadokya: SUBJ.kapadokya, istanbul: SUBJ.istanbul, cay: SUBJ.cay, laleler: SUBJ.laleler, aycicek: SUBJ.aycicek, nar: SUBJ.nar, denizalti: SUBJ.denizalti, uzay: SUBJ.uzay, gece: SUBJ.gece, dag: SUBJ.dag,
+  cbtr: SUBJ.cb('tr', 'mutlu', 'fes'), cbjp: SUBJ.cb('jp', 'normal', 'tac'), wcb: SUBJ.wcbPose('asik'), yazi: SUBJ.word('MERHABA', 46, '#F7F8FA'), kroma: SUBJ.greenCB('br') }))
+  TEST_SCENES['_' + k] = { size: 240, dur: 0.05, fps: 20, bg: bgNavy, layers: [{ x: 120, y: 120, w: 240, h: 240, draw: fn, fx: [] }] };
