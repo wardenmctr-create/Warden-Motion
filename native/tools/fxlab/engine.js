@@ -67,7 +67,7 @@ function fxUniforms(meta, vals) {
   }
   return u;
 }
-function linearOf(spec, vals, meta) { if (!spec) return 0; let v = spec.add || 0; if (spec.k) { const pr = (meta.params || []).find((p) => p.k === spec.k); v += (vals[spec.k] ?? pr?.def ?? 0) * (spec.mul ?? 1); } return Math.max(0, v); }
+function linearOf(spec, vals, meta) { if (!spec) return 0; if (spec.max) return Math.max(0, ...spec.max.map((k) => vals[k] ?? (meta.params || []).find((p) => p.k === k)?.def ?? 0)); let v = spec.add || 0; if (spec.k) { const pr = (meta.params || []).find((p) => p.k === spec.k); v += (vals[spec.k] ?? pr?.def ?? 0) * (spec.mul ?? 1); } return Math.max(0, v); }
 
 // Katmana efekt zincirini uygula: base (önceden çarpılmış doku, kutu + pad), sonuç doku
 async function applyEffects(E, base, box, s, effects, t, dur) {
