@@ -26,6 +26,8 @@ data class Effect(
     val color: String? = null,
     val v: Map<String, Anim>? = null,
     val closed: Boolean? = null,
+    /** Renk ayarları (anahtar → #RRGGBB) */
+    val c: Map<String, String>? = null,
 )
 
 @Serializable

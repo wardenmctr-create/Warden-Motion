@@ -121,7 +121,7 @@ private val PERM = IntArray(512).also { perm ->
     for (i in 0 until 512) perm[i] = p[i and 255]
 }
 private val GX = intArrayOf(1, -1, 1, -1, 1, -1, 0, 0); private val GY = intArrayOf(1, 1, -1, -1, 0, 0, 1, -1)
-private fun perlin(x: Double, y: Double): Double {
+fun perlin(x: Double, y: Double): Double {
     val xi = floor(x).toInt(); val yi = floor(y).toInt(); val xf = x - xi; val yf = y - yi
     val X = xi and 255; val Y = yi and 255
     val u = xf * xf * xf * (xf * (xf * 6 - 15) + 10); val v = yf * yf * yf * (yf * (yf * 6 - 15) + 10)
@@ -131,7 +131,7 @@ private fun perlin(x: Double, y: Double): Double {
     val x2 = g(ab, xf, yf - 1) + u * (g(bb, xf - 1, yf - 1) - g(ab, xf, yf - 1))
     return x1 + v * (x2 - x1)
 }
-private fun fbm(x: Double, y: Double, oct: Double, ox: Double, oy: Double, px: Double, py: Double, seed: Double): Double {
+fun fbm(x: Double, y: Double, oct: Double, ox: Double, oy: Double, px: Double, py: Double, seed: Double): Double {
     var sum = 0.0; var amp = 1.0; var f = 1.0; var norm = 0.0
     val n = ceil(oct).toInt() + 1
     for (i in 0 until n) {
