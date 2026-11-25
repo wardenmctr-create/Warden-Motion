@@ -86,7 +86,9 @@
 "pad": null,
 "passes": null,
 "info": null,
-"heavy": false
+"heavy": false,
+"hidden": true,
+"mergedInto": "bricon"
 },
 {
 "type": "contrast",
@@ -136,7 +138,9 @@
 "pad": null,
 "passes": null,
 "info": null,
-"heavy": false
+"heavy": false,
+"hidden": true,
+"mergedInto": "bricon"
 },
 {
 "type": "bricon",
@@ -193,12 +197,42 @@
 "keys": {},
 "cols": {},
 "at": "start"
+},
+{
+"code": "BR",
+"name": "Parlaklık",
+"vals": {},
+"keys": {},
+"cols": {},
+"at": "start",
+"alias": "brightness"
+},
+{
+"code": "CO",
+"name": "Kontrast",
+"vals": {},
+"keys": {},
+"cols": {},
+"at": "start",
+"alias": "contrast"
 }
 ],
 "pad": null,
 "passes": null,
 "info": null,
-"heavy": false
+"heavy": false,
+"aliases": [
+{
+"type": "brightness",
+"name": "Parlaklık",
+"en": "Brightness"
+},
+{
+"type": "contrast",
+"name": "Kontrast",
+"en": "Contrast"
+}
+]
 },
 {
 "type": "exposure",
@@ -318,7 +352,9 @@
 "pad": null,
 "passes": null,
 "info": null,
-"heavy": false
+"heavy": false,
+"hidden": true,
+"mergedInto": "vibrance"
 },
 {
 "type": "vibrance",
@@ -362,12 +398,28 @@
 "keys": {},
 "cols": {},
 "at": "start"
+},
+{
+"code": "SA",
+"name": "Doygunluk",
+"vals": {},
+"keys": {},
+"cols": {},
+"at": "start",
+"alias": "saturate"
 }
 ],
 "pad": null,
 "passes": null,
 "info": null,
-"heavy": false
+"heavy": false,
+"aliases": [
+{
+"type": "saturate",
+"name": "Doygunluk",
+"en": "Saturation"
+}
+]
 },
 {
 "type": "hue",
@@ -687,7 +739,9 @@
 "pad": null,
 "passes": null,
 "info": null,
-"heavy": false
+"heavy": false,
+"hidden": true,
+"mergedInto": "gradmap"
 },
 {
 "type": "grayscale",
@@ -999,12 +1053,28 @@
 "c2": "#FFD15C"
 },
 "at": "start"
+},
+{
+"code": "DU",
+"name": "İki ton",
+"vals": {},
+"keys": {},
+"cols": {},
+"at": "start",
+"alias": "duotone"
 }
 ],
 "pad": null,
 "passes": null,
 "info": null,
-"heavy": false
+"heavy": false,
+"aliases": [
+{
+"type": "duotone",
+"name": "İki Ton",
+"en": "Duotone / Tint"
+}
+]
 },
 {
 "type": "palettemap",
@@ -1169,7 +1239,9 @@
 "pad": null,
 "passes": null,
 "info": null,
-"heavy": false
+"heavy": false,
+"hidden": true,
+"mergedInto": "colorama"
 },
 {
 "type": "fourcolor",
@@ -1317,11 +1389,28 @@
 "def": 70
 }
 ],
-"presets": [],
+"presets": [
+{
+"code": "GR",
+"name": "Geçiş dolgusu",
+"vals": {},
+"keys": {},
+"cols": {},
+"at": "start",
+"alias": "gradientfill"
+}
+],
 "pad": null,
 "passes": null,
 "info": null,
-"heavy": false
+"heavy": false,
+"aliases": [
+{
+"type": "gradientfill",
+"name": "Geçiş Dolgusu",
+"en": "Gradient Fill"
+}
+]
 },
 {
 "type": "highshadow",
@@ -1414,11 +1503,28 @@
 "def": 20
 }
 ],
-"presets": [],
+"presets": [
+{
+"code": "CH",
+"name": "Rengi ayarla",
+"vals": {},
+"keys": {},
+"cols": {},
+"at": "start",
+"alias": "changecolor"
+}
+],
 "pad": null,
 "passes": null,
 "info": null,
-"heavy": false
+"heavy": false,
+"aliases": [
+{
+"type": "changecolor",
+"name": "Rengi Ayarla",
+"en": "Change Color"
+}
+]
 },
 {
 "type": "spotcolor",
@@ -1709,13 +1815,30 @@
 "def": 40
 }
 ],
-"presets": [],
+"presets": [
+{
+"code": "LI",
+"name": "Işık patlaması",
+"vals": {},
+"keys": {},
+"cols": {},
+"at": "start",
+"alias": "lightburst"
+}
+],
 "pad": {
 "add": 60
 },
 "passes": null,
 "info": null,
-"heavy": true
+"heavy": true,
+"aliases": [
+{
+"type": "lightburst",
+"name": "Işık Patlaması",
+"en": "Light Burst"
+}
+]
 },
 {
 "type": "vignette",
@@ -3609,12 +3732,28 @@
 },
 "cols": {},
 "at": "start"
+},
+{
+"code": "SP",
+"name": "Küreleştir",
+"vals": {},
+"keys": {},
+"cols": {},
+"at": "start",
+"alias": "spherize"
 }
 ],
 "pad": null,
 "passes": null,
 "info": null,
-"heavy": false
+"heavy": false,
+"aliases": [
+{
+"type": "spherize",
+"name": "Küreleştir",
+"en": "Spherize"
+}
+]
 },
 {
 "type": "ripple",
@@ -4369,7 +4508,9 @@
 "pad": null,
 "passes": null,
 "info": null,
-"heavy": false
+"heavy": false,
+"hidden": true,
+"mergedInto": "opticscomp"
 },
 {
 "type": "pixelate",
@@ -4616,14 +4757,31 @@
 "def": 2
 }
 ],
-"presets": [],
+"presets": [
+{
+"code": "HE",
+"name": "Isı dalgası",
+"vals": {},
+"keys": {},
+"cols": {},
+"at": "start",
+"alias": "heatwave"
+}
+],
 "pad": {
 "k": "amount",
 "mul": 1
 },
 "passes": null,
 "info": null,
-"heavy": false
+"heavy": false,
+"aliases": [
+{
+"type": "heatwave",
+"name": "Isı Dalgası",
+"en": "Heat Haze"
+}
+]
 },
 {
 "type": "shear",
@@ -5137,11 +5295,28 @@
 "def": 1
 }
 ],
-"presets": [],
+"presets": [
+{
+"code": "GR",
+"name": "Film greni",
+"vals": {},
+"keys": {},
+"cols": {},
+"at": "start",
+"alias": "grain"
+}
+],
 "pad": null,
 "passes": null,
 "info": null,
-"heavy": false
+"heavy": false,
+"aliases": [
+{
+"type": "grain",
+"name": "Film Greni",
+"en": "Film Grain"
+}
+]
 },
 {
 "type": "clouds",
@@ -5932,11 +6107,28 @@
 "def": 100
 }
 ],
-"presets": [],
+"presets": [
+{
+"code": "ST",
+"name": "Yıldız patlaması",
+"vals": {},
+"keys": {},
+"cols": {},
+"at": "start",
+"alias": "starburst"
+}
+],
 "pad": null,
 "passes": null,
 "info": null,
-"heavy": false
+"heavy": false,
+"aliases": [
+{
+"type": "starburst",
+"name": "Yıldız Patlaması",
+"en": "Star Burst"
+}
+]
 },
 {
 "type": "star",
@@ -6088,7 +6280,9 @@
 "pad": null,
 "passes": null,
 "info": null,
-"heavy": false
+"heavy": false,
+"hidden": true,
+"mergedInto": "fractalnoise"
 },
 {
 "type": "plasma",
@@ -6218,7 +6412,9 @@
 "pad": null,
 "passes": null,
 "info": null,
-"heavy": false
+"heavy": false,
+"hidden": true,
+"mergedInto": "cellpattern"
 },
 {
 "type": "gradientfill",
@@ -6291,7 +6487,9 @@
 "pad": null,
 "passes": null,
 "info": null,
-"heavy": false
+"heavy": false,
+"hidden": true,
+"mergedInto": "gradoverlay"
 },
 {
 "type": "snow",
@@ -8980,11 +9178,28 @@
 "def": 60
 }
 ],
-"presets": [],
+"presets": [
+{
+"code": "WI",
+"name": "Geniş zaman",
+"vals": {},
+"keys": {},
+"cols": {},
+"at": "start",
+"alias": "widetime"
+}
+],
 "pad": null,
 "passes": null,
 "info": "Katmanı Taşı ve Çevir ile canlandırınca iz bırakır.",
-"heavy": false
+"heavy": false,
+"aliases": [
+{
+"type": "widetime",
+"name": "Geniş Zaman",
+"en": "Wide Time"
+}
+]
 },
 {
 "type": "mirrorrepeat",
@@ -9136,11 +9351,28 @@
 "def": 0
 }
 ],
-"presets": [],
+"presets": [
+{
+"code": "EX",
+"name": "Ayıkla",
+"vals": {},
+"keys": {},
+"cols": {},
+"at": "start",
+"alias": "extract"
+}
+],
 "pad": null,
 "passes": null,
 "info": null,
-"heavy": false
+"heavy": false,
+"aliases": [
+{
+"type": "extract",
+"name": "Ayıkla",
+"en": "Extract"
+}
+]
 },
 {
 "type": "solidmatte",
@@ -9764,11 +9996,28 @@
 "def": 50
 }
 ],
-"presets": [],
+"presets": [
+{
+"code": "ST",
+"name": "Flaş",
+"vals": {},
+"keys": {},
+"cols": {},
+"at": "start",
+"alias": "strobe"
+}
+],
 "pad": null,
 "passes": null,
 "info": null,
-"heavy": false
+"heavy": false,
+"aliases": [
+{
+"type": "strobe",
+"name": "Flaş",
+"en": "Strobe"
+}
+]
 },
 {
 "type": "fadein",
@@ -9855,7 +10104,9 @@
 "pad": null,
 "passes": null,
 "info": null,
-"heavy": false
+"heavy": false,
+"hidden": true,
+"mergedInto": "blink"
 },
 {
 "type": "randop",
@@ -10788,7 +11039,9 @@
 "pad": null,
 "passes": null,
 "info": null,
-"heavy": false
+"heavy": false,
+"hidden": true,
+"mergedInto": "noise"
 },
 {
 "type": "vhs",
@@ -11587,11 +11840,28 @@
 "def": 100
 }
 ],
-"presets": [],
+"presets": [
+{
+"code": "SP",
+"name": "Spektrum",
+"vals": {},
+"keys": {},
+"cols": {},
+"at": "start",
+"alias": "spectral"
+}
+],
 "pad": null,
 "passes": null,
 "info": null,
-"heavy": false
+"heavy": false,
+"aliases": [
+{
+"type": "spectral",
+"name": "Spektrum Haritası",
+"en": "Spectral Map"
+}
+]
 },
 {
 "type": "chanshift",
@@ -14203,7 +14473,9 @@
 "pad": null,
 "passes": null,
 "info": null,
-"heavy": false
+"heavy": false,
+"hidden": true,
+"mergedInto": "bulge"
 },
 {
 "type": "warpstyle",
@@ -14330,7 +14602,9 @@
 },
 "passes": null,
 "info": null,
-"heavy": false
+"heavy": false,
+"hidden": true,
+"mergedInto": "displace"
 },
 {
 "type": "beam",
@@ -14477,7 +14751,9 @@
 },
 "passes": null,
 "info": null,
-"heavy": true
+"heavy": true,
+"hidden": true,
+"mergedInto": "lightrays"
 },
 {
 "type": "radiowaves",
@@ -15934,7 +16210,9 @@
 },
 "passes": null,
 "info": null,
-"heavy": false
+"heavy": false,
+"hidden": true,
+"mergedInto": "repetile"
 },
 {
 "type": "colorrange",
@@ -16048,11 +16326,28 @@
 "def": 0
 }
 ],
-"presets": [],
+"presets": [
+{
+"code": "CO",
+"name": "Renk anahtarı",
+"vals": {},
+"keys": {},
+"cols": {},
+"at": "start",
+"alias": "colorkey"
+}
+],
 "pad": null,
 "passes": null,
 "info": null,
-"heavy": false
+"heavy": false,
+"aliases": [
+{
+"type": "colorkey",
+"name": "Renk Anahtarı",
+"en": "Color Key"
+}
+]
 },
 {
 "type": "spill",
@@ -17350,7 +17645,9 @@
 "pad": null,
 "passes": null,
 "info": null,
-"heavy": false
+"heavy": false,
+"hidden": true,
+"mergedInto": "starfield"
 },
 {
 "type": "brokenglass",
@@ -18599,7 +18896,9 @@
 "pad": null,
 "passes": null,
 "info": "Hareketli katmanlarda görünür.",
-"heavy": false
+"heavy": false,
+"hidden": true,
+"mergedInto": "echo"
 },
 {
 "type": "pixelmb",
@@ -19370,7 +19669,9 @@
 "pad": null,
 "passes": null,
 "info": null,
-"heavy": false
+"heavy": false,
+"hidden": true,
+"mergedInto": "replacecolor"
 },
 {
 "type": "opticscomp",
@@ -19417,11 +19718,28 @@
 "def": 0
 }
 ],
-"presets": [],
+"presets": [
+{
+"code": "FI",
+"name": "Balık gözü",
+"vals": {},
+"keys": {},
+"cols": {},
+"at": "start",
+"alias": "fisheye"
+}
+],
 "pad": null,
 "passes": null,
 "info": null,
-"heavy": false
+"heavy": false,
+"aliases": [
+{
+"type": "fisheye",
+"name": "Balık Gözü",
+"en": "Fisheye"
+}
+]
 },
 {
 "type": "bender",
@@ -19671,11 +19989,28 @@
 "def": 100
 }
 ],
-"presets": [],
+"presets": [
+{
+"code": "VO",
+"name": "Hücreler",
+"vals": {},
+"keys": {},
+"cols": {},
+"at": "start",
+"alias": "voronoi"
+}
+],
 "pad": null,
 "passes": null,
 "info": null,
-"heavy": false
+"heavy": false,
+"aliases": [
+{
+"type": "voronoi",
+"name": "Hücreler",
+"en": "Voronoi Cells"
+}
+]
 },
 {
 "type": "thresholdrgb",
@@ -19852,7 +20187,17 @@
 "def": 0
 }
 ],
-"presets": [],
+"presets": [
+{
+"code": "MO",
+"name": "Hareketli döşeme",
+"vals": {},
+"keys": {},
+"cols": {},
+"at": "start",
+"alias": "motiontile"
+}
+],
 "pad": {
 "max": [
 "l",
@@ -19863,7 +20208,14 @@
 },
 "passes": null,
 "info": null,
-"heavy": false
+"heavy": false,
+"aliases": [
+{
+"type": "motiontile",
+"name": "Hareketli Döşeme",
+"en": "Motion Tile"
+}
+]
 },
 {
 "type": "burnfilm",
@@ -20318,11 +20670,28 @@
 "def": 0
 }
 ],
-"presets": [],
+"presets": [
+{
+"code": "TU",
+"name": "Türbülans",
+"vals": {},
+"keys": {},
+"cols": {},
+"at": "start",
+"alias": "turbulence"
+}
+],
 "pad": null,
 "passes": null,
 "info": null,
-"heavy": false
+"heavy": false,
+"aliases": [
+{
+"type": "turbulence",
+"name": "Türbülans",
+"en": "Turbulence"
+}
+]
 },
 {
 "type": "noisehls",
@@ -20772,7 +21141,9 @@
 "pad": null,
 "passes": null,
 "info": null,
-"heavy": false
+"heavy": false,
+"hidden": true,
+"mergedInto": "lincolorkey"
 },
 {
 "type": "extract",
@@ -20841,7 +21212,9 @@
 "pad": null,
 "passes": null,
 "info": null,
-"heavy": false
+"heavy": false,
+"hidden": true,
+"mergedInto": "lumakey"
 },
 {
 "type": "fog",
@@ -22824,6 +23197,3718 @@
 "pad": null,
 "passes": null,
 "info": "Telefonun portre modunda çekilmiş, içinde derinlik haritası olan fotoğraflarda çalışır.",
+"heavy": false
+},
+{
+"type": "chromvortex",
+"name": "Renkli Girdap Bulanıklığı",
+"en": "Chromatic Vortex Blur",
+"cat": 2,
+"kind": "pixel",
+"desc": "Dönerek bulanıklaşırken renkleri kırmızı, yeşil, mavi diye ayırır.",
+"tags": [
+"Bulanık",
+"Renk",
+"Psikedelik"
+],
+"params": [
+{
+"k": "amount",
+"l": "Açı",
+"kind": "jog",
+"min": -36000,
+"max": 36000,
+"step": 1,
+"jog": 0.5,
+"def": 20
+},
+{
+"k": "split",
+"l": "Renk ayrımı",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 60
+},
+{
+"k": "center",
+"l": "Merkez",
+"kind": "jog",
+"min": -100000,
+"max": 100000,
+"defY": 0,
+"step": 1,
+"jog": 1,
+"two": true,
+"def": 0
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false
+},
+{
+"type": "chromzoom",
+"name": "Renkli Yakınlaştırma Bulanıklığı",
+"en": "Chromatic Zoom Blur",
+"cat": 2,
+"kind": "pixel",
+"desc": "Merkezden dışarı bulanıklaşırken renk saçakları oluşturur.",
+"tags": [
+"Bulanık",
+"Renk",
+"Hız"
+],
+"params": [
+{
+"k": "amount",
+"l": "Miktar",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 25
+},
+{
+"k": "split",
+"l": "Renk ayrımı",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 60
+},
+{
+"k": "center",
+"l": "Merkez",
+"kind": "jog",
+"min": -100000,
+"max": 100000,
+"defY": 0,
+"step": 1,
+"jog": 1,
+"two": true,
+"def": 0
+}
+],
+"presets": [],
+"pad": {
+"add": 20
+},
+"passes": null,
+"info": null,
+"heavy": false
+},
+{
+"type": "innerblur",
+"name": "İç Bulanıklık",
+"en": "Inner Blur",
+"cat": 2,
+"kind": "pixel",
+"desc": "Şeklin kenarını keskin bırakıp sadece içini bulanıklaştırır.",
+"tags": [
+"Bulanık",
+"Kenar"
+],
+"params": [
+{
+"k": "amount",
+"l": "Miktar",
+"kind": "jog",
+"min": 0,
+"max": 60,
+"step": 0.5,
+"jog": 0.2,
+"def": 10
+},
+{
+"k": "edge",
+"l": "Kenar payı",
+"kind": "jog",
+"min": 0,
+"max": 50,
+"step": 0.5,
+"jog": 0.2,
+"def": 4
+}
+],
+"presets": [],
+"pad": null,
+"passes": [
+{
+"blur": "src",
+"r": {
+"k": "amount",
+"mul": 1
+},
+"out": "B"
+},
+{
+"fs": "innerblur",
+"aux": {
+"u_aux": "B"
+}
+}
+],
+"info": null,
+"heavy": false
+},
+{
+"type": "linstreaks",
+"name": "Doğrusal İzler",
+"en": "Linear Streaks",
+"cat": 2,
+"kind": "pixel",
+"desc": "Görüntüyü bir yönde, keskin uzayan izler hâlinde sürükler.",
+"tags": [
+"Bulanık",
+"Hız",
+"Glitch"
+],
+"params": [
+{
+"k": "len",
+"l": "Uzunluk",
+"kind": "jog",
+"min": 0,
+"max": 400,
+"step": 0.5,
+"jog": 0.2,
+"def": 60
+},
+{
+"k": "ang",
+"l": "Açı",
+"kind": "jog",
+"min": -36000,
+"max": 36000,
+"step": 1,
+"jog": 0.5,
+"def": 0
+},
+{
+"k": "fade",
+"l": "Solma",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 60
+},
+{
+"k": "bright",
+"l": "Sadece parlaklar",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 0
+}
+],
+"presets": [],
+"pad": {
+"k": "len",
+"mul": 1
+},
+"passes": null,
+"info": null,
+"heavy": false
+},
+{
+"type": "maskblur",
+"name": "Maske Bulanıklığı",
+"en": "Mask Blur",
+"cat": 2,
+"kind": "pixel",
+"desc": "Bir şekil maskesinin içini (ya da dışını) bulanıklaştırır; yüz bulanıklaştırma, sansür.",
+"tags": [
+"Bulanık",
+"Maske",
+"Sansür"
+],
+"params": [
+{
+"k": "shape",
+"l": "Şekil",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Daire",
+"Dikdörtgen",
+"Yuvarlak dikdörtgen"
+],
+"def": 0
+},
+{
+"k": "pos",
+"l": "Konum",
+"kind": "jog",
+"min": -100000,
+"max": 100000,
+"defY": 0,
+"step": 1,
+"jog": 1,
+"two": true,
+"def": 0
+},
+{
+"k": "w",
+"l": "Genişlik",
+"kind": "jog",
+"min": 1,
+"max": 3000,
+"step": 1,
+"jog": 0.5,
+"def": 120
+},
+{
+"k": "h",
+"l": "Yükseklik",
+"kind": "jog",
+"min": 1,
+"max": 3000,
+"step": 1,
+"jog": 0.5,
+"def": 120
+},
+{
+"k": "amount",
+"l": "Bulanıklık",
+"kind": "jog",
+"min": 0,
+"max": 60,
+"step": 0.5,
+"jog": 0.2,
+"def": 14
+},
+{
+"k": "feather",
+"l": "Kenar yumuşaklığı",
+"kind": "jog",
+"min": 0,
+"max": 200,
+"step": 0.5,
+"jog": 0.2,
+"def": 10
+},
+{
+"k": "inv",
+"l": "Dışını bulanıklaştır",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 0
+}
+],
+"presets": [],
+"pad": null,
+"passes": [
+{
+"blur": "src",
+"r": {
+"k": "amount",
+"mul": 1
+},
+"out": "B"
+},
+{
+"fs": "maskblur",
+"aux": {
+"u_aux": "B"
+}
+}
+],
+"info": null,
+"heavy": false
+},
+{
+"type": "spinstreaks",
+"name": "Dönme İzleri",
+"en": "Spin Streaks",
+"cat": 2,
+"kind": "pixel",
+"desc": "Parlak yerler merkez etrafında dairesel izler bırakır.",
+"tags": [
+"Işık",
+"Hız",
+"Döndür"
+],
+"params": [
+{
+"k": "amount",
+"l": "Açı",
+"kind": "jog",
+"min": -36000,
+"max": 36000,
+"step": 1,
+"jog": 0.5,
+"def": 25
+},
+{
+"k": "center",
+"l": "Merkez",
+"kind": "jog",
+"min": -100000,
+"max": 100000,
+"defY": 0,
+"step": 1,
+"jog": 1,
+"two": true,
+"def": 0
+},
+{
+"k": "thr",
+"l": "Eşik",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 40
+},
+{
+"k": "str",
+"l": "Güç",
+"kind": "jog",
+"min": 0,
+"max": 300,
+"step": 1,
+"jog": 0.5,
+"def": 100
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false
+},
+{
+"type": "streakstrips",
+"name": "Şerit İzler",
+"en": "Streak Strips",
+"cat": 2,
+"kind": "pixel",
+"desc": "Görüntüyü ince şeritlere bölüp her şeridi farklı uzunlukta sürükler.",
+"tags": [
+"Glitch",
+"Hız"
+],
+"params": [
+{
+"k": "count",
+"l": "Şerit",
+"kind": "jog",
+"min": 2,
+"max": 200,
+"step": 1,
+"jog": 0.1,
+"def": 30
+},
+{
+"k": "len",
+"l": "Uzunluk",
+"kind": "jog",
+"min": 0,
+"max": 600,
+"step": 0.5,
+"jog": 0.2,
+"def": 80
+},
+{
+"k": "ang",
+"l": "Açı",
+"kind": "jog",
+"min": -36000,
+"max": 36000,
+"step": 1,
+"jog": 0.5,
+"def": 0
+},
+{
+"k": "speed",
+"l": "Değişim hızı",
+"kind": "jog",
+"min": 0,
+"max": 20,
+"step": 0.1,
+"jog": 0.05,
+"def": 2
+},
+{
+"k": "seed",
+"l": "Tohum",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.2,
+"def": 1
+}
+],
+"presets": [],
+"pad": {
+"k": "len",
+"mul": 1
+},
+"passes": null,
+"info": null,
+"heavy": false
+},
+{
+"type": "swirlblur",
+"name": "Girdap Bulanıklığı",
+"en": "Swirl Blur",
+"cat": 2,
+"kind": "pixel",
+"desc": "Merkezde güçlü, kenarda azalan girdap biçimli bulanıklık.",
+"tags": [
+"Bulanık",
+"Döndür"
+],
+"params": [
+{
+"k": "amount",
+"l": "Açı",
+"kind": "jog",
+"min": -36000,
+"max": 36000,
+"step": 1,
+"jog": 0.5,
+"def": 30
+},
+{
+"k": "rad",
+"l": "Yarıçap",
+"kind": "jog",
+"min": 0,
+"max": 300,
+"step": 1,
+"jog": 0.5,
+"def": 70
+},
+{
+"k": "center",
+"l": "Merkez",
+"kind": "jog",
+"min": -100000,
+"max": 100000,
+"defY": 0,
+"step": 1,
+"jog": 1,
+"two": true,
+"def": 0
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false
+},
+{
+"type": "warpblur",
+"name": "Bükme Bulanıklığı",
+"en": "Warp Blur",
+"cat": 2,
+"kind": "pixel",
+"desc": "Akışkan bir gürültünün yönünde, kıvrımlı bulanıklık.",
+"tags": [
+"Bulanık",
+"Akışkan"
+],
+"params": [
+{
+"k": "amount",
+"l": "Miktar",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.5,
+"jog": 0.2,
+"def": 20
+},
+{
+"k": "scale",
+"l": "Ölçek",
+"kind": "jog",
+"min": 10,
+"max": 1000,
+"step": 1,
+"jog": 0.5,
+"def": 120
+},
+{
+"k": "speed",
+"l": "Hız",
+"kind": "jog",
+"min": 0,
+"max": 5,
+"step": 0.01,
+"jog": 0.01,
+"def": 0.5
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false
+},
+{
+"type": "zoomstreaks",
+"name": "Yakınlaştırma İzleri",
+"en": "Zoom Streaks",
+"cat": 2,
+"kind": "pixel",
+"desc": "Parlak yerlerden merkezden dışarı keskin ışık izleri.",
+"tags": [
+"Işık",
+"Hız"
+],
+"params": [
+{
+"k": "len",
+"l": "Uzunluk",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 40
+},
+{
+"k": "center",
+"l": "Merkez",
+"kind": "jog",
+"min": -100000,
+"max": 100000,
+"defY": 0,
+"step": 1,
+"jog": 1,
+"two": true,
+"def": 0
+},
+{
+"k": "thr",
+"l": "Eşik",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 40
+},
+{
+"k": "str",
+"l": "Güç",
+"kind": "jog",
+"min": 0,
+"max": 300,
+"step": 1,
+"jog": 0.5,
+"def": 100
+}
+],
+"presets": [],
+"pad": {
+"add": 30
+},
+"passes": null,
+"info": null,
+"heavy": false
+},
+{
+"type": "darkglow",
+"name": "Karanlık Parlama",
+"en": "Dark Glow",
+"cat": 0,
+"kind": "pixel",
+"desc": "Koyu yerlerin çevresine karanlık bir hale yayar; gizemli, dramatik görünüm.",
+"tags": [
+"Gölge",
+"Dramatik"
+],
+"params": [
+{
+"k": "amount",
+"l": "Yarıçap",
+"kind": "jog",
+"min": 0,
+"max": 60,
+"step": 0.5,
+"jog": 0.2,
+"def": 14
+},
+{
+"k": "thr",
+"l": "Eşik",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 35
+},
+{
+"k": "str",
+"l": "Güç",
+"kind": "jog",
+"min": 0,
+"max": 300,
+"step": 1,
+"jog": 0.5,
+"def": 100
+}
+],
+"presets": [],
+"pad": null,
+"passes": [
+{
+"fs": "darkglow_a",
+"out": "A"
+},
+{
+"blur": "A",
+"r": {
+"k": "amount",
+"mul": 1
+},
+"out": "B"
+},
+{
+"fs": "darkglow_c",
+"aux": {
+"u_aux": "B"
+}
+}
+],
+"info": null,
+"heavy": false
+},
+{
+"type": "lightglow",
+"name": "Işık Parlaması",
+"en": "Light Glow",
+"cat": 0,
+"kind": "pixel",
+"desc": "Görüntünün parlak yerlerinden çevreye ışık yayar (bloom).",
+"tags": [
+"Işık",
+"Parlama"
+],
+"params": [
+{
+"k": "amount",
+"l": "Yarıçap",
+"kind": "jog",
+"min": 0,
+"max": 60,
+"step": 0.5,
+"jog": 0.2,
+"def": 16
+},
+{
+"k": "thr",
+"l": "Eşik",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 60
+},
+{
+"k": "str",
+"l": "Güç",
+"kind": "jog",
+"min": 0,
+"max": 400,
+"step": 1,
+"jog": 0.5,
+"def": 120
+},
+{
+"k": "tint",
+"l": "Ton",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#FFFFFF"
+}
+],
+"presets": [
+{
+"code": "RY",
+"name": "Rüya",
+"vals": {
+"amount": 30,
+"thr": 40,
+"str": 160
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": {
+"k": "amount",
+"mul": 2
+},
+"passes": [
+{
+"fs": "lightglow_a",
+"out": "A"
+},
+{
+"blur": "A",
+"r": {
+"k": "amount",
+"mul": 1
+},
+"out": "B"
+},
+{
+"fs": "lightglow_c",
+"aux": {
+"u_aux": "B"
+}
+}
+],
+"info": null,
+"heavy": false
+},
+{
+"type": "softglow",
+"name": "Yumuşak Parlama",
+"en": "Soft Glow",
+"cat": 0,
+"kind": "pixel",
+"desc": "Bütün görüntüye rüya gibi yumuşak bir ışıltı verir.",
+"tags": [
+"Işık",
+"Parlama",
+"Rüya"
+],
+"params": [
+{
+"k": "amount",
+"l": "Yumuşaklık",
+"kind": "jog",
+"min": 0,
+"max": 60,
+"step": 0.5,
+"jog": 0.2,
+"def": 10
+},
+{
+"k": "str",
+"l": "Güç",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 60
+},
+{
+"k": "bright",
+"l": "Aydınlık",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 20
+}
+],
+"presets": [],
+"pad": null,
+"passes": [
+{
+"blur": "src",
+"r": {
+"k": "amount",
+"mul": 1
+},
+"out": "B"
+},
+{
+"fs": "softglow",
+"aux": {
+"u_aux": "B"
+}
+}
+],
+"info": null,
+"heavy": false
+},
+{
+"type": "viewer360",
+"name": "360° Görüntüleyici",
+"en": "360º Viewer",
+"cat": 3,
+"kind": "pixel",
+"desc": "360 derece görüntünün içinden belli bir yöne bakan normal bir kadraj çıkarır.",
+"tags": [
+"360",
+"VR"
+],
+"params": [
+{
+"k": "yaw",
+"l": "Sağ-sol",
+"kind": "jog",
+"min": -36000,
+"max": 36000,
+"step": 1,
+"jog": 0.5,
+"def": 0
+},
+{
+"k": "pitch",
+"l": "Yukarı-aşağı",
+"kind": "jog",
+"min": -36000,
+"max": 36000,
+"step": 1,
+"jog": 0.5,
+"def": 0
+},
+{
+"k": "roll",
+"l": "Yatma",
+"kind": "jog",
+"min": -36000,
+"max": 36000,
+"step": 1,
+"jog": 0.5,
+"def": 0
+},
+{
+"k": "fov",
+"l": "Görüş açısı",
+"kind": "jog",
+"min": 10,
+"max": 170,
+"step": 0.5,
+"jog": 0.2,
+"def": 90
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false
+},
+{
+"type": "curl",
+"name": "Kıvır",
+"en": "Curl",
+"cat": 3,
+"kind": "pixel",
+"desc": "Görüntüyü bir kenarından rulo gibi kıvırır.",
+"tags": [
+"Bükme",
+"Kâğıt"
+],
+"params": [
+{
+"k": "amount",
+"l": "Kıvrılma",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 40
+},
+{
+"k": "ang",
+"l": "Yön",
+"kind": "jog",
+"min": -36000,
+"max": 36000,
+"step": 1,
+"jog": 0.5,
+"def": 0
+},
+{
+"k": "rad",
+"l": "Rulo yarıçapı",
+"kind": "jog",
+"min": 2,
+"max": 500,
+"step": 0.5,
+"jog": 0.2,
+"def": 30
+},
+{
+"k": "shade",
+"l": "Gölge",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+}
+],
+"presets": [],
+"pad": {
+"add": 30
+},
+"passes": null,
+"info": null,
+"heavy": false
+},
+{
+"type": "graddisp",
+"name": "Geçişli Yer Değiştirme",
+"en": "Gradient Displacement",
+"cat": 3,
+"kind": "pixel",
+"desc": "Görüntüyü bir geçişe göre kaydırır; bir taraf hiç kaymaz, öbür taraf çok kayar.",
+"tags": [
+"Bükme"
+],
+"params": [
+{
+"k": "amount",
+"l": "Kaydırma",
+"kind": "jog",
+"min": -100000,
+"max": 100000,
+"defY": 0,
+"step": 1,
+"jog": 1,
+"two": true,
+"def": 60
+},
+{
+"k": "ang",
+"l": "Geçiş açısı",
+"kind": "jog",
+"min": -36000,
+"max": 36000,
+"step": 1,
+"jog": 0.5,
+"def": 90
+},
+{
+"k": "curve",
+"l": "Eğri",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Doğrusal",
+"Yumuşak",
+"Dalga"
+],
+"def": 0
+}
+],
+"presets": [],
+"pad": {
+"add": 60
+},
+"passes": null,
+"info": null,
+"heavy": false
+},
+{
+"type": "innerbulge",
+"name": "İçten Şişir / Sıkıştır",
+"en": "Inner Pinch/Bulge",
+"cat": 3,
+"kind": "pixel",
+"desc": "Şeklin dış hattını bozmadan içini şişirir ya da sıkıştırır.",
+"tags": [
+"Bükme",
+"Mercek"
+],
+"params": [
+{
+"k": "amount",
+"l": "Miktar",
+"kind": "jog",
+"min": -100,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 50
+},
+{
+"k": "center",
+"l": "Merkez",
+"kind": "jog",
+"min": -100000,
+"max": 100000,
+"defY": 0,
+"step": 1,
+"jog": 1,
+"two": true,
+"def": 0
+},
+{
+"k": "rad",
+"l": "Yarıçap",
+"kind": "jog",
+"min": 0,
+"max": 300,
+"step": 1,
+"jog": 0.5,
+"def": 60
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false
+},
+{
+"type": "ominoglass",
+"name": "Omino Cam",
+"en": "Omino Glass",
+"cat": 3,
+"kind": "pixel",
+"desc": "Işığı kırıp renkleri ayrıştıran gelişmiş cam: prizma gibi renk saçakları.",
+"tags": [
+"Doku",
+"Renk",
+"Bükme"
+],
+"params": [
+{
+"k": "amount",
+"l": "Kırılma",
+"kind": "jog",
+"min": 0,
+"max": 60,
+"step": 0.5,
+"jog": 0.2,
+"def": 10
+},
+{
+"k": "size",
+"l": "Desen",
+"kind": "jog",
+"min": 2,
+"max": 300,
+"step": 0.5,
+"jog": 0.2,
+"def": 30
+},
+{
+"k": "disp",
+"l": "Renk ayrışması",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 60
+},
+{
+"k": "tex",
+"l": "Desen",
+"kind": "choice",
+"min": 0,
+"max": 3,
+"step": 1,
+"jog": 1,
+"opts": [
+"Dalgalı",
+"Hücreli",
+"Şeritli",
+"Damla"
+],
+"def": 0
+},
+{
+"k": "speed",
+"l": "Hareket",
+"kind": "jog",
+"min": 0,
+"max": 5,
+"step": 0.01,
+"jog": 0.01,
+"def": 0.3
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false
+},
+{
+"type": "polardisp",
+"name": "Kutupsal Yer Değiştirme",
+"en": "Polar Displacement Map",
+"cat": 3,
+"kind": "pixel",
+"desc": "Görüntüyü merkeze göre içe-dışa ve dönerek, kendi parlaklığıyla kaydırır.",
+"tags": [
+"Bükme",
+"Psikedelik"
+],
+"params": [
+{
+"k": "radial",
+"l": "İçe-dışa",
+"kind": "jog",
+"min": -200,
+"max": 200,
+"step": 0.5,
+"jog": 0.2,
+"def": 30
+},
+{
+"k": "twist",
+"l": "Dönme",
+"kind": "jog",
+"min": -36000,
+"max": 36000,
+"step": 1,
+"jog": 0.5,
+"def": 20
+},
+{
+"k": "src",
+"l": "Kaynak",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Parlaklık",
+"Saydamlık",
+"Gürültü"
+],
+"def": 0
+},
+{
+"k": "center",
+"l": "Merkez",
+"kind": "jog",
+"min": -100000,
+"max": 100000,
+"defY": 0,
+"step": 1,
+"jog": 1,
+"two": true,
+"def": 0
+}
+],
+"presets": [],
+"pad": {
+"add": 40
+},
+"passes": null,
+"info": null,
+"heavy": false
+},
+{
+"type": "vrcombined",
+"name": "360° Birleşik",
+"en": "VR Combined",
+"cat": 3,
+"kind": "pixel",
+"desc": "360 görüntüyü döndürüp, bakış açısını ve renk saçağını tek efektte ayarlar.",
+"tags": [
+"360",
+"VR"
+],
+"params": [
+{
+"k": "yaw",
+"l": "Sağ-sol",
+"kind": "jog",
+"min": -36000,
+"max": 36000,
+"step": 1,
+"jog": 0.5,
+"def": 0
+},
+{
+"k": "pitch",
+"l": "Yukarı-aşağı",
+"kind": "jog",
+"min": -36000,
+"max": 36000,
+"step": 1,
+"jog": 0.5,
+"def": 0
+},
+{
+"k": "fov",
+"l": "Görüş açısı",
+"kind": "jog",
+"min": 10,
+"max": 360,
+"step": 0.5,
+"jog": 0.2,
+"def": 360
+},
+{
+"k": "chroma",
+"l": "Renk saçağı",
+"kind": "jog",
+"min": 0,
+"max": 20,
+"step": 0.1,
+"jog": 0.05,
+"def": 0
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false
+},
+{
+"type": "contourstrips",
+"name": "Kontur Şeritleri",
+"en": "Contour Strips",
+"cat": 4,
+"kind": "pixel",
+"desc": "Parlaklığa göre basamaklı şeritler: topografik harita gibi.",
+"tags": [
+"Desen",
+"Harita",
+"Grafik"
+],
+"params": [
+{
+"k": "levels",
+"l": "Şerit sayısı",
+"kind": "jog",
+"min": 2,
+"max": 64,
+"step": 1,
+"jog": 0.1,
+"def": 10
+},
+{
+"k": "c1",
+"l": "Alçak",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#0B1430"
+},
+{
+"k": "c2",
+"l": "Yüksek",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#22D3C5"
+},
+{
+"k": "lw",
+"l": "Çizgi",
+"kind": "jog",
+"min": 0,
+"max": 10,
+"step": 0.1,
+"jog": 0.05,
+"def": 1
+},
+{
+"k": "speed",
+"l": "Akış",
+"kind": "jog",
+"min": -5,
+"max": 5,
+"step": 0.01,
+"jog": 0.01,
+"def": 0
+},
+{
+"k": "mix",
+"l": "Karışım",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 100
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false
+},
+{
+"type": "grunge",
+"name": "Kirli Doku",
+"en": "Grunge",
+"cat": 4,
+"kind": "pixel",
+"desc": "Eskimiş, lekeli, çizikli bir yüzey dokusu ekler.",
+"tags": [
+"Doku",
+"Retro"
+],
+"params": [
+{
+"k": "amount",
+"l": "Miktar",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 60
+},
+{
+"k": "scale",
+"l": "Ölçek",
+"kind": "jog",
+"min": 10,
+"max": 1000,
+"step": 1,
+"jog": 0.5,
+"def": 120
+},
+{
+"k": "col",
+"l": "Leke rengi",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#2A1E14"
+},
+{
+"k": "scratch",
+"l": "Çizikler",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 40
+},
+{
+"k": "seed",
+"l": "Tohum",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.2,
+"def": 1
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false
+},
+{
+"type": "ominodiff",
+"name": "Omino Difüzyon+",
+"en": "Omino Diffusion+",
+"cat": 4,
+"kind": "pixel",
+"desc": "Kısıtlı palet ve hatalı renk hesabıyla taneli, dijital glitch görünümü.",
+"tags": [
+"Glitch",
+"Retro",
+"Renk"
+],
+"params": [
+{
+"k": "levels",
+"l": "Renk sayısı",
+"kind": "jog",
+"min": 2,
+"max": 16,
+"step": 1,
+"jog": 0.1,
+"def": 4
+},
+{
+"k": "err",
+"l": "Hata",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 60
+},
+{
+"k": "pal",
+"l": "Palet",
+"kind": "choice",
+"min": 0,
+"max": 3,
+"step": 1,
+"jog": 1,
+"opts": [
+"Özgün renkler",
+"Oyun konsolu",
+"Gece",
+"Neon"
+],
+"def": 0
+},
+{
+"k": "speed",
+"l": "Değişim",
+"kind": "jog",
+"min": 0,
+"max": 30,
+"step": 0.5,
+"jog": 0.2,
+"def": 0
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false
+},
+{
+"type": "volclouds",
+"name": "Hacimli Bulutlar",
+"en": "Volumetric Clouds",
+"cat": 4,
+"kind": "gen",
+"desc": "Işık alan, derinliği olan 3B bulutlar.",
+"tags": [
+"Doğa",
+"Gök",
+"3B"
+],
+"params": [
+{
+"k": "scale",
+"l": "Ölçek",
+"kind": "jog",
+"min": 10,
+"max": 2000,
+"step": 1,
+"jog": 0.5,
+"def": 200
+},
+{
+"k": "cover",
+"l": "Kaplama",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 55
+},
+{
+"k": "speed",
+"l": "Rüzgâr",
+"kind": "jog",
+"min": 0,
+"max": 5,
+"step": 0.01,
+"jog": 0.01,
+"def": 0.4
+},
+{
+"k": "sun",
+"l": "Güneş açısı",
+"kind": "jog",
+"min": -36000,
+"max": 36000,
+"step": 1,
+"jog": 0.5,
+"def": 45
+},
+{
+"k": "sky",
+"l": "Gök",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#5FB2F2"
+},
+{
+"k": "cloud",
+"l": "Bulut",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#FFFFFF"
+},
+{
+"k": "mix",
+"l": "Karışım",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 100
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false
+},
+{
+"type": "box3d",
+"name": "Kutu",
+"en": "Box",
+"cat": 5,
+"kind": "3d",
+"desc": "Eni, boyu ve derinliği ayrı ayarlanan kutu.",
+"tags": [
+"3B",
+"Şekil"
+],
+"params": [
+{
+"k": "rx",
+"l": "X dönüş",
+"kind": "jog",
+"min": -36000,
+"max": 36000,
+"step": 1,
+"jog": 0.5,
+"def": 20
+},
+{
+"k": "ry",
+"l": "Y dönüş",
+"kind": "jog",
+"min": -36000,
+"max": 36000,
+"step": 1,
+"jog": 0.5,
+"def": 30
+},
+{
+"k": "rz",
+"l": "Z dönüş",
+"kind": "jog",
+"min": -36000,
+"max": 36000,
+"step": 1,
+"jog": 0.5,
+"def": 0
+},
+{
+"k": "spin",
+"l": "Dönme hızı",
+"kind": "jog",
+"min": -720,
+"max": 720,
+"step": 1,
+"jog": 0.5,
+"def": 40
+},
+{
+"k": "size",
+"l": "Boyut",
+"kind": "jog",
+"min": 10,
+"max": 200,
+"step": 1,
+"jog": 0.5,
+"def": 70
+},
+{
+"k": "light",
+"l": "Işık",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 70
+},
+{
+"k": "persp",
+"l": "Perspektif",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 50
+},
+{
+"k": "depth",
+"l": "Derinlik",
+"kind": "jog",
+"min": 1,
+"max": 300,
+"step": 1,
+"jog": 0.5,
+"def": 50
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false
+},
+{
+"type": "ellipsoid",
+"name": "Elipsoit",
+"en": "Ellipsoid",
+"cat": 5,
+"kind": "3d",
+"desc": "Basık ya da uzun küre (yumurta, mercimek).",
+"tags": [
+"3B",
+"Şekil"
+],
+"params": [
+{
+"k": "rx",
+"l": "X dönüş",
+"kind": "jog",
+"min": -36000,
+"max": 36000,
+"step": 1,
+"jog": 0.5,
+"def": 10
+},
+{
+"k": "ry",
+"l": "Y dönüş",
+"kind": "jog",
+"min": -36000,
+"max": 36000,
+"step": 1,
+"jog": 0.5,
+"def": 0
+},
+{
+"k": "rz",
+"l": "Z dönüş",
+"kind": "jog",
+"min": -36000,
+"max": 36000,
+"step": 1,
+"jog": 0.5,
+"def": 0
+},
+{
+"k": "spin",
+"l": "Dönme hızı",
+"kind": "jog",
+"min": -720,
+"max": 720,
+"step": 1,
+"jog": 0.5,
+"def": 40
+},
+{
+"k": "size",
+"l": "Boyut",
+"kind": "jog",
+"min": 10,
+"max": 200,
+"step": 1,
+"jog": 0.5,
+"def": 70
+},
+{
+"k": "light",
+"l": "Işık",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 70
+},
+{
+"k": "persp",
+"l": "Perspektif",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 50
+},
+{
+"k": "sx",
+"l": "En",
+"kind": "jog",
+"min": 10,
+"max": 300,
+"step": 1,
+"jog": 0.5,
+"def": 100
+},
+{
+"k": "sy",
+"l": "Boy",
+"kind": "jog",
+"min": 10,
+"max": 300,
+"step": 1,
+"jog": 0.5,
+"def": 70
+},
+{
+"k": "sz",
+"l": "Derinlik",
+"kind": "jog",
+"min": 10,
+"max": 300,
+"step": 1,
+"jog": 0.5,
+"def": 100
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false
+},
+{
+"type": "hollowbox",
+"name": "İçi Boş Kutu",
+"en": "Hollow Box",
+"cat": 5,
+"kind": "3d",
+"desc": "Kapağı açık, içi görünen kutu.",
+"tags": [
+"3B",
+"Şekil"
+],
+"params": [
+{
+"k": "rx",
+"l": "X dönüş",
+"kind": "jog",
+"min": -36000,
+"max": 36000,
+"step": 1,
+"jog": 0.5,
+"def": -30
+},
+{
+"k": "ry",
+"l": "Y dönüş",
+"kind": "jog",
+"min": -36000,
+"max": 36000,
+"step": 1,
+"jog": 0.5,
+"def": 30
+},
+{
+"k": "rz",
+"l": "Z dönüş",
+"kind": "jog",
+"min": -36000,
+"max": 36000,
+"step": 1,
+"jog": 0.5,
+"def": 0
+},
+{
+"k": "spin",
+"l": "Dönme hızı",
+"kind": "jog",
+"min": -720,
+"max": 720,
+"step": 1,
+"jog": 0.5,
+"def": 40
+},
+{
+"k": "size",
+"l": "Boyut",
+"kind": "jog",
+"min": 10,
+"max": 200,
+"step": 1,
+"jog": 0.5,
+"def": 70
+},
+{
+"k": "light",
+"l": "Işık",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 70
+},
+{
+"k": "persp",
+"l": "Perspektif",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 50
+},
+{
+"k": "depth",
+"l": "Derinlik",
+"kind": "jog",
+"min": 1,
+"max": 300,
+"step": 1,
+"jog": 0.5,
+"def": 80
+},
+{
+"k": "wall",
+"l": "Duvar kalınlığı",
+"kind": "jog",
+"min": 1,
+"max": 40,
+"step": 1,
+"jog": 0.5,
+"def": 8
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false
+},
+{
+"type": "ring3d",
+"name": "Halka",
+"en": "Ring",
+"cat": 5,
+"kind": "3d",
+"desc": "Kalın, yassı bir halka (yüzük, disk).",
+"tags": [
+"3B",
+"Şekil"
+],
+"params": [
+{
+"k": "rx",
+"l": "X dönüş",
+"kind": "jog",
+"min": -36000,
+"max": 36000,
+"step": 1,
+"jog": 0.5,
+"def": 60
+},
+{
+"k": "ry",
+"l": "Y dönüş",
+"kind": "jog",
+"min": -36000,
+"max": 36000,
+"step": 1,
+"jog": 0.5,
+"def": 0
+},
+{
+"k": "rz",
+"l": "Z dönüş",
+"kind": "jog",
+"min": -36000,
+"max": 36000,
+"step": 1,
+"jog": 0.5,
+"def": 0
+},
+{
+"k": "spin",
+"l": "Dönme hızı",
+"kind": "jog",
+"min": -720,
+"max": 720,
+"step": 1,
+"jog": 0.5,
+"def": 40
+},
+{
+"k": "size",
+"l": "Boyut",
+"kind": "jog",
+"min": 10,
+"max": 200,
+"step": 1,
+"jog": 0.5,
+"def": 70
+},
+{
+"k": "light",
+"l": "Işık",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 70
+},
+{
+"k": "persp",
+"l": "Perspektif",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 50
+},
+{
+"k": "hole",
+"l": "Delik",
+"kind": "jog",
+"min": 0,
+"max": 95,
+"step": 1,
+"jog": 0.5,
+"def": 50
+},
+{
+"k": "thick",
+"l": "Kalınlık",
+"kind": "jog",
+"min": 1,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 20
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false
+},
+{
+"type": "starpoly",
+"name": "Yıldız Çokyüzlü",
+"en": "Star Polyhedron",
+"cat": 5,
+"kind": "3d",
+"desc": "Her yöne sivri uçlu 3B yıldız (yıldızlı sekizyüzlü).",
+"tags": [
+"3B",
+"Şekil",
+"Yıldız"
+],
+"params": [
+{
+"k": "rx",
+"l": "X dönüş",
+"kind": "jog",
+"min": -36000,
+"max": 36000,
+"step": 1,
+"jog": 0.5,
+"def": 20
+},
+{
+"k": "ry",
+"l": "Y dönüş",
+"kind": "jog",
+"min": -36000,
+"max": 36000,
+"step": 1,
+"jog": 0.5,
+"def": 20
+},
+{
+"k": "rz",
+"l": "Z dönüş",
+"kind": "jog",
+"min": -36000,
+"max": 36000,
+"step": 1,
+"jog": 0.5,
+"def": 0
+},
+{
+"k": "spin",
+"l": "Dönme hızı",
+"kind": "jog",
+"min": -720,
+"max": 720,
+"step": 1,
+"jog": 0.5,
+"def": 50
+},
+{
+"k": "size",
+"l": "Boyut",
+"kind": "jog",
+"min": 10,
+"max": 200,
+"step": 1,
+"jog": 0.5,
+"def": 70
+},
+{
+"k": "light",
+"l": "Işık",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 70
+},
+{
+"k": "persp",
+"l": "Perspektif",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 50
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false
+},
+{
+"type": "cross3",
+"name": "Üç Eksenli Haç",
+"en": "Three-axis Cross",
+"cat": 5,
+"kind": "3d",
+"desc": "Üç eksende birbirini kesen çubuklardan oluşan 3B haç.",
+"tags": [
+"3B",
+"Şekil"
+],
+"params": [
+{
+"k": "rx",
+"l": "X dönüş",
+"kind": "jog",
+"min": -36000,
+"max": 36000,
+"step": 1,
+"jog": 0.5,
+"def": 25
+},
+{
+"k": "ry",
+"l": "Y dönüş",
+"kind": "jog",
+"min": -36000,
+"max": 36000,
+"step": 1,
+"jog": 0.5,
+"def": 35
+},
+{
+"k": "rz",
+"l": "Z dönüş",
+"kind": "jog",
+"min": -36000,
+"max": 36000,
+"step": 1,
+"jog": 0.5,
+"def": 0
+},
+{
+"k": "spin",
+"l": "Dönme hızı",
+"kind": "jog",
+"min": -720,
+"max": 720,
+"step": 1,
+"jog": 0.5,
+"def": 40
+},
+{
+"k": "size",
+"l": "Boyut",
+"kind": "jog",
+"min": 10,
+"max": 200,
+"step": 1,
+"jog": 0.5,
+"def": 70
+},
+{
+"k": "light",
+"l": "Işık",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 70
+},
+{
+"k": "persp",
+"l": "Perspektif",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 50
+},
+{
+"k": "thick",
+"l": "Kalınlık",
+"kind": "jog",
+"min": 5,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 30
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false
+},
+{
+"type": "triprism",
+"name": "Üçgen Prizma",
+"en": "Triangular Prism",
+"cat": 5,
+"kind": "3d",
+"desc": "Üçgen tabanlı prizma.",
+"tags": [
+"3B",
+"Şekil"
+],
+"params": [
+{
+"k": "rx",
+"l": "X dönüş",
+"kind": "jog",
+"min": -36000,
+"max": 36000,
+"step": 1,
+"jog": 0.5,
+"def": 15
+},
+{
+"k": "ry",
+"l": "Y dönüş",
+"kind": "jog",
+"min": -36000,
+"max": 36000,
+"step": 1,
+"jog": 0.5,
+"def": 30
+},
+{
+"k": "rz",
+"l": "Z dönüş",
+"kind": "jog",
+"min": -36000,
+"max": 36000,
+"step": 1,
+"jog": 0.5,
+"def": 0
+},
+{
+"k": "spin",
+"l": "Dönme hızı",
+"kind": "jog",
+"min": -720,
+"max": 720,
+"step": 1,
+"jog": 0.5,
+"def": 40
+},
+{
+"k": "size",
+"l": "Boyut",
+"kind": "jog",
+"min": 10,
+"max": 200,
+"step": 1,
+"jog": 0.5,
+"def": 70
+},
+{
+"k": "light",
+"l": "Işık",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 70
+},
+{
+"k": "persp",
+"l": "Perspektif",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 50
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false
+},
+{
+"type": "tunnel",
+"name": "Tünel",
+"en": "Tunnel",
+"cat": 5,
+"kind": "3d",
+"desc": "Katman bir tünelin duvarlarına sarılır; içinde ilerliyormuş gibi.",
+"tags": [
+"3B",
+"Hız",
+"Psikedelik"
+],
+"params": [
+{
+"k": "speed",
+"l": "İlerleme hızı",
+"kind": "jog",
+"min": -10,
+"max": 10,
+"step": 0.05,
+"jog": 0.02,
+"def": 1
+},
+{
+"k": "twist",
+"l": "Dönme",
+"kind": "jog",
+"min": -360,
+"max": 360,
+"step": 1,
+"jog": 0.5,
+"def": 30
+},
+{
+"k": "shape",
+"l": "Kesit",
+"kind": "choice",
+"min": 0,
+"max": 3,
+"step": 1,
+"jog": 1,
+"opts": [
+"Daire",
+"Kare",
+"Altıgen",
+"Üçgen"
+],
+"def": 0
+},
+{
+"k": "fog",
+"l": "Uzaklık sisi",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 60
+},
+{
+"k": "rep",
+"l": "Doku tekrarı",
+"kind": "jog",
+"min": 1,
+"max": 20,
+"step": 0.1,
+"jog": 0.05,
+"def": 4
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false
+},
+{
+"type": "growparts",
+"name": "Parçaları Büyüt",
+"en": "Grow Parts",
+"cat": 6,
+"kind": "pixel",
+"desc": "Katmanı parçalara (harf, karo) ayırıp her parçayı sırayla büyütür.",
+"tags": [
+"Hareket",
+"Ölçek",
+"Giriş"
+],
+"params": [
+{
+"k": "by",
+"l": "Parça",
+"kind": "choice",
+"min": 0,
+"max": 3,
+"step": 1,
+"jog": 1,
+"opts": [
+"Kareler",
+"Altıgenler",
+"Yatay şeritler",
+"Dikey şeritler"
+],
+"def": 0
+},
+{
+"k": "size",
+"l": "Parça boyu",
+"kind": "jog",
+"min": 4,
+"max": 500,
+"step": 0.5,
+"jog": 0.2,
+"def": 40
+},
+{
+"k": "prog",
+"l": "İlerleme",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 100
+},
+{
+"k": "stag",
+"l": "Sıralama",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 60
+},
+{
+"k": "order",
+"l": "Sıra",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Soldan",
+"Merkezden",
+"Rastgele"
+],
+"def": 0
+}
+],
+"presets": [
+{
+"code": "GR",
+"name": "Parça parça gel",
+"vals": {},
+"keys": {
+"prog": [
+[
+0,
+0
+],
+[
+1,
+100
+]
+]
+},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false
+},
+{
+"type": "morphpath",
+"name": "Yol Dönüşümü",
+"en": "Morph Path",
+"cat": 6,
+"kind": "shape",
+"desc": "Uygulamanın şeklini başka bir şekle yumuşakça dönüştürür (daireden yıldıza…).",
+"tags": [
+"Şekil",
+"Animasyon"
+],
+"params": [
+{
+"k": "to",
+"l": "Hedef şekil",
+"kind": "choice",
+"min": 0,
+"max": 7,
+"step": 1,
+"jog": 1,
+"opts": [
+"Daire",
+"Kare",
+"Üçgen",
+"Yıldız",
+"Kalp",
+"Altıgen",
+"Artı",
+"Hilal"
+],
+"def": 3
+},
+{
+"k": "prog",
+"l": "İlerleme",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 50
+},
+{
+"k": "rot",
+"l": "Dönerek",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 0
+}
+],
+"presets": [
+{
+"code": "DN",
+"name": "Dönüş",
+"vals": {},
+"keys": {
+"prog": [
+[
+0,
+0
+],
+[
+1,
+100
+]
+]
+},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": "Sadece uygulamanın şekillerinde çalışır.",
+"heavy": false
+},
+{
+"type": "movepath",
+"name": "Yol Üzerinde Hareket",
+"en": "Move Along Path",
+"cat": 6,
+"kind": "xform",
+"desc": "Katmanı bir yol boyunca (daire, sekiz, dalga, kalp…) taşır.",
+"tags": [
+"Hareket",
+"Yol"
+],
+"params": [
+{
+"k": "path",
+"l": "Yol",
+"kind": "choice",
+"min": 0,
+"max": 6,
+"step": 1,
+"jog": 1,
+"opts": [
+"Daire",
+"Sekiz",
+"Dalga",
+"Kalp",
+"Yıldız",
+"Kare",
+"Zikzak"
+],
+"def": 0
+},
+{
+"k": "size",
+"l": "Yol boyu",
+"kind": "jog",
+"min": 0,
+"max": 3000,
+"step": 1,
+"jog": 0.5,
+"def": 200
+},
+{
+"k": "speed",
+"l": "Hız (tur/sn)",
+"kind": "jog",
+"min": -5,
+"max": 5,
+"step": 0.01,
+"jog": 0.01,
+"def": 0.3
+},
+{
+"k": "face",
+"l": "Yöne bak",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+},
+{
+"k": "start",
+"l": "Başlangıç",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 0
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false
+},
+{
+"type": "oscillate",
+"name": "Salınım",
+"en": "Oscillate",
+"cat": 6,
+"kind": "xform",
+"desc": "Katman seçtiğin yönde ileri geri gider gelir.",
+"tags": [
+"Hareket"
+],
+"params": [
+{
+"k": "ang",
+"l": "Yön",
+"kind": "jog",
+"min": -36000,
+"max": 36000,
+"step": 1,
+"jog": 0.5,
+"def": 0
+},
+{
+"k": "amount",
+"l": "Mesafe",
+"kind": "jog",
+"min": 0,
+"max": 1000,
+"step": 0.5,
+"jog": 0.2,
+"def": 40
+},
+{
+"k": "speed",
+"l": "Hız",
+"kind": "jog",
+"min": 0.05,
+"max": 10,
+"step": 0.05,
+"jog": 0.02,
+"def": 1
+},
+{
+"k": "wave",
+"l": "Dalga",
+"kind": "choice",
+"min": 0,
+"max": 3,
+"step": 1,
+"jog": 1,
+"opts": [
+"Yumuşak",
+"Üçgen",
+"Kare",
+"Sıçrama"
+],
+"def": 0
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false
+},
+{
+"type": "scaleassist",
+"name": "Ölçek Yardımcısı",
+"en": "Scale Assist",
+"cat": 6,
+"kind": "xform",
+"desc": "Katmanı istediğin noktadan, piksel bozmadan ölçekler (piksel sanatı için keskin büyütme).",
+"tags": [
+"Ölçek",
+"Piksel"
+],
+"params": [
+{
+"k": "scale",
+"l": "Ölçek",
+"kind": "jog",
+"min": 1,
+"max": 2000,
+"step": 1,
+"jog": 0.5,
+"def": 200
+},
+{
+"k": "anchor",
+"l": "Dayanak noktası",
+"kind": "jog",
+"min": -100000,
+"max": 100000,
+"defY": 0,
+"step": 1,
+"jog": 1,
+"two": true,
+"def": 0
+},
+{
+"k": "crisp",
+"l": "Keskin pikseller",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false
+},
+{
+"type": "shakeparts",
+"name": "Parçaları Salla",
+"en": "Shake Parts",
+"cat": 6,
+"kind": "pixel",
+"desc": "Katmanı parçalara ayırıp her parçayı ayrı titretir.",
+"tags": [
+"Hareket",
+"Titreşim",
+"Glitch"
+],
+"params": [
+{
+"k": "by",
+"l": "Parça",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Kareler",
+"Yatay şeritler",
+"Dikey şeritler"
+],
+"def": 0
+},
+{
+"k": "size",
+"l": "Parça boyu",
+"kind": "jog",
+"min": 4,
+"max": 500,
+"step": 0.5,
+"jog": 0.2,
+"def": 30
+},
+{
+"k": "amount",
+"l": "Mesafe",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.05,
+"def": 6
+},
+{
+"k": "rot",
+"l": "Açı",
+"kind": "jog",
+"min": -36000,
+"max": 36000,
+"step": 1,
+"jog": 0.5,
+"def": 8
+},
+{
+"k": "speed",
+"l": "Hız",
+"kind": "jog",
+"min": 0,
+"max": 30,
+"step": 0.1,
+"jog": 0.05,
+"def": 8
+}
+],
+"presets": [],
+"pad": {
+"k": "amount",
+"mul": 2
+},
+"passes": null,
+"info": null,
+"heavy": false
+},
+{
+"type": "stretchaxis",
+"name": "Eksende Esnet",
+"en": "Stretch Axis",
+"cat": 6,
+"kind": "xform",
+"desc": "Katmanı istediğin açıdaki bir eksen boyunca uzatır ya da basar.",
+"tags": [
+"Ölçek",
+"Dönüştür"
+],
+"params": [
+{
+"k": "ang",
+"l": "Eksen açısı",
+"kind": "jog",
+"min": -36000,
+"max": 36000,
+"step": 1,
+"jog": 0.5,
+"def": 0
+},
+{
+"k": "amount",
+"l": "Esnetme",
+"kind": "jog",
+"min": 1,
+"max": 1000,
+"step": 1,
+"jog": 0.5,
+"def": 150
+},
+{
+"k": "keep",
+"l": "Alanı koru",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 0
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false
+},
+{
+"type": "contourgrad",
+"name": "Kontur Geçişi",
+"en": "Contour Gradient",
+"cat": 1,
+"kind": "pixel",
+"desc": "Şeklin kenarından içine doğru renk geçişi (kabarık rozet görünümü).",
+"tags": [
+"Renk",
+"Kenar",
+"Geçiş"
+],
+"params": [
+{
+"k": "c1",
+"l": "Kenar",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#22D3C5"
+},
+{
+"k": "c2",
+"l": "İç",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#0B1430"
+},
+{
+"k": "width",
+"l": "Genişlik",
+"kind": "jog",
+"min": 1,
+"max": 200,
+"step": 0.5,
+"jog": 0.2,
+"def": 30
+},
+{
+"k": "rep",
+"l": "Tekrar",
+"kind": "jog",
+"min": 1,
+"max": 20,
+"step": 1,
+"jog": 0.1,
+"def": 1
+},
+{
+"k": "mix",
+"l": "Karışım",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 100
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false
+},
+{
+"type": "contourlines",
+"name": "Kontur Çizgileri",
+"en": "Contour Lines",
+"cat": 1,
+"kind": "pixel",
+"desc": "Şeklin kenarına paralel iç içe çizgiler.",
+"tags": [
+"Kenar",
+"Çizgi",
+"Grafik"
+],
+"params": [
+{
+"k": "space",
+"l": "Aralık",
+"kind": "jog",
+"min": 1,
+"max": 100,
+"step": 0.5,
+"jog": 0.2,
+"def": 8
+},
+{
+"k": "lw",
+"l": "Çizgi",
+"kind": "jog",
+"min": 0.5,
+"max": 20,
+"step": 0.1,
+"jog": 0.05,
+"def": 2
+},
+{
+"k": "count",
+"l": "Çizgi sayısı",
+"kind": "jog",
+"min": 1,
+"max": 50,
+"step": 1,
+"jog": 0.1,
+"def": 6
+},
+{
+"k": "col",
+"l": "Renk",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#22D3C5"
+},
+{
+"k": "side",
+"l": "Yer",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Dışarı",
+"İçeri",
+"İki yana"
+],
+"def": 0
+},
+{
+"k": "speed",
+"l": "Akış",
+"kind": "jog",
+"min": -50,
+"max": 50,
+"step": 0.5,
+"jog": 0.2,
+"def": 0
+}
+],
+"presets": [],
+"pad": {
+"add": 60
+},
+"passes": null,
+"info": null,
+"heavy": false
+},
+{
+"type": "electricedges",
+"name": "Elektrikli Kenarlar",
+"en": "Electric Edges",
+"cat": 1,
+"kind": "pixel",
+"desc": "Kenarlarda çakan elektrik akımları.",
+"tags": [
+"Enerji",
+"Kenar",
+"Neon"
+],
+"params": [
+{
+"k": "col",
+"l": "Renk",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#9AD8FF"
+},
+{
+"k": "width",
+"l": "Kalınlık",
+"kind": "jog",
+"min": 0.5,
+"max": 10,
+"step": 0.1,
+"jog": 0.05,
+"def": 2
+},
+{
+"k": "amount",
+"l": "Dağınıklık",
+"kind": "jog",
+"min": 0,
+"max": 60,
+"step": 0.5,
+"jog": 0.2,
+"def": 12
+},
+{
+"k": "speed",
+"l": "Hız",
+"kind": "jog",
+"min": 0,
+"max": 30,
+"step": 0.1,
+"jog": 0.05,
+"def": 10
+},
+{
+"k": "glow",
+"l": "Parlama",
+"kind": "jog",
+"min": 0,
+"max": 400,
+"step": 1,
+"jog": 0.5,
+"def": 150
+}
+],
+"presets": [],
+"pad": {
+"k": "amount",
+"mul": 1.5,
+"add": 20
+},
+"passes": null,
+"info": null,
+"heavy": false
+},
+{
+"type": "glowscan",
+"name": "Parlama Taraması",
+"en": "Glow Scan",
+"cat": 1,
+"kind": "pixel",
+"desc": "Sadece seçtiğin parlaklık aralığındaki yerleri bulanıklaştırıp parlatır; aralık kayarak tarar.",
+"tags": [
+"Işık",
+"Parlama",
+"Tarama"
+],
+"params": [
+{
+"k": "lo",
+"l": "Aralık alt",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 40
+},
+{
+"k": "hi",
+"l": "Aralık üst",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 70
+},
+{
+"k": "amount",
+"l": "Yarıçap",
+"kind": "jog",
+"min": 0,
+"max": 60,
+"step": 0.5,
+"jog": 0.2,
+"def": 10
+},
+{
+"k": "str",
+"l": "Güç",
+"kind": "jog",
+"min": 0,
+"max": 400,
+"step": 1,
+"jog": 0.5,
+"def": 150
+},
+{
+"k": "speed",
+"l": "Tarama hızı",
+"kind": "jog",
+"min": -5,
+"max": 5,
+"step": 0.01,
+"jog": 0.01,
+"def": 0
+}
+],
+"presets": [],
+"pad": {
+"k": "amount",
+"mul": 2
+},
+"passes": [
+{
+"fs": "glowscan_a",
+"out": "A"
+},
+{
+"blur": "A",
+"r": {
+"k": "amount",
+"mul": 1
+},
+"out": "B"
+},
+{
+"fs": "glowscan_c",
+"aux": {
+"u_aux": "B"
+}
+}
+],
+"info": null,
+"heavy": false
+},
+{
+"type": "halftonelines",
+"name": "Yarım Ton Çizgileri",
+"en": "Halftone Lines",
+"cat": 1,
+"kind": "pixel",
+"desc": "Görüntüyü kalınlığı değişen paralel çizgilerle çizer (gravür).",
+"tags": [
+"Retro",
+"Baskı",
+"Grafik"
+],
+"params": [
+{
+"k": "space",
+"l": "Aralık",
+"kind": "jog",
+"min": 2,
+"max": 60,
+"step": 0.5,
+"jog": 0.2,
+"def": 8
+},
+{
+"k": "ang",
+"l": "Açı",
+"kind": "jog",
+"min": -36000,
+"max": 36000,
+"step": 1,
+"jog": 0.5,
+"def": 30
+},
+{
+"k": "wave",
+"l": "Dalgalanma",
+"kind": "jog",
+"min": 0,
+"max": 30,
+"step": 0.5,
+"jog": 0.2,
+"def": 0
+},
+{
+"k": "col",
+"l": "Mürekkep",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#0B1430"
+},
+{
+"k": "bg",
+"l": "Kâğıt",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#F7F8FA"
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false
+},
+{
+"type": "smoothedges",
+"name": "Kenar Yumuşatma",
+"en": "Smooth Edges",
+"cat": 1,
+"kind": "pixel",
+"desc": "Tırtıklı, pikselli kenarları pürüzsüzleştirir.",
+"tags": [
+"Kenar",
+"Netlik"
+],
+"params": [
+{
+"k": "amount",
+"l": "Miktar",
+"kind": "jog",
+"min": 0,
+"max": 20,
+"step": 0.1,
+"jog": 0.05,
+"def": 2
+},
+{
+"k": "thr",
+"l": "Keskinlik",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 50
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false
+},
+{
+"type": "stroketaper",
+"name": "Çizgi İnceltme",
+"en": "Stroke Taper",
+"cat": 1,
+"kind": "shape",
+"desc": "Şeklin çizgisinin uçlarını incelterek el çizimi gibi yapar (Çizerek Belirme ile).",
+"tags": [
+"Çizgi",
+"Kenar"
+],
+"params": [
+{
+"k": "start",
+"l": "Baş incelme",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 30
+},
+{
+"k": "end",
+"l": "Son incelme",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 30
+},
+{
+"k": "wave",
+"l": "Kalınlık dalgası",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 0
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": "Çizerek Belirme ya da Kontur ile birlikte uygulamanın şekillerinde çalışır.",
+"heavy": false
+},
+{
+"type": "lumastamp",
+"name": "Parlaklık Damgası",
+"en": "Luma Stamper",
+"cat": 8,
+"kind": "pixel",
+"desc": "Katmanın parlaklığını saydamlığa çevirir; açık yerler görünür, koyular kaybolur.",
+"tags": [
+"Maske",
+"Anahtar"
+],
+"params": [
+{
+"k": "contrast",
+"l": "Kontrast",
+"kind": "jog",
+"min": 0,
+"max": 400,
+"step": 1,
+"jog": 0.5,
+"def": 100
+},
+{
+"k": "inv",
+"l": "Tersine çevir",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 0
+},
+{
+"k": "keepc",
+"l": "Rengi koru",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false
+},
+{
+"type": "repeatpath",
+"name": "Yol Boyunca Tekrar",
+"en": "Repeat Along Path",
+"cat": 7,
+"kind": "repeat",
+"desc": "Kopyaları bir yol (daire, dalga, kalp, yıldız…) boyunca dizer.",
+"tags": [
+"Tekrar",
+"Yol"
+],
+"params": [
+{
+"k": "path",
+"l": "Yol",
+"kind": "choice",
+"min": 0,
+"max": 5,
+"step": 1,
+"jog": 1,
+"opts": [
+"Daire",
+"Dalga",
+"Kalp",
+"Yıldız",
+"Spiral",
+"Sekiz"
+],
+"def": 0
+},
+{
+"k": "count",
+"l": "Kopya",
+"kind": "jog",
+"min": 1,
+"max": 60,
+"step": 1,
+"jog": 0.1,
+"def": 12
+},
+{
+"k": "size",
+"l": "Yol boyu",
+"kind": "jog",
+"min": 10,
+"max": 3000,
+"step": 1,
+"jog": 0.5,
+"def": 200
+},
+{
+"k": "face",
+"l": "Yöne dön",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+},
+{
+"k": "speed",
+"l": "Akış",
+"kind": "jog",
+"min": -5,
+"max": 5,
+"step": 0.01,
+"jog": 0.01,
+"def": 0.1
+},
+{
+"k": "scl",
+"l": "Kopya ölçeği",
+"kind": "jog",
+"min": 1,
+"max": 200,
+"step": 1,
+"jog": 0.5,
+"def": 40
+}
+],
+"presets": [],
+"pad": {
+"add": 0
+},
+"passes": null,
+"info": null,
+"heavy": false
+},
+{
+"type": "scatterfield",
+"name": "Saçılım Alanı",
+"en": "Scatter Field",
+"cat": 7,
+"kind": "repeat",
+"desc": "Bütün kareyi katmanın kopyalarıyla rastgele ve sık doldurur; kopyalar süzülür.",
+"tags": [
+"Tekrar",
+"Parçacık",
+"Desen"
+],
+"params": [
+{
+"k": "density",
+"l": "Yoğunluk",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 50
+},
+{
+"k": "scl",
+"l": "Kopya ölçeği",
+"kind": "jog",
+"min": 1,
+"max": 200,
+"step": 1,
+"jog": 0.5,
+"def": 25
+},
+{
+"k": "svar",
+"l": "Ölçek farkı",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 50
+},
+{
+"k": "speed",
+"l": "Süzülme",
+"kind": "jog",
+"min": 0,
+"max": 5,
+"step": 0.01,
+"jog": 0.01,
+"def": 0.3
+},
+{
+"k": "dir",
+"l": "Yön",
+"kind": "jog",
+"min": -36000,
+"max": 36000,
+"step": 1,
+"jog": 0.5,
+"def": 90
+},
+{
+"k": "seed",
+"l": "Tohum",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.2,
+"def": 1
+}
+],
+"presets": [],
+"pad": {
+"add": 0
+},
+"passes": null,
+"info": null,
+"heavy": false
+},
+{
+"type": "remaphsv",
+"name": "Kanal Yeniden Eşleme (HSV)",
+"en": "Channel Remap (HSV)",
+"cat": 11,
+"kind": "pixel",
+"desc": "Ton, doygunluk ve parlaklık kanallarını birbirinin yerine koyar ya da sabitler.",
+"tags": [
+"Kanal",
+"Renk"
+],
+"params": [
+{
+"k": "h",
+"l": "Ton ←",
+"kind": "choice",
+"min": 0,
+"max": 3,
+"step": 1,
+"jog": 1,
+"opts": [
+"Ton",
+"Doygunluk",
+"Parlaklık",
+"Sabit"
+],
+"def": 0
+},
+{
+"k": "s",
+"l": "Doygunluk ←",
+"kind": "choice",
+"min": 0,
+"max": 3,
+"step": 1,
+"jog": 1,
+"opts": [
+"Ton",
+"Doygunluk",
+"Parlaklık",
+"Sabit"
+],
+"def": 1
+},
+{
+"k": "v",
+"l": "Parlaklık ←",
+"kind": "choice",
+"min": 0,
+"max": 3,
+"step": 1,
+"jog": 1,
+"opts": [
+"Ton",
+"Doygunluk",
+"Parlaklık",
+"Sabit"
+],
+"def": 2
+},
+{
+"k": "const",
+"l": "Sabit değer",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 50
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false
+},
+{
+"type": "magnifybg",
+"name": "Arka Planı Büyüt",
+"en": "Magnify Background",
+"cat": 11,
+"kind": "pixel",
+"desc": "Katmanın şeklinde, arkasındaki görüntüyü büyüterek gösterir (büyüteç).",
+"tags": [
+"Arka plan",
+"Mercek"
+],
+"params": [
+{
+"k": "zoom",
+"l": "Büyütme",
+"kind": "jog",
+"min": 100,
+"max": 1000,
+"step": 1,
+"jog": 0.5,
+"def": 200
+},
+{
+"k": "ring",
+"l": "Çerçeve",
+"kind": "jog",
+"min": 0,
+"max": 20,
+"step": 0.1,
+"jog": 0.05,
+"def": 3
+},
+{
+"k": "ringc",
+"l": "Çerçeve rengi",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#F7F8FA"
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": "Katmanı bir daire şekli yapıp üstüne ekle: büyüteç olur.",
 "heavy": false
 }
 ],

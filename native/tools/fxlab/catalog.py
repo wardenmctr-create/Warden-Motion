@@ -343,6 +343,7 @@ fx("ascii", "Yazı Sanatı", "ASCII Art", c, "pixel", "Görüntüyü küçük ka
 exec(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'catalog_ae.py')).read())
 exec(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'catalog_ae2.py')).read())
 exec(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'catalog_ae3.py')).read())
+exec(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'catalog_am.py')).read())
 order_kinds = {}
 for e in E:
     for p in e["params"]:
@@ -351,4 +352,4 @@ out = dict(version=1, cats=CATS, effects=E, featured=["tiles", "chromakey", "hex
 dst = os.path.join(os.path.dirname(__file__), "../../app/src/main/assets/fx/catalog.json")
 json.dump(out, open(dst, "w"), ensure_ascii=False, indent=0)
 from collections import Counter
-print(len(E), "efekt", Counter(CATS[e["cat"]] for e in E))
+print(sum(1 for e in E if not e.get("hidden")), "görünür efekt /", len(E), "toplam", Counter(CATS[e["cat"]] for e in E if not e.get("hidden")))
