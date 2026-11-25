@@ -189,4 +189,29 @@ class ShotsTest {
             File(out, f.removeSuffix(".svg") + ".png").outputStream().use { b.compress(Bitmap.CompressFormat.PNG, 100, it) }
         }
     }
+
+    @Test fun tracks() {
+        val ctx = ApplicationProvider.getApplicationContext<android.content.Context>()
+        var p = newProject("Şerit", 720, 900, 30, "#FFFFFF")
+        val aud = makeLayer(p, 0.0, 12.0, "audio", "Uzun Ses") { it.copy(src = "media:yok", w = 0.0, h = 0.0, srcDur = 12.0) }
+        val img = makeLayer(p, 0.5, 8.0, "image", "Görsel") { it.copy(src = "packs/hazir/esyalar/konusma-balonu.png") }
+        p = p.copy(layers = listOf(img, aud))
+        runBlocking { Store.get(ctx).save(p) }
+        fun settle() { repeat(5) { rule.mainClock.advanceTimeBy(400); rule.waitForIdle(); Thread.sleep(200) } }
+        rule.mainClock.autoAdvance = false
+        settle(); rule.runOnUiThread { com.warden.motion.app.ui.Assistant.stop(true) }; settle()
+        rule.onAllNodesWithText("Şerit")[0].performClick(); settle(); save(shot(), "t_all")
+        rule.onAllNodesWithText("Uzun Ses")[0].performClick(); settle(); save(shot(), "t_sel")
+        // Sondaki tutamacı sola sürükle (şerit kısalmalı, tutamaç ucu takip etmeli)
+        val ed = com.warden.motion.app.ui.UiState.editor!!
+        rule.runOnUiThread { ed.time = 11.0 }; settle(); save(shot(), "t_end")
+        rule.onNodeWithContentDescription("Katmanın sonu").performTouchInput { down(center); repeat(10) { moveBy(androidx.compose.ui.geometry.Offset(-20f * density, 0f)) }; up() }
+        settle(); save(shot(), "t_trim")
+        println("SON=" + ed.project.layers.first { it.name == "Uzun Ses" }.end + " ZAMAN=" + ed.time)
+        rule.runOnUiThread { ed.time = 0.0 }; settle()
+        rule.onNodeWithContentDescription("Katmanın başlangıcı").performTouchInput { down(center); repeat(5) { moveBy(androidx.compose.ui.geometry.Offset(20f * density, 0f)) }; up() }
+        settle(); save(shot(), "t_trim2")
+        val a = ed.project.layers.first { it.name == "Uzun Ses" }
+        println("BAS=" + a.start + " SRCIN=" + a.srcIn + " ZAMAN=" + ed.time)
+    }
 }

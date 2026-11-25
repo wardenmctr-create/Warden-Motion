@@ -36,6 +36,7 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChange
+import androidx.compose.ui.input.pointer.positionChangeIgnoreConsumed
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
@@ -607,13 +608,16 @@ private fun Timeline(s: EditorState, PPS: Float, setPPS: (Float) -> Unit, tickSt
         val t = f2.toDouble() / p.fps
         if (abs(t - s.time) > 1e-9) s.time = t
     }
-    // PPS: saniye başına dp
+    // PPS: saniye başına dp. Hareket dinleyicileri hep GÜNCEL ölçeği kullanır (yakınlaştırınca eski değer kalmasın)
     val P = PPS
+    val pNow by rememberUpdatedState(PPS)
+    val stepNow by rememberUpdatedState(stepTo)
     Box(modifier.target("tl").clipToBounds().onSizeChanged { tlW = it.width / dens }
-        .pointerInput(p.fps, tickStep) {
+        .pointerInput(Unit) {
             // Yatay kaydırma: kare kare zaman; iki parmak: yakınlaştır
             awaitEachGesture {
                 val d0 = awaitFirstDown(requireUnconsumed = false, pass = PointerEventPass.Initial)
+                s.tlGrab = false // yeni dokunuş: önceki kilit (yarıda kesilen jest) kalmasın
                 inertia?.cancel()
                 var on = false; var vert = false
                 val t0 = s.time; var vx = 0.0; var lastX = d0.position.x; var lastT = d0.uptimeMillis
@@ -624,10 +628,11 @@ private fun Timeline(s: EditorState, PPS: Float, setPPS: (Float) -> Unit, tickSt
                     if (pr.isEmpty()) break
                     if (pr.size >= 2) {
                         val dd = hypot((pr[0].position.x - pr[1].position.x).toDouble(), (pr[0].position.y - pr[1].position.y).toDouble())
-                        if (pinch0 == 0.0) { pinch0 = dd; pps0 = PPS } else setPPS((pps0 * dd / pinch0).toFloat())
+                        if (pinch0 == 0.0) { pinch0 = dd; pps0 = pNow } else setPPS((pps0 * dd / pinch0).toFloat())
                         ev.changes.forEach { it.consume() }; on = true; continue
                     }
                     val c = pr[0]
+                    if (s.tlGrab) { if (!on) break else continue }
                     if (c.isConsumed) { if (!on) break else continue }
                     val dx = c.position.x - d0.position.x; val dy = c.position.y - d0.position.y
                     if (!on && !vert) {
@@ -638,16 +643,16 @@ private fun Timeline(s: EditorState, PPS: Float, setPPS: (Float) -> Unit, tickSt
                     val now = c.uptimeMillis
                     vx = 0.8 * vx + 0.2 * ((c.position.x - lastX) / density / max(1L, now - lastT))
                     lastX = c.position.x; lastT = now
-                    stepTo(t0 - dx / density / P)
+                    stepNow(t0 - dx / density / pNow)
                     c.consume()
                 }
                 if (on && !vert) {
                     if (abs(vx) > 0.6) inertia = scope.launch {
-                        var v = vx * 1000 / P; var t = s.time; var last = withFrameNanos { it }
+                        var v = vx * 1000 / pNow; var t = s.time; var last = withFrameNanos { it }
                         while (isActive) {
                             val now = withFrameNanos { it }; val dt = (now - last) / 1e9; last = now
                             v *= exp(-dt * 4); if (abs(v) < 0.05) break
-                            t -= v * dt; stepTo(t)
+                            t -= v * dt; stepNow(t)
                         }
                     }
                 }
@@ -655,7 +660,8 @@ private fun Timeline(s: EditorState, PPS: Float, setPPS: (Float) -> Unit, tickSt
         }) {
         // İçerik: zaman × ölçek kadar sola kaydırılır (yeniden çizim yok, sadece katman taşınır)
         Box(Modifier.fillMaxSize().verticalScroll(vScroll, enabled = false)) {
-            Box(Modifier.height((TOP + rows.size * ROW + 90).dp).fillMaxWidth().graphicsLayer { translationX = -(s.time * P * dens).toFloat() }) {
+            val contentW = (half + (dur + 2) * P + tlW).toFloat().coerceAtMost(80000f / dens)
+            Box(Modifier.wrapContentWidth(Alignment.Start, unbounded = true).width(contentW.dp).height((TOP + rows.size * ROW + 90).dp).graphicsLayer { translationX = -(s.time * P * dens).toFloat() }) {
                 // Cetvel
                 Canvas(Modifier.offset(x = half.dp).width(((dur + 2) * P).dp).height(14.dp)) {
                     val fps = p.fps; val fpx = P * dens / fps
@@ -672,7 +678,7 @@ private fun Timeline(s: EditorState, PPS: Float, setPPS: (Float) -> Unit, tickSt
                 }
                 // Satır şeritleri (sıra değiştirmek için basılı tut)
                 if (sel == null) rows.forEachIndexed { i, _ ->
-                    Box(Modifier.offset(y = (TOP + i * ROW - 3).dp).fillMaxWidth().height(26.dp).graphicsLayer { translationX = (s.time * P * dens).toFloat() }
+                    Box(Modifier.offset(y = (TOP + i * ROW - 3).dp).width(tlW.dp).height(26.dp).graphicsLayer { translationX = (s.time * P * dens).toFloat() }
                         .background(if (reord?.first == i) C.turq.copy(alpha = .08f) else Color.Transparent)
                         .pointerInput(rows.size) {
                             awaitEachGesture {
@@ -680,7 +686,7 @@ private fun Timeline(s: EditorState, PPS: Float, setPPS: (Float) -> Unit, tickSt
                                 val longPress = withTimeoutOrNull(400) { while (true) { val e = awaitPointerEvent(); val c = e.changes.first(); if (!c.pressed) return@withTimeoutOrNull false; if ((c.position - d.position).getDistance() > 8 * density) return@withTimeoutOrNull false } ; @Suppress("UNREACHABLE_CODE") false }
                                 if (longPress != null) return@awaitEachGesture
                                 haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                                reord = i to i
+                                reord = i to i; s.tlGrab = true
                                 while (true) {
                                     val e = awaitPointerEvent(); val c = e.changes.first()
                                     c.consume()
@@ -693,11 +699,11 @@ private fun Timeline(s: EditorState, PPS: Float, setPPS: (Float) -> Unit, tickSt
                                     val nr = rows.toMutableList(); val it2 = nr.removeAt(ro.first); nr.add(ro.second, it2)
                                     s.update { pp -> pp.copy(layers = nr.reversed().map { l -> pp.layers.first { it.id == l.id } }) }
                                 }
-                                reord = null
+                                reord = null; s.tlGrab = false
                             }
                         })
                 }
-                reord?.let { (_, cur) -> Box(Modifier.offset(y = (TOP + cur * ROW - 3).dp).fillMaxWidth().height(2.dp).graphicsLayer { translationX = (s.time * P * dens).toFloat() }.background(C.turq)) }
+                reord?.let { (_, cur) -> Box(Modifier.offset(y = (TOP + cur * ROW - 3).dp).width(tlW.dp).height(2.dp).graphicsLayer { translationX = (s.time * P * dens).toFloat() }.background(C.turq)) }
                 // Şeritler
                 var nb = 0; var na = 0
                 val look = HashMap<String, Pair<Long, Long>?>()
@@ -776,6 +782,7 @@ private fun Track(s: EditorState, l: Layer, i: Int, left: Float, width: Float, t
     val p = s.project
     val ctx = LocalContext.current
     val h = (W * 0.0625f).dp
+    val pNow by rememberUpdatedState(P)
     val film = if (l.isMedia()) LayerThumbs.rememberThumb(ctx, l) else null
     val bg: Modifier = when {
         look != null -> Modifier.background(Brush.horizontalGradient(listOf(Color(look.first), Color(look.second))))
@@ -813,12 +820,12 @@ private fun Track(s: EditorState, l: Layer, i: Int, left: Float, width: Float, t
         val focus = s.kfFocus
         layerMarkers(l).filter { it.t >= l.start - 1e-6 && it.t <= l.end + 1e-6 }
             .map { it to (isSel && focus != null && it.group in focus) }.sortedBy { it.second }
-            .forEach { (m, f) ->
+            .forEachIndexed { mi, (m, f) ->
                 val onIt = f && abs(m.t - s.time) < 0.5 / p.fps
                 val moving = kfMoving == m.group + "@" + (m.t * p.fps).roundToInt()
                 Canvas(Modifier.offset(x = (left + ((m.t - l.start) * P).toFloat() - 8f).dp, y = (top - 3).dp).size(16.dp, h + 6.dp)
                     .graphicsLayer { alpha = if (f) 1f else .5f }
-                    .then(if (f) Modifier.markerDrag(s, l, m, P, haptic, setKfMoving) else Modifier)) {
+                    .then(if (f) Modifier.markerDrag(s, l, m, mi, { pNow }, haptic, setKfMoving) else Modifier)) {
                     val sc = if (f) 1f else .85f
                     val w = (if (onIt || moving) 11.dp.toPx() else 9.dp.toPx()) * sc; val hh = size.height * (if (onIt || moving) 1f else .88f) * sc
                     val cx = size.width / 2; val cy = size.height / 2
@@ -831,23 +838,27 @@ private fun Track(s: EditorState, l: Layer, i: Int, left: Float, width: Float, t
     // Kırpma tutamaçları: şeride dahil değil, iki yanında ‹ › (Alight Motion gibi)
     if (isSel) for (side in listOf("start", "end")) {
         val x = if (side == "start") left - 26f else left + width
-        Box(Modifier.offset(x = x.dp, y = (top - 2).dp).size(26.dp, h + 4.dp)
+        Box(Modifier.offset(x = x.dp, y = (top - 2).dp).size(26.dp, h + 4.dp).semantics { contentDescription = if (side == "start") "Katmanın başlangıcı" else "Katmanın sonu" }
             .clip(if (side == "start") RoundedCornerShape(topStart = 12.dp, bottomStart = 12.dp) else RoundedCornerShape(topEnd = 12.dp, bottomEnd = 12.dp))
             .background(Color(0xFF4A63A8))
             .pointerInput(l.id, side) {
                 awaitEachGesture {
                     val d = awaitFirstDown(requireUnconsumed = false); d.consume()
+                    s.tlGrab = true
                     val l0 = s.project.layers.first { it.id == l.id }
                     s.checkpoint()
                     val v0 = if (side == "start") l0.start else l0.end
                     setTrimming(Triple(l.id, side, v0))
+                    val fps = s.project.fps
+                    var acc = 0f
                     while (true) {
-                        val e = awaitPointerEvent(PointerEventPass.Initial); val c = e.changes.first(); c.consume()
+                        val e = awaitPointerEvent(PointerEventPass.Initial); val c = e.changes.firstOrNull { it.id == d.id } ?: break; c.consume()
                         if (!c.pressed) break
-                        val v = ((v0 + (c.position.x - d.position.x) / density / P) * p.fps).roundToInt().toDouble() / p.fps
+                        acc += c.positionChangeIgnoreConsumed().x
+                        val v = ((v0 + acc / density / pNow) * fps).roundToInt().toDouble() / fps
                         s.updateLayer(l.id, false) { if (side == "start") it.trimStart(v.coerceIn(0.0, it.end - 0.1)) else it.copy(end = it.maxEnd(max(it.start + 0.1, v))) }
                     }
-                    setTrimming(null)
+                    setTrimming(null); s.tlGrab = false
                 }
             }, contentAlignment = Alignment.Center) { Text(if (side == "start") "‹" else "›", fontSize = 17.sp, fontWeight = FontWeight.ExtraBold, color = Color(0xFF0B1430), lineHeight = 17.sp) }
     }
@@ -880,10 +891,19 @@ private fun BoxScope.Wave(l: Layer, P: Float, onDur: (Double) -> Unit) {
 }
 
 /** Keyframe işareti: dokun → o ana git; basılı tutup kaydır → keyframe'i taşı */
-private fun Modifier.markerDrag(s: EditorState, l: Layer, m: Marker, P: Float, haptic: androidx.compose.ui.hapticfeedback.HapticFeedback, setMoving: (String?) -> Unit): Modifier = pointerInput(l.id, m) {
+private fun Modifier.markerDrag(s: EditorState, l: Layer, m0: Marker, idx: Int, P: () -> Float, haptic: androidx.compose.ui.hapticfeedback.HapticFeedback, setMoving: (String?) -> Unit): Modifier = pointerInput(l.id, m0.group, idx) {
     awaitEachGesture {
         val d = awaitFirstDown(requireUnconsumed = false); d.consume()
+        s.tlGrab = true
+        try { markerGesture(s, l, m0, d, P, haptic, setMoving) } finally { s.tlGrab = false }
+    }
+}
+
+private suspend fun androidx.compose.ui.input.pointer.AwaitPointerEventScope.markerGesture(s: EditorState, l: Layer, m0: Marker, d: androidx.compose.ui.input.pointer.PointerInputChange, P: () -> Float,
+                                                                                           haptic: androidx.compose.ui.hapticfeedback.HapticFeedback, setMoving: (String?) -> Unit) {
         val fps = s.project.fps
+        // Basıldığı andaki işaret (sürüklerken işaret yer değiştirse de jest kesilmez)
+        val m = layerMarkers(s.project.layers.find { it.id == l.id } ?: return).filter { it.group == m0.group }.minByOrNull { abs(it.t - m0.t) } ?: m0
         var moved = false
         val tapUp = withTimeoutOrNull(300) {
             while (true) {
@@ -893,17 +913,19 @@ private fun Modifier.markerDrag(s: EditorState, l: Layer, m: Marker, P: Float, h
             }
             @Suppress("UNREACHABLE_CODE") true
         }
-        if (tapUp == true) { s.time = m.t; return@awaitEachGesture }
-        if (moved) return@awaitEachGesture
+        if (tapUp == true) { s.time = m.t; return }
+        if (moved) return
         haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
         s.checkpoint()
         var cur = m.t
+        var acc = 0f
         setMoving(m.group + "@" + (m.t * fps).roundToInt())
         while (true) {
-            val e = awaitPointerEvent(PointerEventPass.Initial); val c = e.changes.first(); c.consume()
+            val e = awaitPointerEvent(PointerEventPass.Initial); val c = e.changes.firstOrNull { it.id == d.id } ?: break; c.consume()
             if (!c.pressed) break
+            acc += c.positionChangeIgnoreConsumed().x
             val lay = s.project.layers.find { it.id == l.id } ?: break
-            val t1 = ((m.t + (c.position.x - d.position.x) / density / P) * fps).roundToInt().toDouble() / fps
+            val t1 = ((m.t + acc / density / P()) * fps).roundToInt().toDouble() / fps
             val t2 = t1.coerceIn(lay.start, lay.end)
             if (abs(t2 - cur) < 1e-6) continue
             val from = cur; cur = t2
@@ -912,7 +934,6 @@ private fun Modifier.markerDrag(s: EditorState, l: Layer, m: Marker, P: Float, h
             s.time = t2
         }
         setMoving(null)
-    }
 }
 
 /** Zaman çizelgesinin solundaki katman simgesi: katmanın kendisi */

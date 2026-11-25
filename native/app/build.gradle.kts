@@ -14,8 +14,8 @@ android {
         applicationId = "com.warden.motion.glow"
         minSdk = 26
         targetSdk = 34
-        versionCode = 3
-        versionName = "0.19"
+        versionCode = 4
+        versionName = "0.19.1"
     }
     // Yayın imzası: anahtar depoda değil, native/keystore.properties + warden.jks (git'e girmez)
     val kp = rootProject.file("keystore.properties")

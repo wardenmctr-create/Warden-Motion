@@ -24,6 +24,8 @@ class EditorState(initial: Project, private val store: Store, private val scope:
     /** Zaman (sn). Oynatırken her karede değişir: sadece çizim sırasında okunmalı */
     var time by mutableDoubleStateOf(0.0)
     var playing by mutableStateOf(false)
+    /** Zaman çizelgesinde bir tutamaç / keyframe / satır sürükleniyor: çizelge kaymasın */
+    @Volatile var tlGrab = false
     /** Açık panelin işine ait işaretleyici grupları (diğerleri soluk) */
     var kfFocus by mutableStateOf<List<String>?>(null)
     /** Efekt panelinde seçili parametre: (efekt id, anahtar) */
