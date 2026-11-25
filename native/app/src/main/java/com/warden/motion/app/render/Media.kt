@@ -25,64 +25,213 @@ import kotlin.math.min
 import kotlin.math.roundToInt
 
 /**
- * Videodan kare çıkarma: telefonun video çözücüsüyle (MediaMetadataRetriever).
- * Oynatırken kareler birkaç kare ileriden toplu çözülür; duraklatınca tam o kare.
+ * Video kareleri: telefonun donanım video çözücüsüyle (MediaCodec) SIRAYLA çözülür.
+ * Oynatırken kareler akar (her karede baştan arama yok, donma yok); geri sarınca ya da uzağa atlayınca
+ * en yakın anahtar kareye gidilip oradan ileri çözülür. Kareler YUV'den kendimiz çeviriyoruz
+ * (bazı telefonların hazır "kare ver" aracı tek renk kare döndürüyor).
  */
 class VideoSource(private val file: File, private val maxSide: Int, private val onFrame: () -> Unit) {
-    private val r = MediaMetadataRetriever().apply { setDataSource(file.absolutePath) }
-    val durationS = (r.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)?.toDoubleOrNull() ?: 0.0) / 1000
-    private val count = (if (Build.VERSION.SDK_INT >= 28) r.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_FRAME_COUNT)?.toIntOrNull() else null) ?: 0
-    val fps: Double = if (count > 0 && durationS > 0) count / durationS else 30.0
-    private val cache = LruCache<Int, Bitmap>(30)
-    private val exec = Executors.newSingleThreadExecutor()
-    @Volatile private var pending = -1
+    private val ex = MediaExtractor().apply { setDataSource(file.absolutePath) }
+    private val track = (0 until ex.trackCount).first { ex.getTrackFormat(it).getString(MediaFormat.KEY_MIME)?.startsWith("video/") == true }
+    private val fmt = ex.getTrackFormat(track)
+    val durationS: Double
+    val fps: Double
+    private val rot: Int
+    init {
+        ex.selectTrack(track)
+        val r = MediaMetadataRetriever()
+        var d = 0.0; var rr = 0; var cnt = 0
+        runCatching {
+            r.setDataSource(file.absolutePath)
+            d = (r.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)?.toDoubleOrNull() ?: 0.0) / 1000
+            rr = r.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION)?.toIntOrNull() ?: 0
+            if (Build.VERSION.SDK_INT >= 28) cnt = r.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_FRAME_COUNT)?.toIntOrNull() ?: 0
+        }
+        runCatching { r.release() }
+        if (d <= 0 && fmt.containsKey(MediaFormat.KEY_DURATION)) d = fmt.getLong(MediaFormat.KEY_DURATION) / 1e6
+        durationS = d
+        val fr = runCatching { if (fmt.containsKey(MediaFormat.KEY_FRAME_RATE)) fmt.getInteger(MediaFormat.KEY_FRAME_RATE).toDouble() else 0.0 }.getOrDefault(0.0)
+        fps = if (cnt > 0 && d > 0) cnt / d else if (fr > 0) fr else 30.0
+        rot = ((if (fmt.containsKey("rotation-degrees")) fmt.getInteger("rotation-degrees") else rr) % 360 + 360) % 360
+    }
+    // Çözücü açılamazsa (desteklenmeyen tür) her kare yedek yoldan alınır
+    private val codec: MediaCodec? = runCatching {
+        MediaCodec.createDecoderByType(fmt.getString(MediaFormat.KEY_MIME)!!).apply {
+            fmt.setInteger(MediaFormat.KEY_COLOR_FORMAT, android.media.MediaCodecInfo.CodecCapabilities.COLOR_FormatYUV420Flexible)
+            configure(fmt, null, null, 0); start()
+        }
+    }.getOrNull()
+    private val frameDur get() = 1.0 / fps
 
-    private fun scale(b: Bitmap?): Bitmap? {
-        if (b == null) return null
-        val k = maxSide.toFloat() / max(b.width, b.height)
-        if (maxSide <= 0 || k >= 1) return b
-        val s = Bitmap.createScaledBitmap(b, max(1, (b.width * k).toInt()), max(1, (b.height * k).toInt()), true)
-        if (s !== b) b.recycle()
-        return s
+    private val lock = Object()
+    @Volatile private var want = -1.0
+    @Volatile private var alive = true
+    /** En son çözülen kare ve gösterdiği an (kaynak saniyesi) */
+    @Volatile private var latest: Bitmap? = null
+    @Volatile private var latestT = -1.0
+    private var lastPts = -1.0      // çözücünün en son verdiği kare
+    private var inEos = false
+    /** En son tamamlanan istek */
+    @Volatile private var done = -1.0
+    private val pool = ArrayDeque<Bitmap>()
+    private val thread = Thread({ loop() }, "video-" + file.name).apply { isDaemon = true; start() }
+
+    private fun covers(ft: Double, t: Double) = t >= ft - 1e-4 && t < ft + frameDur - 1e-4
+
+    private fun loop() {
+        while (alive) {
+            val t: Double
+            synchronized(lock) {
+                // Aynı istek ikinci kez çözülmez (video bittiyse ya da kare yoksa boşuna dönmesin)
+                while (alive && (want < 0 || want == done || (latestT >= 0 && covers(latestT, want.coerceAtMost(max(0.0, durationS - frameDur * 0.5)))))) lock.wait(200)
+                t = want
+            }
+            if (!alive) break
+            runCatching { decodeTo(t) }.onFailure { runCatching { seek(t) } }
+            done = t
+            synchronized(lock) { lock.notifyAll() }
+        }
+        runCatching { codec?.stop() }; runCatching { codec?.release() }; runCatching { ex.release() }; runCatching { retr?.release() }
+        synchronized(pool) { pool.clear() }
     }
 
-    private fun decode(idx: Int, n: Int) {
-        val last = if (count > 0) count - 1 else Int.MAX_VALUE
-        if (Build.VERSION.SDK_INT >= 28 && count > 0) {
-            val k = min(n, last - idx + 1).coerceAtLeast(1)
-            runCatching { r.getFramesAtIndex(idx.coerceIn(0, last), k) }.getOrNull()?.forEachIndexed { i, b -> scale(b)?.let { cache.put(idx + i, it) } }
-                ?: runCatching { scale(r.getFrameAtTime((idx / fps * 1e6).toLong(), MediaMetadataRetriever.OPTION_CLOSEST))?.let { cache.put(idx, it) } }
-        } else runCatching { scale(r.getFrameAtTime((idx / fps * 1e6).toLong(), MediaMetadataRetriever.OPTION_CLOSEST))?.let { cache.put(idx, it) } }
+    private fun seek(t: Double) {
+        codec?.flush(); inEos = false; lastPts = -1.0
+        ex.seekTo((t * 1e6).toLong(), MediaExtractor.SEEK_TO_PREVIOUS_SYNC)
     }
 
-    fun index(t: Double) = (t.coerceIn(0.0, max(0.0, durationS - 0.001)) * fps).toInt()
-
-    /** Çizim için kare (hazır değilse en yakın hazır kare; arka planda hazırlanır) */
-    fun frame(t: Double, playing: Boolean): Bitmap? {
-        val idx = index(t)
-        cache.get(idx)?.let { if (playing) prefetch(idx + 1, 8); return it }
-        prefetch(idx, if (playing) 8 else 1)
-        // Yakındaki bir kare (titremesin diye)
-        for (d in 1..12) { cache.get(idx - d)?.let { return it }; cache.get(idx + d)?.let { return it } }
-        return null
+    /** t anını gösteren kareye kadar çöz (ileriyse sırayla devam, geriyse / çok uzaksa anahtar kareden) */
+    private fun decodeTo(t0: Double) {
+        val t = t0.coerceIn(0.0, max(0.0, durationS - frameDur * 0.5))
+        val codec = codec ?: run {
+            val ft = ((t * fps).toInt() / fps)
+            fallback(ft)?.let { publish(it, ft) }
+            return
+        }
+        if (lastPts < 0 || t < lastPts - 1e-4 || t > lastPts + 2.0 || (inEos && t > lastPts + frameDur)) seek(t)
+        val info = MediaCodec.BufferInfo()
+        var guard = 0
+        while (alive && guard++ < 4000) {
+            if (want >= 0 && abs(want - t0) > 1e-6 && (want < t0 || want > t0 + 2.0)) return // yeni istek: uzağa atlandı, baştan
+            if (!inEos) {
+                val ii = codec.dequeueInputBuffer(2000)
+                if (ii >= 0) {
+                    val buf = codec.getInputBuffer(ii)!!
+                    val n = ex.readSampleData(buf, 0)
+                    if (n < 0) { codec.queueInputBuffer(ii, 0, 0, 0, MediaCodec.BUFFER_FLAG_END_OF_STREAM); inEos = true }
+                    else { codec.queueInputBuffer(ii, 0, n, ex.sampleTime, 0); ex.advance() }
+                }
+            }
+            val oi = codec.dequeueOutputBuffer(info, 4000)
+            if (oi >= 0) {
+                val eos = info.flags and MediaCodec.BUFFER_FLAG_END_OF_STREAM != 0
+                val pts = info.presentationTimeUs / 1e6
+                val hit = info.size > 0 && (pts + frameDur - 1e-4 > t || eos)
+                if (info.size > 0) lastPts = pts
+                if (hit && info.size > 0) {
+                    val img = runCatching { codec.getOutputImage(oi) }.getOrNull()
+                    var bmp = img?.let { runCatching { convert(it) }.getOrNull() }
+                    img?.close()
+                    codec.releaseOutputBuffer(oi, false)
+                    if (bmp == null) bmp = fallback(pts)
+                    if (bmp != null) publish(bmp, pts)
+                    return
+                }
+                codec.releaseOutputBuffer(oi, false)
+                if (eos) return
+            }
+        }
     }
 
-    private fun prefetch(idx: Int, n: Int) {
-        if (cache.get(idx) != null && cache.get(min(idx + n - 1, idx + 3)) != null) return
-        if (pending == idx) return
-        pending = idx
-        exec.execute { if (pending == idx) { decode(idx, n); onFrame() } }
+    /** YUV_420_888 → RGB, hedef boyuta küçülterek ve videonun dönüklüğüne göre çevirerek */
+    private fun convert(img: android.media.Image): Bitmap? {
+        val cr = img.cropRect
+        val sw = cr.width(); val sh = cr.height()
+        if (sw <= 0 || sh <= 0) return null
+        val rw = if (rot == 90 || rot == 270) sh else sw; val rh = if (rot == 90 || rot == 270) sw else sh
+        val k = if (maxSide > 0) min(1.0, maxSide.toDouble() / max(rw, rh)) else 1.0
+        val ow = max(1, (rw * k).roundToInt()); val oh = max(1, (rh * k).roundToInt())
+        val py = img.planes[0]; val pu = img.planes[1]; val pv = img.planes[2]
+        // Düzlemler bir kerede diziye alınır (piksel piksel tampondan okumaktan çok daha hızlı)
+        val yb = py.buffer.let { b -> ByteArray(b.remaining()).also { b.get(it) } }
+        val ub = pu.buffer.let { b -> ByteArray(b.remaining()).also { b.get(it) } }
+        val vb = pv.buffer.let { b -> ByteArray(b.remaining()).also { b.get(it) } }
+        val yRow = py.rowStride; val yPix = py.pixelStride
+        val uRow = pu.rowStride; val uPix = pu.pixelStride; val vRow = pv.rowStride; val vPix = pv.pixelStride
+        val out = yuvToArgb(yb, yRow, yPix, ub, uRow, uPix, vb, vRow, vPix, cr.left, cr.top, sw, sh, rot, ow, oh)
+        val bmp = synchronized(pool) { pool.firstOrNull { it.width == ow && it.height == oh }?.also { pool.remove(it) } } ?: Bitmap.createBitmap(ow, oh, Bitmap.Config.ARGB_8888)
+        bmp.setPixels(out, 0, ow, 0, 0, ow, oh)
+        return bmp
     }
+
+    private fun publish(bmp: Bitmap, t: Double) {
+        val old = latest
+        latest = bmp; latestT = t
+        if (old != null && old !== bmp) synchronized(pool) { if (pool.size < 3) pool.addLast(old) }
+        synchronized(lock) { lock.notifyAll() }
+        onFrame()
+    }
+
+    /** Çözücü kareyi veremezse: o tek kare telefonun kare çıkarma aracıyla */
+    private var retr: MediaMetadataRetriever? = null
+    private fun fallback(t: Double): Bitmap? = runCatching {
+        val r = retr ?: MediaMetadataRetriever().also { it.setDataSource(file.absolutePath); retr = it }
+        val b = r.getFrameAtTime((t * 1e6).toLong(), MediaMetadataRetriever.OPTION_CLOSEST) ?: return null
+        val k = if (maxSide > 0) min(1.0, maxSide.toDouble() / max(b.width, b.height)) else 1.0
+        if (k < 1) Bitmap.createScaledBitmap(b, max(1, (b.width * k).toInt()), max(1, (b.height * k).toInt()), true).also { if (it !== b) b.recycle() } else b
+    }.getOrNull()
+
+    private fun request(t: Double) = synchronized(lock) { if (want != t) { want = t; lock.notifyAll() } }
+
+    /** Çizim için kare: hazır olan en son kare hemen döner (bekleme yok), istenen kare arka planda çözülür */
+    fun frame(t: Double, playing: Boolean): Bitmap? { request(t); return latest }
 
     /** Dışa aktarma: tam o kare (beklenir) */
     fun frameSync(t: Double): Bitmap? {
-        val idx = index(t)
-        cache.get(idx)?.let { return it }
-        decode(idx, 6)
-        return cache.get(idx)
+        request(t)
+        val end = System.currentTimeMillis() + 5000
+        synchronized(lock) {
+            while (alive && done != t && !(latestT >= 0 && (covers(latestT, t.coerceAtMost(max(0.0, durationS - frameDur * 0.5))) || latestT >= durationS - frameDur * 1.5 && t >= latestT)) && System.currentTimeMillis() < end) {
+                lock.wait(5)
+            }
+        }
+        return latest
     }
 
-    fun release() { exec.shutdownNow(); runCatching { r.release() } }
+    fun release() { alive = false; synchronized(lock) { lock.notifyAll() } }
+}
+
+/** YUV 4:2:0 düzlemlerinden ARGB: (ow × oh) boyuta küçültür, rot derece (saat yönü) döndürür. BT.601 sınırlı aralık */
+internal fun yuvToArgb(yb: ByteArray, yRow: Int, yPix: Int, ub: ByteArray, uRow: Int, uPix: Int, vb: ByteArray, vRow: Int, vPix: Int,
+                       left: Int, top: Int, sw: Int, sh: Int, rot: Int, ow: Int, oh: Int): IntArray {
+    val rw = if (rot == 90 || rot == 270) sh else sw; val rh = if (rot == 90 || rot == 270) sw else sh
+    val out = IntArray(ow * oh)
+    val kx = rw.toDouble() / ow; val ky = rh.toDouble() / oh
+    for (oy in 0 until oh) {
+        val dy = (oy * ky).toInt()
+        for (ox in 0 until ow) {
+            val dx = (ox * kx).toInt()
+            // Ekrandaki (döndürülmüş) pikselin kaynaktaki yeri
+            val ux: Int; val uy: Int
+            when (rot) {
+                90 -> { ux = dy; uy = sh - 1 - dx }
+                180 -> { ux = sw - 1 - dx; uy = sh - 1 - dy }
+                270 -> { ux = sw - 1 - dy; uy = dx }
+                else -> { ux = dx; uy = dy }
+            }
+            val x = ux.coerceIn(0, sw - 1) + left; val y = uy.coerceIn(0, sh - 1) + top
+            val Y = (yb[min(yb.size - 1, y * yRow + x * yPix)].toInt() and 0xFF) - 16
+            val cx = x / 2; val cy = y / 2
+            val U = (ub[min(ub.size - 1, cy * uRow + cx * uPix)].toInt() and 0xFF) - 128
+            val V = (vb[min(vb.size - 1, cy * vRow + cx * vPix)].toInt() and 0xFF) - 128
+            val y1 = 1192 * max(0, Y)
+            val r = ((y1 + 1634 * V) shr 10).coerceIn(0, 255)
+            val g = ((y1 - 833 * V - 400 * U) shr 10).coerceIn(0, 255)
+            val b = ((y1 + 2066 * U) shr 10).coerceIn(0, 255)
+            out[oy * ow + ox] = (0xFF shl 24) or (r shl 16) or (g shl 8) or b
+        }
+    }
+    return out
 }
 
 // ---------------------------------------------------------------------------------------------
