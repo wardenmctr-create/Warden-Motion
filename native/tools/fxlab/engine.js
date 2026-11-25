@@ -70,7 +70,7 @@ function fxUniforms(meta, vals) {
 function linearOf(spec, vals, meta) { if (!spec) return 0; if (spec.max) return Math.max(0, ...spec.max.map((k) => vals[k] ?? (meta.params || []).find((p) => p.k === k)?.def ?? 0)); let v = spec.add || 0; if (spec.k) { const pr = (meta.params || []).find((p) => p.k === spec.k); v += (vals[spec.k] ?? pr?.def ?? 0) * (spec.mul ?? 1); } return Math.max(0, v); }
 
 // Katmana efekt zincirini uygula: base (önceden çarpılmış doku, kutu + pad), sonuç doku
-async function applyEffects(E, base, box, s, effects, t, dur) {
+async function applyEffects(E, base, box, s, effects, t, dur, extra = {}) {
   let cur = base;
   for (const ef of effects) {
     const meta = E.meta[ef.type]; if (!meta || !['pixel', 'gen', 'repeat', '3d'].includes(meta.kind)) continue;
@@ -83,11 +83,11 @@ async function applyEffects(E, base, box, s, effects, t, dur) {
       if (ps.blur) { // ayrılabilir Gauss (iki geçiş)
         const sig = linearOf(ps.r, ef.v || {}, meta) * s;
         const a = E.tex(cur.w, cur.h), b = E.tex(cur.w, cur.h);
-        await E.pass('_blur', a, { u_tex: bufs[ps.blur] || last }, { ...common, u_dir: [1, 0], u_sigma: sig });
+        await E.pass('_blur', a, { u_tex: bufs[ps.blur] || last, ...extra }, { ...common, u_dir: [1, 0], u_sigma: sig });
         await E.pass('_blur', b, { u_tex: a }, { ...common, u_dir: [0, 1], u_sigma: sig });
         E.free(a); bufs[ps.out || '_last'] = b; last = b; continue;
       }
-      const out = E.tex(cur.w, cur.h); const ins = { u_tex: inp, u_src: cur };
+      const out = E.tex(cur.w, cur.h); const ins = { u_tex: inp, u_src: cur, ...extra };
       for (const [k, v] of Object.entries(ps.aux || {})) ins[k] = bufs[v];
       await E.pass(ps.fs, out, ins, { ...common, ...(ps.set || {}) });
       bufs[ps.out || '_last'] = out; bufs._last = out; last = out;

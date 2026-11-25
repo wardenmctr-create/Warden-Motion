@@ -342,6 +342,7 @@ fx("ascii", "Yazı Sanatı", "ASCII Art", c, "pixel", "Görüntüyü küçük ka
 
 exec(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'catalog_ae.py')).read())
 exec(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'catalog_ae2.py')).read())
+exec(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'catalog_ae3.py')).read())
 order_kinds = {}
 for e in E:
     for p in e["params"]:

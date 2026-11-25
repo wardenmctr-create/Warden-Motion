@@ -131,6 +131,35 @@ def('repetile', full(Sb.cb('az', 'mutlu'), 'repetile', (p) => ({ l: 90, r: 90, u
 def('burnfilm', full(Sb.kapadokya, 'burnfilm', (p) => ({ prog: osc(p, 0, 42), scale: 90, centerX: 30, centerY: 20 }), { bg: dark('#0B1430') }));
 def('blockload', full(Sb.dag, 'blockload', (p) => ({ prog: Math.min(100, p * 130), scan: 1 })));
 
+
+// ---- Bulanıklık ----
+const noisy = (fn, seed = 3) => (g, w, h) => { fn(g, w, h); const r = seeded(seed); for (let i = 0; i < 260; i++) { g.fillStyle = r() > 0.5 ? 'rgba(255,255,255,0.9)' : 'rgba(0,0,0,0.8)'; g.fillRect(-w / 2 + r() * w, -h / 2 + r() * h, 1.6, 1.6); } };
+const smeared = (fn, n = 9, dx = 2.2) => (g, w, h) => { g.globalAlpha = 1 / n * 1.6; for (let i = 0; i < n; i++) { g.save(); g.translate((i - n / 2) * dx, 0); fn(g, w, h); g.restore(); } g.globalAlpha = 1; };
+def('blur', full(Sb.aycicek, 'blur', (p) => ({ amount: osc(p, 0, 14) })));
+def('boxblur', full(Sb.laleler, 'boxblur', (p) => ({ amount: osc(p, 0, 20) })));
+def('dirblur', full(Sb.cb('jp', 'mutlu', 'tac'), 'dirblur', (p) => ({ amount: osc(p, 0, 70), ang: 0 }), { bg: dark('#E3EEFC'), w: 150, h: 150 }));
+def('spinblur', full(Sb.cb('br', 'saskin'), 'spinblur', (p) => ({ amount: osc(p, 0, 40), centerX: 0, centerY: 0 }), { bg: dark('#E3EEFC'), w: 170, h: 170 }));
+def('zoomblur', full(Sb.istanbul, 'zoomblur', (p) => ({ amount: osc(p, 0, 45), centerX: 30, centerY: 30 })));
+def('lensblur', full(Sb.gece, 'lensblur', (p) => ({ amount: osc(p, 0, 9), bright: 90 })));
+def('tiltshift', full(Sb.kapadokya, 'tiltshift', (p) => ({ amount: osc(p, 0, 9), focus: osc(p, -40, 40), width: 25, sat: 1 })));
+SCENES['motionblur'] = { size: 240, dur: 2, fps: 12, bg: dark('#E3EEFC'), layers: [{ x: 120, y: 120, w: 110, h: 110, draw: Sb.cb('tr', 'mutlu', 'fes'), fx: [{ type: 'motionblur', v: { tune: 2.4, pos: 1, scl: 1, ang: 1 } }],
+  tr: (p) => { const e = 0.5 - 0.5 * Math.cos(p * Math.PI * 2); return { x: 40 + e * 160, rot: e * 360 }; } }] };
+def('streaks', full(Sb.uzay, 'streaks', (p) => ({ len: osc(p, 0, 70), ang: 30, count: 2, thr: 25 })));
+def('sharpen', full(Sb.nar, 'sharpen', (p) => ({ amount: osc(p, 0, 260), rad: 1.5 })));
+def('bilateral', full(Sb.wcbPose('utangac'), 'bilateral', (p) => ({ amount: osc(p, 0, 10), thr: 30 }), { bg: dark('#F3E4CF'), w: 210, h: 190 }));
+def('chanblur', full(Sb.logo, 'chanblur', (p) => ({ r: osc(p, 0, 12), g: 0, b: osc(p, 0, 5) }), { bg: dark('#F7F8FA'), w: 160, h: 160 }));
+def('crossblur', full(Sb.word('ÇAPRAZ', 48, '#3FD0F0'), 'crossblur', (p) => ({ h: osc(p, 0, 40), v: osc(p, 20, 0) }), { bg: dark('#0B1430'), w: 230, h: 90 }));
+def('vectorblur', full(Sb.denizalti, 'vectorblur', (p) => ({ amount: osc(p, 0, 14), ang: 90 })));
+def('median', full(onCol('#DCE9FF', cbGroup), 'median', (p) => ({ rad: Math.round(osc(p, 0, 5)) })));
+def('dustscratch', full(noisy(Sb.istanbul), 'dustscratch', (p) => ({ rad: p < 0.5 ? 0 : 2, thr: 15 })));
+def('unsharp', full(Sb.dag, 'unsharp', (p) => ({ amount: osc(p, 0, 300), rad: 3, thr: 2 })));
+def('compoundblur', full(Sb.cay, 'compoundblur', (p) => ({ amount: osc(p, 0, 12), map: 0 })));
+def('deblur', full(smeared(Sb.word('NET', 80, '#F7F8FA')), 'deblur', (p) => ({ len: 14, ang: 0, amount: osc(p, 0, 90), iter: 3 }), { bg: dark('#1B2A55'), w: 220, h: 110 }));
+def('upscale', full((g, w, h) => Sb.cb('it', 'mutlu', 'kep')(g, w * 0.42, h * 0.42), 'upscale', (p) => ({ scale: osc(p, 100, 230), detail: 60, noise: 20 }), { bg: dark('#E3EEFC'), w: 220, h: 220 }));
+SCENES['depthblur'] = { size: 240, dur: 2, fps: 12, bg: bgNavy, layers: [{ x: 120, y: 120, w: 240, h: 240, fx: [{ type: 'depthblur', v: (p) => ({ focus: osc(p, 8, 92), amount: 10, range: 12 }) }],
+  draw: (g, w, h) => { Sb.istanbul(g, w, h); g.save(); g.translate(-w * 0.18, h * 0.18); Sb.cb('tr', 'mutlu', 'fes')(g, w * 0.5, h * 0.5); g.restore(); },
+  depth: (g, w, h) => { g.fillStyle = '#E6E6E6'; g.fillRect(-w / 2, -h / 2, w, h); g.fillStyle = '#999'; g.fillRect(-w / 2, h * 0.18, w, h * 0.32); g.save(); g.translate(-w * 0.18, h * 0.18); g.filter = 'brightness(0)'; Sb.cb('tr', 'mutlu', 'fes')(g, w * 0.5, h * 0.5); g.filter = 'none'; g.restore(); } }] };
+
 window.SCENES = SCENES;
 // Konu galerisi (efektsiz) — kontrol için
 window.TEST_SCENES = {};

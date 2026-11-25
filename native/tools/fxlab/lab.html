@@ -40,7 +40,9 @@ async function frame(scene, p) {
     for (const e of fx) { const m = E.meta[e.type]; if (m && m.pad) pad += linearOf(m.pad, e.v, m); }
     const lc = layerCanvas(L, pad, s);
     const base = E.upload(lc.c);
-    const out = await applyEffects(E, base, lc.box, s, fx, t, scene.dur);
+    const extra = {}; if (L.depth) extra.u_depth = E.upload(layerCanvas({ ...L, draw: L.depth }, pad, s).c);
+    const out = await applyEffects(E, base, lc.box, s, fx, t, scene.dur, extra);
+    if (extra.u_depth) E.free(extra.u_depth);
     // sahneye: merkez (x,y), dönme, ölçek
     const tr = L.tr ? L.tr(p, t) : {};
     const x = (tr.x ?? L.x) * s, y = (tr.y ?? L.y) * s, rot = (tr.rot ?? 0) * Math.PI / 180, sc = tr.scale ?? 1, op = tr.op ?? 1;
@@ -49,8 +51,22 @@ async function frame(scene, p) {
     const ax = 2 / 480, ay = -2 / 480;
     const m = [ (2 * hw * ca) * ax, (2 * hw * sa) * ay, 0, (-2 * hh * sa) * ax, (2 * hh * ca) * ay, 0,
       (x - hw * ca + hh * sa) * ax - 1, (y - hw * sa - hh * ca) * ay + 1, 1 ];
+    const mbE = fx.find((e) => e.type === 'motionblur');
+    if (mbE && L.tr) {
+      const N = 14, span = (mbE.v.tune ?? 1) / 20; const acc = E.tex(480, 480);
+      gl.bindFramebuffer(gl.FRAMEBUFFER, acc.fb); gl.clearColor(0, 0, 0, 0); gl.clear(gl.COLOR_BUFFER_BIT);
+      gl.enable(gl.BLEND); gl.blendFunc(gl.ONE, gl.ONE);
+      for (let i = 0; i < N; i++) { const tt = t + span * (i / (N - 1) - 0.5); const r2 = L.tr(tt / scene.dur, tt);
+        const X = (r2.x ?? L.x) * s, Y = (r2.y ?? L.y) * s, ro = (r2.rot ?? 0) * Math.PI / 180, sc2 = r2.scale ?? 1; const hw2 = out.w / 2 * sc2, hh2 = out.h / 2 * sc2, c2 = Math.cos(ro), s2 = Math.sin(ro);
+        const m2 = [(2 * hw2 * c2) * ax, (2 * hw2 * s2) * ay, 0, (-2 * hh2 * s2) * ax, (2 * hh2 * c2) * ay, 0, (X - hw2 * c2 + hh2 * s2) * ax - 1, (Y - hw2 * s2 - hh2 * c2) * ay + 1, 1];
+        m2[7] = -m2[7]; m2[4] = -m2[4]; m2[1] = -m2[1];
+        await E.pass('_comp', acc, { u_tex: out }, { u_op: op / N }, m2); }
+      gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+      await E.pass('_comp', null, { u_tex: acc }, { u_op: 1 }, [2, 0, 0, 0, -2, 0, -1, 1, 1]); E.free(acc);
+    } else {
     gl.enable(gl.BLEND); gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
     await E.pass('_comp', null, { u_tex: out }, { u_op: op }, m);
+    }
     if (out !== base) E.free(out); E.free(base);
   }
   gl.disable(gl.BLEND);

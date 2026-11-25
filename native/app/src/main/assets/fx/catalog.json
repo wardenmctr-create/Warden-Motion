@@ -21759,6 +21759,1072 @@
 "passes": null,
 "info": "Katmanın kendisi ses üretir; bir ses katmanına ya da herhangi bir katmana ekleyebilirsin.",
 "heavy": false
+},
+{
+"type": "hdrsdr",
+"name": "HDR'den SDR'ye",
+"en": "HDR to SDR Tone Map",
+"cat": 0,
+"kind": "pixel",
+"desc": "Yeni telefonların HDR videolarını normal ekranlarda soluk değil doğal göstermek için ton eşler.",
+"tags": [
+"Renk",
+"Video",
+"HDR"
+],
+"params": [
+{
+"k": "src",
+"l": "Kaynak",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"HLG",
+"PQ (HDR10)",
+"Otomatik"
+],
+"def": 2
+},
+{
+"k": "peak",
+"l": "Tepe parlaklık (nit)",
+"kind": "jog",
+"min": 100,
+"max": 4000,
+"step": 10,
+"jog": 5,
+"def": 1000
+},
+{
+"k": "sat",
+"l": "Doygunluk",
+"kind": "jog",
+"min": 0,
+"max": 200,
+"step": 1,
+"jog": 0.5,
+"def": 100
+},
+{
+"k": "exp",
+"l": "Pozlama",
+"kind": "jog",
+"min": -3,
+"max": 3,
+"step": 0.01,
+"jog": 0.01,
+"def": 0
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false
+},
+{
+"type": "logconv",
+"name": "Log'dan Normale",
+"en": "Log to Rec.709",
+"cat": 0,
+"kind": "pixel",
+"desc": "Log ile çekilmiş soluk videoları normal renge çevirir.",
+"tags": [
+"Renk",
+"Video",
+"Sinema"
+],
+"params": [
+{
+"k": "log",
+"l": "Log türü",
+"kind": "choice",
+"min": 0,
+"max": 4,
+"step": 1,
+"jog": 1,
+"opts": [
+"Samsung Log",
+"Apple Log",
+"Sony S-Log3",
+"Canon C-Log",
+"Cineon (film)"
+],
+"def": 0
+},
+{
+"k": "amount",
+"l": "Güç",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 100
+},
+{
+"k": "exp",
+"l": "Pozlama",
+"kind": "jog",
+"min": -3,
+"max": 3,
+"step": 0.01,
+"jog": 0.01,
+"def": 0
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false
+},
+{
+"type": "colorprofile",
+"name": "Renk Profili",
+"en": "Color Profile Converter",
+"cat": 0,
+"kind": "pixel",
+"desc": "Renk uzayları arasında dönüşüm (Display P3, sRGB, Rec.2020).",
+"tags": [
+"Renk",
+"Teknik"
+],
+"params": [
+{
+"k": "from",
+"l": "Kaynak",
+"kind": "choice",
+"min": 0,
+"max": 3,
+"step": 1,
+"jog": 1,
+"opts": [
+"sRGB / Rec.709",
+"Display P3",
+"Rec.2020",
+"Doğrusal"
+],
+"def": 0
+},
+{
+"k": "to",
+"l": "Hedef",
+"kind": "choice",
+"min": 0,
+"max": 3,
+"step": 1,
+"jog": 1,
+"opts": [
+"sRGB / Rec.709",
+"Display P3",
+"Rec.2020",
+"Doğrusal"
+],
+"def": 1
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false
+},
+{
+"type": "broadcast",
+"name": "Yayın Renkleri",
+"en": "Broadcast Colors",
+"cat": 0,
+"kind": "pixel",
+"desc": "Renkleri ve parlaklığı televizyon yayın sınırları içine çeker.",
+"tags": [
+"Renk",
+"Video",
+"Teknik"
+],
+"params": [
+{
+"k": "max",
+"l": "En yüksek (IRE)",
+"kind": "jog",
+"min": 80,
+"max": 120,
+"step": 1,
+"jog": 0.5,
+"def": 100
+},
+{
+"k": "how",
+"l": "Nasıl",
+"kind": "choice",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"opts": [
+"Doygunluğu azalt",
+"Parlaklığı azalt"
+],
+"def": 0
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false
+},
+{
+"type": "colorstab",
+"name": "Renk Sabitleme",
+"en": "Color Stabilizer",
+"cat": 0,
+"kind": "pixel",
+"desc": "Timelapse ve videolarda kareden kareye değişen ışığı ve rengi dengeler.",
+"tags": [
+"Renk",
+"Video",
+"Timelapse"
+],
+"params": [
+{
+"k": "amount",
+"l": "Güç",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 80
+},
+{
+"k": "target",
+"l": "Hedef parlaklık",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 50
+},
+{
+"k": "color",
+"l": "Rengi de dengele",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false
+},
+{
+"type": "deblur",
+"name": "Bulanıklık Giderme",
+"en": "Shake Deblur",
+"cat": 2,
+"kind": "pixel",
+"desc": "Belli yöndeki hareket bulanıklığını kısmen geri alır.",
+"tags": [
+"Netlik",
+"Fotoğraf",
+"Video"
+],
+"params": [
+{
+"k": "len",
+"l": "Bulanıklık uzunluğu",
+"kind": "jog",
+"min": 0,
+"max": 60,
+"step": 0.5,
+"jog": 0.2,
+"def": 8
+},
+{
+"k": "ang",
+"l": "Açı",
+"kind": "jog",
+"min": -36000,
+"max": 36000,
+"step": 1,
+"jog": 0.5,
+"def": 0
+},
+{
+"k": "amount",
+"l": "Güç",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 70
+},
+{
+"k": "iter",
+"l": "Yineleme",
+"kind": "jog",
+"min": 1,
+"max": 8,
+"step": 1,
+"jog": 0.1,
+"def": 3
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false
+},
+{
+"type": "upscale",
+"name": "Ayrıntılı Büyütme",
+"en": "Detail-preserving Upscale",
+"cat": 2,
+"kind": "pixel",
+"desc": "Küçük görseli büyütürken kenarları keskin ve ayrıntıyı korur.",
+"tags": [
+"Netlik",
+"Büyütme"
+],
+"params": [
+{
+"k": "scale",
+"l": "Ölçek",
+"kind": "jog",
+"min": 100,
+"max": 400,
+"step": 1,
+"jog": 0.5,
+"def": 200
+},
+{
+"k": "detail",
+"l": "Ayrıntı",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 50
+},
+{
+"k": "noise",
+"l": "Gürültü azalt",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 20
+}
+],
+"presets": [],
+"pad": {
+"add": 0
+},
+"passes": null,
+"info": null,
+"heavy": false
+},
+{
+"type": "liquify",
+"name": "Sıvılaştır",
+"en": "Liquify",
+"cat": 3,
+"kind": "pixel",
+"desc": "Parmakla it, çek, döndür, şişir ya da sıkıştır (önizlemede noktaları sürükle).",
+"tags": [
+"Bükme",
+"Fırça"
+],
+"params": [
+{
+"k": "tool",
+"l": "Araç",
+"kind": "choice",
+"min": 0,
+"max": 4,
+"step": 1,
+"jog": 1,
+"opts": [
+"İt",
+"Saat yönü döndür",
+"Ters döndür",
+"Şişir",
+"Sıkıştır"
+],
+"def": 0
+},
+{
+"k": "from",
+"l": "Fırça yeri",
+"kind": "jog",
+"min": -100000,
+"max": 100000,
+"defY": 0,
+"step": 1,
+"jog": 1,
+"two": true,
+"def": 0
+},
+{
+"k": "to",
+"l": "İtme yönü",
+"kind": "jog",
+"min": -100000,
+"max": 100000,
+"defY": 0,
+"step": 1,
+"jog": 1,
+"two": true,
+"def": 40
+},
+{
+"k": "rad",
+"l": "Fırça boyu",
+"kind": "jog",
+"min": 5,
+"max": 1000,
+"step": 1,
+"jog": 0.5,
+"def": 80
+},
+{
+"k": "str",
+"l": "Güç",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 70
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false
+},
+{
+"type": "paintbucket",
+"name": "Boya Kovası",
+"en": "Paint Bucket",
+"cat": 4,
+"kind": "pixel",
+"desc": "Dokunduğun noktadaki aynı renkli alanı seçtiğin renkle doldurur.",
+"tags": [
+"Renk",
+"Doldur"
+],
+"params": [
+{
+"k": "pos",
+"l": "Nokta",
+"kind": "jog",
+"min": -100000,
+"max": 100000,
+"defY": 0,
+"step": 1,
+"jog": 1,
+"two": true,
+"def": 0
+},
+{
+"k": "col",
+"l": "Renk",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#22D3C5"
+},
+{
+"k": "tol",
+"l": "Tolerans",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 15
+},
+{
+"k": "feather",
+"l": "Yumuşaklık",
+"kind": "jog",
+"min": 0,
+"max": 20,
+"step": 0.1,
+"jog": 0.05,
+"def": 1
+},
+{
+"k": "mode",
+"l": "Tür",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Doldur",
+"Sadece kenar",
+"Saydam yap"
+],
+"def": 0
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": true
+},
+{
+"type": "eyedropper",
+"name": "Damlalık Dolgu",
+"en": "Eyedropper Fill",
+"cat": 4,
+"kind": "pixel",
+"desc": "Seçtiğin noktadaki rengi alıp bütün katmanı o renge boyar.",
+"tags": [
+"Renk",
+"Doldur"
+],
+"params": [
+{
+"k": "pos",
+"l": "Nokta",
+"kind": "jog",
+"min": -100000,
+"max": 100000,
+"defY": 0,
+"step": 1,
+"jog": 1,
+"two": true,
+"def": 0
+},
+{
+"k": "rad",
+"l": "Örnek alanı",
+"kind": "jog",
+"min": 0,
+"max": 50,
+"step": 0.5,
+"jog": 0.2,
+"def": 2
+},
+{
+"k": "mix",
+"l": "Karışım",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 100
+},
+{
+"k": "keep",
+"l": "Işığı koru",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 0
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false
+},
+{
+"type": "diffmatte",
+"name": "Fark Matı",
+"en": "Difference Matte",
+"cat": 8,
+"kind": "special",
+"desc": "Videonun boş (temiz arka planlı) bir karesine göre değişmeyen yerleri saydam yapar.",
+"tags": [
+"Maske",
+"Anahtar",
+"Video"
+],
+"params": [
+{
+"k": "ref",
+"l": "Temiz kare (sn)",
+"kind": "jog",
+"min": 0,
+"max": 100000.0,
+"step": 0.04,
+"jog": 0.02,
+"def": 0
+},
+{
+"k": "tol",
+"l": "Tolerans",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 12
+},
+{
+"k": "soft",
+"l": "Yumuşaklık",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 10
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": "Arka planın boş olduğu anı 'Temiz kare' olarak seç.",
+"heavy": false
+},
+{
+"type": "wireremove",
+"name": "Tel Silme",
+"en": "Wire Removal",
+"cat": 8,
+"kind": "pixel",
+"desc": "İki nokta arasındaki ince çizgiyi (tel, ip) çevresiyle doldurarak siler.",
+"tags": [
+"Temizlik",
+"Video"
+],
+"params": [
+{
+"k": "a",
+"l": "Uç 1",
+"kind": "jog",
+"min": -100000,
+"max": 100000,
+"defY": -60,
+"step": 1,
+"jog": 1,
+"two": true,
+"def": -100
+},
+{
+"k": "b",
+"l": "Uç 2",
+"kind": "jog",
+"min": -100000,
+"max": 100000,
+"defY": 60,
+"step": 1,
+"jog": 1,
+"two": true,
+"def": 100
+},
+{
+"k": "width",
+"l": "Kalınlık",
+"kind": "jog",
+"min": 0.5,
+"max": 40,
+"step": 0.1,
+"jog": 0.05,
+"def": 4
+},
+{
+"k": "soft",
+"l": "Yumuşaklık",
+"kind": "jog",
+"min": 0,
+"max": 20,
+"step": 0.1,
+"jog": 0.05,
+"def": 2
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false
+},
+{
+"type": "fringe",
+"name": "Renk Saçağı Temizle",
+"en": "Remove Color Matting",
+"cat": 8,
+"kind": "pixel",
+"desc": "Kesilmiş nesnenin kenarında kalan eski arka plan rengini temizler.",
+"tags": [
+"Maske",
+"Kenar"
+],
+"params": [
+{
+"k": "bg",
+"l": "Eski arka plan",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#22B14C"
+},
+{
+"k": "amount",
+"l": "Güç",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 100
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false
+},
+{
+"type": "matchgrain",
+"name": "Gren Eşle",
+"en": "Match Grain",
+"cat": 11,
+"kind": "special",
+"desc": "Katmanın kendi grenini ölçer, efektlerden (bulanıklık gibi) sonra kaybolan greni geri ekler.",
+"tags": [
+"Gürültü",
+"Video",
+"Film"
+],
+"params": [
+{
+"k": "amount",
+"l": "Güç",
+"kind": "jog",
+"min": 0,
+"max": 300,
+"step": 1,
+"jog": 0.5,
+"def": 100
+},
+{
+"k": "size",
+"l": "Tane",
+"kind": "jog",
+"min": 0.5,
+"max": 5,
+"step": 0.05,
+"jog": 0.02,
+"def": 1
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": "Efekt listesinde sona koy.",
+"heavy": false
+},
+{
+"type": "timediff",
+"name": "Zaman Farkı",
+"en": "Time Difference",
+"cat": 14,
+"kind": "special",
+"desc": "Şimdiki kare ile biraz önceki kare arasında değişen yerleri gösterir (hareket algılama görünümü).",
+"tags": [
+"Zaman",
+"Hareket",
+"Bilim"
+],
+"params": [
+{
+"k": "off",
+"l": "Fark (sn)",
+"kind": "jog",
+"min": 0.01,
+"max": 2,
+"step": 0.005,
+"jog": 0.002,
+"def": 0.1
+},
+{
+"k": "gain",
+"l": "Kazanç",
+"kind": "jog",
+"min": 0,
+"max": 1000,
+"step": 1,
+"jog": 0.5,
+"def": 300
+},
+{
+"k": "abs",
+"l": "Mutlak fark",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+},
+{
+"k": "color",
+"l": "Renkli",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false
+},
+{
+"type": "chrome",
+"name": "Krom Yansıma",
+"en": "Environment (Chrome)",
+"cat": 1,
+"kind": "pixel",
+"desc": "Katmanı parlak krom gibi yapar; kendi görüntüsünü yansıtır.",
+"tags": [
+"Metal",
+"Işık",
+"3B"
+],
+"params": [
+{
+"k": "bump",
+"l": "Kabartı",
+"kind": "jog",
+"min": 0,
+"max": 30,
+"step": 0.1,
+"jog": 0.05,
+"def": 6
+},
+{
+"k": "refl",
+"l": "Yansıma",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 80
+},
+{
+"k": "tint",
+"l": "Ton",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#DCE6F5"
+},
+{
+"k": "spin",
+"l": "Ortam dönmesi",
+"kind": "jog",
+"min": -360,
+"max": 360,
+"step": 1,
+"jog": 0.5,
+"def": 20
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false
+},
+{
+"type": "depthblur",
+"name": "Arka Plan Bulanıklığı (Derinlik)",
+"en": "Depth of Field",
+"cat": 2,
+"kind": "pixel",
+"desc": "Portre fotoğrafının derinlik haritasıyla odak dışını bulanıklaştırır; odağı sonradan değiştirebilirsin.",
+"tags": [
+"Bulanık",
+"Fotoğraf",
+"Portre"
+],
+"params": [
+{
+"k": "focus",
+"l": "Odak uzaklığı",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.5,
+"jog": 0.2,
+"def": 20
+},
+{
+"k": "amount",
+"l": "Bulanıklık",
+"kind": "jog",
+"min": 0,
+"max": 60,
+"step": 0.5,
+"jog": 0.2,
+"def": 16
+},
+{
+"k": "range",
+"l": "Net alan",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 15
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": "Telefonun portre modunda çekilmiş, içinde derinlik haritası olan fotoğraflarda çalışır.",
+"heavy": true
+},
+{
+"type": "depthmatte",
+"name": "Derinlik Matı",
+"en": "Depth Matte",
+"cat": 8,
+"kind": "pixel",
+"desc": "Belli bir uzaklıktan ötesini saydam yapar (arka planı silme).",
+"tags": [
+"Maske",
+"Portre"
+],
+"params": [
+{
+"k": "depth",
+"l": "Uzaklık",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.5,
+"jog": 0.2,
+"def": 40
+},
+{
+"k": "soft",
+"l": "Yumuşaklık",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 10
+},
+{
+"k": "inv",
+"l": "Önü sil",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 0
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": "Telefonun portre modunda çekilmiş, içinde derinlik haritası olan fotoğraflarda çalışır.",
+"heavy": false
+},
+{
+"type": "depthfog",
+"name": "3B Sis",
+"en": "Fog 3D",
+"cat": 11,
+"kind": "pixel",
+"desc": "Uzaktaki yerleri derinliğe göre sisle örter.",
+"tags": [
+"Atmosfer",
+"Portre",
+"3B"
+],
+"params": [
+{
+"k": "start",
+"l": "Sis başlangıcı",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.5,
+"jog": 0.2,
+"def": 30
+},
+{
+"k": "end",
+"l": "Tam sis",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.5,
+"jog": 0.2,
+"def": 100
+},
+{
+"k": "col",
+"l": "Renk",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#DCE6F5"
+},
+{
+"k": "dens",
+"l": "Yoğunluk",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 0.5,
+"def": 80
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": "Telefonun portre modunda çekilmiş, içinde derinlik haritası olan fotoğraflarda çalışır.",
+"heavy": false
 }
 ],
 "featured": [
