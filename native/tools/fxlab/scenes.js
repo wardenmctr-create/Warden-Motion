@@ -38,14 +38,14 @@ const bgCol = (c) => (g, S) => { g.fillStyle = c; g.fillRect(0, 0, S, S); };
 const checkerBg = (g, S) => { for (let y = 0; y < S; y += 12) for (let x = 0; x < S; x += 12) { g.fillStyle = ((x + y) / 12) % 2 ? '#C9D3E3' : '#E3E9F2'; g.fillRect(x, y, 12, 12); } };
 
 // Sahne kalıpları
-function photo(type, vals, extra = {}) { return { size: 240, dur: 2.4, fps: 20, bg: bgNavy, layers: [{ x: 120, y: 120, w: 240, h: 240, draw: landscape, fx: [{ type, v: vals }], ...extra }] }; }
-function on(drawFn, w, h, type, vals, o = {}) { return { size: 240, dur: o.dur || 2.4, fps: 20, bg: o.bg || bgNavy, layers: [...(o.under || []), { x: o.x ?? 120, y: o.y ?? 120, w, h, draw: drawFn, fx: [{ type, v: vals }], tr: o.tr }, ...(o.over || [])] }; }
+function photo(type, vals, extra = {}) { return { size: 240, dur: 2, fps: 12, bg: bgNavy, layers: [{ x: 120, y: 120, w: 240, h: 240, draw: landscape, fx: [{ type, v: vals }], ...extra }] }; }
+function on(drawFn, w, h, type, vals, o = {}) { return { size: 240, dur: o.dur || 2, fps: 12, bg: o.bg || bgNavy, layers: [...(o.under || []), { x: o.x ?? 120, y: o.y ?? 120, w, h, draw: drawFn, fx: [{ type, v: vals }], tr: o.tr }, ...(o.over || [])] }; }
 
 const SCENES = {};
 const def = (t, sc) => { SCENES[t] = sc; };
 // ---- Renk ve Işık (her efekt farklı bir konu) ----
 const Sb = SUBJ;
-const full = (draw, type, vals, o = {}) => ({ size: 240, dur: o.dur || 2.4, fps: 20, bg: o.bg || bgNavy, layers: [...(o.under || []), { x: 120, y: 120, w: o.w || 240, h: o.h || 240, draw, fx: [{ type, v: vals }], tr: o.tr }, ...(o.over || [])] });
+const full = (draw, type, vals, o = {}) => ({ size: 240, dur: o.dur || 2, fps: 12, bg: o.bg || bgNavy, layers: [...(o.under || []), { x: 120, y: 120, w: o.w || 240, h: o.h || 240, draw, fx: [{ type, v: vals }], tr: o.tr }, ...(o.over || [])] });
 const cbGroup = (g, w, h) => { Sb.cb('az', 'mutlu')(g, w * 0.3, h * 0.3); g.save(); g.translate(-w * 0.3, h * 0.08); Sb.cb('tr', 'normal', 'fes')(g, w * 0.36, h * 0.36); g.restore(); g.save(); g.translate(w * 0.3, h * 0.1); Sb.cb('jp', 'saskin')(g, w * 0.32, h * 0.32); g.restore(); };
 const onCol = (c, fn) => (g, w, h) => { g.fillStyle = c; g.fillRect(-w / 2, -h / 2, w, h); fn(g, w, h); };
 const lightBg = (fn) => onCol('#E3EEFC', fn);

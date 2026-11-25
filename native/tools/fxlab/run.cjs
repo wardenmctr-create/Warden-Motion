@@ -22,7 +22,10 @@ const MIME = { '.html': 'text/html', '.js': 'text/javascript', '.json': 'applica
     let frames;
     try { frames = await p.evaluate((t) => render(t), t); } catch (e) { console.log('HATA', t, String(e).slice(0, 500)); continue; }
     frames.forEach((d, i) => fs.writeFileSync(`${dir}/${String(i).padStart(3, '0')}.png`, Buffer.from(d.split(',')[1], 'base64')));
-    execFileSync('ffmpeg', ['-v', 'error', '-y', '-framerate', '20', '-i', `${dir}/%03d.png`, '-vf', 'scale=240:240:flags=lanczos,split[a][b];[a]palettegen=stats_mode=full[p];[b][p]paletteuse=dither=sierra2_4a', '-loop', '0', `${out}/${t}.gif`]);
+    // Sohbet için küçük GIF (160 px, 12 kare/sn), uygulama için daha küçük hareketli WebP (128 px, 8 kare/sn)
+    const fps = await p.evaluate((t) => (SCENES[t] || TEST_SCENES[t]).fps, t);
+    execFileSync('ffmpeg', ['-v', 'error', '-y', '-framerate', String(fps), '-i', `${dir}/%03d.png`, '-vf', 'scale=160:160:flags=lanczos,split[a][b];[a]palettegen=max_colors=128:stats_mode=full[p];[b][p]paletteuse=dither=bayer:bayer_scale=4', '-loop', '0', `${out}/${t}.gif`]);
+    execFileSync('ffmpeg', ['-v', 'error', '-y', '-framerate', String(fps), '-i', `${dir}/%03d.png`, '-vf', `fps=8,scale=128:128:flags=lanczos`, '-c:v', 'libwebp', '-lossless', '0', '-q:v', '35', '-compression_level', '6', '-loop', '0', '-an', `${out}/${t}.webp`]);
     console.log('OK', t);
   }
   await b.close();

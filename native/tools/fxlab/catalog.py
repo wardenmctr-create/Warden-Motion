@@ -341,6 +341,7 @@ fx("pixelsort", "Piksel Sıralama", "Pixel Sort Streaks", c, "pixel", "Parlak b�
 fx("ascii", "Yazı Sanatı", "ASCII Art", c, "pixel", "Görüntüyü küçük karakterlerden oluşan desene çevirir.", ["Retro", "Grafik", "Hacker"], [J("size", "Karakter boyu", 3, 60, 10, 0.5, 0.2), C("col", "Renk", "#22D3C5"), C("bg", "Zemin", "#0B1430"), T("orig", "Asıl renk", 0)])
 
 exec(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'catalog_ae.py')).read())
+exec(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'catalog_ae2.py')).read())
 order_kinds = {}
 for e in E:
     for p in e["params"]:
