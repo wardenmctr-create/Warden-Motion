@@ -727,10 +727,12 @@ private fun Timeline(s: EditorState, PPS: Float, setPPS: (Float) -> Unit, tickSt
         }
         trimming?.let { (id, side, v0) ->
             val l = p.layers.find { it.id == id }
-            if (l != null) Row(Modifier.fillMaxWidth().background(C.dBg).padding(horizontal = 8.dp, vertical = 4.dp).zIndex(7f)) {
+            // Şeridi kapatmasın: zaman çizelgesinin altında, tek satır ve küçük
+            if (l != null) Row(Modifier.align(Alignment.BottomCenter).padding(bottom = 6.dp).clip(RoundedCornerShape(8.dp)).background(C.dBar.copy(alpha = .92f)).padding(horizontal = 10.dp, vertical = 5.dp).zIndex(7f),
+                horizontalArrangement = Arrangement.spacedBy(10.dp), verticalAlignment = Alignment.CenterVertically) {
                 val d = if (side == "start") l.start - v0 else l.end - v0
-                listOf("Başlangıç" to fmtTime(l.start, p.fps), "Bitiş" to fmtTime(l.end, p.fps), "Süre" to fmtTime(l.end - l.start, p.fps), "Değişiklik" to (if (d < 0) "-" else "+") + fmtTime(abs(d), p.fps)).forEach { (a, b) ->
-                    Column(Modifier.weight(1f)) { Text(a, fontSize = 10.sp, color = C.dText2); Text(b, fontSize = 12.sp, color = C.dText) }
+                listOf("Baş" to fmtTime(l.start, p.fps), "Son" to fmtTime(l.end, p.fps), "Süre" to fmtTime(l.end - l.start, p.fps), "Fark" to (if (d < 0) "-" else "+") + fmtTime(abs(d), p.fps)).forEach { (a, b) ->
+                    Row(verticalAlignment = Alignment.CenterVertically) { Text(a + " ", fontSize = 10.sp, color = C.dText2); Text(b, fontSize = 11.sp, color = C.dText, fontWeight = FontWeight.Medium) }
                 }
             }
         }

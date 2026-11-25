@@ -205,7 +205,9 @@ class ShotsTest {
         // Sondaki tutamacı sola sürükle (şerit kısalmalı, tutamaç ucu takip etmeli)
         val ed = com.warden.motion.app.ui.UiState.editor!!
         rule.runOnUiThread { ed.time = 11.0 }; settle(); save(shot(), "t_end")
-        rule.onNodeWithContentDescription("Katmanın sonu").performTouchInput { down(center); repeat(10) { moveBy(androidx.compose.ui.geometry.Offset(-20f * density, 0f)) }; up() }
+        rule.onNodeWithContentDescription("Katmanın sonu").performTouchInput { down(center); repeat(10) { moveBy(androidx.compose.ui.geometry.Offset(-20f * density, 0f)) } }
+        settle(); save(shot(), "t_drag")
+        rule.onNodeWithContentDescription("Katmanın sonu").performTouchInput { up() }
         settle(); save(shot(), "t_trim")
         println("SON=" + ed.project.layers.first { it.name == "Uzun Ses" }.end + " ZAMAN=" + ed.time)
         rule.runOnUiThread { ed.time = 0.0 }; settle()
