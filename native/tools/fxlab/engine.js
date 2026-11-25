@@ -1,0 +1,99 @@
+// Warden Motion efekt laboratuvarı: uygulamadaki GPU motorunun WebGL2 eşi.
+// Aynı shader dosyalarını (app/src/main/assets/fx) ve aynı kataloğu kullanır.
+const FX = window.FXBASE || 'fx/';
+const VS = `#version 300 es
+in vec2 a_pos; out vec2 v_uv; uniform mat3 u_m;
+void main(){ v_uv = a_pos; vec3 p = u_m * vec3(a_pos, 1.0); gl_Position = vec4(p.xy, 0.0, 1.0); }`;
+
+class Engine {
+  constructor(canvas) {
+    this.c = canvas; const gl = this.gl = canvas.getContext('webgl2', { premultipliedAlpha: true, preserveDrawingBuffer: true, alpha: true });
+    gl.getExtension('EXT_color_buffer_float');
+    this.quad = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, this.quad);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([0,0, 1,0, 0,1, 1,1]), gl.STATIC_DRAW);
+    this.progs = {}; this.src = {};
+  }
+  async load(catalogUrl) {
+    this.common = await (await fetch(FX + 'common.glsl')).text();
+    this.cat = await (await fetch(catalogUrl)).json();
+    this.meta = {}; for (const e of this.cat.effects) this.meta[e.type] = e;
+  }
+  async shaderSrc(name) { if (!this.src[name]) this.src[name] = await (await fetch(FX + name + '.glsl')).text(); return this.src[name]; }
+  async prog(name) {
+    if (this.progs[name]) return this.progs[name];
+    const gl = this.gl; const fsrc = '#version 300 es\n' + this.common + '\n' + await this.shaderSrc(name);
+    const mk = (t, s) => { const sh = gl.createShader(t); gl.shaderSource(sh, s); gl.compileShader(sh); if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS)) throw new Error(name + ': ' + gl.getShaderInfoLog(sh)); return sh; };
+    const p = gl.createProgram(); gl.attachShader(p, mk(gl.VERTEX_SHADER, VS)); gl.attachShader(p, mk(gl.FRAGMENT_SHADER, fsrc)); gl.linkProgram(p);
+    if (!gl.getProgramParameter(p, gl.LINK_STATUS)) throw new Error(name + ' link: ' + gl.getProgramInfoLog(p));
+    this.progs[name] = p; return p;
+  }
+  tex(w, h) {
+    const gl = this.gl; const t = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, t);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA8, w, h, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+    for (const [k, v] of [[gl.TEXTURE_MIN_FILTER, gl.LINEAR], [gl.TEXTURE_MAG_FILTER, gl.LINEAR], [gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE], [gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE]]) gl.texParameteri(gl.TEXTURE_2D, k, v);
+    const fb = gl.createFramebuffer(); gl.bindFramebuffer(gl.FRAMEBUFFER, fb); gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, t, 0);
+    return { t, fb, w, h };
+  }
+  upload(canvas2d) {
+    const gl = this.gl; const T = this.tex(canvas2d.width, canvas2d.height);
+    gl.bindTexture(gl.TEXTURE_2D, T.t); gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA8, gl.RGBA, gl.UNSIGNED_BYTE, canvas2d); return T;
+  }
+  free(T) { const gl = this.gl; gl.deleteTexture(T.t); gl.deleteFramebuffer(T.fb); }
+  // Bir geçiş: program, girişler, çıktı hedefi
+  async pass(name, out, inputs, uni, m) {
+    const gl = this.gl; const p = await this.prog(name); gl.useProgram(p);
+    gl.bindFramebuffer(gl.FRAMEBUFFER, out ? out.fb : null); gl.viewport(0, 0, out ? out.w : this.c.width, out ? out.h : this.c.height);
+    let unit = 0;
+    for (const [k, T] of Object.entries(inputs)) { gl.activeTexture(gl.TEXTURE0 + unit); gl.bindTexture(gl.TEXTURE_2D, T.t); gl.uniform1i(gl.getUniformLocation(p, k), unit); unit++; }
+    for (const [k, v] of Object.entries(uni)) {
+      const loc = gl.getUniformLocation(p, k); if (!loc) continue;
+      if (typeof v === 'number') gl.uniform1f(loc, v); else if (v.length === 2) gl.uniform2fv(loc, v); else if (v.length === 3) gl.uniform3fv(loc, v); else if (v.length === 4) gl.uniform4fv(loc, v); else if (v.length === 9) gl.uniformMatrix3fv(loc, false, v);
+    }
+    gl.uniformMatrix3fv(gl.getUniformLocation(p, 'u_m'), false, m || [2,0,0, 0,2,0, -1,-1,1]);
+    const a = gl.getAttribLocation(p, 'a_pos'); gl.bindBuffer(gl.ARRAY_BUFFER, this.quad); gl.enableVertexAttribArray(a); gl.vertexAttribPointer(a, 2, gl.FLOAT, false, 0, 0);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+  }
+}
+
+// Efektin ayar değerleri → uniform
+function hexToRgb(h) { const n = parseInt(h.slice(1), 16); return [(n >> 16 & 255) / 255, (n >> 8 & 255) / 255, (n & 255) / 255]; }
+function fxUniforms(meta, vals) {
+  const u = {};
+  for (const pr of meta.params || []) {
+    if (pr.kind === 'color') u['c_' + pr.k] = hexToRgb(vals[pr.k] ?? pr.def);
+    else if (pr.two) u['p_' + pr.k] = [vals[pr.k + 'X'] ?? pr.def, vals[pr.k + 'Y'] ?? (pr.defY ?? pr.def)];
+    else u['p_' + pr.k] = vals[pr.k] ?? pr.def;
+  }
+  return u;
+}
+function linearOf(spec, vals, meta) { if (!spec) return 0; let v = spec.add || 0; if (spec.k) { const pr = (meta.params || []).find((p) => p.k === spec.k); v += (vals[spec.k] ?? pr?.def ?? 0) * (spec.mul ?? 1); } return Math.max(0, v); }
+
+// Katmana efekt zincirini uygula: base (önceden çarpılmış doku, kutu + pad), sonuç doku
+async function applyEffects(E, base, box, s, effects, t, dur) {
+  let cur = base;
+  for (const ef of effects) {
+    const meta = E.meta[ef.type]; if (!meta || !['pixel', 'gen', 'repeat', '3d'].includes(meta.kind)) continue;
+    const common = { u_res: [cur.w, cur.h], u_box: box, u_t: t, u_s: s, u_dur: dur, ...fxUniforms(meta, ef.v || {}) };
+    const bufs = { src: cur };
+    const passes = meta.passes || [{ fs: ef.type }];
+    let last = cur;
+    for (const ps of passes) {
+      const inp = bufs[ps.in || (last === cur ? 'src' : '_last')] || last;
+      if (ps.blur) { // ayrılabilir Gauss (iki geçiş)
+        const sig = linearOf(ps.r, ef.v || {}, meta) * s;
+        const a = E.tex(cur.w, cur.h), b = E.tex(cur.w, cur.h);
+        await E.pass('_blur', a, { u_tex: bufs[ps.blur] || last }, { ...common, u_dir: [1, 0], u_sigma: sig });
+        await E.pass('_blur', b, { u_tex: a }, { ...common, u_dir: [0, 1], u_sigma: sig });
+        E.free(a); bufs[ps.out || '_last'] = b; last = b; continue;
+      }
+      const out = E.tex(cur.w, cur.h); const ins = { u_tex: inp, u_src: cur };
+      for (const [k, v] of Object.entries(ps.aux || {})) ins[k] = bufs[v];
+      await E.pass(ps.fs, out, ins, { ...common, ...(ps.set || {}) });
+      bufs[ps.out || '_last'] = out; bufs._last = out; last = out;
+    }
+    cur = last;
+  }
+  return cur;
+}
+window.Engine = Engine; window.applyEffects = applyEffects; window.fxUniforms = fxUniforms; window.linearOf = linearOf;

@@ -1,0 +1,59 @@
+<!doctype html><html><head><meta charset="utf-8"><style>body{margin:0;background:#000}</style></head><body>
+<canvas id="gl" width="480" height="480"></canvas>
+<script>window.FXBASE='/native/app/src/main/assets/fx/';</script>
+<script src="engine.js"></script>
+<script src="scenes.js"></script>
+<script>
+const IMG = {};
+function loadImg(k, url) { return new Promise((res) => { const i = new Image(); i.onload = () => { IMG[k] = i; res(); }; i.onerror = () => res(); i.src = url; }); }
+async function boot() {
+  const f = new FontFace('Inter', 'url(/native/app/src/main/res/font/inter_bold.otf)', { weight: '700' }); await f.load(); document.fonts.add(f);
+  const f2 = new FontFace('InterX', 'url(/native/app/src/main/res/font/inter_extrabold.otf)', { weight: '800' }); await f2.load(); document.fonts.add(f2);
+  await loadImg('tr', '/public/flags/tr.svg');
+  for (const k of ['a', 'e', 'h', 'b']) await loadImg('wcb' + k, '/native/app/src/main/res/drawable-nodpi/wcb' + k + '_idle.png');
+  window.E = new Engine(document.getElementById('gl'));
+  await E.load(window.FXBASE + 'catalog.json');
+  window.ready = true;
+}
+// Bir katmanın kendi düzlemindeki çizimi (pad dahil), s px/birim
+function layerCanvas(L, pad, s) {
+  const W = Math.ceil((L.w + 2 * pad) * s), H = Math.ceil((L.h + 2 * pad) * s);
+  const c = document.createElement('canvas'); c.width = W; c.height = H; const g = c.getContext('2d');
+  g.translate(W / 2, H / 2); g.scale(s, s);
+  L.draw(g, L.w, L.h, L);
+  return { c, box: [pad * s, pad * s, L.w * s, L.h * s] };
+}
+// Bir kare: sahne → piksel verisi
+async function frame(scene, p) {
+  const gl = E.gl, S = scene.size, s = 480 / S, t = p * scene.dur;
+  gl.bindFramebuffer(gl.FRAMEBUFFER, null); gl.viewport(0, 0, 480, 480);
+  gl.disable(gl.BLEND); gl.clearColor(0, 0, 0, 0); gl.clear(gl.COLOR_BUFFER_BIT);
+  // arka plan
+  const bg = document.createElement('canvas'); bg.width = bg.height = 480; const bgx = bg.getContext('2d'); bgx.scale(s, s); scene.bg(bgx, S, p);
+  const bgt = E.upload(bg); gl.disable(gl.BLEND); await E.pass('_comp', null, { u_tex: bgt }, { u_op: 1 }, [2, 0, 0, 0, -2, 0, -1, 1, 1]); E.free(bgt);
+  for (const L0 of scene.layers) {
+    const L = typeof L0 === 'function' ? L0(p) : L0;
+    const fx = (L.fx || []).map((e) => ({ type: e.type, v: typeof e.v === 'function' ? e.v(p, t) : (e.v || {}) }));
+    let pad = L.pad ?? 0;
+    for (const e of fx) { const m = E.meta[e.type]; if (m && m.pad) pad += linearOf(m.pad, e.v, m); }
+    const lc = layerCanvas(L, pad, s);
+    const base = E.upload(lc.c);
+    const out = await applyEffects(E, base, lc.box, s, fx, t, scene.dur);
+    // sahneye: merkez (x,y), dönme, ölçek
+    const tr = L.tr ? L.tr(p, t) : {};
+    const x = (tr.x ?? L.x) * s, y = (tr.y ?? L.y) * s, rot = (tr.rot ?? 0) * Math.PI / 180, sc = tr.scale ?? 1, op = tr.op ?? 1;
+    const hw = out.w / 2 * sc, hh = out.h / 2 * sc, ca = Math.cos(rot), sa = Math.sin(rot);
+    // birim kare (0..1) → piksel → NDC (y aşağı)
+    const ax = 2 / 480, ay = -2 / 480;
+    const m = [ (2 * hw * ca) * ax, (2 * hw * sa) * ay, 0, (-2 * hh * sa) * ax, (2 * hh * ca) * ay, 0,
+      (x - hw * ca + hh * sa) * ax - 1, (y - hw * sa - hh * ca) * ay + 1, 1 ];
+    gl.enable(gl.BLEND); gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+    await E.pass('_comp', null, { u_tex: out }, { u_op: op }, m);
+    if (out !== base) E.free(out); E.free(base);
+  }
+  gl.disable(gl.BLEND);
+  return document.getElementById('gl').toDataURL('image/png');
+}
+async function render(name) { const sc = SCENES[name]; const n = Math.round(sc.dur * sc.fps); const out = []; for (let i = 0; i < n; i++) out.push(await frame(sc, i / n)); return out; }
+boot().catch((e) => { window.bootErr = String(e); });
+</script></body></html>
