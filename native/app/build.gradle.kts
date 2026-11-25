@@ -1,3 +1,4 @@
+import java.util.Properties
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -16,8 +17,24 @@ android {
         versionCode = 3
         versionName = "0.19"
     }
+    // Yayın imzası: anahtar depoda değil, native/keystore.properties + warden.jks (git'e girmez)
+    val kp = rootProject.file("keystore.properties")
+    signingConfigs {
+        if (kp.exists()) create("release") {
+            val pr = Properties().apply { kp.inputStream().use { load(it) } }
+            storeFile = rootProject.file(pr.getProperty("storeFile"))
+            storePassword = pr.getProperty("storePassword")
+            keyAlias = pr.getProperty("keyAlias")
+            keyPassword = pr.getProperty("keyPassword")
+        }
+    }
     buildTypes {
-        release { isMinifyEnabled = false }
+        release {
+            // Kod küçültme: kullanılmayan kütüphane kodu atılır (APK küçülür, uygulama hızlanır)
+            isMinifyEnabled = true
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            if (kp.exists()) signingConfig = signingConfigs.getByName("release")
+        }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17

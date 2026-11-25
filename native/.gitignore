@@ -3,3 +3,5 @@ local.properties
 build/
 app/build/
 shots/
+keystore.properties
+*.jks
