@@ -147,7 +147,7 @@ vec3 palc_$k(int i) { vec3 c[8] = vec3[8]($c); return c[clamp(i, 0, 7)]; }"""
     }
 
     data class Job(val effects: List<Pair<Effect, FxMeta>>, val t: Double, val lt: Double, val dur: Double, val box: FloatArray, val s: Float,
-                   val sources: Map<String, Bitmap> = emptyMap())
+                   val sources: Map<String, Bitmap> = emptyMap(), val rot: Float = 0f)
 
     /** Efekt zincirini uygular; sonuç yeni bir Bitmap (aynı boyut) ya da GPU yoksa null */
     fun apply(bmp: Bitmap, job: Job): Bitmap? = try { exec.submit<Bitmap?> { run(bmp, job) }.get() } catch (e: Throwable) { Log.w("GlFx", "uygulanamadı", e); null }
@@ -163,7 +163,7 @@ vec3 palc_$k(int i) { vec3 c[8] = vec3[8]($c); return c[clamp(i, 0, 7)]; }"""
         var cur = base
         for ((e, m) in job.effects) {
             val uni = HashMap<String, Any>()
-            uni["u_res"] = floatArrayOf(w.toFloat(), h.toFloat()); uni["u_box"] = job.box; uni["u_t"] = job.lt.toFloat(); uni["u_s"] = job.s; uni["u_dur"] = job.dur.toFloat()
+            uni["u_res"] = floatArrayOf(w.toFloat(), h.toFloat()); uni["u_box"] = job.box; uni["u_t"] = job.lt.toFloat(); uni["u_s"] = job.s; uni["u_dur"] = job.dur.toFloat(); uni["u_rot"] = job.rot
             uniforms(e, m, job.t, job.box, job.s, uni); uni.putAll(srcOn)
             val bufs = HashMap<String, Tex>(); bufs["src"] = cur
             val passes = m.passes ?: listOf(FxPass(m.type, null, null, 1.0, 0.0, null, null, emptyMap(), emptyMap()))

@@ -98,7 +98,7 @@ async function applyEffects(E, base, box, s, effects, t, dur, extra = {}) {
   let cur = base;
   for (const ef of effects) {
     const meta = E.meta[ef.type]; if (!meta || !['pixel', 'gen', 'repeat', '3d'].includes(meta.kind)) continue;
-    const common = { u_res: [cur.w, cur.h], u_box: box, u_t: t, u_s: s, u_dur: dur, ...fxUniforms(meta, ef.v || {}, box, s) };
+    const common = { u_res: [cur.w, cur.h], u_box: box, u_t: t, u_s: s, u_dur: dur, u_rot: window.CUR_ROT || 0, ...fxUniforms(meta, ef.v || {}, box, s) };
     const bufs = { src: cur }; const made = [];
     const passes = meta.passes || [{ fs: ef.type }];
     let last = cur;

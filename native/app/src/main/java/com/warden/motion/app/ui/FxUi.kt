@@ -52,6 +52,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import com.warden.motion.app.model.*
 import com.warden.motion.app.render.GlFx
 import java.util.Locale
+import kotlin.math.roundToInt
 
 // ---------------------------------------------------------------------------------------------
 // Efekt tarayıcısının renkleri (uygulamanın lacivert paleti)
@@ -332,6 +333,7 @@ fun EffectsPanel(s: EditorState, layer: Layer, onClose: () -> Unit) {
     var menuFx by remember { mutableStateOf<String?>(null) }
     var colorFor by remember { mutableStateOf<Triple<String, String, Int>?>(null) } // efekt, ayar, durak (-1: düz renk)
     var numFor by remember { mutableStateOf<Triple<String, String, Int>?>(null) }  // efekt, ayar, eksen
+    var closedGroups by remember { mutableStateOf(setOf<String>()) }
     val sel = s.fxParam
     LaunchedEffect(sel) { s.kfFocus = listOf(if (sel != null) "fx:${sel.first}:${sel.second}" else "fx:none") }
     DisposableEffect(Unit) { onDispose { s.kfFocus = null; s.fxParam = null } }
@@ -398,8 +400,18 @@ fun EffectsPanel(s: EditorState, layer: Layer, onClose: () -> Unit) {
                                     .tap { upd(e) { applyPreset(makeEffect(e.type).copy(id = e.id), pr, layer.start, layer.end).copy(preset = pr.code) } }.padding(horizontal = 10.dp, vertical = 5.dp))
                             }
                         }
-                        val params = (if (m.kind in GlFx.GPU_KINDS) listOf(MIX_P) else emptyList()) + m.params.filter { it.kind != "info" }
+                        val params = (if (m.kind in GlFx.GPU_KINDS) listOf(MIX_P) else emptyList()) + m.params.filter { it.kind != "info" && (it.visKey == null || (e.value(it.visKey, t).roundToInt() in (it.visIn ?: emptyList()))) }
+                        var lastG: String? = null
                         params.forEachIndexed { pi, pr ->
+                            val g = pr.group
+                            if (g != null && g != lastG) {
+                                val closed = "${e.id}:$g" in closedGroups
+                                Row(Modifier.fillMaxWidth().height(34.dp).background(Color(0xFF222C55)).tap { closedGroups = if (closed) closedGroups - "${e.id}:$g" else closedGroups + "${e.id}:$g" }.padding(horizontal = 10.dp), verticalAlignment = Alignment.CenterVertically) {
+                                    Text(if (closed) "▸" else "▾", fontSize = 11.sp, color = C.dText2); Spacer(Modifier.width(8.dp)); Text(g.uppercase(java.util.Locale("tr")), fontSize = 11.5.sp, fontWeight = FontWeight.Bold, color = C.dText2, letterSpacing = 0.6.sp)
+                                }
+                            }
+                            lastG = g
+                            if (g != null && "${e.id}:$g" in closedGroups) return@forEachIndexed
                             ParamRow(s, layer, e, pr, pi > 0, sel?.first == e.id && sel.second == pr.key,
                                 onSel = { s.fxParam = e.id to pr.key }, onColor = { stop -> s.checkpoint(); colorFor = Triple(e.id, pr.key, stop) },
                                 onNum = { axis -> numFor = Triple(e.id, pr.key, axis) })

@@ -104,3 +104,8 @@ for n, s in _SP.items():
 # Gizli (birleşmiş) efektlerin eski ayarları lab için saklanır
 for e in E:
     if e.get("hidden"): LEGACY.setdefault(e["type"], dict(params=copy.deepcopy(e["params"]), presets=copy.deepcopy(e["presets"])))
+
+# Sonradan eklenen tanımlar (Karton Kukla, Kesim Altlığı, güncel Dokulandır)
+exec(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "catalog_extra.py")).read())
+for _e in E:
+    if _e["type"] in ("cutback", "cardpuppet", "texturize"): _e["ready"] = _e["type"] in READY

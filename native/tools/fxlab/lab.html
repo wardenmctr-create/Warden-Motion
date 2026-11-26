@@ -42,6 +42,7 @@ async function frame(scene, p) {
     const lc = layerCanvas(L, pad, s);
     const base = E.upload(lc.c);
     const extra = {}; if (L.depth) extra.u_depth = E.upload(layerCanvas({ ...L, draw: L.depth }, pad, s).c);
+    window.CUR_ROT = L.tr ? (L.tr(p, t).rot || 0) : 0;
     const out = await applyEffects(E, base, lc.box, s, fx, t, scene.dur, extra);
     if (extra.u_depth) E.free(extra.u_depth);
     // sahneye: merkez (x,y), dönme, ölçek

@@ -34,6 +34,7 @@ burnfilm
 bwmix
 capsule
 carddance
+cardpuppet
 cardwipe
 cartoon
 caustics
@@ -87,6 +88,7 @@ crt
 cube
 curl
 curves
+cutback
 cylinder
 darkglow
 deblur

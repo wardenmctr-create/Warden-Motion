@@ -43,8 +43,14 @@ data class TR(val x: Double, val y: Double, val rot: Double, val scale: Double, 
 
 private fun noise(t: Double, seed: Int) = sin(t * 12.9898 + seed * 78.233) * 0.5 + sin(t * 4.1 + seed) * 0.5
 
-fun layerTransform(l: Layer, t: Double): TR {
-    val tr = TR(l.x.at(t), l.y.at(t), l.rotation.at(t), l.scale.at(t), l.opacity.at(t))
+fun layerTransform(l: Layer, t0: Double): TR {
+    var t = t0
+    // Karton Kukla: stop-motion hissi (düşük kare hızı, eklemlerde sertlik, mikro sallanma)
+    val cp = l.effects.find { it.type == "cardpuppet" && it.on != false && it.value("stopMotion", t0) >= 0.5 }
+    if (cp != null) { val fps = cp.value("kuklaFps", t0).coerceIn(1.0, 60.0); val q = kotlin.math.floor((t0 - l.start) * fps) / fps + l.start; t = q + (t0 - q) * (1 - cp.value("eklemSert", t0) / 100) * 0.3 }
+    var tr = TR(l.x.at(t), l.y.at(t), l.rotation.at(t), l.scale.at(t), l.opacity.at(t))
+    if (cp != null) { val tick = kotlin.math.floor((t0 - l.start) * cp.value("kuklaFps", t0)); val m = cp.value("mikroSallan", t0) / 100
+        tr = tr.copy(x = tr.x + (noise1(tick, 1.0) * 3 * m), y = tr.y + noise1(tick, 2.0) * 3 * m, rot = tr.rot + noise1(tick, 3.0) * 2.5 * m) }
     return if (l.effects.isEmpty()) tr else applyMotionFx(l, t, tr)
 }
 
@@ -236,7 +242,7 @@ class Renderer(private val ctx: Context, maxSide: Int = 2048, private val sync: 
         drawLayer(bc, l)
         if (gpu.isNotEmpty()) {
             val box = floatArrayOf((pad * q).toFloat(), (pad * q).toFloat(), (l.w * q).toFloat(), (l.h * q).toFloat())
-            val job = GlFx.Job(gpu.map { it to fxMeta(it.type) }, t, t - l.start, l.end - l.start, box, q.toFloat(), sourcesFor(p, l, gpu, t, q))
+            val job = GlFx.Job(gpu.map { it to fxMeta(it.type) }, t, t - l.start, l.end - l.start, box, q.toFloat(), sourcesFor(p, l, gpu, t, q), tr.rot.toFloat())
             GlFx.apply(buf, job)?.let { buf.recycle(); buf = it }
         }
         val rect = RectF((-bw / q / 2).toFloat(), (-bh / q / 2).toFloat(), (bw / q / 2).toFloat(), (bh / q / 2).toFloat())
@@ -341,6 +347,7 @@ class Renderer(private val ctx: Context, maxSide: Int = 2048, private val sync: 
             "text" -> {
                 val fp = fillPaint(l)
                 fp.typeface = bold; fp.textSize = (l.fontSize ?: 64.0).toFloat(); fp.textAlign = Paint.Align.CENTER
+                if (FxText.has(l)) { FxText.draw(c, l, Paint(fp), curT); if (crop != null) c.restore(); return }
                 val lines = (l.text ?: "").split("\n")
                 val lh = fp.textSize * 1.15f
                 val fm = fp.fontMetrics
