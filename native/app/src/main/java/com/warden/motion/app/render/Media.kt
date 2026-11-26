@@ -363,7 +363,10 @@ object AudioDecode {
         val n = max(0, ((l.end - l.start) * rate).roundToInt()); val out = FloatArray(n * 2); val k = pcm.rate.toDouble() / rate
         for (i in 0 until n) { val src = i * k + (l.srcIn ?: 0.0) * pcm.rate; val j = src.toInt(); if (j + 1 >= pcm.frames) break; val f = (src - j).toFloat()
             out[i * 2] = pcm.data[j * 2] * (1 - f) + pcm.data[j * 2 + 2] * f; out[i * 2 + 1] = pcm.data[j * 2 + 1] * (1 - f) + pcm.data[j * 2 + 3] * f }
-        if (withFx && AudioFx.has(l)) AudioFx.apply(l, out, rate) { id ->
+        AudioFx.pos = { id, tt -> p.layers.find { it.id == id }?.let { o -> val w = worldTransform(p, o, tt); doubleArrayOf((w.x / p.width * 2 - 1).coerceIn(-1.0, 1.0), (1 - abs(w.scale).coerceIn(0.0, 1.0))) } }
+        if (withFx && AudioFx.has(l)) AudioFx.apply(l, out, rate) { id0 ->
+            if (id0.startsWith("raw:")) { val o = p.layers.find { it.id == id0.removePrefix("raw:") && it.src != null && (it.type == "audio" || it.type == "video") } ?: return@apply null; return@apply if (depth > 1) null else layerAudio(ctx, p, o, rate, false, depth + 1) }
+            val id = id0
             // Otomatik Müzik Kısma: konuşma katmanının sesi, bu katmanın zamanına hizalanır
             val o = p.layers.find { it.id == id && hasAudio(it) } ?: return@apply null; if (depth > 1) return@apply null
             val a = layerAudio(ctx, p, o, rate, true, depth + 1) ?: return@apply null; val sh = ((o.start - l.start) * rate).roundToInt(); val r = FloatArray(n * 2)

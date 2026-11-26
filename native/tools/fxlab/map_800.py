@@ -96,3 +96,41 @@ N8A([
  (722, "scalebar", "Countryball", "gen", ["Harita", "Ölçek"], None), (723, "compass", "Countryball", "gen", ["Harita", "Pusula"], None),
  (725, "minimap", "Countryball", "gen", ["Harita", "Küçük harita"], None),
 ])
+N8A([
+ (729, "thicken3d", "3B", "3d", ["3B", "Kalınlık"], {"box": 0.45}), (733, "spikes3d", "3B", "3d", ["3B", "İğne"], {"box": 0.6}),
+ (734, "explodefaces", "3B", "3d", ["3B", "Parça"], {"box": 0.8}), (735, "facethick", "3B", "3d", ["3B", "Yüz"], {"box": 0.45}),
+ (738, "mirror3d", "3B", "3d", ["3B", "Ayna"], {"box": 0.8}), (740, "spherify", "3B", "3d", ["3B", "Küre"], {"box": 0.45}),
+ (741, "twist3d", "3B", "3d", ["3B", "Burgu"], {"box": 0.45}), (742, "taper3d", "3B", "3d", ["3B", "Büzülme"], {"box": 0.45}),
+ (744, "buildorder", "3B", "3d", ["3B", "Yapım", "Giriş"], {"box": 0.6}), (745, "voxelize", "3B", "3d", ["3B", "Voksel"], {"box": 0.45}),
+ (748, "ocean3d", "3B", "3d", ["3B", "Okyanus", "Su"], {"box": 0.6}), (750, "depthclip3d", "3B", "3d", ["3B", "Kamera", "Kesme"], {"box": 0.45}),
+])
+HIDE8.update({"thicken3d": ["normalleYeniHesa"], "voxelize": ["azamiVoxeButc"], "facethick": ["yuzSeci"], "mirror3d": ["dikisiBirl"]})
+def _rep(ps, k, new):
+    i = next(i for i, p in enumerate(ps) if p["k"] == k); return ps[:i] + new + ps[i + 1:]
+def _rng(ps, k, mn=None, mx=None, d=None):
+    for p in ps:
+        if p["k"] == k:
+            if mn is not None: p["min"] = mn
+            if mx is not None: p["max"] = mx
+            if d is not None: p["def_"] = d
+    return ps
+PFIX.update({
+ "notchfilter": lambda ps: _rng(ps, "merkez", 20, 20000, 50),
+ "dynamiceq": lambda ps: _rng(ps, "merkez", 20, 20000, 3000),
+ "multibandcomp": lambda ps: _rep(_rep(_rep(ps, "ayirma", [_J8("ayirma1", "Alt ayırma frekansı", 200, 20, 20000, "Hz"), _J8("ayirma2", "Üst ayırma frekansı", 2500, 20, 20000, "Hz")]),
+     "esikOran", [_J8("esik", "Eşik", -18, -60, 0, "dB"), _J8("oran", "Oran", 3, 1, 20, "", st=0.1)]), "bantSaldBira", [_J8("saldiri", "Saldırı", 10, 1, 500, "ms"), _J8("birakma", "Bırakma", 100, 10, 2000, "ms")]),
+ "expander": lambda ps: _rep(ps, "saldiriBira", [_J8("saldiri", "Saldırı", 10, 1, 500, "ms"), _J8("birakma", "Bırakma", 120, 10, 2000, "ms")]),
+ "speechrate": lambda ps: _rep(ps, "hedefSure", [_J8("hizOran", "Hız oranı", 1.0, 0.25, 4.0, "×", st=0.01)]),
+})
+N8A([
+ (751, "loudnorm", "Ses", "audio-fx", ["Ses", "Gürlük"], None), (752, "peaknorm", "Ses", "audio-fx", ["Ses", "Tepe"], None), (753, "dcremove", "Ses", "audio-fx", ["Ses", "Onarım"], None),
+ (754, "declick", "Ses", "audio-fx", ["Ses", "Onarım", "Çıtırtı"], None), (755, "declip", "Ses", "audio-fx", ["Ses", "Onarım", "Kırpılma"], None), (756, "dropoutfix", "Ses", "audio-fx", ["Ses", "Onarım"], None),
+ (757, "notchfilter", "Ses", "audio-fx", ["Ses", "Filtre"], None), (758, "dynamiceq", "Ses", "audio-fx", ["Ses", "Ekolayzer"], None), (759, "multibandcomp", "Ses", "audio-fx", ["Ses", "Dinamik"], None),
+ (760, "expander", "Ses", "audio-fx", ["Ses", "Dinamik"], None), (761, "transient", "Ses", "audio-fx", ["Ses", "Dinamik", "Vuruş"], None), (762, "phaseinvert", "Ses", "audio-fx", ["Ses", "Faz"], None),
+ (763, "chandelay", "Ses", "audio-fx", ["Ses", "Stereo"], None), (764, "phaser", "Ses", "audio-fx", ["Ses", "Modülasyon"], None), (765, "rotary", "Ses", "audio-fx", ["Ses", "Modülasyon"], None),
+ (766, "convreverb", "Ses", "audio-fx", ["Ses", "Mekân", "Yankı"], None), (767, "specfreeze", "Ses", "audio-fx", ["Ses", "Spektral"], None), (768, "granular", "Ses", "audio-fx", ["Ses", "Tanecik"], None),
+ (769, "speechrate", "Ses", "audio-fx", ["Ses", "Hız"], None), (770, "autocrossfade", "Ses", "audio-fx", ["Ses", "Geçiş"], None), (771, "autopan", "Ses", "audio-fx", ["Ses", "Konum"], None),
+ (772, "distancefx", "Ses", "audio-fx", ["Ses", "Mesafe"], None),
+ (773, "spectrogram", "Ses", "gen", ["Ses", "Görselleştirici"], None), (774, "phasescope", "Ses", "gen", ["Ses", "Görselleştirici", "Stereo"], None), (775, "loudmeter", "Ses", "gen", ["Ses", "Ölçer"], None),
+])
+HIDE8.update({"loudnorm": ["analizEt"], "peaknorm": ["analiz"], "dcremove": ["olc"], "declip": ["onizle"]})

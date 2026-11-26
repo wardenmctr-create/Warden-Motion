@@ -88,6 +88,8 @@ fun parseCol(hex: String?, def: Int = 0xFF8F7CF0.toInt()): Int = runCatching { a
  */
 class Renderer(private val ctx: Context, maxSide: Int = 2048, private val sync: Boolean = false, cacheMb: Int = 64) {
     private val store = Store.get(ctx)
+    private val pcmCache = android.util.LruCache<String, Pcm>(3)
+    init { AudioVis.pcmOf = { l -> l.src?.takeIf { it.startsWith("media:") }?.let { src -> pcmCache.get(src) ?: runCatching { AudioDecode.decode(store.mediaFile(src.removePrefix("media:")), 600.0) }.getOrNull()?.also { pcmCache.put(src, it) } } } }
     init { AudioLevels.resolver = { l -> l.src?.takeIf { it.startsWith("media:") }?.let { runCatching { AudioDecode.peaks(store.mediaFile(it.removePrefix("media:"))) }.getOrNull() } } }
     /** Önizlemedeki görsellerin en uzun kenarı (Lite ayarı 'img'); değişince görseller yeniden çözülür */
     var maxSide: Int = maxSide
@@ -353,7 +355,7 @@ class Renderer(private val ctx: Context, maxSide: Int = 2048, private val sync: 
         drawLayer(bc, l)
         if (gpu.isNotEmpty()) {
             val box = floatArrayOf((pad * q).toFloat(), (pad * q).toFloat(), (l.w * q).toFloat(), (l.h * q).toFloat())
-            val job = GlFx.Job(gpu.map { it to fxMeta(it.type) }, t, t - l.start, l.end - l.start, box, q.toFloat(), sourcesFor(p, l, gpu, t, q) + Analysis.sources(gpu, buf, t) + historySource(p, l, gpu, t, tr, bw, bh, q), tr.rot.toFloat(), exporting)
+            val job = GlFx.Job(gpu.map { it to fxMeta(it.type) }, t, t - l.start, l.end - l.start, box, q.toFloat(), sourcesFor(p, l, gpu, t, q) + Analysis.sources(gpu, buf, t) + AudioVis.sources(p, gpu, t) + historySource(p, l, gpu, t, tr, bw, bh, q), tr.rot.toFloat(), exporting)
             GlFx.apply(buf, job)?.let { buf.recycle(); buf = it }
         }
         val rect = RectF((-bw / q / 2).toFloat(), (-bh / q / 2).toFloat(), (bw / q / 2).toFloat(), (bh / q / 2).toFloat())

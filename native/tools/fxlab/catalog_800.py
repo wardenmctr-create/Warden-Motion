@@ -12,12 +12,16 @@ def _c8(p):
     if q["kind"] in ("button", "curve"): q["hideUi"] = True
     if q["kind"] == "source" and q["k"] in ("uclar", "kopyaGrub", "katmanla", "parcalar", "kaynakla", "kamerala", "bolgeler", "seriler"): q["multi"] = True  # işlemi motorda otomatik yapılan düğmeler ve sabit eğri gösterilmez
     return q
+PFIX = {}  # tür: ayar listesini düzelten işlev (birleşik kontrolleri ayırma, aralık düzeltme)
+def _J8(k, l, d, mn, mx, unit="", g=None, st=None): return dict(k=k, l=l, kind="jog", min=mn, max=mx, def_=d, step=st or (1 if unit in ("Hz", "ms") else 0.1), jog=st or (1 if unit in ("Hz", "ms") else 0.1), unit=unit, anim="yes", g=g)
 exec(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "map_800.py")).read())
 for n, (t, cat, kind, tags, pad) in sorted(N8.items()):
     if t not in READY3: continue
     s = _SP3[str(n)]
     if t in _BY: E.remove(_BY[t])
-    fx(t, s["name"], "", _C[cat], kind, s["desc"] or s["name"], tags, [_c8(p) for p in s["params"]], pad=pad, heavy=kind == "3d")
+    ps = [_c8(p) for p in s["params"]]
+    if t in PFIX: ps = PFIX[t](ps)
+    fx(t, s["name"], "", _C[cat], kind, s["desc"] or s["name"], tags, ps, pad=pad, heavy=kind == "3d")
     e = E[-1]; e["n"] = n; _BY[t] = e; e["ready"] = True
     keys = {p["k"] for p in e["params"]}
     e["presets"] = [dict(code=p["code"], name=p["name"], vals={k: v for k, v in p["vals"].items() if k in keys}, keys={}, cols={k: v for k, v in p["cols"].items() if k in keys}, at="start")

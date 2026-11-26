@@ -11,7 +11,9 @@ import kotlin.math.*
  */
 object AudioFx {
     val TYPES = setOf("reverse", "basstreble", "delay", "flanger", "filter", "modulator", "parameq", "reverb", "stereo", "tone",
-        "compressor", "limiter", "noisegate", "deesser", "pitchshift", "voicechar", "denoise", "ducking", "stereowide", "robotvoice", "audiodistort")
+        "compressor", "limiter", "noisegate", "deesser", "pitchshift", "voicechar", "denoise", "ducking", "stereowide", "robotvoice", "audiodistort",
+        "loudnorm", "peaknorm", "dcremove", "declick", "declip", "dropoutfix", "notchfilter", "dynamiceq", "multibandcomp", "expander", "transient", "phaseinvert", "chandelay",
+        "phaser", "rotary", "convreverb", "specfreeze", "granular", "speechrate", "autocrossfade", "autopan", "distancefx")
     fun has(l: Layer) = l.effects.any { it.on != false && it.type in TYPES }
     fun signature(l: Layer) = l.effects.filter { it.on != false && it.type in TYPES }.hashCode()
 
@@ -40,8 +42,10 @@ object AudioFx {
         fun read(d: Double): Double { val p = w - 1 - d; val i = floor(p).toInt(); val f = p - i; val a = b[((i % b.size) + b.size) % b.size]; val c = b[(((i + 1) % b.size) + b.size) % b.size]; return a + (c - a) * f } }
 
     /** Kendi içinde zaman sınırlı bir ses parçası: buf (L,R), örnek hızı; sidechain = başka katmanın sesi (Otomatik Müzik Kısma) */
+    /** pos: görsel katmanın o anki yatay konumu (−1 sol … 1 sağ) ve uzaklık oranı; Hareketli Ses Konumu için */
+    var pos: (String, Double) -> DoubleArray? = { _, _ -> null }
     fun apply(l: Layer, buf: FloatArray, rate: Int, sidechain: (String) -> FloatArray? = { null }) {
-        for (e in l.effects) { if (e.on == false || e.type !in TYPES) continue; runCatching { one(e, l, buf, rate, sidechain) } }
+        for (e in l.effects) { if (e.on == false || e.type !in TYPES) continue; runCatching { if (!AudioFx2.one(e, l, buf, rate, sidechain)) one(e, l, buf, rate, sidechain) } }
     }
 
     private fun one(e: Effect, l: Layer, buf: FloatArray, rate: Int, side: (String) -> FloatArray?) {

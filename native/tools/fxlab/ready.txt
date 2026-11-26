@@ -46,6 +46,7 @@ broadcast
 brokenglass
 brushstrokes
 bubbles
+buildorder
 bulge
 burnfilm
 bwmix
@@ -147,6 +148,7 @@ delaunay
 demoire
 denoise
 depthblur
+depthclip3d
 depthfog
 depthmatte
 depthparallax
@@ -176,12 +178,14 @@ ellipsoid
 emboss
 embroidery
 equalize
+explodefaces
 exposure
 exposurefuse
 exposurezones
 extrude
 eyedropper
 eyelid
+facethick
 feather
 feedbackloop
 fftnotch
@@ -315,6 +319,7 @@ localwb
 logconv
 lomo
 longshadow
+loudmeter
 lowpoly
 lumakey
 lumastamp
@@ -336,6 +341,7 @@ meteors
 minimap
 minimax
 mirror
+mirror3d
 mirrorrepeat
 moireprint
 morphimg
@@ -356,6 +362,7 @@ noisealpha
 noisehls
 normalmap
 normalselect
+ocean3d
 octahedron
 offset
 oilpaint
@@ -377,6 +384,7 @@ particleworld
 pencilhatch
 penrose
 perspgrid
+phasescope
 photocopy
 photofilter
 pipe3d
@@ -468,7 +476,10 @@ softglow
 solidcolor
 solidmatte
 spatialdiffuse
+spectrogram
 sphere
+spherify
+spikes3d
 spill
 spinblur
 spinstreaks
@@ -497,6 +508,7 @@ stroke
 sunsurface
 swirl
 swirlblur
+taper3d
 temperature
 temporaldenoise
 temporalfreq
@@ -504,6 +516,7 @@ temporalmedian
 tetra
 texsimilar
 texturize
+thicken3d
 threads
 threshold
 thresholdrgb
@@ -525,6 +538,7 @@ tritone
 truchet
 tunnel
 turingmaze
+twist3d
 twister
 underwater
 unsharp
@@ -541,6 +555,7 @@ vignettefix
 volclouds
 volslices
 volumelight
+voxelize
 vrcombined
 wangtiles
 warpblur
