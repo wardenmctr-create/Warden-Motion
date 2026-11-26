@@ -20,3 +20,9 @@ rhythmquant
 motionmirror
 pathmatch
 looplock
+textpathfit
+mathlayout
+textdiff
+bubblelayout
+labelavoid
+lettergrid

@@ -49,6 +49,7 @@ bokeh
 book3d
 box3d
 boxblur
+boxplot
 bricon
 brightaccum
 broadcast
@@ -67,6 +68,7 @@ cardboardcut
 carddance
 cardpuppet
 cardwipe
+cartogram
 cartoon
 caustics
 cbblush
@@ -110,6 +112,7 @@ circlepack
 clahe
 clothphys
 clouds
+coastbands
 coderain
 coffeering
 coin3d
@@ -169,6 +172,7 @@ darkaccum
 darkframe
 darkglow
 datacorrupt
+daynight
 deadpixel
 debandfix
 deblock
@@ -198,9 +202,11 @@ dirblur
 displace
 dispmap
 dissolve
+distcircles
 dla
 dollyzoom
 doorwings
+dotdensity
 dots
 drizzle
 droplets
@@ -252,6 +258,7 @@ floorshadow
 flowconfidence
 flowerrosette
 flowfield
+flowlines
 flowwarp
 fluidtrail
 foam
@@ -283,6 +290,7 @@ gabor
 galaxy
 gammagain
 gamutwarn
+gantt
 gear3d
 geodesiccolor
 geoheat
@@ -294,6 +302,7 @@ glitch
 globe3d
 glow
 glowscan
+glyphsplit
 goboshadow
 graddisp
 gradfade
@@ -412,6 +421,7 @@ magnifier
 magnify
 magnifybg
 mapproject
+mapswipe
 marbling
 marinesnow
 markedsep
@@ -516,6 +526,7 @@ poseblend
 posterize
 powervoronoi
 prismfx
+propsymbols
 puppetpin
 pyramid
 quilling
@@ -530,6 +541,7 @@ rays
 reactdiff
 reflect
 regiondata
+regionmerge
 reliefmap
 relight
 remaphsv
@@ -641,9 +653,11 @@ stringart
 stripes
 strobelight
 stroke
+strokewrite
 subdivide
 subpixeldither
 subsurface
+sunburst
 sunsurface
 superformula
 sweeppath
@@ -717,6 +731,8 @@ warpfield
 warpomatic
 warpstyle
 watercolor
+waterfall
+watershed
 wave
 waveform
 wavefront

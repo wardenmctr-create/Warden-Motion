@@ -13,7 +13,7 @@ import kotlin.math.*
  * local: efektin bulunduğu katmanın kendi dönüşümü; rig: efektin seçtiği diğer katmanlar (ayak, uzuv, iris, yüz parçaları, poz grupları).
  */
 object Anim1000 {
-    val RIG = setOf("footlock", "stepcycle", "irislock", "exprweights", "facecoords", "jointlimit", "phasespread", "speedpose", "motionmirror")
+    val RIG = setOf("bubblelayout", "labelavoid", "footlock", "stepcycle", "irislock", "exprweights", "facecoords", "jointlimit", "phasespread", "speedpose", "motionmirror")
     private fun ids(e: Effect, k: String) = e.c?.get(k)?.split(',')?.filter { it.isNotBlank() } ?: emptyList()
     private fun lay(p: Project, e: Effect, k: String) = e.c?.get(k)?.split(',')?.firstOrNull { it.isNotBlank() }?.let { id -> p.layers.find { it.id == id } }
     private fun h1(n: Double): Double { val x = sin(n * 127.1 + 311.7) * 43758.5453; return x - floor(x) }
@@ -111,10 +111,25 @@ object Anim1000 {
         out
     }
 
+    /** 918/919: üyelerin çakışmasız yerleşimi (kutuları ayrılana kadar itilir, en fazla "sınır" kadar); üye id → (dx, dy) */
+    private val layoutCache = HashMap<String, Map<String, Pair<Double, Double>>>()
+    fun layoutOffsets(p: Project, e: Effect, t: Double): Map<String, Pair<Double, Double>> {
+        val key = if (e.type == "bubblelayout") "balonlar" else "etiketle"; val ms = ids(e, key).mapNotNull { id -> p.layers.find { it.id == id } }.filter { t >= it.start && t < it.end }
+        val ck = e.id + "|" + t + "|" + ms.joinToString { it.id + it.x.at(t) + it.y.at(t) }; layoutCache[ck]?.let { return it }
+        val gap = e.value(if (e.type == "bubblelayout") "enAzBosl" else "aralik", t); val lim = e.value(if (e.type == "bubblelayout") "bagUzun" else "tasimaSini", t)
+        val x0 = ms.map { layerTransform(it, t).x }; val y0 = ms.map { layerTransform(it, t).y }; val hw = ms.map { val tr = layerTransform(it, t); it.w * abs(tr.scale) / 2 + gap / 2 }; val hh = ms.map { val tr = layerTransform(it, t); it.h * abs(tr.scale) / 2 + gap / 2 }
+        val x = x0.toDoubleArray(); val y = y0.toDoubleArray()
+        repeat(40) { for (i in ms.indices) for (j in i + 1 until ms.size) { val ox = hw[i] + hw[j] - abs(x[i] - x[j]); val oy = hh[i] + hh[j] - abs(y[i] - y[j]); if (ox <= 0 || oy <= 0) continue
+            if (ox < oy) { val d = ox / 2 * (if (x[i] < x[j] || (x[i] == x[j] && i < j)) -1 else 1); x[i] += d; x[j] -= d } else { val d = oy / 2 * (if (y[i] < y[j] || (y[i] == y[j] && i < j)) -1 else 1); y[i] += d; y[j] -= d } }
+            for (i in ms.indices) { val dx = x[i] - x0[i]; val dy = y[i] - y0[i]; val L = hypot(dx, dy); if (L > lim && L > 0) { x[i] = x0[i] + dx / L * lim; y[i] = y0[i] + dy / L * lim } } }
+        val out = ms.indices.associate { ms[it].id to ((x[it] - x0[it]) to (y[it] - y0[it])) }; if (layoutCache.size > 256) layoutCache.clear(); layoutCache[ck] = out; return out
+    }
+
     /** Diğer katmanlara uygulanan rig efektleri; h: efektin bulunduğu katman, l: dönüşümü hesaplanan katman */
     fun rig(p: Project, h: Layer, e: Effect, l: Layer, t: Double, loc0: TR, off: (Double, Double) -> Pair<Double, Double>): TR {
         var loc = loc0; fun v(k: String) = e.value(k, t)
         when (e.type) {
+            "bubblelayout", "labelavoid" -> { val o = layoutOffsets(p, e, t)[l.id] ?: return loc; val (lx, ly) = off(o.first, o.second); loc = loc.copy(x = loc.x + lx, y = loc.y + ly) }
             "footlock" -> { // 898: ayak zemine değince temas başlangıcındaki sahne x'inde sabit kalır
                 if (e.c?.get("ayak") != l.id) return loc; val g = lay(p, e, "zemin"); val th = max(0.5, v("gecis"))
                 fun bottom(tt: Double): Pair<Double, Double> { val w = worldTransform(p, l, tt); return w.x to w.y + l.h / 2 * abs(w.scale) }

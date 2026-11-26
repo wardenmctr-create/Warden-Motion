@@ -43,6 +43,7 @@ object FxText {
     fun draw(c: Canvas, l: Layer, fp: Paint, t: Double) {
         val lt = t - l.start; val dur = l.end - l.start
         val fx = l.effects.filter { it.on != false && fxMeta(it.type).kind == "text" }
+        fx.find { it.type == "mathlayout" }?.let { e -> MathType.draw(c, e.c?.get("ifade")?.takeIf { it.isNotBlank() } ?: (l.text ?: "x²+1"), Paint(fp).apply { textSize = e.value("yaziBoyu", t).toFloat(); color = parseCol(e.c?.get("renk") ?: "#FFFFFF") }, e.value("satirBosl", t).toFloat()); return }
         var text = l.text ?: ""
         // 1) Metni değiştirenler
         for (e in fx) {
@@ -69,6 +70,14 @@ object FxText {
                 }
             }
         }
+        // 917 Dikey Kesitli Harf Geçişi: ortak baş/son sabit, değişen bölüm ilerlemenin ilk yarısında yukarı çıkar, ikinci yarısında yeni metin aşağıdan gelir
+        var diff: IntArray? = null; var diffP = 0.0; var diffAmp = 0f
+        fx.find { it.type == "textdiff" }?.let { e -> val a = graphemes(text); val b = graphemes(e.c?.get("hedefMeti") ?: "")
+            var pre = 0; while (pre < a.size && pre < b.size && a[pre] == b[pre]) pre++
+            var suf = 0; while (suf < a.size - pre && suf < b.size - pre && a[a.size - 1 - suf] == b[b.size - 1 - suf]) suf++
+            diffP = (e.value("ilerleme", t) / 100).coerceIn(0.0, 1.0); diffAmp = e.value("hareket", t).toFloat(); val fixed = e.value("eslesenBoluSabi", t) >= 0.5
+            val cur = if (diffP >= 0.5) b else a; if (diffP >= 0.5) text = b.joinToString("")
+            diff = intArrayOf(if (fixed) pre else 0, cur.size - (if (fixed) suf else 0)) }
         // 705 Canlı Metin Değişkeni: seçilen katmanın özelliği, biçimlenmiş sayı olarak
         fx.find { it.type == "livetext" }?.let { e -> val pr = project; val src = e.c?.get("parametr")?.let { id -> pr?.layers?.find { it.id == id } }
             if (pr != null && src != null) { val w = worldTransform(pr, src, t); val k = e.value("ozellik", t).roundToInt(); var x = when (k) { 0 -> w.x; 1 -> w.y; 2 -> w.rot; 3 -> w.scale * 100; else -> w.opacity * 100 }
@@ -109,6 +118,25 @@ object FxText {
             while (wi < words.size && y < yEnd) { for ((x0, x1) in segs(y)) { var x = x0; while (wi < words.size) { val w = words[wi]; val ww = w.sumOf { it.w.toDouble() }.toFloat() + fp.measureText(" "); if (x + ww - fp.measureText(" ") > x1 && x > x0) break
                         var cx = x; w.forEach { g -> g.x = cx; g.y = y + mid; cx += g.w }; x += ww; wi++ } }; y += lhF; row++ }
             for (k in wi until words.size) words[k].forEach { it.a = 0f } }
+        // 920 Harf Temelli Izgara: harfler hücre merkezlerine, harf başına gecikmeyle açılır
+        var grid: Triple<Int, Int, Float>? = null
+        fx.find { it.type == "lettergrid" }?.let { e -> val cols = e.value("sutun", t).roundToInt().coerceAtLeast(1); val rows = e.value("satir", t).roundToInt().coerceAtLeast(1); val cs = e.value("hucre", t).toFloat()
+            val chars = gl.filter { it.s.isNotBlank() }; gl.filter { it.s.isBlank() }.forEach { it.a = 0f }
+            chars.forEachIndexed { i, g -> if (i >= cols * rows) { g.a = 0f; return@forEachIndexed }
+                g.x = (i % cols - (cols - 1) / 2f) * cs - g.w / 2; g.y = (i / cols - (rows - 1) / 2f) * cs + mid
+                val k = ((lt - e.value("gecikme", t) * i) / 0.25).coerceIn(0.0, 1.0); g.sc *= ease(2, k).toFloat(); g.a *= k.toFloat() }
+            if (e.value("izgaraGoru", t) >= .5) grid = Triple(cols, rows, cs) }
+        // 913 Yol Üzerinde Yerleşim Kısıtı: harfler seçilen şeklin yolu boyunca, baş/son payları arasında; taşma: gizle / küçült / satır böl
+        fx.find { it.type == "textpathfit" }?.let { e -> val pr = project ?: return@let; val src = e.c?.get("yol")?.let { id -> pr.layers.find { it.id == id } } ?: return@let; if (src.type != "shape") return@let
+            val me = worldTransform(pr, l, t); val w = worldTransform(pr, src, t); val path = Path(ShapeFx.path(src, t)); val m = android.graphics.Matrix()
+            m.postScale((w.scale * w.sx).toFloat(), (w.scale * w.sy).toFloat()); m.postRotate(w.rot.toFloat()); m.postTranslate(w.x.toFloat(), w.y.toFloat())
+            m.postTranslate(-me.x.toFloat(), -me.y.toFloat()); m.postRotate(-me.rot.toFloat()); val sc0 = if (abs(me.scale) > 1e-6) me.scale else 1.0; m.postScale((1 / (sc0 * me.sx)).toFloat(), (1 / (sc0 * me.sy)).toFloat()); path.transform(m)
+            val pm = android.graphics.PathMeasure(path, false); val Lp = pm.length; val a0 = e.value("basPayi", t).toFloat(); val a1 = Lp - e.value("sonPayi", t).toFloat(); val avail = max(1f, a1 - a0)
+            val total = gl.sumOf { it.w.toDouble() }.toFloat(); val mode = e.value("tasma", t).roundToInt(); val k = if (mode == 1 && total > avail) avail / total else 1f
+            val pos = FloatArray(2); val tan = FloatArray(2); var sPos = a0; var row = 0
+            for (g in gl) { val gw = g.w * k; if (sPos + gw > a1) { if (mode == 2 && row < 6) { row++; sPos = a0 } else { g.a = 0f; continue } }
+                pm.getPosTan(sPos + gw / 2, pos, tan); val off = -row * fp.textSize * 1.1f * k; g.x = pos[0] - tan[1] * off - g.w / 2; g.y = pos[1] + tan[0] * off + mid
+                g.rot += Math.toDegrees(kotlin.math.atan2(tan[1].toDouble(), tan[0].toDouble())).toFloat(); g.sc *= k; sPos += gw } }
         // 702 Dikey dizim: her satır bir sütun olur, harfler alt alta
         fx.find { it.type == "verticaltext" }?.let { e -> val up = e.value("dizim", t) >= 0.5; val colW = fp.textSize * e.value("satirAral", t).toFloat(); val rowH = fp.textSize * 1.05f
             val cols = gl.groupBy { it.line }; val nc = cols.size
@@ -119,6 +147,7 @@ object FxText {
             digits.forEachIndexed { i, g -> val place = (nInt - 1 - i).toDouble(); val frac = ((abs(cur) / 10.0.pow(place)) % 1.0); val f = if (place == 0.0 - dec || i == digits.size - 1) frac else (frac - 0.9).coerceAtLeast(0.0) * 10
                 g.dy -= (f * lh * 0.9).toFloat(); if (f > 0.01) gl += G(((g.s.toInt() + 1) % 10).toString(), g.x, g.y + lh * 0.9f, g.w, g.line, g.idx, g.word).also { it.dy = g.dy } } }
         // 3) Harf efektleri
+        diff?.let { (a, b) -> val ph = if (diffP < 0.5) diffP * 2 else (diffP - 0.5) * 2; gl.forEach { g -> if (g.idx in a until b) { if (diffP < 0.5) { g.dy -= (diffAmp * ph).toFloat(); g.a *= (1 - ph).toFloat() } else { g.dy += (diffAmp * (1 - ph)).toFloat(); g.a *= ph.toFloat() } } } }
         for (e in fx) {
             fun v(k: String) = e.value(k, t)
             when (e.type) {
@@ -208,6 +237,8 @@ object FxText {
                 }
             }
         }
+        grid?.let { (cols, rows, cs) -> val gp = Paint(Paint.ANTI_ALIAS_FLAG).apply { style = Paint.Style.STROKE; strokeWidth = max(1f, cs * 0.03f); color = (fp.color and 0x00FFFFFF) or 0x66000000 }
+            val x0 = -cols * cs / 2; val y0 = -rows * cs / 2; for (i in 0..cols) c.drawLine(x0 + i * cs, y0, x0 + i * cs, y0 + rows * cs, gp); for (j in 0..rows) c.drawLine(x0, y0 + j * cs, x0 + cols * cs, y0 + j * cs, gp) }
         // 5) Çiz
         val p2 = Paint(fp)
         for (g in gl) {

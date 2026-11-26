@@ -251,6 +251,9 @@ class Renderer(private val ctx: Context, maxSide: Int = 2048, private val sync: 
             when (e.type) {
                 "cbborder" -> { val src = e.c?.get("yolKatm")?.let { id -> p.layers.find { it.id == id } } ?: l
                     val w = worldTransform(p, src, t); ShapeFx.border(c, src, e, t) { cv -> cv.translate(w.x.toFloat(), w.y.toFloat()); cv.rotate(w.rot.toFloat()); cv.scale((w.scale * w.sx).toFloat(), (w.scale * w.sy).toFloat()) } }
+                "labelavoid" -> if (e.value("bagCizg", t) >= 0.5) { val lp = Paint(Paint.ANTI_ALIAS_FLAG).apply { strokeWidth = 1.5f; color = 0xCCFFFFFF.toInt() }
+                    for ((id, o) in Anim1000.layoutOffsets(p, e, t)) { if (kotlin.math.hypot(o.first, o.second) < 2) continue; val lb = p.layers.find { it.id == id } ?: continue; val w = worldTransform(p, lb, t)
+                        c.drawLine((w.x - o.first).toFloat(), (w.y - o.second).toFloat(), w.x.toFloat(), w.y.toFloat(), lp); c.drawCircle((w.x - o.first).toFloat(), (w.y - o.second).toFloat(), 2.5f, lp) } }
                 "pathmatch" -> { // 911: iki şekil yolunun düğüm eşlemesi önizlemesi (yay uzunluğu ya da işaret; yön ters çevrilebilir)
                     val tg = e.c?.get("hedefYol")?.let { id -> p.layers.find { it.id == id } } ?: continue; if (l.type != "shape" || tg.type != "shape") continue
                     val n = e.value("dugum", t).roundToInt().coerceIn(4, 128); val a = ShapeFx.sample(ShapeFx.path(l, t), n); var b = ShapeFx.sample(ShapeFx.path(tg, t), n); if (e.value("yonuTers", t) >= 0.5) b = b.reversed()

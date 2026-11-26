@@ -69,3 +69,17 @@ N10A([
  (911, "pathmatch", "Diğer", "special", ["Yol", "Eşleme"], None), (912, "looplock", "Zaman", "xform", ["Döngü", "Keyframe"], None),
 ])
 HIDE10.update({"multicentroid": ["hedefAgir"], "footlock": ["basisAral"], "anticipation": ["egri", "yalnizSeciKeyf"], "exprweights": ["agirlikl"], "irislock": ["irisiMask"]})
+N10A([
+ (913, "textpathfit", "Metin", "text", ["Metin", "Yol"], None), (914, "glyphsplit", "Metin", "pixel", ["Metin", "Renk"], None),
+ (915, "strokewrite", "Metin", "pixel", ["Metin", "Yazma"], None), (916, "mathlayout", "Metin", "text", ["Matematik", "Metin"], None),
+ (917, "textdiff", "Metin", "text", ["Metin", "Geçiş"], None), (918, "bubblelayout", "Countryball", "rig", ["Balon", "Yerleşim"], None),
+ (919, "labelavoid", "Diğer", "rig", ["Etiket", "Harita"], None), (920, "lettergrid", "Metin", "text", ["Metin", "Izgara"], None),
+ (921, "propsymbols", "Diğer", "gen", ["Harita", "Veri", "Simge"], None), (922, "flowlines", "Diğer", "gen", ["Harita", "Akış", "Veri"], None),
+ (923, "regionmerge", "Diğer", "pixel", ["Harita", "Bölge"], None), (924, "coastbands", "Diğer", "pixel", ["Harita", "Kıyı"], None),
+ (925, "watershed", "Diğer", "pixel", ["Harita", "Havza"], None), (926, "cartogram", "Diğer", "pixel", ["Harita", "Kartogram", "Veri"], None),
+ (927, "daynight", "Diğer", "pixel", ["Harita", "Güneş"], None), (928, "distcircles", "Diğer", "pixel", ["Harita", "Mesafe"], None),
+ (929, "mapswipe", "Diğer", "pixel", ["Harita", "Karşılaştırma"], None), (930, "waterfall", "Diğer", "gen", ["Grafik", "Veri"], None),
+ (931, "boxplot", "Diğer", "gen", ["Grafik", "İstatistik"], None), (932, "sunburst", "Diğer", "gen", ["Grafik", "Hiyerarşi"], None),
+ (933, "gantt", "Diğer", "gen", ["Grafik", "Zaman"], None), (934, "dotdensity", "Diğer", "gen", ["Harita", "Nokta", "Veri"], None),
+])
+HIDE10.update({"textpathfit": [], "strokewrite": ["sira"] if False else [], "regionmerge": ["grupAlan"], "cartogram": ["yineleme"], "mapswipe": ["koordinaKili"]})
