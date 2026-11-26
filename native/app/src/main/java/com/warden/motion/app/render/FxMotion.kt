@@ -292,6 +292,14 @@ fun applyMotionFx(l: Layer, t: Double, tr0: TR): TR {
                 }
             }
             // ---- Opaklık ----
+            "cbhold" -> { // bekleme süresince odak noktasına hafif yakınlaşma (giriş/çıkış yumuşak)
+                val tg = v("tetiklem"); val hold = max(1e-3, v("bekleme")); val x = lt - tg
+                if (x in 0.0..hold) { val gi = max(1e-3, min(v("giris"), hold / 2)); val ci = max(1e-3, min(v("cikis"), hold / 2))
+                    fun sm(q: Double) = q.coerceIn(0.0, 1.0).let { it * it * (3 - 2 * it) }
+                    val k = min(sm(x / gi), sm((hold - x) / ci)); val f = 1 + (v("yakinlas") / 100 - 1) * k
+                    val oy = (v("odak") / 100 - 0.5) * l.h * tr.scale * tr.sy
+                    tr = tr.copy(scale = tr.scale * f, y = tr.y - oy * (f - 1)) }
+            }
             "elastic" -> { // anahtar kareye varınca, varış hızıyla orantılı sönümlü yay salınımı
                 val f = max(0.1, v("frekans")); val d = max(0.05, v("sure")); val damp = 1.0 + v("sonum") / 100 * 7; val amp = v("tasma") / 20
                 fun el(a: com.warden.motion.app.model.Anim): Double {

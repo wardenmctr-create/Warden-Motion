@@ -12,6 +12,8 @@ applique
 areacompare
 arithmetic
 ascii
+audiospec
+audiowave
 aurora
 autocolor
 autolevels
@@ -170,6 +172,7 @@ depthpriority
 depthview
 dice3d
 diffmap
+diffmatte
 dirblur
 displace
 dispmap
@@ -211,6 +214,7 @@ fire
 fireworks
 flagpole3d
 flagwave
+flash
 flatfield
 flip3d
 flomotion
@@ -359,6 +363,7 @@ markedsep
 markerpen
 maskblur
 maskcombine
+matchgrain
 matte2img
 maze
 measurearrow
@@ -583,6 +588,8 @@ tilerotate
 tiles
 tileshift
 tiltshift
+timediff
+timedisplace
 timeline
 timemap
 timemosaic

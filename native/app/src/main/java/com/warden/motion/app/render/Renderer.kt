@@ -52,6 +52,10 @@ fun layerTransform(l: Layer, t0: Double): TR {
     // Kare Atla: "Hareketi de kare kare oynat" açıksa katmanın dönüşümü de seçilen kare hızında ilerler
     l.effects.find { it.type == "posterizetime" && it.on != false && it.value("hareketAtla", t0) >= 0.5 }?.let { e ->
         val f = kotlin.math.max(0.1, e.value("kareHizi", t0)); t = kotlin.math.floor((t - l.start + e.value("zamanKaym", t0)) * f) / f + l.start }
+    // CB Bekleme: kareyi dondur açıkken hareket de tetikleme anında bekler, sonra kaldığı yerden sürer
+    l.effects.find { it.type == "cbhold" && it.on != false && it.value("kareyiDond", t0) >= 0.5 }?.let { e ->
+        val tg = e.value("tetiklem", t0); val hold = kotlin.math.max(0.0, e.value("bekleme", t0)); val lt = t - l.start
+        if (lt > tg) t = l.start + if (lt < tg + hold) tg else lt - hold }
     var tr = TR(l.x.at(t), l.y.at(t), l.rotation.at(t), l.scale.at(t), l.opacity.at(t))
     if (cp != null) { val tick = kotlin.math.floor((t0 - l.start) * cp.value("kuklaFps", t0)); val m = cp.value("mikroSallan", t0) / 100
         tr = tr.copy(x = tr.x + (noise1(tick, 1.0) * 3 * m), y = tr.y + noise1(tick, 2.0) * 3 * m, rot = tr.rot + noise1(tick, 3.0) * 2.5 * m) }
@@ -173,9 +177,16 @@ class Renderer(private val ctx: Context, maxSide: Int = 2048, private val sync: 
         paint.color = parseCol(p.background, android.graphics.Color.WHITE)
         c.drawRect(0f, 0f, p.width.toFloat(), p.height.toFloat(), paint)
         c.clipRect(0f, 0f, p.width.toFloat(), p.height.toFloat())
-        FxText.project = p
+        FxText.project = p; curProj = p
+        // 418 CB Gezi Çizgisi: simge olarak seçilen katman rotanın üstünde çizilir, kendi yerinde ayrıca çizilmez
+        val icons = p.layers.flatMap { h -> h.effects.filter { it.type == "cbtrail" && it.on != false && t >= h.start && t < h.end }.mapNotNull { it.c?.get("simgeKatm")?.takeIf { s -> s.isNotBlank() } } }.toSet()
+        val cam = camFx(p, t)
+        if (cam != null && cam.host == null) applyCam(c, cam)
         for (l in drawOrder(p, t)) {
-            if (l.type == "audio" || l.hidden == true || t < l.start || t >= l.end) continue
+            if (l.type == "audio" || l.hidden == true || t < l.start || t >= l.end || l.id in icons) continue
+            val camHere = cam != null && cam.host == l.id
+            if (camHere) { c.save(); applyCam(c, cam!!) }
+            sceneFxBefore(c, p, l, t)
             val m = l.mask?.let { id -> p.layers.find { it.id == id } }
             if (m != null) {
                 // Kırpma maskesi: katman ayrı katmana çizilir, maskenin şekliyle kesilir (Hariç Tutma: tersi)
@@ -186,8 +197,69 @@ class Renderer(private val ctx: Context, maxSide: Int = 2048, private val sync: 
                 paintLayer(c, p, m.copy(hidden = null, effects = emptyList(), blend = null), t)
                 c.restore(); c.restore()
             } else paintLayer(c, p, l, t)
+            sceneFxAfter(c, p, l, t)
+            if (camHere) c.restore()
         }
         c.restore()
+    }
+
+    // ---------- Sahne düzeyindeki CB efektleri ----------
+    private class Cam(val tx: Double, val ty: Double, val z: Double, val k: Double, val host: String?)
+    /** 412 CB Kamera Tepkisi: hedefe yumuşak yakınlaşma, bekleme ve geri dönüş */
+    private fun camFx(p: Project, t: Double): Cam? {
+        for (h in p.layers) { if (t < h.start || t >= h.end || h.hidden == true) continue
+            val e = h.effects.find { it.type == "cbcam" && it.on != false } ?: continue
+            val gi = max(1e-3, e.value("girisSure", t)); val be = max(0.0, e.value("bekleme", t)); val ci = max(1e-3, e.value("cikisSure", t))
+            val lt = t - h.start - e.value("baslangi", t); if (lt < 0) continue
+            val curve = e.value("egri", t).roundToInt()
+            fun ease(x: Double): Double { val q = x.coerceIn(0.0, 1.0); return when (curve) { 1 -> 1 + 2.70158 * (q - 1).pow(3) + 1.70158 * (q - 1).pow(2); 2 -> q; else -> q * q * (3 - 2 * q) } }
+            val k = when { lt < gi -> ease(lt / gi); lt < gi + be || e.value("geriDon", t) < 0.5 -> 1.0; else -> 1 - ease((lt - gi - be) / ci) }
+            if (k <= 1e-4) continue
+            val tg = e.c?.get("hedefKatm")?.let { id -> p.layers.find { it.id == id } } ?: h
+            val w = worldTransform(p, tg, t); val ty = w.y + (e.value("hedefNokt", t) / 100 - 0.5) * tg.h * w.scale * w.sy
+            return Cam(w.x, ty, e.value("yakinlas", t) / 100, k, if (e.value("kameraKaps", t).roundToInt() == 1) h.id else null)
+        }
+        return null
+    }
+    private fun applyCam(c: Canvas, m: Cam) {
+        val pw = curProj?.width ?: 0; val ph = curProj?.height ?: 0
+        val z = 1 + (m.z - 1) * m.k
+        val mx = if (m.host == null) m.tx + (pw / 2.0 - m.tx) * m.k else m.tx; val my = if (m.host == null) m.ty + (ph / 2.0 - m.ty) * m.k else m.ty
+        c.translate(mx.toFloat(), my.toFloat()); c.scale(z.toFloat(), z.toFloat()); c.translate(-m.tx.toFloat(), -m.ty.toFloat())
+    }
+    private var curProj: Project? = null
+
+    /** 411 CB Gölge Takibi: katman yükseldikçe yerdeki gölge küçülür ve solar */
+    private fun sceneFxBefore(c: Canvas, p: Project, l: Layer, t: Double) {
+        curProj = p
+        val e = l.effects.find { it.type == "cbshadow" && it.on != false } ?: return
+        val w = worldTransform(p, l, t); val ground = p.height * e.value("zeminNokt", t) / 100
+        val bottom = w.y + l.h / 2 * kotlin.math.abs(w.scale * w.sy)
+        val hgt = if (e.value("yuksekliKayn", t).roundToInt() == 1) e.value("yuksekli", t) else max(0.0, ground - bottom)
+        val s = (1 - hgt / (p.height * 0.5) * e.value("perspekt", t) / 100).coerceIn(0.15, 1.0)
+        val x = if (e.value("konumuTakiEt", t) >= 0.5) w.x else worldTransform(p, l, l.start).x
+        val ew = (l.w * kotlin.math.abs(w.scale * w.sx) * e.value("en", t) / 100 * s).toFloat(); val eh = ew * (e.value("boy", t) / 100).toFloat()
+        if (ew <= 0.5f) return
+        val pt = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = e.color("golgeReng", "#000000"); alpha = (e.value("opaklik", t) / 100 * s * 255).roundToInt().coerceIn(0, 255)
+            val b = e.value("bulanikl", t).toFloat(); if (b > 0.5f) maskFilter = android.graphics.BlurMaskFilter(b, android.graphics.BlurMaskFilter.Blur.NORMAL) }
+        c.drawOval(RectF(x.toFloat() - ew / 2, ground.toFloat() - eh / 2, x.toFloat() + ew / 2, ground.toFloat() + eh / 2), pt)
+    }
+
+    /** 417 CB Sınır Çizimi ve 418 CB Gezi Çizgisi simgesi: katmandan sonra, sahne koordinatında */
+    private fun sceneFxAfter(c: Canvas, p: Project, l: Layer, t: Double) {
+        for (e in l.effects) { if (e.on == false) continue
+            when (e.type) {
+                "cbborder" -> { val src = e.c?.get("yolKatm")?.let { id -> p.layers.find { it.id == id } } ?: l
+                    val w = worldTransform(p, src, t); ShapeFx.border(c, src, e, t) { cv -> cv.translate(w.x.toFloat(), w.y.toFloat()); cv.rotate(w.rot.toFloat()); cv.scale((w.scale * w.sx).toFloat(), (w.scale * w.sy).toFloat()) } }
+                "cbtrail" -> { val ic = e.c?.get("simgeKatm")?.let { id -> p.layers.find { it.id == id } } ?: continue
+                    if (l.type != "shape") continue
+                    val w = worldTransform(p, l, t); val (px, py, ang) = ShapeFx.routePoint(l, t, e.value("ilerleme", t) / 100)
+                    val a = w.rot * PI / 180; val sx = px * w.scale * w.sx; val sy = py * w.scale * w.sy
+                    val x = w.x + sx * cos(a) - sy * sin(a); val y = w.y + sx * sin(a) + sy * cos(a)
+                    val iw = worldTransform(p, ic, t); val sz = e.value("simgeBoyu", t) / max(1.0, max(ic.w, ic.h))
+                    drawTransformed(c, ic, iw.copy(x = x, y = y, scale = sz, sx = 1.0, sy = 1.0, rot = if (e.value("simgeyiYolaDond", t) >= 0.5) ang + w.rot else iw.rot)) }
+            }
+        }
     }
 
     // ---------- Efekt ayarları ----------
@@ -396,7 +468,9 @@ class Renderer(private val ctx: Context, maxSide: Int = 2048, private val sync: 
             val gpu3 = gpu2.map { e -> if (e.type != "areacompare") e else { var v = e.v ?: emptyMap(); var i = 0
                 for (k in listOf("bolgeler", "bolgeler_1", "bolgeler_2", "bolgeler_3")) { val b = srcs[k] ?: continue; val n = b.width * b.height; val px = IntArray(n); b.getPixels(px, 0, b.width, 0, 0, b.width, b.height)
                     var a = 0.0; for (c in px) a += ((c ushr 24) and 255) / 255.0; v = v + ("dv$i" to com.warden.motion.app.model.Anim(a / (q * q))); i++ }; e.copy(v = v) } }
-            val job = GlFx.Job(gpu3.map { it to fxMeta(it.type) }, t, t - l.start, l.end - l.start, box, q.toFloat(), srcs + Analysis.sources(gpu, buf, t) + AudioVis.sources(p, gpu, t) + hs, tr.rot.toFloat(), exporting)
+            val gpu4 = gpu3.map { e -> if (e.type != "audiospec" && e.type != "audiowave") e else { val d = AudioVis.data(p, e, t) ?: return@map e
+                var v = e.v ?: emptyMap(); d.forEachIndexed { i, x -> v = v + ("dv$i" to com.warden.motion.app.model.Anim(x)) }; e.copy(v = v) } }
+            val job = GlFx.Job(gpu4.map { it to fxMeta(it.type) }, t, t - l.start, l.end - l.start, box, q.toFloat(), srcs + Analysis.sources(gpu, buf, t) + AudioVis.sources(p, gpu, t) + hs, tr.rot.toFloat(), exporting)
             GlFx.apply(buf, job)?.let { buf.recycle(); buf = it }
         }
         val rect = RectF((-bw / q / 2).toFloat(), (-bh / q / 2).toFloat(), (bw / q / 2).toFloat(), (bh / q / 2).toFloat())
@@ -501,11 +575,28 @@ class Renderer(private val ctx: Context, maxSide: Int = 2048, private val sync: 
     }
 
     fun drawLayer(c: Canvas, l: Layer) {
+        val bd = l.effects.find { it.type == "cbbadge" && it.on != false } ?: return drawLayer0(c, l)
+        // 419 CB Rozet Açılışı: katmanın arkasında rozet, yaylanarak açılır
+        val t = curT; val pr = if (bd.value("otomatik", t) >= 0.5) (t - l.start) / max(0.01, bd.value("sure", t)) else bd.value("ilerleme", t) / 100
+        val x = pr.coerceIn(0.0, 1.0); val c1 = 1.70158 * bd.value("tasma", t) / 15; val sc = (1 + (c1 + 1) * (x - 1).pow(3) + c1 * (x - 1).pow(2)).toFloat()
+        if (sc <= 0.001f) return
+        c.save(); c.scale(sc, sc)
+        val pad = bd.value("icBosl", t).toFloat(); val hw = l.w.toFloat() / 2 + pad; val hh = l.h.toFloat() / 2 + pad
+        val path = Path().apply { when (bd.value("rozetBici", t).roundToInt()) {
+            0 -> addCircle(0f, 0f, max(hw, hh), Path.Direction.CW)
+            1 -> addRoundRect(RectF(-hw, -hh, hw, hh), min(hw, hh), min(hw, hh), Path.Direction.CW)
+            else -> addRoundRect(RectF(-hw, -hh, hw, hh), min(hw, hh) * 0.18f, min(hw, hh) * 0.18f, Path.Direction.CW) } }
+        val bp = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = bd.color("dolgu", "#23487A") }; c.drawPath(path, bp)
+        val sw = bd.value("konturGeni", t).toFloat(); if (sw > 0) { bp.style = Paint.Style.STROKE; bp.strokeWidth = sw; bp.color = bd.color("kontur"); c.drawPath(path, bp) }
+        drawLayer0(c, l); c.restore()
+    }
+
+    private fun drawLayer0(c: Canvas, l: Layer) {
         val w = l.w.toFloat(); val h = l.h.toFloat()
         val crop = l.crop
         if (crop != null && l.type != "shape" && l.type != "text") { c.save(); c.clipRect(l.visBox()) }
         when (l.type) {
-            "shape" -> if (l.noFill != true) fillShape(c, l, fillPaint(l))
+            "shape" -> if (ShapeFx.has(l)) ShapeFx.draw(c, l, fillPaint(l), curT) else if (l.noFill != true) fillShape(c, l, fillPaint(l))
             "text" -> {
                 val fp = fillPaint(l)
                 fp.typeface = bold; fp.textSize = (l.fontSize ?: 64.0).toFloat(); fp.textAlign = Paint.Align.CENTER

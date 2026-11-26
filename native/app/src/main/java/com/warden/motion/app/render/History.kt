@@ -26,6 +26,11 @@ object History {
             "movingmatte" -> { val g = v("gecmis").coerceAtLeast(1.0); val k = min(cap, 9); listOf(t) + (1 until k).map { t - it * g / (k - 1) * dt } }
             "motiondirmatte", "motionmagnify", "framerepair" -> listOf(t, t - dt, t + dt)
             "cinemagraph" -> listOf(l.start + v("sabitKareZama"))
+            "timediff" -> listOf(t - max(dt, v("zamanFark")))
+            "diffmatte" -> if (e.c?.get("temizKareKatm").isNullOrBlank()) listOf(l.start + v("referansZama")) else null
+            "timedisplace" -> { val k = min(cap, v("ornekSayi").roundToInt().coerceAtLeast(2)); val m = v("maksimumZama"); val d = max(dt, l.end - l.start); val mode = v("zamanSini").roundToInt()
+                (0 until k).map { i -> val tt = t - m * i / (k - 1); val r = tt - l.start
+                    when { r >= 0 || mode == 0 -> tt; mode == 1 -> l.start + ((r % d) + d) % d; else -> l.start + kotlin.math.abs(r).let { a -> val q = a % (2 * d); if (q > d) 2 * d - q else q } } } }
             "stabilize" -> listOf(if (v("bilincliKameKaym") >= 0.5) max(l.start, t - v("yumusatmSure")) else l.start)
             else -> null
         }

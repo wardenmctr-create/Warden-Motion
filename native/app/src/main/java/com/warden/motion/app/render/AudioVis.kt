@@ -11,6 +11,30 @@ import kotlin.math.*
 object AudioVis {
     @Volatile var pcmOf: ((Layer) -> Pcm?)? = null
     private val TYPES = setOf("spectrogram", "phasescope", "loudmeter")
+    /** 207 Ses Spektrumu (bant seviyeleri 0..1) ve 208 Ses Dalgası (örnekler −1..1): shader'a p_dv olarak gider */
+    fun data(p: Project, e: Effect, t: Double): DoubleArray? {
+        val l = e.c?.get("sesKayn")?.takeIf { it.isNotBlank() }?.let { id -> p.layers.find { it.id == id } }
+            ?: p.layers.firstOrNull { hasAudio(it) && t >= it.start && t < it.end } ?: p.layers.firstOrNull { hasAudio(it) } ?: return null
+        val pcm = pcmOf?.invoke(l) ?: return null; val rate = pcm.rate
+        fun idx(tt: Double) = ((tt - l.start + (l.srcIn ?: 0.0)) * rate).toInt()
+        fun mono(j: Int) = if (j in 0 until pcm.frames) (pcm.data[j * 2] + pcm.data[j * 2 + 1]) / 2.0 else 0.0
+        if (e.type == "audiowave") {
+            val n = e.value("ornekSayi", t).roundToInt().coerceIn(8, 256); val win = max(0.005, e.value("zamanPenc", t)); val ch = e.value("kanal", t).roundToInt()
+            val c0 = idx(t - win / 2); val span = win * rate
+            return DoubleArray(n) { i -> val j = c0 + (span * i / (n - 1)).toInt(); if (j !in 0 until pcm.frames) 0.0 else when (ch) { 1 -> pcm.data[j * 2].toDouble(); 2 -> pcm.data[j * 2 + 1].toDouble(); else -> mono(j) } }
+        }
+        val bands = e.value("bantSayi", t).roundToInt().coerceIn(2, 128); val N = 2048; val lo = max(10.0, e.value("altFrek", t)); val hi = max(lo * 1.01, min(rate / 2.0, e.value("ustFrek", t)))
+        val sm = max(0.0, e.value("yumusatm", t)); val out = DoubleArray(bands); val re = DoubleArray(N); val im = DoubleArray(N); val frames = if (sm > 0.01) 3 else 1
+        for (f in 0 until frames) { val c = idx(t - sm * f / 2)
+            for (k in 0 until N) { re[k] = mono(c - N + k) * (0.5 - 0.5 * cos(2 * PI * k / N)); im[k] = 0.0 }
+            AudioFx.fft(re, im, false)
+            for (b in 0 until bands) { val f0 = lo * (hi / lo).pow(b.toDouble() / bands); val f1 = lo * (hi / lo).pow((b + 1.0) / bands)
+                val k0 = (f0 / rate * N).toInt().coerceIn(1, N / 2 - 1); val k1 = (f1 / rate * N).toInt().coerceIn(k0, N / 2 - 1)
+                var m = 0.0; for (k in k0..k1) m = max(m, hypot(re[k], im[k]) / N * 4)
+                out[b] += ((20 * log10(max(m, 1e-6)) + 70) / 70).coerceIn(0.0, 1.0) / frames } }
+        return out
+    }
+
     fun sources(p: Project, fx: List<Effect>, t: Double): Map<String, Bitmap> {
         val e = fx.firstOrNull { it.type in TYPES } ?: return emptyMap()
         val l = p.layers.firstOrNull { hasAudio(it) && t >= it.start && t < it.end } ?: p.layers.firstOrNull { hasAudio(it) } ?: return emptyMap()

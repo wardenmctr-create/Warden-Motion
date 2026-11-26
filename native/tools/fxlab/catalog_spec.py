@@ -30,9 +30,20 @@ def _neutral(p):
     if p.get("unit") in ("°",) or p["min"] < 0 < p["max"]: return 0
     return p["min"]
 
+import re as _re
+# Otomatik Hafif/Güçlü/Animasyonlu yalnız "güç" anlamlı bir ayar üzerinden kurulur (ilk ayar "en düşük", "yön", "frekans" olabilir ve büyütmek efekti zayıflatır)
+_TR = str.maketrans("çğıöşüÇĞİÖŞÜ", "cgiosuCGIOSU")
+_STRONG = _re.compile(r"(guc|sidd|miktar|yogun|genlik|mesafe|boyut|yaricap|kalinl|olcek|buyu|tasma|bukme|bozul|derinl|parlakl|kontrast|doygun|bulanikl|yayil|esneme|salinim|egim|kuvvet|dalga.?yuks|yukseklik|kayma|sapma|titres|zipla|gerilme|karisim)")
+_EXCL = _re.compile(r"(^min|^max|minimum|maksimum|en ?dusuk|en ?yuksek|tohum|baslang|bitis|sure|gecik|frekans|faz|^yon|hiz|zaman|sayi|adet|esik|merkez|konum|ofset|tekrar|aral|dongu|bekleme|egri|yumusa|orijinal|gecis)")
 def _main(ps):
     for p in ps:
-        if p["kind"] == "jog" and not p.get("two") and not p.get("three") and p.get("anim") == "yes" and p.get("unit") in ("%", "px", "°", ""): return p
+        if not (p["kind"] == "jog" and not p.get("two") and not p.get("three") and p.get("anim") == "yes" and p.get("unit") in ("%", "px", "°", "")): continue
+        nm = (p["k"] + " " + p.get("l", "")).translate(_TR).lower()
+        if _STRONG.search(nm) and not _EXCL.search(nm): return p
+    for p in ps:
+        if not (p["kind"] == "jog" and not p.get("two") and not p.get("three") and p.get("anim") == "yes" and p.get("unit") in ("%", "px", "")): continue
+        nm = (p["k"] + " " + p.get("l", "")).translate(_TR).lower()
+        if not _EXCL.search(nm) and not _re.search(r"(aci|kayd|yansima|renk|kirmizi|yesil|mavi|siya|beyaz)", nm): return p
     return None
 
 def _round(v, p):
@@ -111,5 +122,6 @@ exec(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "catalog_upd.
 exec(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "catalog_new.py")).read())
 exec(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "presets_new.py")).read())
 exec(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "catalog_800.py")).read())
+exec(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "catalog_fix.py")).read())
 for _e in E:
     if _e["type"] in ("cutback", "cardpuppet", "texturize"): _e["ready"] = _e["type"] in READY

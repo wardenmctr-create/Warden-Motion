@@ -28,6 +28,19 @@ object Motion2 {
         var tr = tr0
         for (e in l.effects) { if (e.on == false) continue; fun v(k: String) = e.value(k, t)
             when (e.type) {
+                "cbbeat" -> { // 425 CB Ritme Tepki: sesin tepe seviyesinden yükselme/sönüm zarfı → ölçek ve açı
+                    val src = tgt(p, e, "sesKayn") ?: p.layers.firstOrNull { it.type == "audio" && it.muted != true } ?: continue
+                    val thr = (v("esik") / 100).coerceIn(0.0, 0.99); val gain = v("hassasiy") / 50; val rel = max(0.02, v("sonum")); val att = max(0.0, v("tepki"))
+                    var env = 0.0; val win = min(3.0, rel * 5 + att); val n = (win * 100).toInt().coerceIn(1, 300)
+                    for (i in 0..n) { val tau = i / 100.0; val tt = t - tau; if (tt < src.start) break
+                        var lev = AudioLevels.level(src, tt) * gain; if (v("basAgir") >= 0.5) lev = lev * lev * 1.4
+                        val hit = max(0.0, (lev - thr) / (1 - thr)); if (hit <= 0) continue
+                        val a = if (att > 1e-3) min(1.0, tau / att) else 1.0
+                        env = max(env, hit * a * exp(-max(0.0, tau - att) / rel)) }
+                    env = env.coerceIn(0.0, 1.5)
+                    val f = 1 + v("buyume") / 100 * env
+                    tr = tr.copy(scale = tr.scale * f, rot = tr.rot + v("donus") * env)
+                    if (v("sabitTaba") >= 0.5) tr = tr.copy(y = tr.y - l.h / 2 * tr.scale / f * tr.sy * (f - 1)) }
                 "lookat" -> { val sm = max(0.0, v("yumusatm")); var ax = 0.0; var ay = 0.0; val S = if (sm > 0.01) 6 else 1
                     for (i in 0 until S) { val tt = t - sm * i / max(1, S - 1); val g = tgt(p, e, "hedef"); val (gx, gy) = if (g != null) worldTransform(p, g, tt).let { it.x to it.y } else (e.value("elleHedeNoktX", tt) / 100 * p.width to e.value("elleHedeNoktY", tt) / 100 * p.height); ax += gx / S; ay += gy / S }
                     tr = tr.copy(rot = Math.toDegrees(atan2(ay - tr.y, ax - tr.x)) + v("aciOfse")) }

@@ -483,7 +483,7 @@ fun EffectsPanel(s: EditorState, layer: Layer, onClose: () -> Unit) {
 
 val MIX_P = FxParam("_mix", "Karışım", 0.0, 100.0, 100.0, 0.1, 0.1, unit = "%")
 /** Motoru henüz yazılmamış efektler (panelde açıkça uyarı gösterilir) */
-val NO_ENGINE = setOf("drawpath", "stroketaper", "audiospec", "audiowave", "morphpath", "diffmatte", "flash", "matchgrain", "timedisplace", "timediff", "cbshadow", "cbcam", "cbborder", "cbtrail", "cbbadge", "cbbeat")
+val NO_ENGINE = emptySet<String>()
 val MOTION_KINDS = setOf("xform", "opacity", "time", "special")
 
 fun stopsOf(e: Effect, pr: FxParam): List<Pair<String, Double>> = runCatching {

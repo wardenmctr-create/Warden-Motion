@@ -669,7 +669,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"tonAcis": 72.0
+"doygunlu": 20.0
 },
 "keys": {},
 "cols": {},
@@ -680,7 +680,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"tonAcis": 198.0
+"doygunlu": 55.0
 },
 "keys": {},
 "cols": {},
@@ -692,18 +692,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"tonAcis": [
+"doygunlu": [
 [
 0,
 0.0
 ],
 [
 0.5,
-198.0
+55.0
 ],
 [
 1,
-72.0
+20.0
 ]
 ]
 },
@@ -1313,52 +1313,6 @@
 "keys": {},
 "cols": {},
 "at": "start"
-},
-{
-"code": "HF",
-"name": "Hafif",
-"vals": {
-"kirmizi": 20.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "GÇ",
-"name": "Güçlü",
-"vals": {
-"kirmizi": 55.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "AN",
-"name": "Animasyonlu",
-"vals": {},
-"keys": {
-"kirmizi": [
-[
-0,
-0.0
-],
-[
-0.5,
-55.0
-],
-[
-1,
-20.0
-]
-]
-},
-"cols": {},
-"at": "start",
-"auto": true
 }
 ],
 "pad": null,
@@ -1428,7 +1382,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"sicaklik": 3750.0
+"guc": 50.0
 },
 "keys": {},
 "cols": {},
@@ -1439,7 +1393,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"sicaklik": 10900.0
+"guc": 100.0
 },
 "keys": {},
 "cols": {},
@@ -1451,18 +1405,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"sicaklik": [
+"guc": [
 [
 0,
-1000.0
+0.0
 ],
 [
 0.5,
-10900.0
+100.0
 ],
 [
 1,
-6500.0
+100.0
 ]
 ]
 },
@@ -2085,54 +2039,7 @@
 "def": 0
 }
 ],
-"presets": [
-{
-"code": "HF",
-"name": "Hafif",
-"vals": {
-"esik": 25.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "GÇ",
-"name": "Güçlü",
-"vals": {
-"esik": 90.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "AN",
-"name": "Animasyonlu",
-"vals": {},
-"keys": {
-"esik": [
-[
-0,
-0.0
-],
-[
-0.5,
-90.0
-],
-[
-1,
-50.0
-]
-]
-},
-"cols": {},
-"at": "start",
-"auto": true
-}
-],
+"presets": [],
 "pad": null,
 "passes": null,
 "info": null,
@@ -2379,7 +2286,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"girisSiya": 20.0
+"gama": 0.5
 },
 "keys": {},
 "cols": {},
@@ -2390,7 +2297,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"girisSiya": 55.0
+"gama": 1.79
 },
 "keys": {},
 "cols": {},
@@ -2402,18 +2309,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"girisSiya": [
+"gama": [
 [
 0,
-0.0
+0.01
 ],
 [
 0.5,
-55.0
+1.79
 ],
 [
 1,
-20.0
+1.0
 ]
 ]
 },
@@ -2637,52 +2544,6 @@
 "renkGeci": "[[\"#2B1A0E\",0],[\"#9B6B43\",55],[\"#F3E3C3\",100]]"
 },
 "at": "start"
-},
-{
-"code": "HF",
-"name": "Hafif",
-"vals": {
-"gecisKayd": 20.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "GÇ",
-"name": "Güçlü",
-"vals": {
-"gecisKayd": 55.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "AN",
-"name": "Animasyonlu",
-"vals": {},
-"keys": {
-"gecisKayd": [
-[
-0,
-0.0
-],
-[
-0.5,
-55.0
-],
-[
-1,
-20.0
-]
-]
-},
-"cols": {},
-"at": "start",
-"auto": true
 },
 {
 "code": "DU",
@@ -2925,54 +2786,7 @@
 "def": 0
 }
 ],
-"presets": [
-{
-"code": "HF",
-"name": "Hafif",
-"vals": {
-"altEsik": 20.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "GÇ",
-"name": "Güçlü",
-"vals": {
-"altEsik": 55.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "AN",
-"name": "Animasyonlu",
-"vals": {},
-"keys": {
-"altEsik": [
-[
-0,
-0.0
-],
-[
-0.5,
-55.0
-],
-[
-1,
-20.0
-]
-]
-},
-"cols": {},
-"at": "start",
-"auto": true
-}
-],
+"presets": [],
 "pad": null,
 "passes": null,
 "info": null,
@@ -3159,54 +2973,7 @@
 "def": 0
 }
 ],
-"presets": [
-{
-"code": "HF",
-"name": "Hafif",
-"vals": {
-"gecisYumu": 40.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "GÇ",
-"name": "Güçlü",
-"vals": {
-"gecisYumu": 100.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "AN",
-"name": "Animasyonlu",
-"vals": {},
-"keys": {
-"gecisYumu": [
-[
-0,
-0.0
-],
-[
-0.5,
-100.0
-],
-[
-1,
-80.0
-]
-]
-},
-"cols": {},
-"at": "start",
-"auto": true
-}
-],
+"presets": [],
 "pad": null,
 "passes": null,
 "info": null,
@@ -3356,7 +3123,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"aci": 72.0
+"olcek": 50.5
 },
 "keys": {},
 "cols": {},
@@ -3367,7 +3134,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"aci": 198.0
+"olcek": 179.2
 },
 "keys": {},
 "cols": {},
@@ -3379,18 +3146,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"aci": [
+"olcek": [
 [
 0,
-0.0
+1.0
 ],
 [
 0.5,
-198.0
+179.2
 ],
 [
 1,
-72.0
+100.0
 ]
 ]
 },
@@ -3519,7 +3286,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"acikTonl": 20.0
+"yaricap": 15.0
 },
 "keys": {},
 "cols": {},
@@ -3530,7 +3297,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"acikTonl": 55.0
+"yaricap": 54.0
 },
 "keys": {},
 "cols": {},
@@ -3542,18 +3309,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"acikTonl": [
+"yaricap": [
 [
 0,
 0.0
 ],
 [
 0.5,
-55.0
+54.0
 ],
 [
 1,
-20.0
+30.0
 ]
 ]
 },
@@ -3822,7 +3589,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"tolerans": 10.0
+"disDoyg": 20.0
 },
 "keys": {},
 "cols": {},
@@ -3833,7 +3600,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"tolerans": 36.0
+"disDoyg": 55.0
 },
 "keys": {},
 "cols": {},
@@ -3845,14 +3612,14 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"tolerans": [
+"disDoyg": [
 [
 0,
 0.0
 ],
 [
 0.5,
-36.0
+55.0
 ],
 [
 1,
@@ -3921,54 +3688,7 @@
 "def": 1
 }
 ],
-"presets": [
-{
-"code": "HF",
-"name": "Hafif",
-"vals": {
-"renkOpak": 50.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "GÇ",
-"name": "Güçlü",
-"vals": {
-"renkOpak": 100.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "AN",
-"name": "Animasyonlu",
-"vals": {},
-"keys": {
-"renkOpak": [
-[
-0,
-0.0
-],
-[
-0.5,
-100.0
-],
-[
-1,
-100.0
-]
-]
-},
-"cols": {},
-"at": "start",
-"auto": true
-}
-],
+"presets": [],
 "pad": null,
 "passes": null,
 "info": null,
@@ -4403,7 +4123,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"esik": 32.5
+"yogunluk": 35.0
 },
 "keys": {},
 "cols": {},
@@ -4414,7 +4134,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"esik": 100.0
+"yogunluk": 100.0
 },
 "keys": {},
 "cols": {},
@@ -4426,7 +4146,7 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"esik": [
+"yogunluk": [
 [
 0,
 0.0
@@ -4437,7 +4157,7 @@
 ],
 [
 1,
-65.0
+70.0
 ]
 ]
 },
@@ -5188,7 +4908,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"opaklik": 27.5
+"mesafe": 7.5
 },
 "keys": {},
 "cols": {},
@@ -5199,7 +4919,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"opaklik": 99.0
+"mesafe": 27.0
 },
 "keys": {},
 "cols": {},
@@ -5211,18 +4931,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"opaklik": [
+"mesafe": [
 [
 0,
 0.0
 ],
 [
 0.5,
-99.0
+27.0
 ],
 [
 1,
-55.0
+15.0
 ]
 ]
 },
@@ -5937,7 +5657,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"opaklik": 25.0
+"mesafe": 5.0
 },
 "keys": {},
 "cols": {},
@@ -5948,7 +5668,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"opaklik": 90.0
+"mesafe": 18.0
 },
 "keys": {},
 "cols": {},
@@ -5960,18 +5680,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"opaklik": [
+"mesafe": [
 [
 0,
 0.0
 ],
 [
 0.5,
-90.0
+18.0
 ],
 [
 1,
-50.0
+10.0
 ]
 ]
 },
@@ -6096,7 +5816,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"esik": 10.0
+"kalinlik": 1.0
 },
 "keys": {},
 "cols": {},
@@ -6107,7 +5827,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"esik": 36.0
+"kalinlik": 3.6
 },
 "keys": {},
 "cols": {},
@@ -6119,18 +5839,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"esik": [
+"kalinlik": [
 [
 0,
 0.0
 ],
 [
 0.5,
-36.0
+3.6
 ],
 [
 1,
-20.0
+2.0
 ]
 ]
 },
@@ -6229,7 +5949,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"isikAcis": 67.5
+"yuksekli": 1.0
 },
 "keys": {},
 "cols": {},
@@ -6240,7 +5960,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"isikAcis": 243.0
+"yuksekli": 3.6
 },
 "keys": {},
 "cols": {},
@@ -6252,18 +5972,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"isikAcis": [
+"yuksekli": [
 [
 0,
 0.0
 ],
 [
 0.5,
-243.0
+3.6
 ],
 [
 1,
-135.0
+2.0
 ]
 ]
 },
@@ -6707,7 +6427,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"esik": 12.5
+"kenarKali": 1.0
 },
 "keys": {},
 "cols": {},
@@ -6718,7 +6438,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"esik": 45.0
+"kenarKali": 3.6
 },
 "keys": {},
 "cols": {},
@@ -6730,18 +6450,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"esik": [
+"kenarKali": [
 [
 0,
 0.0
 ],
 [
 0.5,
-45.0
+3.6
 ],
 [
 1,
-25.0
+2.0
 ]
 ]
 },
@@ -6857,7 +6577,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"kenarEsig": 10.0
+"kenarKali": 1.0
 },
 "keys": {},
 "cols": {},
@@ -6868,7 +6588,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"kenarEsig": 36.0
+"kenarKali": 3.6
 },
 "keys": {},
 "cols": {},
@@ -6880,18 +6600,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"kenarEsig": [
+"kenarKali": [
 [
 0,
 0.0
 ],
 [
 0.5,
-36.0
+3.6
 ],
 [
 1,
-20.0
+2.0
 ]
 ]
 },
@@ -7321,7 +7041,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"baslangi": 20.0
+"cizgiKali": 2.5
 },
 "keys": {},
 "cols": {},
@@ -7332,7 +7052,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"baslangi": 55.0
+"cizgiKali": 9.0
 },
 "keys": {},
 "cols": {},
@@ -7344,18 +7064,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"baslangi": [
+"cizgiKali": [
 [
 0,
 0.0
 ],
 [
 0.5,
-55.0
+9.0
 ],
 [
 1,
-20.0
+5.0
 ]
 ]
 },
@@ -7369,7 +7089,7 @@
 "info": "Sadece uygulamanın şekillerinde çalışır.",
 "heavy": false,
 "n": 70,
-"ready": false
+"ready": true
 },
 {
 "type": "frame",
@@ -8582,7 +8302,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"aci": 72.0
+"bulanikl": 10.0
 },
 "keys": {},
 "cols": {},
@@ -8593,7 +8313,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"aci": 198.0
+"bulanikl": 36.0
 },
 "keys": {},
 "cols": {},
@@ -8605,18 +8325,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"aci": [
+"bulanikl": [
 [
 0,
 0.0
 ],
 [
 0.5,
-198.0
+36.0
 ],
 [
 1,
-72.0
+20.0
 ]
 ]
 },
@@ -8749,54 +8469,7 @@
 "def": 1
 }
 ],
-"presets": [
-{
-"code": "HF",
-"name": "Hafif",
-"vals": {
-"deklansoAcis": 90.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "GÇ",
-"name": "Güçlü",
-"vals": {
-"deklansoAcis": 324.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "AN",
-"name": "Animasyonlu",
-"vals": {},
-"keys": {
-"deklansoAcis": [
-[
-0,
-0.0
-],
-[
-0.5,
-324.0
-],
-[
-1,
-180.0
-]
-]
-},
-"cols": {},
-"at": "start",
-"auto": true
-}
-],
+"presets": [],
 "pad": null,
 "passes": null,
 "info": "Kullanmak için katmanı Taşı ve Çevir ile canlandır (bulanıklık kendiliğinden uygulanır).",
@@ -8912,7 +8585,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"esik": 37.5
+"yogunluk": 32.5
 },
 "keys": {},
 "cols": {},
@@ -8923,7 +8596,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"esik": 100.0
+"yogunluk": 100.0
 },
 "keys": {},
 "cols": {},
@@ -8935,7 +8608,7 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"esik": [
+"yogunluk": [
 [
 0,
 0.0
@@ -8946,7 +8619,7 @@
 ],
 [
 1,
-75.0
+65.0
 ]
 ]
 },
@@ -9034,7 +8707,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"keskinli": 17.5
+"yaricap": 1.0
 },
 "keys": {},
 "cols": {},
@@ -9045,7 +8718,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"keskinli": 63.0
+"yaricap": 3.6
 },
 "keys": {},
 "cols": {},
@@ -9057,18 +8730,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"keskinli": [
+"yaricap": [
 [
 0,
 0.0
 ],
 [
 0.5,
-63.0
+3.6
 ],
 [
 1,
-35.0
+2.0
 ]
 ]
 },
@@ -9392,54 +9065,7 @@
 "def": 0
 }
 ],
-"presets": [
-{
-"code": "HF",
-"name": "Hafif",
-"vals": {
-"yansimaEkse": 45.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "GÇ",
-"name": "Güçlü",
-"vals": {
-"yansimaEkse": 162.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "AN",
-"name": "Animasyonlu",
-"vals": {},
-"keys": {
-"yansimaEkse": [
-[
-0,
-0.0
-],
-[
-0.5,
-162.0
-],
-[
-1,
-90.0
-]
-]
-},
-"cols": {},
-"at": "start",
-"auto": true
-}
-],
+"presets": [],
 "pad": null,
 "passes": null,
 "info": null,
@@ -10505,7 +10131,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"seritGeni": 15.0
+"esneme": 50.0
 },
 "keys": {},
 "cols": {},
@@ -10516,7 +10142,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"seritGeni": 54.0
+"esneme": 180.0
 },
 "keys": {},
 "cols": {},
@@ -10528,18 +10154,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"seritGeni": [
+"esneme": [
 [
 0,
 0.0
 ],
 [
 0.5,
-54.0
+180.0
 ],
 [
 1,
-30.0
+100.0
 ]
 ]
 },
@@ -11871,7 +11497,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"aci": 72.0
+"olcek": 50.5
 },
 "keys": {},
 "cols": {},
@@ -11882,7 +11508,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"aci": 198.0
+"olcek": 179.2
 },
 "keys": {},
 "cols": {},
@@ -11894,18 +11520,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"aci": [
+"olcek": [
 [
 0,
-0.0
+1.0
 ],
 [
 0.5,
-198.0
+179.2
 ],
 [
 1,
-72.0
+100.0
 ]
 ]
 },
@@ -11993,54 +11619,7 @@
 "def": 0
 }
 ],
-"presets": [
-{
-"code": "HF",
-"name": "Hafif",
-"vals": {
-"yatayKayd": 100.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "GÇ",
-"name": "Güçlü",
-"vals": {
-"yatayKayd": 275.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "AN",
-"name": "Animasyonlu",
-"vals": {},
-"keys": {
-"yatayKayd": [
-[
-0,
-0.0
-],
-[
-0.5,
-275.0
-],
-[
-1,
-100.0
-]
-]
-},
-"cols": {},
-"at": "start",
-"auto": true
-}
-],
+"presets": [],
 "pad": null,
 "passes": null,
 "info": null,
@@ -14151,7 +13730,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"yatayAral": 25.0
+"cizgiKali": 1.0
 },
 "keys": {},
 "cols": {},
@@ -14162,7 +13741,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"yatayAral": 90.0
+"cizgiKali": 3.6
 },
 "keys": {},
 "cols": {},
@@ -14174,18 +13753,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"yatayAral": [
+"cizgiKali": [
 [
 0,
 0.0
 ],
 [
 0.5,
-90.0
+3.6
 ],
 [
 1,
-50.0
+2.0
 ]
 ]
 },
@@ -14780,7 +14359,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"bulutOlce": 90.0
+"kontrast": 10.0
 },
 "keys": {},
 "cols": {},
@@ -14791,7 +14370,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"bulutOlce": 324.0
+"kontrast": 36.0
 },
 "keys": {},
 "cols": {},
@@ -14803,18 +14382,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"bulutOlce": [
+"kontrast": [
 [
 0,
 0.0
 ],
 [
 0.5,
-324.0
+36.0
 ],
 [
 1,
-180.0
+20.0
 ]
 ]
 },
@@ -16446,7 +16025,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"kurdeleGeni": 12.5
+"dalgaYuks": 22.5
 },
 "keys": {},
 "cols": {},
@@ -16457,7 +16036,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"kurdeleGeni": 45.0
+"dalgaYuks": 81.0
 },
 "keys": {},
 "cols": {},
@@ -16469,18 +16048,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"kurdeleGeni": [
+"dalgaYuks": [
 [
 0,
 0.0
 ],
 [
 0.5,
-45.0
+81.0
 ],
 [
 1,
-25.0
+45.0
 ]
 ]
 },
@@ -16634,7 +16213,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"hiz": 0.5
+"yildizBoyu": 1.5
 },
 "keys": {},
 "cols": {},
@@ -16645,7 +16224,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"hiz": 1.8
+"yildizBoyu": 5.4
 },
 "keys": {},
 "cols": {},
@@ -16657,18 +16236,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"hiz": [
+"yildizBoyu": [
 [
 0,
 0.0
 ],
 [
 0.5,
-1.8
+5.4
 ],
 [
 1,
-1.0
+3.0
 ]
 ]
 },
@@ -17439,7 +17018,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"enKucuTane": 1.0
+"enBuyuTane": 4.0
 },
 "keys": {},
 "cols": {},
@@ -17450,7 +17029,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"enKucuTane": 3.6
+"enBuyuTane": 14.4
 },
 "keys": {},
 "cols": {},
@@ -17462,18 +17041,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"enKucuTane": [
+"enBuyuTane": [
 [
 0,
 0.0
 ],
 [
 0.5,
-3.6
+14.4
 ],
 [
 1,
-2.0
+8.0
 ]
 ]
 },
@@ -17624,7 +17203,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"damlaUzun": 15.0
+"kalinlik": 0.5
 },
 "keys": {},
 "cols": {},
@@ -17635,7 +17214,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"damlaUzun": 54.0
+"kalinlik": 1.8
 },
 "keys": {},
 "cols": {},
@@ -17647,18 +17226,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"damlaUzun": [
+"kalinlik": [
 [
 0,
 0.0
 ],
 [
 0.5,
-54.0
+1.8
 ],
 [
 1,
-30.0
+1.0
 ]
 ]
 },
@@ -27922,7 +27501,7 @@
 "info": null,
 "heavy": false,
 "n": 249,
-"ready": false
+"ready": true
 },
 {
 "type": "shake",
@@ -28229,7 +27808,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"konumSidd": 10.0
+"donusSidd": 1.5
 },
 "keys": {},
 "cols": {},
@@ -28240,7 +27819,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"konumSidd": 36.0
+"donusSidd": 5.4
 },
 "keys": {},
 "cols": {},
@@ -28252,18 +27831,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"konumSidd": [
+"donusSidd": [
 [
 0,
 0.0
 ],
 [
 0.5,
-36.0
+5.4
 ],
 [
 1,
-20.0
+3.0
 ]
 ]
 },
@@ -28277,7 +27856,7 @@
 "info": null,
 "heavy": false,
 "n": 250,
-"ready": false
+"ready": true
 },
 {
 "type": "spin",
@@ -28361,60 +27940,13 @@
 "def": 0
 }
 ],
-"presets": [
-{
-"code": "HF",
-"name": "Hafif",
-"vals": {
-"hiz": 45.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "GÇ",
-"name": "Güçlü",
-"vals": {
-"hiz": 162.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "AN",
-"name": "Animasyonlu",
-"vals": {},
-"keys": {
-"hiz": [
-[
-0,
-0.0
-],
-[
-0.5,
-162.0
-],
-[
-1,
-90.0
-]
-]
-},
-"cols": {},
-"at": "start",
-"auto": true
-}
-],
+"presets": [],
 "pad": null,
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 251,
-"ready": false
+"ready": true
 },
 {
 "type": "pulse",
@@ -28593,60 +28125,13 @@
 "def": 50
 }
 ],
-"presets": [
-{
-"code": "HF",
-"name": "Hafif",
-"vals": {
-"enDusuOlce": 45.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "GÇ",
-"name": "Güçlü",
-"vals": {
-"enDusuOlce": 100.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "AN",
-"name": "Animasyonlu",
-"vals": {},
-"keys": {
-"enDusuOlce": [
-[
-0,
-0.0
-],
-[
-0.5,
-100.0
-],
-[
-1,
-90.0
-]
-]
-},
-"cols": {},
-"at": "start",
-"auto": true
-}
-],
+"presets": [],
 "pad": null,
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 252,
-"ready": false
+"ready": true
 },
 {
 "type": "bounce",
@@ -28958,7 +28443,7 @@
 "info": null,
 "heavy": false,
 "n": 253,
-"ready": false
+"ready": true
 },
 {
 "type": "wiggle",
@@ -29063,60 +28548,13 @@
 "def": 1
 }
 ],
-"presets": [
-{
-"code": "HF",
-"name": "Hafif",
-"vals": {
-"konumGenl": 7.5
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "GÇ",
-"name": "Güçlü",
-"vals": {
-"konumGenl": 27.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "AN",
-"name": "Animasyonlu",
-"vals": {},
-"keys": {
-"konumGenl": [
-[
-0,
-0.0
-],
-[
-0.5,
-27.0
-],
-[
-1,
-15.0
-]
-]
-},
-"cols": {},
-"at": "start",
-"auto": true
-}
-],
+"presets": [],
 "pad": null,
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 254,
-"ready": false
+"ready": true
 },
 {
 "type": "orbit",
@@ -29288,7 +28726,7 @@
 "info": null,
 "heavy": false,
 "n": 255,
-"ready": false
+"ready": true
 },
 {
 "type": "float",
@@ -29420,7 +28858,7 @@
 "info": null,
 "heavy": false,
 "n": 256,
-"ready": false
+"ready": true
 },
 {
 "type": "pendulum",
@@ -29520,7 +28958,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"aci": 12.5
+"sonum": 20.0
 },
 "keys": {},
 "cols": {},
@@ -29531,7 +28969,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"aci": 45.0
+"sonum": 55.0
 },
 "keys": {},
 "cols": {},
@@ -29543,18 +28981,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"aci": [
+"sonum": [
 [
 0,
 0.0
 ],
 [
 0.5,
-45.0
+55.0
 ],
 [
 1,
-25.0
+20.0
 ]
 ]
 },
@@ -29568,7 +29006,7 @@
 "info": null,
 "heavy": false,
 "n": 257,
-"ready": false
+"ready": true
 },
 {
 "type": "heartbeat",
@@ -29667,7 +29105,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"vurusSayi": 46.0
+"ilkVuruOlce": 107.5
 },
 "keys": {},
 "cols": {},
@@ -29678,7 +29116,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"vurusSayi": 113.6
+"ilkVuruOlce": 127.0
 },
 "keys": {},
 "cols": {},
@@ -29690,18 +29128,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"vurusSayi": [
+"ilkVuruOlce": [
 [
 0,
-20.0
+100.0
 ],
 [
 0.5,
-113.6
+127.0
 ],
 [
 1,
-72.0
+115.0
 ]
 ]
 },
@@ -29715,7 +29153,7 @@
 "info": null,
 "heavy": false,
 "n": 258,
-"ready": false
+"ready": true
 },
 {
 "type": "squash",
@@ -29940,7 +29378,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"ezilme": 12.5
+"esneme": 15.0
 },
 "keys": {},
 "cols": {},
@@ -29951,7 +29389,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"ezilme": 45.0
+"esneme": 54.0
 },
 "keys": {},
 "cols": {},
@@ -29963,18 +29401,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"ezilme": [
+"esneme": [
 [
 0,
 0.0
 ],
 [
 0.5,
-45.0
+54.0
 ],
 [
 1,
-25.0
+30.0
 ]
 ]
 },
@@ -29988,7 +29426,7 @@
 "info": null,
 "heavy": false,
 "n": 259,
-"ready": false
+"ready": true
 },
 {
 "type": "coinflip",
@@ -30097,7 +29535,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"donmeEkse": 45.0
+"kalinlik": 1.5
 },
 "keys": {},
 "cols": {},
@@ -30108,7 +29546,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"donmeEkse": 162.0
+"kalinlik": 5.4
 },
 "keys": {},
 "cols": {},
@@ -30120,18 +29558,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"donmeEkse": [
+"kalinlik": [
 [
 0,
 0.0
 ],
 [
 0.5,
-162.0
+5.4
 ],
 [
 1,
-90.0
+3.0
 ]
 ]
 },
@@ -30145,7 +29583,7 @@
 "info": null,
 "heavy": false,
 "n": 260,
-"ready": false
+"ready": true
 },
 {
 "type": "jump",
@@ -30243,60 +29681,13 @@
 "def": 0.0
 }
 ],
-"presets": [
-{
-"code": "HF",
-"name": "Hafif",
-"vals": {
-"maksimumKaymX": 20.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "GÇ",
-"name": "Güçlü",
-"vals": {
-"maksimumKaymX": 72.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "AN",
-"name": "Animasyonlu",
-"vals": {},
-"keys": {
-"maksimumKaymX": [
-[
-0,
-0.0
-],
-[
-0.5,
-72.0
-],
-[
-1,
-40.0
-]
-]
-},
-"cols": {},
-"at": "start",
-"auto": true
-}
-],
+"presets": [],
 "pad": null,
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 261,
-"ready": false
+"ready": true
 },
 {
 "type": "slidein",
@@ -30409,7 +29800,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"yon": 90.0
+"mesafe": 250.0
 },
 "keys": {},
 "cols": {},
@@ -30420,7 +29811,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"yon": 324.0
+"mesafe": 900.0
 },
 "keys": {},
 "cols": {},
@@ -30432,18 +29823,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"yon": [
+"mesafe": [
 [
 0,
 0.0
 ],
 [
 0.5,
-324.0
+900.0
 ],
 [
 1,
-180.0
+500.0
 ]
 ]
 },
@@ -30457,7 +29848,7 @@
 "info": null,
 "heavy": false,
 "n": 262,
-"ready": false
+"ready": true
 },
 {
 "type": "slideout",
@@ -30570,7 +29961,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"yon": 72.0
+"mesafe": 250.0
 },
 "keys": {},
 "cols": {},
@@ -30581,7 +29972,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"yon": 198.0
+"mesafe": 900.0
 },
 "keys": {},
 "cols": {},
@@ -30593,18 +29984,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"yon": [
+"mesafe": [
 [
 0,
 0.0
 ],
 [
 0.5,
-198.0
+900.0
 ],
 [
 1,
-72.0
+500.0
 ]
 ]
 },
@@ -30618,7 +30009,7 @@
 "info": null,
 "heavy": false,
 "n": 263,
-"ready": false
+"ready": true
 },
 {
 "type": "popin",
@@ -30730,7 +30121,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"baslangiOlce": 20.0
+"tasma": 7.5
 },
 "keys": {},
 "cols": {},
@@ -30741,7 +30132,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"baslangiOlce": 55.0
+"tasma": 27.0
 },
 "keys": {},
 "cols": {},
@@ -30753,18 +30144,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"baslangiOlce": [
+"tasma": [
 [
 0,
 0.0
 ],
 [
 0.5,
-55.0
+27.0
 ],
 [
 1,
-20.0
+15.0
 ]
 ]
 },
@@ -30778,7 +30169,7 @@
 "info": null,
 "heavy": false,
 "n": 264,
-"ready": false
+"ready": true
 },
 {
 "type": "popout",
@@ -30877,7 +30268,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"bitisOlce": 20.0
+"onBuyu": 5.0
 },
 "keys": {},
 "cols": {},
@@ -30888,7 +30279,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"bitisOlce": 55.0
+"onBuyu": 18.0
 },
 "keys": {},
 "cols": {},
@@ -30900,18 +30291,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"bitisOlce": [
+"onBuyu": [
 [
 0,
 0.0
 ],
 [
 0.5,
-55.0
+18.0
 ],
 [
 1,
-20.0
+10.0
 ]
 ]
 },
@@ -31158,7 +30549,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"aralikX": 50.0
+"satirKaym": 100.0
 },
 "keys": {},
 "cols": {},
@@ -31169,7 +30560,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"aralikX": 180.0
+"satirKaym": 275.0
 },
 "keys": {},
 "cols": {},
@@ -31181,14 +30572,14 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"aralikX": [
+"satirKaym": [
 [
 0,
 0.0
 ],
 [
 0.5,
-180.0
+275.0
 ],
 [
 1,
@@ -31411,7 +30802,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"adimX": 25.0
+"olcekAdim": 20.0
 },
 "keys": {},
 "cols": {},
@@ -31422,7 +30813,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"adimX": 90.0
+"olcekAdim": 55.0
 },
 "keys": {},
 "cols": {},
@@ -31434,18 +30825,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"adimX": [
+"olcekAdim": [
 [
 0,
 0.0
 ],
 [
 0.5,
-90.0
+55.0
 ],
 [
 1,
-50.0
+20.0
 ]
 ]
 },
@@ -31949,7 +31340,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"alanX": 250.0
+"olcekDegi": 20.0
 },
 "keys": {},
 "cols": {},
@@ -31960,7 +31351,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"alanX": 900.0
+"olcekDegi": 72.0
 },
 "keys": {},
 "cols": {},
@@ -31972,18 +31363,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"alanX": [
+"olcekDegi": [
 [
 0,
 0.0
 ],
 [
 0.5,
-900.0
+72.0
 ],
 [
 1,
-500.0
+40.0
 ]
 ]
 },
@@ -32367,7 +31758,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"baslangiOpak": 50.0
+"sonum": 35.0
 },
 "keys": {},
 "cols": {},
@@ -32378,7 +31769,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"baslangiOpak": 100.0
+"sonum": 100.0
 },
 "keys": {},
 "cols": {},
@@ -32390,7 +31781,7 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"baslangiOpak": [
+"sonum": [
 [
 0,
 0.0
@@ -32401,7 +31792,7 @@
 ],
 [
 1,
-100.0
+70.0
 ]
 ]
 },
@@ -32629,7 +32020,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"eksenAcis": 72.0
+"mesafe": 100.0
 },
 "keys": {},
 "cols": {},
@@ -32640,7 +32031,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"eksenAcis": 198.0
+"mesafe": 275.0
 },
 "keys": {},
 "cols": {},
@@ -32652,18 +32043,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"eksenAcis": [
+"mesafe": [
 [
 0,
 0.0
 ],
 [
 0.5,
-198.0
+275.0
 ],
 [
 1,
-72.0
+100.0
 ]
 ]
 },
@@ -32960,7 +32351,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"tolerans": 12.5
+"renkTasm": 25.0
 },
 "keys": {},
 "cols": {},
@@ -32971,7 +32362,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"tolerans": 45.0
+"renkTasm": 90.0
 },
 "keys": {},
 "cols": {},
@@ -32983,18 +32374,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"tolerans": [
+"renkTasm": [
 [
 0,
 0.0
 ],
 [
 0.5,
-45.0
+90.0
 ],
 [
 1,
-25.0
+50.0
 ]
 ]
 },
@@ -33090,52 +32481,6 @@
 }
 ],
 "presets": [
-{
-"code": "HF",
-"name": "Hafif",
-"vals": {
-"esik": 25.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "GÇ",
-"name": "Güçlü",
-"vals": {
-"esik": 90.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "AN",
-"name": "Animasyonlu",
-"vals": {},
-"keys": {
-"esik": [
-[
-0,
-0.0
-],
-[
-0.5,
-90.0
-],
-[
-1,
-50.0
-]
-]
-},
-"cols": {},
-"at": "start",
-"auto": true
-},
 {
 "code": "EX",
 "name": "Ayıkla",
@@ -33975,54 +33320,7 @@
 "def": 1
 }
 ],
-"presets": [
-{
-"code": "HF",
-"name": "Hafif",
-"vals": {
-"esik": 25.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "GÇ",
-"name": "Güçlü",
-"vals": {
-"esik": 90.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "AN",
-"name": "Animasyonlu",
-"vals": {},
-"keys": {
-"esik": [
-[
-0,
-0.0
-],
-[
-0.5,
-90.0
-],
-[
-1,
-50.0
-]
-]
-},
-"cols": {},
-"at": "start",
-"auto": true
-}
-],
+"presets": [],
 "pad": null,
 "passes": null,
 "info": null,
@@ -34744,54 +34042,7 @@
 "def": 0
 }
 ],
-"presets": [
-{
-"code": "HF",
-"name": "Hafif",
-"vals": {
-"baslangiOpak": 50.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "GÇ",
-"name": "Güçlü",
-"vals": {
-"baslangiOpak": 100.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "AN",
-"name": "Animasyonlu",
-"vals": {},
-"keys": {
-"baslangiOpak": [
-[
-0,
-0.0
-],
-[
-0.5,
-100.0
-],
-[
-1,
-100.0
-]
-]
-},
-"cols": {},
-"at": "start",
-"auto": true
-}
-],
+"presets": [],
 "pad": null,
 "passes": null,
 "info": null,
@@ -35219,60 +34470,13 @@
 "def": 40.0
 }
 ],
-"presets": [
-{
-"code": "HF",
-"name": "Hafif",
-"vals": {
-"enDusuOpak": 25.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "GÇ",
-"name": "Güçlü",
-"vals": {
-"enDusuOpak": 90.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "AN",
-"name": "Animasyonlu",
-"vals": {},
-"keys": {
-"enDusuOpak": [
-[
-0,
-0.0
-],
-[
-0.5,
-90.0
-],
-[
-1,
-50.0
-]
-]
-},
-"cols": {},
-"at": "start",
-"auto": true
-}
-],
+"presets": [],
 "pad": null,
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 305,
-"ready": false
+"ready": true
 },
 {
 "type": "blink",
@@ -35368,7 +34572,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"acikKalmOran": 35.0
+"kapaliOpak": 10.0
 },
 "keys": {},
 "cols": {},
@@ -35379,7 +34583,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"acikKalmOran": 100.0
+"kapaliOpak": 36.0
 },
 "keys": {},
 "cols": {},
@@ -35391,18 +34595,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"acikKalmOran": [
+"kapaliOpak": [
 [
 0,
 0.0
 ],
 [
 0.5,
-100.0
+36.0
 ],
 [
 1,
-70.0
+20.0
 ]
 ]
 },
@@ -35433,7 +34637,7 @@
 ],
 "n": 306,
 "inner": "Flaş",
-"ready": false
+"ready": true
 },
 {
 "type": "fadein",
@@ -35518,60 +34722,13 @@
 "def": 0
 }
 ],
-"presets": [
-{
-"code": "HF",
-"name": "Hafif",
-"vals": {
-"baslangiOpak": 20.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "GÇ",
-"name": "Güçlü",
-"vals": {
-"baslangiOpak": 55.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "AN",
-"name": "Animasyonlu",
-"vals": {},
-"keys": {
-"baslangiOpak": [
-[
-0,
-0.0
-],
-[
-0.5,
-55.0
-],
-[
-1,
-20.0
-]
-]
-},
-"cols": {},
-"at": "start",
-"auto": true
-}
-],
+"presets": [],
 "pad": null,
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 307,
-"ready": false
+"ready": true
 },
 {
 "type": "fadeout",
@@ -35656,60 +34813,13 @@
 "def": 0
 }
 ],
-"presets": [
-{
-"code": "HF",
-"name": "Hafif",
-"vals": {
-"baslangiOpak": 50.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "GÇ",
-"name": "Güçlü",
-"vals": {
-"baslangiOpak": 100.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "AN",
-"name": "Animasyonlu",
-"vals": {},
-"keys": {
-"baslangiOpak": [
-[
-0,
-0.0
-],
-[
-0.5,
-100.0
-],
-[
-1,
-100.0
-]
-]
-},
-"cols": {},
-"at": "start",
-"auto": true
-}
-],
+"presets": [],
 "pad": null,
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 308,
-"ready": false
+"ready": true
 },
 {
 "type": "strobe",
@@ -35821,60 +34931,13 @@
 "def": 80.0
 }
 ],
-"presets": [
-{
-"code": "HF",
-"name": "Hafif",
-"vals": {
-"minimum": 30.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "GÇ",
-"name": "Güçlü",
-"vals": {
-"minimum": 100.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "AN",
-"name": "Animasyonlu",
-"vals": {},
-"keys": {
-"minimum": [
-[
-0,
-0.0
-],
-[
-0.5,
-100.0
-],
-[
-1,
-60.0
-]
-]
-},
-"cols": {},
-"at": "start",
-"auto": true
-}
-],
+"presets": [],
 "pad": null,
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 309,
-"ready": false
+"ready": true
 },
 {
 "type": "breathe",
@@ -35956,60 +35019,13 @@
 "def": 0
 }
 ],
-"presets": [
-{
-"code": "HF",
-"name": "Hafif",
-"vals": {
-"minimum": 32.5
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "GÇ",
-"name": "Güçlü",
-"vals": {
-"minimum": 100.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "AN",
-"name": "Animasyonlu",
-"vals": {},
-"keys": {
-"minimum": [
-[
-0,
-0.0
-],
-[
-0.5,
-100.0
-],
-[
-1,
-65.0
-]
-]
-},
-"cols": {},
-"at": "start",
-"auto": true
-}
-],
+"presets": [],
 "pad": null,
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 310,
-"ready": false
+"ready": true
 },
 {
 "type": "dissolve",
@@ -36674,7 +35690,7 @@
 "info": "Sadece metin katmanlarında çalışır.",
 "heavy": false,
 "n": 313,
-"ready": false
+"ready": true
 },
 {
 "type": "counter",
@@ -36808,7 +35824,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"baslangi": 200000.0
+"ilerleme": 20.0
 },
 "keys": {},
 "cols": {},
@@ -36819,7 +35835,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"baslangi": 550000.0
+"ilerleme": 55.0
 },
 "keys": {},
 "cols": {},
@@ -36831,18 +35847,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"baslangi": [
+"ilerleme": [
 [
 0,
 0.0
 ],
 [
 0.5,
-550000.0
+55.0
 ],
 [
 1,
-200000.0
+20.0
 ]
 ]
 },
@@ -36856,7 +35872,7 @@
 "info": "Sadece metin katmanlarında çalışır.",
 "heavy": false,
 "n": 314,
-"ready": false
+"ready": true
 },
 {
 "type": "spacing",
@@ -36924,60 +35940,13 @@
 "def": 1
 }
 ],
-"presets": [
-{
-"code": "HF",
-"name": "Hafif",
-"vals": {
-"harfAral": 100.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "GÇ",
-"name": "Güçlü",
-"vals": {
-"harfAral": 275.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "AN",
-"name": "Animasyonlu",
-"vals": {},
-"keys": {
-"harfAral": [
-[
-0,
-0.0
-],
-[
-0.5,
-275.0
-],
-[
-1,
-100.0
-]
-]
-},
-"cols": {},
-"at": "start",
-"auto": true
-}
-],
+"presets": [],
 "pad": null,
 "passes": null,
 "info": "Sadece metin katmanlarında çalışır.",
 "heavy": false,
 "n": 315,
-"ready": false
+"ready": true
 },
 {
 "type": "wavetext",
@@ -37122,7 +36091,7 @@
 "info": "Sadece metin katmanlarında çalışır.",
 "heavy": false,
 "n": 316,
-"ready": false
+"ready": true
 },
 {
 "type": "scramble",
@@ -37298,7 +36267,7 @@
 "info": "Sadece metin katmanlarında çalışır.",
 "heavy": false,
 "n": 317,
-"ready": false
+"ready": true
 },
 {
 "type": "charfade",
@@ -37462,7 +36431,7 @@
 "info": "Sadece metin katmanlarında çalışır.",
 "heavy": false,
 "n": 318,
-"ready": false
+"ready": true
 },
 {
 "type": "textbounce",
@@ -37612,7 +36581,7 @@
 "info": "Sadece metin katmanlarında çalışır.",
 "heavy": false,
 "n": 319,
-"ready": false
+"ready": true
 },
 {
 "type": "rainbowtext",
@@ -37710,7 +36679,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"baslangiTonu": 72.0
+"doygunlu": 50.0
 },
 "keys": {},
 "cols": {},
@@ -37721,7 +36690,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"baslangiTonu": 198.0
+"doygunlu": 100.0
 },
 "keys": {},
 "cols": {},
@@ -37733,18 +36702,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"baslangiTonu": [
+"doygunlu": [
 [
 0,
 0.0
 ],
 [
 0.5,
-198.0
+100.0
 ],
 [
 1,
-72.0
+100.0
 ]
 ]
 },
@@ -37758,7 +36727,7 @@
 "info": "Sadece metin katmanlarında çalışır.",
 "heavy": false,
 "n": 320,
-"ready": false
+"ready": true
 },
 {
 "type": "textshake",
@@ -37852,60 +36821,13 @@
 "def": 30.0
 }
 ],
-"presets": [
-{
-"code": "HF",
-"name": "Hafif",
-"vals": {
-"konumX": 1.5
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "GÇ",
-"name": "Güçlü",
-"vals": {
-"konumX": 5.4
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "AN",
-"name": "Animasyonlu",
-"vals": {},
-"keys": {
-"konumX": [
-[
-0,
-0.0
-],
-[
-0.5,
-5.4
-],
-[
-1,
-3.0
-]
-]
-},
-"cols": {},
-"at": "start",
-"auto": true
-}
-],
+"presets": [],
 "pad": null,
 "passes": null,
 "info": "Sadece metin katmanlarında çalışır.",
 "heavy": false,
 "n": 321,
-"ready": false
+"ready": true
 },
 {
 "type": "texttransform",
@@ -38113,7 +37035,7 @@
 "info": "Sadece metin katmanlarında çalışır.",
 "heavy": false,
 "n": 322,
-"ready": false
+"ready": true
 },
 {
 "type": "copybg",
@@ -38387,52 +37309,6 @@
 "keys": {},
 "cols": {},
 "at": "start"
-},
-{
-"code": "HF",
-"name": "Hafif",
-"vals": {
-"kareHizi": 6.05
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "GÇ",
-"name": "Güçlü",
-"vals": {
-"kareHizi": 21.52
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "AN",
-"name": "Animasyonlu",
-"vals": {},
-"keys": {
-"kareHizi": [
-[
-0,
-0.1
-],
-[
-0.5,
-21.52
-],
-[
-1,
-12.0
-]
-]
-},
-"cols": {},
-"at": "start",
-"auto": true
 }
 ],
 "pad": null,
@@ -38550,7 +37426,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"cizgiAral": 2.0
+"kalinlik": 0.5
 },
 "keys": {},
 "cols": {},
@@ -38561,7 +37437,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"cizgiAral": 7.2
+"kalinlik": 1.8
 },
 "keys": {},
 "cols": {},
@@ -38573,18 +37449,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"cizgiAral": [
+"kalinlik": [
 [
 0,
 0.0
 ],
 [
 0.5,
-7.2
+1.8
 ],
 [
 1,
-4.0
+1.0
 ]
 ]
 },
@@ -38927,7 +37803,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"gren": 10.0
+"titresim": 5.0
 },
 "keys": {},
 "cols": {},
@@ -38938,7 +37814,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"gren": 36.0
+"titresim": 18.0
 },
 "keys": {},
 "cols": {},
@@ -38950,18 +37826,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"gren": [
+"titresim": [
 [
 0,
 0.0
 ],
 [
 0.5,
-36.0
+18.0
 ],
 [
 1,
-20.0
+10.0
 ]
 ]
 },
@@ -39088,7 +37964,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"ekranKavi": 7.5
+"renkKaym": 1.0
 },
 "keys": {},
 "cols": {},
@@ -39099,7 +37975,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"ekranKavi": 27.0
+"renkKaym": 3.6
 },
 "keys": {},
 "cols": {},
@@ -39111,18 +37987,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"ekranKavi": [
+"renkKaym": [
 [
 0,
 0.0
 ],
 [
 0.5,
-27.0
+3.6
 ],
 [
 1,
-15.0
+2.0
 ]
 ]
 },
@@ -39246,54 +38122,7 @@
 "def": 1.0
 }
 ],
-"presets": [
-{
-"code": "HF",
-"name": "Hafif",
-"vals": {
-"yon": 45.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "GÇ",
-"name": "Güçlü",
-"vals": {
-"yon": 162.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "AN",
-"name": "Animasyonlu",
-"vals": {},
-"keys": {
-"yon": [
-[
-0,
-0.0
-],
-[
-0.5,
-162.0
-],
-[
-1,
-90.0
-]
-]
-},
-"cols": {},
-"at": "start",
-"auto": true
-}
-],
+"presets": [],
 "pad": {
 "k": "maksimumIz",
 "mul": 1
@@ -39632,7 +38461,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"kirmiziKatk": 50.0
+"sabit": 20.0
 },
 "keys": {},
 "cols": {},
@@ -39643,7 +38472,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"kirmiziKatk": 100.0
+"sabit": 55.0
 },
 "keys": {},
 "cols": {},
@@ -39655,18 +38484,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"kirmiziKatk": [
+"sabit": [
 [
 0,
 0.0
 ],
 [
 0.5,
-100.0
+55.0
 ],
 [
 1,
-100.0
+20.0
 ]
 ]
 },
@@ -40156,54 +38985,7 @@
 "def": 1
 }
 ],
-"presets": [
-{
-"code": "HF",
-"name": "Hafif",
-"vals": {
-"camgobeg": 20.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "GÇ",
-"name": "Güçlü",
-"vals": {
-"camgobeg": 55.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "AN",
-"name": "Animasyonlu",
-"vals": {},
-"keys": {
-"camgobeg": [
-[
-0,
-0.0
-],
-[
-0.5,
-55.0
-],
-[
-1,
-20.0
-]
-]
-},
-"cols": {},
-"at": "start",
-"auto": true
-}
-],
+"presets": [],
 "pad": null,
 "passes": null,
 "info": null,
@@ -40294,7 +39076,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"siyahKirp": 0.5
+"guc": 50.0
 },
 "keys": {},
 "cols": {},
@@ -40305,7 +39087,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"siyahKirp": 1.8
+"guc": 100.0
 },
 "keys": {},
 "cols": {},
@@ -40317,18 +39099,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"siyahKirp": [
+"guc": [
 [
 0,
 0.0
 ],
 [
 0.5,
-1.8
+100.0
 ],
 [
 1,
-1.0
+100.0
 ]
 ]
 },
@@ -40457,52 +39239,6 @@
 }
 ],
 "presets": [
-{
-"code": "HF",
-"name": "Hafif",
-"vals": {
-"faz": 20.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "GÇ",
-"name": "Güçlü",
-"vals": {
-"faz": 55.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "AN",
-"name": "Animasyonlu",
-"vals": {},
-"keys": {
-"faz": [
-[
-0,
-0.0
-],
-[
-0.5,
-55.0
-],
-[
-1,
-20.0
-]
-]
-},
-"cols": {},
-"at": "start",
-"auto": true
-},
 {
 "code": "SP",
 "name": "Spektrum",
@@ -40983,7 +39719,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"terslik": 50.0
+"kontrast": 15.0
 },
 "keys": {},
 "cols": {},
@@ -40994,7 +39730,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"terslik": 100.0
+"kontrast": 54.0
 },
 "keys": {},
 "cols": {},
@@ -41006,18 +39742,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"terslik": [
+"kontrast": [
 [
 0,
 0.0
 ],
 [
 0.5,
-100.0
+54.0
 ],
 [
 1,
-100.0
+30.0
 ]
 ]
 },
@@ -41836,7 +40572,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"kirmiziKatk": 50.0
+"gokyuzuKara": 25.0
 },
 "keys": {},
 "cols": {},
@@ -41847,7 +40583,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"kirmiziKatk": 100.0
+"gokyuzuKara": 90.0
 },
 "keys": {},
 "cols": {},
@@ -41859,18 +40595,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"kirmiziKatk": [
+"gokyuzuKara": [
 [
 0,
 0.0
 ],
 [
 0.5,
-100.0
+90.0
 ],
 [
 1,
-100.0
+50.0
 ]
 ]
 },
@@ -42150,7 +40886,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"kirilma": 7.5
+"bulanikl": 1.5
 },
 "keys": {},
 "cols": {},
@@ -42161,7 +40897,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"kirilma": 27.0
+"bulanikl": 5.4
 },
 "keys": {},
 "cols": {},
@@ -42173,18 +40909,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"kirilma": [
+"bulanikl": [
 [
 0,
 0.0
 ],
 [
 0.5,
-27.0
+5.4
 ],
 [
 1,
-15.0
+3.0
 ]
 ]
 },
@@ -42431,7 +41167,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"kabartmaYuks": 1.5
+"guc": 37.5
 },
 "keys": {},
 "cols": {},
@@ -42442,7 +41178,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"kabartmaYuks": 5.4
+"guc": 100.0
 },
 "keys": {},
 "cols": {},
@@ -42454,18 +41190,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"kabartmaYuks": [
+"guc": [
 [
 0,
 0.0
 ],
 [
 0.5,
-5.4
+100.0
 ],
 [
 1,
-3.0
+75.0
 ]
 ]
 },
@@ -43221,7 +41957,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"pahGeni": 4.0
+"pahDeri": 2.0
 },
 "keys": {},
 "cols": {},
@@ -43232,7 +41968,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"pahGeni": 14.4
+"pahDeri": 7.2
 },
 "keys": {},
 "cols": {},
@@ -43244,18 +41980,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"pahGeni": [
+"pahDeri": [
 [
 0,
 0.0
 ],
 [
 0.5,
-14.4
+7.2
 ],
 [
 1,
-8.0
+4.0
 ]
 ]
 },
@@ -43369,7 +42105,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"genislik": 5.0
+"derinlik": 2.5
 },
 "keys": {},
 "cols": {},
@@ -43380,7 +42116,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"genislik": 18.0
+"derinlik": 9.0
 },
 "keys": {},
 "cols": {},
@@ -43392,18 +42128,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"genislik": [
+"derinlik": [
 [
 0,
 0.0
 ],
 [
 0.5,
-18.0
+9.0
 ],
 [
 1,
-10.0
+5.0
 ]
 ]
 },
@@ -43846,7 +42582,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"aci": 22.5
+"isikGucu": 40.0
 },
 "keys": {},
 "cols": {},
@@ -43857,7 +42593,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"aci": 81.0
+"isikGucu": 100.0
 },
 "keys": {},
 "cols": {},
@@ -43869,18 +42605,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"aci": [
+"isikGucu": [
 [
 0,
 0.0
 ],
 [
 0.5,
-81.0
+100.0
 ],
 [
 1,
-45.0
+80.0
 ]
 ]
 },
@@ -44644,7 +43380,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"kontur": 1.5
+"noktaBoyu": 3.0
 },
 "keys": {},
 "cols": {},
@@ -44655,7 +43391,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"kontur": 5.4
+"noktaBoyu": 10.8
 },
 "keys": {},
 "cols": {},
@@ -44667,18 +43403,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"kontur": [
+"noktaBoyu": [
 [
 0,
 0.0
 ],
 [
 0.5,
-5.4
+10.8
 ],
 [
 1,
-3.0
+6.0
 ]
 ]
 },
@@ -45131,7 +43867,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"taramaAral": 2.5
+"bozulma": 2.0
 },
 "keys": {},
 "cols": {},
@@ -45142,7 +43878,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"taramaAral": 9.0
+"bozulma": 7.2
 },
 "keys": {},
 "cols": {},
@@ -45154,18 +43890,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"taramaAral": [
+"bozulma": [
 [
 0,
 0.0
 ],
 [
 0.5,
-9.0
+7.2
 ],
 [
 1,
-5.0
+4.0
 ]
 ]
 },
@@ -46290,54 +45026,7 @@
 "def": 1
 }
 ],
-"presets": [
-{
-"code": "HF",
-"name": "Hafif",
-"vals": {
-"bukulmeAcis": 22.5
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "GÇ",
-"name": "Güçlü",
-"vals": {
-"bukulmeAcis": 81.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "AN",
-"name": "Animasyonlu",
-"vals": {},
-"keys": {
-"bukulmeAcis": [
-[
-0,
-0.0
-],
-[
-0.5,
-81.0
-],
-[
-1,
-45.0
-]
-]
-},
-"cols": {},
-"at": "start",
-"auto": true
-}
-],
+"presets": [],
 "pad": {
 "box": 0.9
 },
@@ -46442,7 +45131,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"damlalas": 7.5
+"yuzeyParl": 20.0
 },
 "keys": {},
 "cols": {},
@@ -46453,7 +45142,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"damlalas": 27.0
+"yuzeyParl": 72.0
 },
 "keys": {},
 "cols": {},
@@ -46465,18 +45154,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"damlalas": [
+"yuzeyParl": [
 [
 0,
 0.0
 ],
 [
 0.5,
-27.0
+72.0
 ],
 [
 1,
-15.0
+40.0
 ]
 ]
 },
@@ -46785,7 +45474,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"parcaDonu": 10.0
+"parcaKaym": 10.0
 },
 "keys": {},
 "cols": {},
@@ -46796,7 +45485,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"parcaDonu": 36.0
+"parcaKaym": 36.0
 },
 "keys": {},
 "cols": {},
@@ -46808,7 +45497,7 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"parcaDonu": [
+"parcaKaym": [
 [
 0,
 0.0
@@ -47097,7 +45786,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"kivrimAcis": 22.5
+"yaricap": 40.0
 },
 "keys": {},
 "cols": {},
@@ -47108,7 +45797,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"kivrimAcis": 81.0
+"yaricap": 144.0
 },
 "keys": {},
 "cols": {},
@@ -47120,18 +45809,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"kivrimAcis": [
+"yaricap": [
 [
 0,
 0.0
 ],
 [
 0.5,
-81.0
+144.0
 ],
 [
 1,
-45.0
+80.0
 ]
 ]
 },
@@ -47260,7 +45949,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"halkaIler": 25.0
+"genlik": 5.0
 },
 "keys": {},
 "cols": {},
@@ -47271,7 +45960,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"halkaIler": 90.0
+"genlik": 18.0
 },
 "keys": {},
 "cols": {},
@@ -47283,18 +45972,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"halkaIler": [
+"genlik": [
 [
 0,
 0.0
 ],
 [
 0.5,
-90.0
+18.0
 ],
 [
 1,
-50.0
+10.0
 ]
 ]
 },
@@ -47717,7 +46406,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"aci": 45.0
+"ayrilma": 15.0
 },
 "keys": {},
 "cols": {},
@@ -47728,7 +46417,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"aci": 162.0
+"ayrilma": 54.0
 },
 "keys": {},
 "cols": {},
@@ -47740,18 +46429,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"aci": [
+"ayrilma": [
 [
 0,
 0.0
 ],
 [
 0.5,
-162.0
+54.0
 ],
 [
 1,
-90.0
+30.0
 ]
 ]
 },
@@ -49280,7 +47969,7 @@
 "name": "Ses Spektrumu",
 "en": "Audio Spectrum",
 "cat": 4,
-"kind": "audio",
+"kind": "gen",
 "desc": "Projedeki sese göre zıplayan çubuklar (ekolayzer).",
 "tags": [
 "Ses",
@@ -49298,7 +47987,7 @@
 "step": 1,
 "jog": 1,
 "multi": false,
-"hint": "Uygun katman/dosya/ses",
+"hint": "Boş bırakılırsa projedeki ilk ses katmanı kullanılır.",
 "src": "Kaynak seçici",
 "def": ""
 },
@@ -49515,14 +48204,14 @@
 "info": "Projedeki ses katmanlarına göre hareket eder.",
 "heavy": false,
 "n": 207,
-"ready": false
+"ready": true
 },
 {
 "type": "audiowave",
 "name": "Ses Dalgası",
 "en": "Audio Waveform",
 "cat": 4,
-"kind": "audio",
+"kind": "gen",
 "desc": "Projedeki sesin dalga çizgisi.",
 "tags": [
 "Ses",
@@ -49539,7 +48228,7 @@
 "step": 1,
 "jog": 1,
 "multi": false,
-"hint": "Uygun katman/dosya/ses",
+"hint": "Boş bırakılırsa projedeki ilk ses katmanı kullanılır.",
 "src": "Kaynak seçici",
 "def": ""
 },
@@ -49721,7 +48410,7 @@
 "info": "Projedeki ses katmanlarına göre hareket eder.",
 "heavy": false,
 "n": 208,
-"ready": false
+"ready": true
 },
 {
 "type": "threads",
@@ -49829,7 +48518,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"iplikGeni": 3.0
+"dokumaDeri": 20.0
 },
 "keys": {},
 "cols": {},
@@ -49840,7 +48529,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"iplikGeni": 10.8
+"dokumaDeri": 72.0
 },
 "keys": {},
 "cols": {},
@@ -49852,18 +48541,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"iplikGeni": [
+"dokumaDeri": [
 [
 0,
 0.0
 ],
 [
 0.5,
-10.8
+72.0
 ],
 [
 1,
-6.0
+40.0
 ]
 ]
 },
@@ -50963,7 +49652,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"donus": 720.0
+"yaricap": 150.0
 },
 "keys": {},
 "cols": {},
@@ -50974,7 +49663,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"donus": 1980.0
+"yaricap": 540.0
 },
 "keys": {},
 "cols": {},
@@ -50986,18 +49675,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"donus": [
+"yaricap": [
 [
 0,
 0.0
 ],
 [
 0.5,
-1980.0
+540.0
 ],
 [
 1,
-720.0
+300.0
 ]
 ]
 },
@@ -51136,7 +49825,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"sutunAral": 10.0
+"yaziBoyu": 8.0
 },
 "keys": {},
 "cols": {},
@@ -51147,7 +49836,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"sutunAral": 36.0
+"yaziBoyu": 28.8
 },
 "keys": {},
 "cols": {},
@@ -51159,18 +49848,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"sutunAral": [
+"yaziBoyu": [
 [
 0,
 0.0
 ],
 [
 0.5,
-36.0
+28.8
 ],
 [
 1,
-20.0
+16.0
 ]
 ]
 },
@@ -53496,7 +52185,7 @@
 "info": null,
 "heavy": false,
 "n": 266,
-"ready": false
+"ready": true
 },
 {
 "type": "elastic",
@@ -53664,7 +52353,7 @@
 "info": "Taşı ve Çevir keyframe'leriyle birlikte kullan.",
 "heavy": false,
 "n": 267,
-"ready": false
+"ready": true
 },
 {
 "type": "drift",
@@ -53747,60 +52436,13 @@
 "def": 0
 }
 ],
-"presets": [
-{
-"code": "HF",
-"name": "Hafif",
-"vals": {
-"hizX": 5.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "GÇ",
-"name": "Güçlü",
-"vals": {
-"hizX": 18.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "AN",
-"name": "Animasyonlu",
-"vals": {},
-"keys": {
-"hizX": [
-[
-0,
-0.0
-],
-[
-0.5,
-18.0
-],
-[
-1,
-10.0
-]
-]
-},
-"cols": {},
-"at": "start",
-"auto": true
-}
-],
+"presets": [],
 "pad": null,
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 268,
-"ready": false
+"ready": true
 },
 {
 "type": "spiralpath",
@@ -53911,7 +52553,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"baslangiYari": 100.0
+"ilerleme": 20.0
 },
 "keys": {},
 "cols": {},
@@ -53922,7 +52564,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"baslangiYari": 275.0
+"ilerleme": 55.0
 },
 "keys": {},
 "cols": {},
@@ -53934,18 +52576,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"baslangiYari": [
+"ilerleme": [
 [
 0,
 0.0
 ],
 [
 0.5,
-275.0
+55.0
 ],
 [
 1,
-100.0
+20.0
 ]
 ]
 },
@@ -53959,7 +52601,7 @@
 "info": null,
 "heavy": false,
 "n": 269,
-"ready": false
+"ready": true
 },
 {
 "type": "motiontile",
@@ -54147,7 +52789,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"altTon": 45.0
+"altDoyg": 10.0
 },
 "keys": {},
 "cols": {},
@@ -54158,7 +52800,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"altTon": 162.0
+"altDoyg": 36.0
 },
 "keys": {},
 "cols": {},
@@ -54170,18 +52812,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"altTon": [
+"altDoyg": [
 [
 0,
 0.0
 ],
 [
 0.5,
-162.0
+36.0
 ],
 [
 1,
-90.0
+20.0
 ]
 ]
 },
@@ -54281,7 +52923,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"benzerli": 15.0
+"karisim": 7.5
 },
 "keys": {},
 "cols": {},
@@ -54292,7 +52934,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"benzerli": 54.0
+"karisim": 27.0
 },
 "keys": {},
 "cols": {},
@@ -54304,18 +52946,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"benzerli": [
+"karisim": [
 [
 0,
 0.0
 ],
 [
 0.5,
-54.0
+27.0
 ],
 [
 1,
-30.0
+15.0
 ]
 ]
 },
@@ -54790,7 +53432,7 @@
 "name": "Flaş Geçişi",
 "en": "Flash",
 "cat": 9,
-"kind": "opacity",
+"kind": "pixel",
 "desc": "Katmanın başında beyaz bir flaşla belirir.",
 "tags": [
 "Işık",
@@ -54931,7 +53573,7 @@
 "info": null,
 "heavy": false,
 "n": 312,
-"ready": false
+"ready": true
 },
 {
 "type": "timecode",
@@ -55050,7 +53692,7 @@
 "info": "Sadece metin katmanlarında çalışır.",
 "heavy": false,
 "n": 323,
-"ready": false
+"ready": true
 },
 {
 "type": "textglitch",
@@ -55208,7 +53850,7 @@
 "info": "Sadece metin katmanlarında çalışır.",
 "heavy": false,
 "n": 324,
-"ready": false
+"ready": true
 },
 {
 "type": "textreveal",
@@ -55336,7 +53978,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"ilerleme": 20.0
+"kayma": 20.0
 },
 "keys": {},
 "cols": {},
@@ -55347,7 +53989,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"ilerleme": 55.0
+"kayma": 72.0
 },
 "keys": {},
 "cols": {},
@@ -55359,18 +54001,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"ilerleme": [
+"kayma": [
 [
 0,
 0.0
 ],
 [
 0.5,
-55.0
+72.0
 ],
 [
 1,
-20.0
+40.0
 ]
 ]
 },
@@ -55384,7 +54026,7 @@
 "info": "Sadece metin katmanlarında çalışır.",
 "heavy": false,
 "n": 325,
-"ready": false
+"ready": true
 },
 {
 "type": "shatter",
@@ -55980,7 +54622,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"donusX": 45.0
+"dalgaBoyu": 100.0
 },
 "keys": {},
 "cols": {},
@@ -55991,7 +54633,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"donusX": 162.0
+"dalgaBoyu": 360.0
 },
 "keys": {},
 "cols": {},
@@ -56003,18 +54645,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"donusX": [
+"dalgaBoyu": [
 [
 0,
 0.0
 ],
 [
 0.5,
-162.0
+360.0
 ],
 [
 1,
-90.0
+200.0
 ]
 ]
 },
@@ -56155,7 +54797,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"desenOlce": 40.0
+"isikGucu": 30.0
 },
 "keys": {},
 "cols": {},
@@ -56166,7 +54808,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"desenOlce": 144.0
+"isikGucu": 100.0
 },
 "keys": {},
 "cols": {},
@@ -56178,18 +54820,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"desenOlce": [
+"isikGucu": [
 [
 0,
 0.0
 ],
 [
 0.5,
-144.0
+100.0
 ],
 [
 1,
-80.0
+60.0
 ]
 ]
 },
@@ -56947,7 +55589,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"uretimHizi": 50.0
+"yayilim": 45.0
 },
 "keys": {},
 "cols": {},
@@ -56958,7 +55600,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"uretimHizi": 180.0
+"yayilim": 162.0
 },
 "keys": {},
 "cols": {},
@@ -56970,18 +55612,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"uretimHizi": [
+"yayilim": [
 [
 0,
 0.0
 ],
 [
 0.5,
-180.0
+162.0
 ],
 [
 1,
-100.0
+90.0
 ]
 ]
 },
@@ -57517,7 +56159,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"uzunluk": 10.0
+"kalinlik": 0.5
 },
 "keys": {},
 "cols": {},
@@ -57528,7 +56170,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"uzunluk": 36.0
+"kalinlik": 1.8
 },
 "keys": {},
 "cols": {},
@@ -57540,18 +56182,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"uzunluk": [
+"kalinlik": [
 [
 0,
 0.0
 ],
 [
 0.5,
-36.0
+1.8
 ],
 [
 1,
-20.0
+1.0
 ]
 ]
 },
@@ -57706,7 +56348,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"topAral": 10.0
+"topBoyu": 40.0
 },
 "keys": {},
 "cols": {},
@@ -57717,7 +56359,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"topAral": 36.0
+"topBoyu": 100.0
 },
 "keys": {},
 "cols": {},
@@ -57729,18 +56371,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"topAral": [
+"topBoyu": [
 [
 0,
 0.0
 ],
 [
 0.5,
-36.0
+100.0
 ],
 [
 1,
-20.0
+80.0
 ]
 ]
 },
@@ -60285,7 +58927,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"obturatoAcis": 90.0
+"hareketHass": 25.0
 },
 "keys": {},
 "cols": {},
@@ -60296,7 +58938,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"obturatoAcis": 324.0
+"hareketHass": 90.0
 },
 "keys": {},
 "cols": {},
@@ -60308,18 +58950,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"obturatoAcis": [
+"hareketHass": [
 [
 0,
 0.0
 ],
 [
 0.5,
-324.0
+90.0
 ],
 [
 1,
-180.0
+50.0
 ]
 ]
 },
@@ -60340,7 +58982,7 @@
 "name": "Zaman Kayması",
 "en": "Time Displacement",
 "cat": 14,
-"kind": "special",
+"kind": "pixel",
 "desc": "Her satırı biraz farklı zamandan gösterir (slit-scan).",
 "tags": [
 "Zaman",
@@ -60450,60 +59092,13 @@
 "def": 0
 }
 ],
-"presets": [
-{
-"code": "HF",
-"name": "Hafif",
-"vals": {
-"yumusatm": 5.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "GÇ",
-"name": "Güçlü",
-"vals": {
-"yumusatm": 18.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "AN",
-"name": "Animasyonlu",
-"vals": {},
-"keys": {
-"yumusatm": [
-[
-0,
-0.0
-],
-[
-0.5,
-18.0
-],
-[
-1,
-10.0
-]
-]
-},
-"cols": {},
-"at": "start",
-"auto": true
-}
-],
+"presets": [],
 "pad": null,
 "passes": null,
 "info": null,
 "heavy": true,
 "n": 388,
-"ready": false
+"ready": true
 },
 {
 "type": "unsharp",
@@ -60718,54 +59313,7 @@
 "def": 1
 }
 ],
-"presets": [
-{
-"code": "HF",
-"name": "Hafif",
-"vals": {
-"maksimumYari": 15.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "GÇ",
-"name": "Güçlü",
-"vals": {
-"maksimumYari": 54.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "AN",
-"name": "Animasyonlu",
-"vals": {},
-"keys": {
-"maksimumYari": [
-[
-0,
-0.0
-],
-[
-0.5,
-54.0
-],
-[
-1,
-30.0
-]
-]
-},
-"cols": {},
-"at": "start",
-"auto": true
-}
-],
+"presets": [],
 "pad": {
 "k": "maksimumYari",
 "mul": 0.8
@@ -60859,7 +59407,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"siyahKirp": 0.5
+"renkKaymDuze": 50.0
 },
 "keys": {},
 "cols": {},
@@ -60870,7 +59418,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"siyahKirp": 1.8
+"renkKaymDuze": 100.0
 },
 "keys": {},
 "cols": {},
@@ -60882,18 +59430,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"siyahKirp": [
+"renkKaymDuze": [
 [
 0,
 0.0
 ],
 [
 0.5,
-1.8
+100.0
 ],
 [
 1,
-1.0
+100.0
 ]
 ]
 },
@@ -61024,7 +59572,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"ton": 72.0
+"doygunlu": 20.0
 },
 "keys": {},
 "cols": {},
@@ -61035,7 +59583,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"ton": 198.0
+"doygunlu": 55.0
 },
 "keys": {},
 "cols": {},
@@ -61047,18 +59595,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"ton": [
+"doygunlu": [
 [
 0,
 0.0
 ],
 [
 0.5,
-198.0
+55.0
 ],
 [
 1,
-72.0
+20.0
 ]
 ]
 },
@@ -61468,7 +60016,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"sicaklik": 20.0
+"kontrast": 20.0
 },
 "keys": {},
 "cols": {},
@@ -61479,7 +60027,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"sicaklik": 55.0
+"kontrast": 55.0
 },
 "keys": {},
 "cols": {},
@@ -61491,7 +60039,7 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"sicaklik": [
+"kontrast": [
 [
 0,
 0.0
@@ -61781,7 +60329,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"kirmizi": 20.0
+"sari": 30.0
 },
 "keys": {},
 "cols": {},
@@ -61792,7 +60340,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"kirmizi": 72.0
+"sari": 100.0
 },
 "keys": {},
 "cols": {},
@@ -61804,18 +60352,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"kirmizi": [
+"sari": [
 [
 0,
 0.0
 ],
 [
 0.5,
-72.0
+100.0
 ],
 [
 1,
-40.0
+60.0
 ]
 ]
 },
@@ -61998,7 +60546,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"gorusAcis": 45.5
+"olcek": 50.5
 },
 "keys": {},
 "cols": {},
@@ -62009,7 +60557,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"gorusAcis": 161.2
+"olcek": 179.2
 },
 "keys": {},
 "cols": {},
@@ -62021,18 +60569,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"gorusAcis": [
+"olcek": [
 [
 0,
 1.0
 ],
 [
 0.5,
-161.2
+179.2
 ],
 [
 1,
-90.0
+100.0
 ]
 ]
 },
@@ -62150,7 +60698,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"kavisAcis": 22.5
+"kavisDagi": 25.0
 },
 "keys": {},
 "cols": {},
@@ -62161,7 +60709,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"kavisAcis": 81.0
+"kavisDagi": 90.0
 },
 "keys": {},
 "cols": {},
@@ -62173,18 +60721,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"kavisAcis": [
+"kavisDagi": [
 [
 0,
 0.0
 ],
 [
 0.5,
-81.0
+90.0
 ],
 [
 1,
-45.0
+50.0
 ]
 ]
 },
@@ -62840,54 +61388,7 @@
 "def": 0
 }
 ],
-"presets": [
-{
-"code": "HF",
-"name": "Hafif",
-"vals": {
-"kirmiziEsik": 25.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "GÇ",
-"name": "Güçlü",
-"vals": {
-"kirmiziEsik": 90.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "AN",
-"name": "Animasyonlu",
-"vals": {},
-"keys": {
-"kirmiziEsik": [
-[
-0,
-0.0
-],
-[
-0.5,
-90.0
-],
-[
-1,
-50.0
-]
-]
-},
-"cols": {},
-"at": "start",
-"auto": true
-}
-],
+"presets": [],
 "pad": null,
 "passes": null,
 "info": null,
@@ -63487,7 +61988,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"yuklemeIler": 25.0
+"blokBoyu": 24.0
 },
 "keys": {},
 "cols": {},
@@ -63498,7 +61999,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"yuklemeIler": 90.0
+"blokBoyu": 86.4
 },
 "keys": {},
 "cols": {},
@@ -63510,18 +62011,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"yuklemeIler": [
+"blokBoyu": [
 [
 0,
 0.0
 ],
 [
 0.5,
-90.0
+86.4
 ],
 [
 1,
-50.0
+48.0
 ]
 ]
 },
@@ -64007,52 +62508,6 @@
 "keys": {},
 "cols": {},
 "at": "start"
-},
-{
-"code": "HF",
-"name": "Hafif",
-"vals": {
-"hiz": 50.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "GÇ",
-"name": "Güçlü",
-"vals": {
-"hiz": 180.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "AN",
-"name": "Animasyonlu",
-"vals": {},
-"keys": {
-"hiz": [
-[
-0,
-0.0
-],
-[
-0.5,
-180.0
-],
-[
-1,
-100.0
-]
-]
-},
-"cols": {},
-"at": "start",
-"auto": true
 }
 ],
 "pad": null,
@@ -64541,7 +62996,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"tonGuru": 5.0
+"doygunluGuru": 5.0
 },
 "keys": {},
 "cols": {},
@@ -64552,7 +63007,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"tonGuru": 18.0
+"doygunluGuru": 18.0
 },
 "keys": {},
 "cols": {},
@@ -64564,7 +63019,7 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"tonGuru": [
+"doygunluGuru": [
 [
 0,
 0.0
@@ -64688,7 +63143,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"gurultuAzal": 25.0
+"mekansalYari": 1.0
 },
 "keys": {},
 "cols": {},
@@ -64699,7 +63154,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"gurultuAzal": 90.0
+"mekansalYari": 3.6
 },
 "keys": {},
 "cols": {},
@@ -64711,18 +63166,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"gurultuAzal": [
+"mekansalYari": [
 [
 0,
 0.0
 ],
 [
 0.5,
-90.0
+3.6
 ],
 [
 1,
-50.0
+2.0
 ]
 ]
 },
@@ -64840,7 +63295,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"kirmizi": 20.0
+"alfa": 20.0
 },
 "keys": {},
 "cols": {},
@@ -64851,7 +63306,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"kirmizi": 55.0
+"alfa": 55.0
 },
 "keys": {},
 "cols": {},
@@ -64863,7 +63318,7 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"kirmizi": [
+"alfa": [
 [
 0,
 0.0
@@ -65290,7 +63745,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"perdeKaza": 50.0
+"tasmaTemi": 30.0
 },
 "keys": {},
 "cols": {},
@@ -65301,7 +63756,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"perdeKaza": 180.0
+"tasmaTemi": 100.0
 },
 "keys": {},
 "cols": {},
@@ -65313,18 +63768,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"perdeKaza": [
+"tasmaTemi": [
 [
 0,
 0.0
 ],
 [
 0.5,
-180.0
+100.0
 ],
 [
 1,
-100.0
+60.0
 ]
 ]
 },
@@ -65738,54 +64193,7 @@
 "def": 1
 }
 ],
-"presets": [
-{
-"code": "HF",
-"name": "Hafif",
-"vals": {
-"yaw": 72.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "GÇ",
-"name": "Güçlü",
-"vals": {
-"yaw": 198.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "AN",
-"name": "Animasyonlu",
-"vals": {},
-"keys": {
-"yaw": [
-[
-0,
-0.0
-],
-[
-0.5,
-198.0
-],
-[
-1,
-72.0
-]
-]
-},
-"cols": {},
-"at": "start",
-"auto": true
-}
-],
+"presets": [],
 "pad": null,
 "passes": null,
 "info": null,
@@ -65890,7 +64298,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"donus": 720.0
+"yakinlas": 55.0
 },
 "keys": {},
 "cols": {},
@@ -65901,7 +64309,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"donus": 1980.0
+"yakinlas": 172.0
 },
 "keys": {},
 "cols": {},
@@ -65913,18 +64321,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"donus": [
+"yakinlas": [
 [
 0,
-0.0
+10.0
 ],
 [
 0.5,
-1980.0
+172.0
 ],
 [
 1,
-720.0
+100.0
 ]
 ]
 },
@@ -66295,7 +64703,7 @@
 "info": "Sadece metin katmanlarında çalışır.",
 "heavy": false,
 "n": 326,
-"ready": false
+"ready": true
 },
 {
 "type": "reverse",
@@ -66373,54 +64781,7 @@
 "def": 0.0
 }
 ],
-"presets": [
-{
-"code": "HF",
-"name": "Hafif",
-"vals": {
-"bitis": 20.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "GÇ",
-"name": "Güçlü",
-"vals": {
-"bitis": 55.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "AN",
-"name": "Animasyonlu",
-"vals": {},
-"keys": {
-"bitis": [
-[
-0,
-0.0
-],
-[
-0.5,
-55.0
-],
-[
-1,
-20.0
-]
-]
-},
-"cols": {},
-"at": "start",
-"auto": true
-}
-],
+"presets": [],
 "pad": null,
 "passes": null,
 "info": "Ses ve video katmanlarının sesine uygulanır.",
@@ -66849,7 +65210,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"geriBesl": 7.5
+"karisim": 20.0
 },
 "keys": {},
 "cols": {},
@@ -66860,7 +65221,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"geriBesl": 27.0
+"karisim": 72.0
 },
 "keys": {},
 "cols": {},
@@ -66872,18 +65233,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"geriBesl": [
+"karisim": [
 [
 0,
 0.0
 ],
 [
 0.5,
-27.0
+72.0
 ],
 [
 1,
-15.0
+40.0
 ]
 ]
 },
@@ -66992,7 +65353,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"rezonans": 0.4
+"karisim": 50.0
 },
 "keys": {},
 "cols": {},
@@ -67003,7 +65364,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"rezonans": 1.19
+"karisim": 100.0
 },
 "keys": {},
 "cols": {},
@@ -67015,18 +65376,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"rezonans": [
+"karisim": [
 [
 0,
-0.1
+0.0
 ],
 [
 0.5,
-1.19
+100.0
 ],
 [
 1,
-0.71
+100.0
 ]
 ]
 },
@@ -67864,54 +66225,7 @@
 "def": 0.02
 }
 ],
-"presets": [
-{
-"code": "HF",
-"name": "Hafif",
-"vals": {
-"faz": 720.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "GÇ",
-"name": "Güçlü",
-"vals": {
-"faz": 1980.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "AN",
-"name": "Animasyonlu",
-"vals": {},
-"keys": {
-"faz": [
-[
-0,
-0.0
-],
-[
-0.5,
-1980.0
-],
-[
-1,
-720.0
-]
-]
-},
-"cols": {},
-"at": "start",
-"auto": true
-}
-],
+"presets": [],
 "pad": null,
 "passes": null,
 "info": "Katmanın kendisi ses üretir; bir ses katmanına ya da herhangi bir katmana ekleyebilirsin.",
@@ -68616,7 +66930,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"hareketAcis": 72.0
+"duzeltmeGucu": 25.0
 },
 "keys": {},
 "cols": {},
@@ -68627,7 +66941,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"hareketAcis": 198.0
+"duzeltmeGucu": 90.0
 },
 "keys": {},
 "cols": {},
@@ -68639,18 +66953,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"hareketAcis": [
+"duzeltmeGucu": [
 [
 0,
 0.0
 ],
 [
 0.5,
-198.0
+90.0
 ],
 [
 1,
-72.0
+50.0
 ]
 ]
 },
@@ -69271,7 +67585,7 @@
 "name": "Fark Matı",
 "en": "Difference Matte",
 "cat": 8,
-"kind": "special",
+"kind": "pixel",
 "desc": "Videonun boş (temiz arka planlı) bir karesine göre değişmeyen yerleri saydam yapar.",
 "tags": [
 "Maske",
@@ -69375,7 +67689,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"tolerans": 5.0
+"onBula": 1.0
 },
 "keys": {},
 "cols": {},
@@ -69386,7 +67700,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"tolerans": 18.0
+"onBula": 3.6
 },
 "keys": {},
 "cols": {},
@@ -69398,18 +67712,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"tolerans": [
+"onBula": [
 [
 0,
 0.0
 ],
 [
 0.5,
-18.0
+3.6
 ],
 [
 1,
-10.0
+2.0
 ]
 ]
 },
@@ -69423,7 +67737,7 @@
 "info": "Arka planın boş olduğu anı 'Temiz kare' olarak seç.",
 "heavy": false,
 "n": 300,
-"ready": false
+"ready": true
 },
 {
 "type": "wireremove",
@@ -69714,7 +68028,7 @@
 "name": "Gren Eşle",
 "en": "Match Grain",
 "cat": 11,
-"kind": "special",
+"kind": "pixel",
 "desc": "Katmanın kendi grenini ölçer, efektlerden (bulanıklık gibi) sonra kaybolan greni geri ekler.",
 "tags": [
 "Gürültü",
@@ -69868,14 +68182,14 @@
 "info": "Efekt listesinde sona koy.",
 "heavy": false,
 "n": 344,
-"ready": false
+"ready": true
 },
 {
 "type": "timediff",
 "name": "Zaman Farkı",
 "en": "Time Difference",
 "cat": 14,
-"kind": "special",
+"kind": "pixel",
 "desc": "Şimdiki kare ile biraz önceki kare arasında değişen yerleri gösterir (hareket algılama görünümü).",
 "tags": [
 "Zaman",
@@ -70016,7 +68330,7 @@
 "info": null,
 "heavy": false,
 "n": 390,
-"ready": false
+"ready": true
 },
 {
 "type": "chrome",
@@ -70115,7 +68429,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"yansimaAcis": 72.0
+"kontrast": 15.0
 },
 "keys": {},
 "cols": {},
@@ -70126,7 +68440,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"yansimaAcis": 198.0
+"kontrast": 54.0
 },
 "keys": {},
 "cols": {},
@@ -70138,18 +68452,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"yansimaAcis": [
+"kontrast": [
 [
 0,
 0.0
 ],
 [
 0.5,
-198.0
+54.0
 ],
 [
 1,
-72.0
+30.0
 ]
 ]
 },
@@ -70281,7 +68595,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"odakUzak": 25.0
+"bulanikl": 12.5
 },
 "keys": {},
 "cols": {},
@@ -70292,7 +68606,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"odakUzak": 90.0
+"bulanikl": 45.0
 },
 "keys": {},
 "cols": {},
@@ -70304,18 +68618,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"odakUzak": [
+"bulanikl": [
 [
 0,
 0.0
 ],
 [
 0.5,
-90.0
+45.0
 ],
 [
 1,
-50.0
+25.0
 ]
 ]
 },
@@ -70592,7 +68906,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"baslangi": 10.0
+"yogunluk": 32.5
 },
 "keys": {},
 "cols": {},
@@ -70603,7 +68917,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"baslangi": 36.0
+"yogunluk": 100.0
 },
 "keys": {},
 "cols": {},
@@ -70615,18 +68929,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"baslangi": [
+"yogunluk": [
 [
 0,
 0.0
 ],
 [
 0.5,
-36.0
+100.0
 ],
 [
 1,
-20.0
+65.0
 ]
 ]
 },
@@ -70744,7 +69058,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"donusAcis": 10.0
+"kanalAyri": 4.0
 },
 "keys": {},
 "cols": {},
@@ -70755,7 +69069,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"donusAcis": 36.0
+"kanalAyri": 14.4
 },
 "keys": {},
 "cols": {},
@@ -70767,18 +69081,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"donusAcis": [
+"kanalAyri": [
 [
 0,
 0.0
 ],
 [
 0.5,
-36.0
+14.4
 ],
 [
 1,
-20.0
+8.0
 ]
 ]
 },
@@ -71165,7 +69479,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"aci": 72.0
+"yogunluk": 37.5
 },
 "keys": {},
 "cols": {},
@@ -71176,7 +69490,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"aci": 198.0
+"yogunluk": 100.0
 },
 "keys": {},
 "cols": {},
@@ -71188,18 +69502,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"aci": [
+"yogunluk": [
 [
 0,
 0.0
 ],
 [
 0.5,
-198.0
+100.0
 ],
 [
 1,
-72.0
+75.0
 ]
 ]
 },
@@ -71468,7 +69782,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"donmeAcis": 22.5
+"yogunluk": 35.0
 },
 "keys": {},
 "cols": {},
@@ -71479,7 +69793,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"donmeAcis": 81.0
+"yogunluk": 100.0
 },
 "keys": {},
 "cols": {},
@@ -71491,18 +69805,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"donmeAcis": [
+"yogunluk": [
 [
 0,
 0.0
 ],
 [
 0.5,
-81.0
+100.0
 ],
 [
 1,
-45.0
+70.0
 ]
 ]
 },
@@ -71782,7 +70096,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"girdapAcis": 22.5
+"yaricap": 100.0
 },
 "keys": {},
 "cols": {},
@@ -71793,7 +70107,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"girdapAcis": 81.0
+"yaricap": 360.0
 },
 "keys": {},
 "cols": {},
@@ -71805,18 +70119,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"girdapAcis": [
+"yaricap": [
 [
 0,
 0.0
 ],
 [
 0.5,
-81.0
+360.0
 ],
 [
 1,
-45.0
+200.0
 ]
 ]
 },
@@ -72084,7 +70398,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"izUzun": 50.0
+"yogunluk": 35.0
 },
 "keys": {},
 "cols": {},
@@ -72095,7 +70409,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"izUzun": 180.0
+"yogunluk": 100.0
 },
 "keys": {},
 "cols": {},
@@ -72107,18 +70421,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"izUzun": [
+"yogunluk": [
 [
 0,
 0.0
 ],
 [
 0.5,
-180.0
+100.0
 ],
 [
 1,
-100.0
+70.0
 ]
 ]
 },
@@ -72234,7 +70548,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"esik": 17.5
+"yayilma": 15.0
 },
 "keys": {},
 "cols": {},
@@ -72245,7 +70559,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"esik": 63.0
+"yayilma": 54.0
 },
 "keys": {},
 "cols": {},
@@ -72257,18 +70571,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"esik": [
+"yayilma": [
 [
 0,
 0.0
 ],
 [
 0.5,
-63.0
+54.0
 ],
 [
 1,
-35.0
+30.0
 ]
 ]
 },
@@ -72403,7 +70717,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"esik": 32.5
+"yayilma": 15.0
 },
 "keys": {},
 "cols": {},
@@ -72414,7 +70728,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"esik": 100.0
+"yayilma": 54.0
 },
 "keys": {},
 "cols": {},
@@ -72426,18 +70740,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"esik": [
+"yayilma": [
 [
 0,
 0.0
 ],
 [
 0.5,
-100.0
+54.0
 ],
 [
 1,
-65.0
+30.0
 ]
 ]
 },
@@ -72557,7 +70871,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"yumusakl": 12.5
+"yogunluk": 20.0
 },
 "keys": {},
 "cols": {},
@@ -72568,7 +70882,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"yumusakl": 45.0
+"yogunluk": 72.0
 },
 "keys": {},
 "cols": {},
@@ -72580,18 +70894,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"yumusakl": [
+"yogunluk": [
 [
 0,
 0.0
 ],
 [
 0.5,
-45.0
+72.0
 ],
 [
 1,
-25.0
+40.0
 ]
 ]
 },
@@ -72718,54 +71032,7 @@
 "def": 1
 }
 ],
-"presets": [
-{
-"code": "HF",
-"name": "Hafif",
-"vals": {
-"yatayBaki": 72.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "GÇ",
-"name": "Güçlü",
-"vals": {
-"yatayBaki": 198.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "AN",
-"name": "Animasyonlu",
-"vals": {},
-"keys": {
-"yatayBaki": [
-[
-0,
-0.0
-],
-[
-0.5,
-198.0
-],
-[
-1,
-72.0
-]
-]
-},
-"cols": {},
-"at": "start",
-"auto": true
-}
-],
+"presets": [],
 "pad": null,
 "passes": null,
 "info": null,
@@ -72885,7 +71152,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"kivrimIler": 15.0
+"kivrimYari": 30.0
 },
 "keys": {},
 "cols": {},
@@ -72896,7 +71163,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"kivrimIler": 54.0
+"kivrimYari": 108.0
 },
 "keys": {},
 "cols": {},
@@ -72908,18 +71175,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"kivrimIler": [
+"kivrimYari": [
 [
 0,
 0.0
 ],
 [
 0.5,
-54.0
+108.0
 ],
 [
 1,
-30.0
+60.0
 ]
 ]
 },
@@ -73650,7 +71917,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"kirilma": 10.0
+"camKali": 4.0
 },
 "keys": {},
 "cols": {},
@@ -73661,7 +71928,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"kirilma": 36.0
+"camKali": 14.4
 },
 "keys": {},
 "cols": {},
@@ -73673,18 +71940,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"kirilma": [
+"camKali": [
 [
 0,
 0.0
 ],
 [
 0.5,
-36.0
+14.4
 ],
 [
 1,
-20.0
+8.0
 ]
 ]
 },
@@ -73975,54 +72242,7 @@
 "def": 1
 }
 ],
-"presets": [
-{
-"code": "HF",
-"name": "Hafif",
-"vals": {
-"yatayBaki": 72.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "GÇ",
-"name": "Güçlü",
-"vals": {
-"yatayBaki": 198.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "AN",
-"name": "Animasyonlu",
-"vals": {},
-"keys": {
-"yatayBaki": [
-[
-0,
-0.0
-],
-[
-0.5,
-198.0
-],
-[
-1,
-72.0
-]
-]
-},
-"cols": {},
-"at": "start",
-"auto": true
-}
-],
+"presets": [],
 "pad": null,
 "passes": null,
 "info": null,
@@ -74135,7 +72355,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"faz": 20.0
+"kenarKali": 1.0
 },
 "keys": {},
 "cols": {},
@@ -74146,7 +72366,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"faz": 55.0
+"kenarKali": 3.6
 },
 "keys": {},
 "cols": {},
@@ -74158,18 +72378,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"faz": [
+"kenarKali": [
 [
 0,
 0.0
 ],
 [
 0.5,
-55.0
+3.6
 ],
 [
 1,
-20.0
+2.0
 ]
 ]
 },
@@ -80726,7 +78946,7 @@
 "info": "Sadece uygulamanın şekillerinde çalışır.",
 "heavy": false,
 "n": 271,
-"ready": false
+"ready": true
 },
 {
 "type": "movepath",
@@ -80932,7 +79152,7 @@
 "info": null,
 "heavy": false,
 "n": 272,
-"ready": false
+"ready": true
 },
 {
 "type": "oscillate",
@@ -81113,7 +79333,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"aci": 72.0
+"genlik": 12.5
 },
 "keys": {},
 "cols": {},
@@ -81124,7 +79344,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"aci": 198.0
+"genlik": 45.0
 },
 "keys": {},
 "cols": {},
@@ -81136,18 +79356,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"aci": [
+"genlik": [
 [
 0,
 0.0
 ],
 [
 0.5,
-198.0
+45.0
 ],
 [
 1,
-72.0
+25.0
 ]
 ]
 },
@@ -81161,7 +79381,7 @@
 "info": null,
 "heavy": false,
 "n": 273,
-"ready": false
+"ready": true
 },
 {
 "type": "scaleassist",
@@ -81311,7 +79531,7 @@
 "info": null,
 "heavy": false,
 "n": 274,
-"ready": false
+"ready": true
 },
 {
 "type": "shakeparts",
@@ -81443,7 +79663,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"konumSidd": 5.0
+"aciSidd": 2.5
 },
 "keys": {},
 "cols": {},
@@ -81454,7 +79674,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"konumSidd": 18.0
+"aciSidd": 9.0
 },
 "keys": {},
 "cols": {},
@@ -81466,18 +79686,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"konumSidd": [
+"aciSidd": [
 [
 0,
 0.0
 ],
 [
 0.5,
-18.0
+9.0
 ],
 [
 1,
-10.0
+5.0
 ]
 ]
 },
@@ -81579,7 +79799,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"eksen": 72.0
+"olcek": 75.5
 },
 "keys": {},
 "cols": {},
@@ -81590,7 +79810,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"eksen": 198.0
+"olcek": 269.2
 },
 "keys": {},
 "cols": {},
@@ -81602,18 +79822,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"eksen": [
+"olcek": [
 [
 0,
-0.0
+1.0
 ],
 [
 0.5,
-198.0
+269.2
 ],
 [
 1,
-72.0
+150.0
 ]
 ]
 },
@@ -81627,7 +79847,7 @@
 "info": null,
 "heavy": false,
 "n": 276,
-"ready": false
+"ready": true
 },
 {
 "type": "contourgrad",
@@ -81886,7 +80106,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"aralik": 6.0
+"kalinlik": 1.0
 },
 "keys": {},
 "cols": {},
@@ -81897,7 +80117,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"aralik": 21.6
+"kalinlik": 3.6
 },
 "keys": {},
 "cols": {},
@@ -81909,18 +80129,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"aralik": [
+"kalinlik": [
 [
 0,
 0.0
 ],
 [
 0.5,
-21.6
+3.6
 ],
 [
 1,
-12.0
+2.0
 ]
 ]
 },
@@ -82411,7 +80631,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"cizgiAral": 4.0
+"enInceKali": 100.0
 },
 "keys": {},
 "cols": {},
@@ -82422,7 +80642,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"cizgiAral": 14.4
+"enInceKali": 275.0
 },
 "keys": {},
 "cols": {},
@@ -82434,18 +80654,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"cizgiAral": [
+"enInceKali": [
 [
 0,
 0.0
 ],
 [
 0.5,
-14.4
+275.0
 ],
 [
 1,
-8.0
+100.0
 ]
 ]
 },
@@ -82543,7 +80763,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"yumusatm": 1.0
+"ayrintiyKoru": 35.0
 },
 "keys": {},
 "cols": {},
@@ -82554,7 +80774,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"yumusatm": 3.6
+"ayrintiyKoru": 100.0
 },
 "keys": {},
 "cols": {},
@@ -82566,18 +80786,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"yumusatm": [
+"ayrintiyKoru": [
 [
 0,
 0.0
 ],
 [
 0.5,
-3.6
+100.0
 ],
 [
 1,
-2.0
+70.0
 ]
 ]
 },
@@ -82710,7 +80930,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"baslangiKali": 20.0
+"ortaKali": 50.0
 },
 "keys": {},
 "cols": {},
@@ -82721,7 +80941,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"baslangiKali": 55.0
+"ortaKali": 100.0
 },
 "keys": {},
 "cols": {},
@@ -82733,18 +80953,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"baslangiKali": [
+"ortaKali": [
 [
 0,
 0.0
 ],
 [
 0.5,
-55.0
+100.0
 ],
 [
 1,
-20.0
+100.0
 ]
 ]
 },
@@ -82758,7 +80978,7 @@
 "info": "Çizerek Belirme ya da Kontur ile birlikte uygulamanın şekillerinde çalışır.",
 "heavy": false,
 "n": 102,
-"ready": false
+"ready": true
 },
 {
 "type": "lumastamp",
@@ -82841,7 +81061,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"siyahNokt": 20.0
+"gama": 0.5
 },
 "keys": {},
 "cols": {},
@@ -82852,7 +81072,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"siyahNokt": 55.0
+"gama": 1.79
 },
 "keys": {},
 "cols": {},
@@ -82864,18 +81084,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"siyahNokt": [
+"gama": [
 [
 0,
-0.0
+0.01
 ],
 [
 0.5,
-55.0
+1.79
 ],
 [
 1,
-20.0
+1.0
 ]
 ]
 },
@@ -83424,7 +81644,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"alanX": 500.0
+"enKucuOlce": 5.0
 },
 "keys": {},
 "cols": {},
@@ -83435,7 +81655,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"alanX": 1800.0
+"enKucuOlce": 18.0
 },
 "keys": {},
 "cols": {},
@@ -83447,18 +81667,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"alanX": [
+"enKucuOlce": [
 [
 0,
 0.0
 ],
 [
 0.5,
-1800.0
+18.0
 ],
 [
 1,
-1000.0
+10.0
 ]
 ]
 },
@@ -83599,7 +81819,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"sabitTon": 72.0
+"sabitDoyg": 50.0
 },
 "keys": {},
 "cols": {},
@@ -83610,7 +81830,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"sabitTon": 198.0
+"sabitDoyg": 100.0
 },
 "keys": {},
 "cols": {},
@@ -83622,18 +81842,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"sabitTon": [
+"sabitDoyg": [
 [
 0,
 0.0
 ],
 [
 0.5,
-198.0
+100.0
 ],
 [
 1,
-72.0
+100.0
 ]
 ]
 },
@@ -84366,7 +82586,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"sabitSeriGeni": 2.5
+"dalgaYuks": 11.0
 },
 "keys": {},
 "cols": {},
@@ -84377,7 +82597,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"sabitSeriGeni": 9.0
+"dalgaYuks": 39.6
 },
 "keys": {},
 "cols": {},
@@ -84389,18 +82609,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"sabitSeriGeni": [
+"dalgaYuks": [
 [
 0,
 0.0
 ],
 [
 0.5,
-9.0
+39.6
 ],
 [
 1,
-5.0
+22.0
 ]
 ]
 },
@@ -84937,54 +83157,7 @@
 "def": 1
 }
 ],
-"presets": [
-{
-"code": "HF",
-"name": "Hafif",
-"vals": {
-"maksimumKaym": 6.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "GÇ",
-"name": "Güçlü",
-"vals": {
-"maksimumKaym": 21.6
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "AN",
-"name": "Animasyonlu",
-"vals": {},
-"keys": {
-"maksimumKaym": [
-[
-0,
-0.0
-],
-[
-0.5,
-21.6
-],
-[
-1,
-12.0
-]
-]
-},
-"cols": {},
-"at": "start",
-"auto": true
-}
-],
+"presets": [],
 "pad": null,
 "passes": null,
 "info": null,
@@ -85513,7 +83686,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"hassasiy": 30.0
+"yuksekli": 4.0
 },
 "keys": {},
 "cols": {},
@@ -85524,7 +83697,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"hassasiy": 100.0
+"yuksekli": 14.4
 },
 "keys": {},
 "cols": {},
@@ -85536,18 +83709,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"hassasiy": [
+"yuksekli": [
 [
 0,
 0.0
 ],
 [
 0.5,
-100.0
+14.4
 ],
 [
 1,
-60.0
+8.0
 ]
 ]
 },
@@ -85736,7 +83909,7 @@
 "info": null,
 "heavy": false,
 "n": 407,
-"ready": false
+"ready": true
 },
 {
 "type": "cbblush",
@@ -86461,7 +84634,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"en": 55.0
+"bulanikl": 4.0
 },
 "keys": {},
 "cols": {},
@@ -86472,7 +84645,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"en": 198.0
+"bulanikl": 14.4
 },
 "keys": {},
 "cols": {},
@@ -86484,18 +84657,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"en": [
+"bulanikl": [
 [
 0,
 0.0
 ],
 [
 0.5,
-198.0
+14.4
 ],
 [
 1,
-110.0
+8.0
 ]
 ]
 },
@@ -86509,7 +84682,7 @@
 "info": null,
 "heavy": false,
 "n": 411,
-"ready": false
+"ready": true
 },
 {
 "type": "cbcam",
@@ -86717,7 +84890,7 @@
 "info": null,
 "heavy": false,
 "n": 412,
-"ready": false
+"ready": true
 },
 {
 "type": "cbskin",
@@ -87323,7 +85496,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"kontur": 1.5
+"koseYari": 10.0
 },
 "keys": {},
 "cols": {},
@@ -87334,7 +85507,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"kontur": 5.4
+"koseYari": 36.0
 },
 "keys": {},
 "cols": {},
@@ -87346,18 +85519,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"kontur": [
+"koseYari": [
 [
 0,
 0.0
 ],
 [
 0.5,
-5.4
+36.0
 ],
 [
 1,
-3.0
+20.0
 ]
 ]
 },
@@ -87371,7 +85544,7 @@
 "info": null,
 "heavy": false,
 "n": 415,
-"ready": false
+"ready": true
 },
 {
 "type": "cbmaphl",
@@ -87891,7 +86064,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"ilerleme": 20.0
+"kalinlik": 2.0
 },
 "keys": {},
 "cols": {},
@@ -87902,7 +86075,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"ilerleme": 55.0
+"kalinlik": 7.2
 },
 "keys": {},
 "cols": {},
@@ -87914,18 +86087,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"ilerleme": [
+"kalinlik": [
 [
 0,
 0.0
 ],
 [
 0.5,
-55.0
+7.2
 ],
 [
 1,
-20.0
+4.0
 ]
 ]
 },
@@ -87939,7 +86112,7 @@
 "info": null,
 "heavy": false,
 "n": 417,
-"ready": false
+"ready": true
 },
 {
 "type": "cbtrail",
@@ -88078,7 +86251,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"ilerleme": 20.0
+"kalinlik": 2.0
 },
 "keys": {},
 "cols": {},
@@ -88089,7 +86262,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"ilerleme": 55.0
+"kalinlik": 7.2
 },
 "keys": {},
 "cols": {},
@@ -88101,18 +86274,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"ilerleme": [
+"kalinlik": [
 [
 0,
 0.0
 ],
 [
 0.5,
-55.0
+7.2
 ],
 [
 1,
-20.0
+4.0
 ]
 ]
 },
@@ -88126,7 +86299,7 @@
 "info": null,
 "heavy": false,
 "n": 418,
-"ready": false
+"ready": true
 },
 {
 "type": "cbbadge",
@@ -88265,7 +86438,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"konturGeni": 1.0
+"tasma": 7.5
 },
 "keys": {},
 "cols": {},
@@ -88276,7 +86449,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"konturGeni": 3.6
+"tasma": 27.0
 },
 "keys": {},
 "cols": {},
@@ -88288,18 +86461,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"konturGeni": [
+"tasma": [
 [
 0,
 0.0
 ],
 [
 0.5,
-3.6
+27.0
 ],
 [
 1,
-2.0
+15.0
 ]
 ]
 },
@@ -88313,7 +86486,7 @@
 "info": null,
 "heavy": false,
 "n": 419,
-"ready": false
+"ready": true
 },
 {
 "type": "cbhold",
@@ -88612,7 +86785,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"yon": 72.0
+"kalinlik": 1.0
 },
 "keys": {},
 "cols": {},
@@ -88623,7 +86796,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"yon": 198.0
+"kalinlik": 3.6
 },
 "keys": {},
 "cols": {},
@@ -88635,18 +86808,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"yon": [
+"kalinlik": [
 [
 0,
 0.0
 ],
 [
 0.5,
-198.0
+3.6
 ],
 [
 1,
-72.0
+2.0
 ]
 ]
 },
@@ -89043,7 +87216,7 @@
 "info": null,
 "heavy": false,
 "n": 423,
-"ready": false
+"ready": true
 },
 {
 "type": "cbflagtrans",
@@ -89345,7 +87518,7 @@
 "code": "HF",
 "name": "Hafif",
 "vals": {
-"hassasiy": 25.0
+"buyume": 6.0
 },
 "keys": {},
 "cols": {},
@@ -89356,7 +87529,7 @@
 "code": "GÇ",
 "name": "Güçlü",
 "vals": {
-"hassasiy": 90.0
+"buyume": 21.6
 },
 "keys": {},
 "cols": {},
@@ -89368,18 +87541,18 @@
 "name": "Animasyonlu",
 "vals": {},
 "keys": {
-"hassasiy": [
+"buyume": [
 [
 0,
 0.0
 ],
 [
 0.5,
-90.0
+21.6
 ],
 [
 1,
-50.0
+12.0
 ]
 ]
 },
@@ -89393,7 +87566,7 @@
 "info": null,
 "heavy": false,
 "n": 425,
-"ready": false
+"ready": true
 },
 {
 "type": "cbexpr",
@@ -89683,54 +87856,7 @@
 "def": 1
 }
 ],
-"presets": [
-{
-"code": "HF",
-"name": "Hafif",
-"vals": {
-"aksesuarAcis": 72.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "GÇ",
-"name": "Güçlü",
-"vals": {
-"aksesuarAcis": 198.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "AN",
-"name": "Animasyonlu",
-"vals": {},
-"keys": {
-"aksesuarAcis": [
-[
-0,
-0.0
-],
-[
-0.5,
-198.0
-],
-[
-1,
-72.0
-]
-]
-},
-"cols": {},
-"at": "start",
-"auto": true
-}
-],
+"presets": [],
 "pad": null,
 "passes": null,
 "info": null,
@@ -90438,7 +88564,7 @@
 "info": null,
 "heavy": false,
 "n": 430,
-"ready": false
+"ready": true
 },
 {
 "type": "cutback",
