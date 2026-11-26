@@ -105,6 +105,7 @@ chromaber
 chromadenoise
 chromakey
 chromasharpen
+chromawheel
 chrome
 chromolitho
 chromvortex
@@ -233,6 +234,7 @@ ellipsoid
 emboss
 embroidery
 envelope
+envelopeparts
 envelopewarp
 equalize
 escapepath
@@ -485,6 +487,7 @@ oilpaint
 oldfilm
 ominodiff
 ominoglass
+onsetdetect
 opticscomp
 organicgrow
 origami
@@ -517,6 +520,7 @@ phasescope
 photocopy
 photofilter
 pipe3d
+pitchcurve
 pixelate
 pixelclean
 pixelpolly
@@ -658,6 +662,7 @@ starfilter
 starpoly
 starprism
 stencilprint
+stereodir
 stipple
 strata
 streaks
@@ -683,6 +688,7 @@ swishpan
 tailribbon
 taper3d
 temperature
+tempocurve
 temporaldenoise
 temporalfreq
 temporalmedian
@@ -717,6 +723,7 @@ triangulate
 triprism
 tritone
 truchet
+tuningmeter
 tunnel
 turingmaze
 twist3d

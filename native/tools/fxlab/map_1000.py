@@ -97,3 +97,17 @@ N10A([
  (955, "camframe3d", "3B", "special", ["Kamera", "Kadraj"], None), (956, "sectioncap", "3B", "3d", ["3B", "Kesit"], {"box": 0.15}),
 ])
 HIDE10.update({"bevel3d": ["aciEsig"], "twistbridge": ["kenarSeci"], "normalsmooth": ["agirlik"], "unfold3d": ["kokYuz", "cakismalIsar"], "depthsort": ["kamera", "alfaKariKoru"], "camframe3d": ["telafi"]})
+N10A([
+ (957, "vocalsplit", "Ses", "audio-fx", ["Ses", "Vokal", "Ayırma"], None), (958, "hpss", "Ses", "audio-fx", ["Ses", "Davul", "Ayırma"], None),
+ (959, "pitchcurve", "Ses", "gen", ["Ses", "Nota", "Görselleştirme"], None), (960, "tuningmeter", "Ses", "gen", ["Ses", "Akort", "Ölçer"], None),
+ (961, "autotune", "Ses", "audio-fx", ["Ses", "Akort"], None), (962, "chromawheel", "Ses", "gen", ["Ses", "Akor", "Görselleştirme"], None),
+ (963, "tempocurve", "Ses", "gen", ["Ses", "Tempo", "Analiz"], None), (964, "onsetdetect", "Ses", "gen", ["Ses", "Vuruş", "Olay"], None),
+ (965, "silencegap", "Ses", "audio-fx", ["Ses", "Sessizlik"], None), (966, "binaural3d", "Ses", "audio-fx", ["Ses", "3B", "Uzamsal"], None),
+ (967, "earlyreflect", "Ses", "audio-fx", ["Ses", "Oda", "Yansıma"], None), (968, "reverseverb", "Ses", "audio-fx", ["Ses", "Yankı"], None),
+ (969, "freqshift", "Ses", "audio-fx", ["Ses", "Frekans"], None), (970, "specblur", "Ses", "audio-fx", ["Ses", "Spektral"], None),
+ (971, "audiofreeze", "Ses", "audio-fx", ["Ses", "Dondurma"], None), (972, "harmonizer", "Ses", "audio-fx", ["Ses", "Armoni"], None),
+ (973, "roombox", "Ses", "audio-fx", ["Ses", "Oda", "Rezonans"], None), (974, "parallelchain", "Ses", "audio-fx", ["Ses", "Paralel"], None),
+ (975, "chanalign", "Ses", "audio-fx", ["Ses", "Kanal", "Hizalama"], None), (976, "specmatch", "Ses", "audio-fx", ["Ses", "EQ", "Eşleme"], None),
+ (977, "envelopeparts", "Ses", "gen", ["Ses", "Zarf", "Analiz"], None), (978, "stereodir", "Ses", "gen", ["Ses", "Stereo", "Görselleştirme"], None),
+])
+HIDE10.update({"vocalsplit": ["analiz"], "chanalign": ["analiz"], "binaural3d": ["hrtf"], "harmonizer": ["aralik"], "parallelchain": ["kolSevi", "gecikmeTela"], "tempocurve": []})

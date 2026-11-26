@@ -13,11 +13,12 @@ object AudioVis {
     private val TYPES = setOf("spectrogram", "phasescope", "loudmeter")
     /** 207 Ses Spektrumu (bant seviyeleri 0..1) ve 208 Ses Dalgası (örnekler −1..1): shader'a p_dv olarak gider */
     fun data(p: Project, e: Effect, t: Double): DoubleArray? {
-        val l = e.c?.get("sesKayn")?.takeIf { it.isNotBlank() }?.let { id -> p.layers.find { it.id == id } }
+        val l = (e.c?.get("sesKayn") ?: e.c?.get("ses"))?.takeIf { it.isNotBlank() }?.let { id -> p.layers.find { it.id == id } }
             ?: p.layers.firstOrNull { hasAudio(it) && t >= it.start && t < it.end } ?: p.layers.firstOrNull { hasAudio(it) } ?: return null
         val pcm = pcmOf?.invoke(l) ?: return null; val rate = pcm.rate
         fun idx(tt: Double) = ((tt - l.start + (l.srcIn ?: 0.0)) * rate).toInt()
         fun mono(j: Int) = if (j in 0 until pcm.frames) (pcm.data[j * 2] + pcm.data[j * 2 + 1]) / 2.0 else 0.0
+        AudioVis2.data(e, t, l, pcm, ::idx)?.let { return it }
         if (e.type == "audiowave") {
             val n = e.value("ornekSayi", t).roundToInt().coerceIn(8, 256); val win = max(0.005, e.value("zamanPenc", t)); val ch = e.value("kanal", t).roundToInt()
             val c0 = idx(t - win / 2); val span = win * rate

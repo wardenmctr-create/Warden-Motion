@@ -495,7 +495,7 @@ class Renderer(private val ctx: Context, maxSide: Int = 2048, private val sync: 
             val gpu3 = gpu2.map { e -> if (e.type != "areacompare") e else { var v = e.v ?: emptyMap(); var i = 0
                 for (k in listOf("bolgeler", "bolgeler_1", "bolgeler_2", "bolgeler_3")) { val b = srcs[k] ?: continue; val n = b.width * b.height; val px = IntArray(n); b.getPixels(px, 0, b.width, 0, 0, b.width, b.height)
                     var a = 0.0; for (c in px) a += ((c ushr 24) and 255) / 255.0; v = v + ("dv$i" to com.warden.motion.app.model.Anim(a / (q * q))); i++ }; e.copy(v = v) } }
-            val gpu4 = gpu3.map { e -> if (e.type != "audiospec" && e.type != "audiowave") e else { val d = AudioVis.data(p, e, t) ?: return@map e
+            val gpu4 = gpu3.map { e -> if (e.type != "audiospec" && e.type != "audiowave" && e.type !in AudioVis2.TYPES) e else { val d = AudioVis.data(p, e, t) ?: return@map e
                 var v = e.v ?: emptyMap(); d.forEachIndexed { i, x -> v = v + ("dv$i" to com.warden.motion.app.model.Anim(x)) }; e.copy(v = v) } }
             val job = GlFx.Job(gpu4.map { it to fxMeta(it.type) }, t, t - l.start, l.end - l.start, box, q.toFloat(), srcs + Analysis.sources(gpu, buf, t) + AudioVis.sources(p, gpu, t) + hs, tr.rot.toFloat(), exporting)
             GlFx.apply(buf, job)?.let { buf.recycle(); buf = it }

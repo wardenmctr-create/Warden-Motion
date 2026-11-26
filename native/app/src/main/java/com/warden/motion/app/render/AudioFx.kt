@@ -13,7 +13,9 @@ object AudioFx {
     val TYPES = setOf("reverse", "basstreble", "delay", "flanger", "filter", "modulator", "parameq", "reverb", "stereo", "tone",
         "compressor", "limiter", "noisegate", "deesser", "pitchshift", "voicechar", "audiodenoise", "ducking", "stereowide", "robotvoice", "audiodistort",
         "loudnorm", "peaknorm", "dcremove", "declick", "declip", "dropoutfix", "notchfilter", "dynamiceq", "multibandcomp", "expander", "transient", "phaseinvert", "chandelay",
-        "phaser", "rotary", "convreverb", "specfreeze", "granular", "speechrate", "autocrossfade", "autopan", "distancefx")
+        "phaser", "rotary", "convreverb", "specfreeze", "granular", "speechrate", "autocrossfade", "autopan", "distancefx") + AudioFx3.TYPES
+    /** Ses işlenirken proje (paralel ağ gibi başka katmanın efekt zincirini kullanan efektler için) */
+    @Volatile var project: com.warden.motion.app.model.Project? = null
     fun has(l: Layer) = l.effects.any { it.on != false && it.type in TYPES }
     fun signature(l: Layer) = l.effects.filter { it.on != false && it.type in TYPES }.hashCode()
 
@@ -45,7 +47,7 @@ object AudioFx {
     /** pos: görsel katmanın o anki yatay konumu (−1 sol … 1 sağ) ve uzaklık oranı; Hareketli Ses Konumu için */
     var pos: (String, Double) -> DoubleArray? = { _, _ -> null }
     fun apply(l: Layer, buf: FloatArray, rate: Int, sidechain: (String) -> FloatArray? = { null }) {
-        for (e in l.effects) { if (e.on == false || e.type !in TYPES) continue; runCatching { if (!AudioFx2.one(e, l, buf, rate, sidechain)) one(e, l, buf, rate, sidechain) } }
+        for (e in l.effects) { if (e.on == false || e.type !in TYPES) continue; runCatching { if (!AudioFx3.one(e, l, buf, rate, sidechain) && !AudioFx2.one(e, l, buf, rate, sidechain)) one(e, l, buf, rate, sidechain) } }
     }
 
     private fun one(e: Effect, l: Layer, buf: FloatArray, rate: Int, side: (String) -> FloatArray?) {
@@ -152,7 +154,7 @@ object AudioFx {
     }
 
     /** İki uçlu gecikme hattıyla perde kaydırma (süre korunur): okuma hızı oranla değişir, iki tanecik üst üste biner */
-    private fun shiftPitch(buf: FloatArray, rate: Int, ratio: (Int) -> Double, win: Double, mix: (Int) -> Double, gain: (Int) -> Double, keepDur: Boolean) {
+    fun shiftPitch(buf: FloatArray, rate: Int, ratio: (Int) -> Double, win: Double, mix: (Int) -> Double, gain: (Int) -> Double, keepDur: Boolean) {
         val n = buf.size / 2; val src = buf.copyOf(); val W = max(64.0, win)
         if (!keepDur) { var p = 0.0; for (i in 0 until n) { val j = p.toInt(); val f = p - j; val m = mix(i); for (c in 0..1) { val y = if (j + 1 < n) src[j * 2 + c] * (1 - f) + src[j * 2 + 2 + c] * f else 0.0; buf[i * 2 + c] = ((src[i * 2 + c] * (1 - m) + y * m) * gain(i)).toFloat() }; p += ratio(i) }; return }
         var ph = 0.0
