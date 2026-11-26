@@ -19,6 +19,9 @@ object Fx1000 {
             "fourierdraw" -> fourier(p, e, t, loc)
             "evolute" -> evolute(p, e, t, loc)
             "plotfunc" -> plot(e, t)
+            "routewindow" -> if (e.c?.get("rota").isNullOrBlank()) null else curvePts(p, e, "rota", t, 32, loc).flatMap { it.toList() }
+            "focustrack" -> e.c?.get("hedef")?.let { id -> p.layers.find { it.id == id } }?.let { o -> val sm = max(0.0, e.value("tepki", t)); var x = 0.0; var y = 0.0; val S = if (sm > 0.01) 6 else 1
+                for (i in 0 until S) { val w = worldTransform(p, o, t - sm * i / max(1, S - 1)); val (a, b) = loc(w.x, w.y); x += a / S; y += b / S }; listOf(x, y) }
             "lightvoronoi" -> e.c?.get("kaynakla")?.split(',')?.filter { it.isNotBlank() }?.take(8)?.mapNotNull { id -> p.layers.find { it.id == id } }
                 ?.flatMap { o -> val w = worldTransform(p, o, t); loc(w.x, w.y).toList() }
             else -> null
@@ -30,6 +33,7 @@ object Fx1000 {
     /** Kaynak şeklin yolu, n eşit aralıklı nokta (bu katmanın yerel biriminde); kaynak yoksa yıldız */
     private fun curvePts(p: Project, e: Effect, key: String, t: Double, n: Int, loc: (Double, Double) -> Pair<Double, Double>): List<Pair<Double, Double>> {
         val o = e.c?.get(key)?.let { id -> p.layers.find { it.id == id } }
+        if (o == null && key == "rota") return emptyList()
         if (o == null) return List(n) { i -> val a = 2 * PI * i / n; val r = 60.0 * (0.62 + 0.38 * cos(5 * a)); r * cos(a) to r * sin(a) }
         val w = worldTransform(p, o, t); val ra = w.rot * PI / 180
         val pts = if (o.type == "shape") ShapeFx.sample(shapePath(o), n).map { it[0].toDouble() to it[1].toDouble() } else List(n) { i -> val a = 2 * PI * i / n; cos(a) * o.w / 2 to sin(a) * o.h / 2 }

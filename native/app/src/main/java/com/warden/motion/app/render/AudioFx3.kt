@@ -8,7 +8,7 @@ import kotlin.math.*
 /** 1000 rehberi ses işlemcileri (957–976). true dönerse işlendi. Tampon: stereo, aralıklı (L, R, L, R…). */
 object AudioFx3 {
     val TYPES = setOf("vocalsplit", "hpss", "autotune", "silencegap", "binaural3d", "earlyreflect", "reverseverb", "freqshift", "specblur", "audiofreeze",
-        "harmonizer", "roombox", "parallelchain", "chanalign", "specmatch")
+        "harmonizer", "roombox", "parallelchain", "chanalign", "specmatch", "jlcut")
     private fun db(x: Double) = 10.0.pow(x / 20.0)
 
     /** STFT (Hann, %75 örtüşme): her kare için (re, im) dizilerini işleyen fonksiyon; ters dönüşüm ve örtüşmeli toplama */
@@ -122,6 +122,13 @@ object AudioFx3 {
                 for (d in -maxL..maxL) { var c = 0.0; var i = max(0, -d); while (i < win - max(0, d)) { c += L[i] * R[i + d]; i += 4 }; if (c > best) { best = c; lag = d } }
                 val sh = (lag * v("guc") / 100).roundToInt(); val refRight = v("referans").roundToInt() == 1
                 if (refRight) for (i in 0 until n) { val j = i - sh; buf[i * 2] = if (j in 0 until n) L[j].toFloat() else 0f } else for (i in 0 until n) { val j = i + sh; buf[i * 2 + 1] = if (j in 0 until n) R[j].toFloat() else 0f } }
+            "jlcut" -> { // 992: J: ikinci klibin sesi kesimden önce (pay kadar) bu klibin sonuna girer; L: önceki klibin sesi bu klibin başında devam eder
+                val pr = AudioFx.project ?: return true; val id = e.c?.get("ikinciKlip")?.takeIf { it.isNotBlank() } ?: return true; val o = pr.layers.find { it.id == id } ?: return true; val raw = side("raw:$id") ?: return true
+                val pay = max(0.0, v("onSonPay")); val fade = max(0.01, v("sesGeci")); val J = v("bicim").roundToInt() == 0; val on = raw.size / 2
+                if (J) { val a0 = o.start - pay - l.start; for (i in 0 until n) { val tt = i.toDouble() / rate; if (tt < a0 || tt >= o.start - l.start) continue; val j = ((tt - a0) * rate).toInt(); if (j >= on) break; val g = min(1.0, (tt - a0) / fade)
+                        buf[i * 2] = (buf[i * 2] * (1 - g * 0.5) + raw[j * 2] * g).toFloat(); buf[i * 2 + 1] = (buf[i * 2 + 1] * (1 - g * 0.5) + raw[j * 2 + 1] * g).toFloat() } }
+                else { val off0 = l.start - o.start; for (i in 0 until n) { val tt = i.toDouble() / rate; if (tt >= pay) break; val j = ((off0 + tt) * rate).toInt(); if (j < 0 || j >= on) continue; val g = 1 - min(1.0, max(0.0, tt - (pay - fade)) / fade)
+                        buf[i * 2] = (buf[i * 2] + raw[j * 2] * g).toFloat(); buf[i * 2 + 1] = (buf[i * 2 + 1] + raw[j * 2 + 1] * g).toFloat() } } }
             "specmatch" -> { // 976: referans sesin uzun dönem spektrumu bu sese yumuşak eğriyle aktarılır (sınırlı dB)
                 val id = e.c?.get("referans")?.takeIf { it.isNotBlank() } ?: return true; val ref = side("raw:$id") ?: side(id) ?: return true; val N = 4096; val span = (v("analizSure") * rate).toInt()
                 fun ltas(b: FloatArray): DoubleArray { val m = DoubleArray(N / 2); val x = DoubleArray(min(b.size / 2, span)) { (b[it * 2] + b[it * 2 + 1]) / 2.0 }; var cnt = 0; stft(x, N) { re, im, _ -> for (k in 0 until N / 2) m[k] += hypot(re[k], im[k]); cnt++ }; for (k in m.indices) m[k] = m[k] / max(1, cnt); return m }

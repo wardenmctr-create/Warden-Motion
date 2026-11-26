@@ -13,7 +13,7 @@ import kotlin.math.*
  * local: efektin bulunduğu katmanın kendi dönüşümü; rig: efektin seçtiği diğer katmanlar (ayak, uzuv, iris, yüz parçaları, poz grupları).
  */
 object Anim1000 {
-    val RIG = setOf("slopeattach", "bonepropagate", "bubblelayout", "labelavoid", "footlock", "stepcycle", "irislock", "exprweights", "facecoords", "jointlimit", "phasespread", "speedpose", "motionmirror")
+    val RIG = setOf("posehold", "slopeattach", "bonepropagate", "bubblelayout", "labelavoid", "footlock", "stepcycle", "irislock", "exprweights", "facecoords", "jointlimit", "phasespread", "speedpose", "motionmirror")
     private fun ids(e: Effect, k: String) = e.c?.get(k)?.split(',')?.filter { it.isNotBlank() } ?: emptyList()
     private fun lay(p: Project, e: Effect, k: String) = e.c?.get(k)?.split(',')?.firstOrNull { it.isNotBlank() }?.let { id -> p.layers.find { it.id == id } }
     private fun h1(n: Double): Double { val x = sin(n * 127.1 + 311.7) * 43758.5453; return x - floor(x) }
@@ -28,11 +28,13 @@ object Anim1000 {
         depth++
         try { return local0(p, l, t, tr0) } finally { depth-- }
     }
-    private val LOCAL = setOf("multicentroid", "axisparent", "dynpivot", "wheelroll", "twopointstretch", "contactsquash", "weightshift", "eyesaccade", "overshootstop", "anticipation", "rhythmquant", "looplock")
+    private val LOCAL = setOf("posehold", "multicentroid", "axisparent", "dynpivot", "wheelroll", "twopointstretch", "contactsquash", "weightshift", "eyesaccade", "overshootstop", "anticipation", "rhythmquant", "looplock")
     private fun local0(p: Project, l: Layer, t: Double, tr0: TR): TR {
         var tr = tr0
         for (e in l.effects) { if (e.on == false) continue; fun v(k: String) = e.value(k, t)
             when (e.type) {
+                "posehold" -> if (e.c?.get("dondurulKatm").isNullOrBlank() || e.c?.get("dondurulKatm") == l.id) { val tt = holdTime(e, l, t); val a = layerTransform(l, tt); val b = layerTransform(l, t)
+                    tr = tr.copy(x = tr.x + a.x - b.x, y = tr.y + a.y - b.y, rot = tr.rot + a.rot - b.rot, scale = tr.scale * (if (abs(b.scale) > 1e-6) a.scale / b.scale else 1.0)) }
                 "multicentroid" -> { // 891: seçili hedeflerin (gecikmeli) ağırlık merkezi; ağırlık = sıra (ilk hedefler daha baskın)
                     val tg = ids(e, "hedefler").mapNotNull { id -> p.layers.find { it.id == id } }.filter { it.id != l.id }; if (tg.isEmpty()) continue
                     val tt = t - v("gecikme"); var x = 0.0; var y = 0.0; var ws = 0.0
@@ -102,6 +104,10 @@ object Anim1000 {
         return tr
     }
 
+    /** 989 Kare Sonu Poz Tutma: poz anında durur, tutma süresince bekler, sonra çıkış yumuşatmasıyla kaldığı yerden sürer */
+    private fun holdTime(e: Effect, l: Layer, t: Double): Double { val tp = e.value("pozZama", t); val hold = max(0.0, e.value("tutma", t)); val ex = max(0.0, e.value("cikisYumu", t)); val lt = t - l.start
+        if (lt < tp) return t; if (lt < tp + hold) return l.start + tp; val u = lt - tp - hold; return l.start + tp + if (ex > 1e-3 && u < ex) u * u / (2 * ex) else u - ex / 2 }
+
     /** Ses başlangıçları (seviye zarfındaki yerel tepeler), katman başına önbellekli */
     private val beatCache = HashMap<String, List<Double>>()
     private fun beats(a: Layer): List<Double> = beatCache.getOrPut(a.id + a.src + a.start + a.srcIn) {
@@ -129,6 +135,8 @@ object Anim1000 {
     fun rig(p: Project, h: Layer, e: Effect, l: Layer, t: Double, loc0: TR, off: (Double, Double) -> Pair<Double, Double>): TR {
         var loc = loc0; fun v(k: String) = e.value(k, t)
         when (e.type) {
+            "posehold" -> { if (e.c?.get("dondurulKatm") != l.id || l.id == h.id) return loc; val tt = holdTime(e, l, t); val a = layerTransform(l, tt); val b = layerTransform(l, t)
+                val (lx, ly) = off(a.x - b.x, a.y - b.y); loc = loc.copy(x = loc.x + lx, y = loc.y + ly, rot = loc.rot + a.rot - b.rot, scale = loc.scale * (if (abs(b.scale) > 1e-6) a.scale / b.scale else 1.0)) }
             "bubblelayout", "labelavoid" -> { val o = layoutOffsets(p, e, t)[l.id] ?: return loc; val (lx, ly) = off(o.first, o.second); loc = loc.copy(x = loc.x + lx, y = loc.y + ly) }
             "slopeattach" -> { // 944: nesne yüzey şeklinin üst konturuna oturur; tabanı yerel eğime göre döner, normal yönünde ofset korunur
                 if (e.c?.get("takipNesn") != l.id) return loc; val sf = lay(p, e, "yuzey") ?: return loc; if (sf.type != "shape") return loc

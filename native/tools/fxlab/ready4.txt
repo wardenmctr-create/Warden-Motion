@@ -45,3 +45,5 @@ roombox
 parallelchain
 chanalign
 specmatch
+posehold
+jlcut

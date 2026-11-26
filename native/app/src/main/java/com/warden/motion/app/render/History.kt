@@ -29,6 +29,14 @@ object History {
             "timediff" -> listOf(t - max(dt, v("zamanFark")))
             "medianbg" -> { val k = min(cap, v("ornek").roundToInt().coerceAtLeast(3)); val span = max(dt, v("analizSure")); (0 until k).map { l.start + span * it / (k - 1) } }
             "flowconfidence" -> listOf(t, t - dt, t + dt)
+            "cutbeatpreview" -> listOf(t, t - dt)
+            "framecheck" -> { val k = min(cap, max(3, v("donmaAltSini").roundToInt() + 1)); (0 until k).map { t - it * dt } }
+            "multitimepanel" -> { val k = min(cap, v("pencere").roundToInt().coerceIn(2, 16)); (0 until k).map { l.start + (l.end - l.start - dt) * it / (k - 1) } }
+            "frametimes" -> (0 until cap).map { t - it * dt }
+            "flowconsistency" -> { val k = min(cap - 1, v("komsu").roundToInt().coerceAtLeast(1)); (0..k).map { t - it * dt } }
+            "loopscanner" -> { val k = min(cap - 1, v("aday").roundToInt().coerceIn(1, 15)); listOf(t) + (0 until k).map { t + v("enKisaSure") + (v("enUzun") - v("enKisaSure")) * it / max(1, k - 1) } }
+            "edgeextend2" -> { val k = min(cap, v("aramaKare").roundToInt().coerceIn(1, 9)); (0 until k).map { t + (it - k / 2) * dt * 2 } }
+            "stroboscope" -> { val k = min(cap, v("poz").roundToInt().coerceIn(2, 16)); (0 until k).map { t - it * max(dt, v("zamanAral")) } }
             "fluidtrail" -> { val k = min(cap, 12); val span = max(dt, v("sonme")); (0 until k).map { t - span * it / (k - 1) } }
             "diffmatte" -> if (e.c?.get("temizKareKatm").isNullOrBlank()) listOf(l.start + v("referansZama")) else null
             "timedisplace" -> { val k = min(cap, v("ornekSayi").roundToInt().coerceAtLeast(2)); val m = v("maksimumZama"); val d = max(dt, l.end - l.start); val mode = v("zamanSini").roundToInt()

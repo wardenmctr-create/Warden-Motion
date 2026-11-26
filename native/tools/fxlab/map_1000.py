@@ -111,3 +111,18 @@ N10A([
  (977, "envelopeparts", "Ses", "gen", ["Ses", "Zarf", "Analiz"], None), (978, "stereodir", "Ses", "gen", ["Ses", "Stereo", "Görselleştirme"], None),
 ])
 HIDE10.update({"vocalsplit": ["analiz"], "chanalign": ["analiz"], "binaural3d": ["hrtf"], "harmonizer": ["aralik"], "parallelchain": ["kolSevi", "gecikmeTela"], "tempocurve": []})
+N10A([
+ (979, "perspmatch", "Bükme ve Bozulma", "pixel", ["Perspektif", "Eşleme"], None), (980, "cutbeatpreview", "Zaman", "gen", ["Kurgu", "Ritim", "Kesme"], None),
+ (981, "framecheck", "Zaman", "pixel", ["Kurgu", "Donma", "Analiz"], None), (982, "texturecut", "Geçiş", "pixel", ["Geçiş", "Doku"], None),
+ (983, "behindobject", "Geçiş", "pixel", ["Geçiş", "Maske"], None), (984, "screeninscreen", "Geçiş", "pixel", ["Geçiş", "Ekran"], None),
+ (985, "depthtransition", "Geçiş", "pixel", ["Geçiş", "Derinlik"], None), (986, "hingemosaic", "Geçiş", "pixel", ["Geçiş", "Mozaik"], None),
+ (987, "routewindow", "Geçiş", "pixel", ["Geçiş", "Rota"], None), (988, "multitimepanel", "Zaman", "pixel", ["Pano", "Zaman"], None),
+ (989, "posehold", "Zaman", "xform", ["Poz", "Dondurma"], None), (990, "frametimes", "Zaman", "pixel", ["Kare", "Analiz"], None),
+ (991, "cutcolormatch", "Renk ve Işık", "pixel", ["Kesme", "Renk eşleme"], None), (992, "jlcut", "Ses", "audio-fx", ["Ses", "Kurgu", "Geçiş"], None),
+ (993, "safeareacheck", "Diğer", "pixel", ["Kadraj", "Güvenli alan"], None), (994, "seamlessfix", "Tekrar", "pixel", ["Döşeme", "Onarım"], None),
+ (995, "flowconsistency", "Zaman", "pixel", ["Tutarlılık", "Zamansal"], None), (996, "loopscanner", "Zaman", "pixel", ["Döngü", "Analiz"], None),
+ (997, "multiscreen", "Diğer", "pixel", ["Ekran", "Dağıtım"], None), (998, "focustrack", "Bulanıklık", "pixel", ["Odak", "Derinlik"], None),
+ (999, "edgeextend2", "Zaman", "pixel", ["Kenar", "Genişletme"], {"k": "genislet"}), (1000, "stroboscope", "Zaman", "pixel", ["Poz", "Çoklu", "Hareket"], None),
+])
+HIDE10.update({"perspmatch": ["noktaSeti"], "screeninscreen": ["ekranKose", "kameraEgri"], "multitimepanel": ["zamanNokt", "kaynak"], "frametimes": ["kaynak", "zamanOlce"], "safeareacheck": ["oranlar"], "framecheck": ["klip"], "focustrack": []})
+TRANS10.update({"texturecut", "behindobject", "screeninscreen", "depthtransition", "hingemosaic", "routewindow"})

@@ -179554,6 +179554,2145 @@
 "heavy": false,
 "n": 978,
 "ready": true
+},
+{
+"type": "perspmatch",
+"name": "Kamera Pozundan Perspektif Eşleme",
+"en": "",
+"cat": 3,
+"kind": "pixel",
+"desc": "İki karedeki manuel eşleşen düzlem ve ufuk çizgisini kullanarak ikinci görüntünün kamera perspektifini hizalar; 500 izleme zaman boyunca takip, bu iki görüntü arası eşleme.",
+"tags": [
+"Perspektif",
+"Eşleme"
+],
+"params": [
+{
+"k": "hedef",
+"l": "Hedef",
+"g": null,
+"anim": "no",
+"hint": "",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": ""
+},
+{
+"k": "noktaSeti",
+"l": "Nokta seti",
+"g": null,
+"anim": "step",
+"hint": "",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"4",
+"6",
+"8"
+],
+"hideUi": true,
+"def": 0
+},
+{
+"k": "guc",
+"l": "Güç",
+"g": null,
+"anim": "yes",
+"hint": "",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 100.0
+},
+{
+"k": "ufkuKoru",
+"l": "Ufku koru",
+"g": null,
+"anim": "step",
+"hint": "",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 979,
+"ready": true
+},
+{
+"type": "cutbeatpreview",
+"name": "Kesme Noktası Vuruş Önizlemesi",
+"en": "",
+"cat": 14,
+"kind": "gen",
+"desc": "İki klip kesmesinin müzikal vuruş ve görüntü hareketi açısından uyuşmasını görselleştirir; otomatik kurgu yapmadan kullanıcıya kesme kaydırma aralığı sunar.",
+"tags": [
+"Kurgu",
+"Ritim",
+"Kesme"
+],
+"params": [
+{
+"k": "ses",
+"l": "Ses",
+"g": null,
+"anim": "no",
+"hint": "",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": ""
+},
+{
+"k": "arama",
+"l": "Arama",
+"g": null,
+"anim": "yes",
+"hint": "",
+"kind": "jog",
+"min": 0.05,
+"max": 3.0,
+"step": 0.01,
+"jog": 0.01,
+"unit": "sn",
+"def": 0.5
+},
+{
+"k": "ritimAgir",
+"l": "Ritim ağırlığı",
+"g": null,
+"anim": "yes",
+"hint": "",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 60.0
+},
+{
+"k": "hareketUyum",
+"l": "Hareket uyumu",
+"g": null,
+"anim": "step",
+"hint": "",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 980,
+"ready": true
+},
+{
+"type": "framecheck",
+"name": "Zamansal Kare Yeterliliği Maskesi",
+"en": "",
+"cat": 14,
+"kind": "pixel",
+"desc": "Klipteki tekrar, donma veya sahne kesimlerini ardışık kare karşılaştırmasıyla işaretleyerek zaman maskesi üretir; 386 kare atlama oynatmayı değiştirir, bu analiz yapar.",
+"tags": [
+"Kurgu",
+"Donma",
+"Analiz"
+],
+"params": [
+{
+"k": "klip",
+"l": "Klip",
+"g": null,
+"anim": "no",
+"hint": "",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"hideUi": true,
+"def": ""
+},
+{
+"k": "benzerliEsig",
+"l": "Benzerlik eşiği",
+"g": null,
+"anim": "yes",
+"hint": "",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 98.0
+},
+{
+"k": "donmaAltSini",
+"l": "Donma alt sınırı",
+"g": null,
+"anim": "step",
+"hint": "",
+"kind": "jog",
+"min": 2.0,
+"max": 120.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 3.0
+},
+{
+"k": "cikti",
+"l": "Çıktı",
+"g": null,
+"anim": "step",
+"hint": "",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Donma",
+"Kesme",
+"İkisi"
+],
+"def": 0
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 981,
+"ready": true
+},
+{
+"type": "texturecut",
+"name": "Doku Eşlemeli Kesme",
+"en": "",
+"cat": 13,
+"kind": "pixel",
+"desc": "İki karedeki benzer yerel doku bölgelerini karşılaştırarak eşleşen yerleri önce değiştirir, renk eşlemeli geçiş tek renk benzerliğine dayanır.",
+"tags": [
+"Geçiş",
+"Doku"
+],
+"params": [
+{
+"k": "hedef",
+"l": "Hedef",
+"g": null,
+"anim": "no",
+"hint": "",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": ""
+},
+{
+"k": "dokuOlce",
+"l": "Doku ölçeği",
+"g": null,
+"anim": "yes",
+"hint": "",
+"kind": "jog",
+"min": 2.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 12.0
+},
+{
+"k": "ilerleme",
+"l": "İlerleme",
+"g": null,
+"anim": "yes",
+"hint": "",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 0.0
+},
+{
+"k": "eslesmeEsig",
+"l": "Eşleşme eşiği",
+"g": null,
+"anim": "yes",
+"hint": "",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 70.0
+}
+],
+"presets": [
+{
+"code": "GR",
+"name": "Giriş",
+"vals": {},
+"keys": {
+"ilerleme": [
+[
+0,
+100
+],
+[
+0.7,
+0
+]
+]
+},
+"cols": {},
+"at": "start"
+},
+{
+"code": "CK",
+"name": "Çıkış",
+"vals": {},
+"keys": {
+"ilerleme": [
+[
+-0.7,
+0
+],
+[
+0,
+100
+]
+]
+},
+"cols": {},
+"at": "end"
+},
+{
+"code": "AN",
+"name": "Animasyonlu",
+"vals": {},
+"keys": {
+"ilerleme": [
+[
+0,
+0
+],
+[
+1,
+100
+],
+[
+2,
+0
+]
+]
+},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 982,
+"ready": true
+},
+{
+"type": "behindobject",
+"name": "Nesne Arkasından Geçiş",
+"en": "",
+"cat": 13,
+"kind": "pixel",
+"desc": "İzlenen ön plan nesnesinin silüetini sahne değişiminin örtücüsü olarak kullanır, ön planı ayrı maske ile korur; düz wipe'tan farklı gerçek katman örtülmesi.",
+"tags": [
+"Geçiş",
+"Maske"
+],
+"params": [
+{
+"k": "onPlanMask",
+"l": "Ön plan maskesi",
+"g": null,
+"anim": "no",
+"hint": "",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": ""
+},
+{
+"k": "hedefKlip",
+"l": "Hedef klip",
+"g": null,
+"anim": "no",
+"hint": "",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": ""
+},
+{
+"k": "ilerleme",
+"l": "İlerleme",
+"g": null,
+"anim": "yes",
+"hint": "",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 0.0
+},
+{
+"k": "kenarPayi",
+"l": "Kenar payı",
+"g": null,
+"anim": "yes",
+"hint": "",
+"kind": "jog",
+"min": 0.0,
+"max": 40.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 2.0
+}
+],
+"presets": [
+{
+"code": "GR",
+"name": "Giriş",
+"vals": {},
+"keys": {
+"ilerleme": [
+[
+0,
+100
+],
+[
+0.7,
+0
+]
+]
+},
+"cols": {},
+"at": "start"
+},
+{
+"code": "CK",
+"name": "Çıkış",
+"vals": {},
+"keys": {
+"ilerleme": [
+[
+-0.7,
+0
+],
+[
+0,
+100
+]
+]
+},
+"cols": {},
+"at": "end"
+},
+{
+"code": "AN",
+"name": "Animasyonlu",
+"vals": {},
+"keys": {
+"ilerleme": [
+[
+0,
+0
+],
+[
+1,
+100
+],
+[
+2,
+0
+]
+]
+},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 983,
+"ready": true
+},
+{
+"type": "screeninscreen",
+"name": "Görüntü İçinden Görüntü Geçişi",
+"en": "",
+"cat": 13,
+"kind": "pixel",
+"desc": "İlk klipteki seçilen dörtgen ekranı ikinci kliple doldurup kamera hareketiyle ekran sınırlarını tuval dışına taşır; 161 köşe sabitle tek katman deformasyonu, bu eşlenmiş iki klip animasyonudur.",
+"tags": [
+"Geçiş",
+"Ekran"
+],
+"params": [
+{
+"k": "hedefKlip",
+"l": "Hedef klip",
+"g": null,
+"anim": "no",
+"hint": "",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": ""
+},
+{
+"k": "ekranKose",
+"l": "Ekran köşeleri",
+"g": null,
+"anim": "step",
+"hint": "",
+"kind": "choice",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"opts": [
+"4 nokta"
+],
+"hideUi": true,
+"def": 0
+},
+{
+"k": "ilerleme",
+"l": "İlerleme",
+"g": null,
+"anim": "yes",
+"hint": "",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 0.0
+},
+{
+"k": "kameraEgri",
+"l": "Kamera eğrisi",
+"g": null,
+"anim": "no",
+"hint": "",
+"kind": "curve",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"hideUi": true,
+"def": [
+[
+0,
+0
+],
+[
+1,
+1
+]
+]
+}
+],
+"presets": [
+{
+"code": "GR",
+"name": "Giriş",
+"vals": {},
+"keys": {
+"ilerleme": [
+[
+0,
+100
+],
+[
+0.7,
+0
+]
+]
+},
+"cols": {},
+"at": "start"
+},
+{
+"code": "CK",
+"name": "Çıkış",
+"vals": {},
+"keys": {
+"ilerleme": [
+[
+-0.7,
+0
+],
+[
+0,
+100
+]
+]
+},
+"cols": {},
+"at": "end"
+},
+{
+"code": "AN",
+"name": "Animasyonlu",
+"vals": {},
+"keys": {
+"ilerleme": [
+[
+0,
+0
+],
+[
+1,
+100
+],
+[
+2,
+0
+]
+]
+},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 984,
+"ready": true
+},
+{
+"type": "depthtransition",
+"name": "Derinlik Sıralı Sahne Geçişi",
+"en": "",
+"cat": 13,
+"kind": "pixel",
+"desc": "İki klip arasında önce yakın, sonra uzak yüzeyleri değiştirerek üç boyutlu katmanlar halinde sahne açar. İki kaynaklı derinlik sırası gerektirir, 303 tek matı ve 537 dilimleri üretir.",
+"tags": [
+"Geçiş",
+"Derinlik"
+],
+"params": [
+{
+"k": "hedefKlip",
+"l": "Hedef klip",
+"g": null,
+"anim": "no",
+"hint": "",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": ""
+},
+{
+"k": "derinlik",
+"l": "Derinlik",
+"g": null,
+"anim": "no",
+"hint": "",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": ""
+},
+{
+"k": "ilerleme",
+"l": "İlerleme",
+"g": null,
+"anim": "yes",
+"hint": "",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 0.0
+},
+{
+"k": "katmanGeci",
+"l": "Katman geçişi",
+"g": null,
+"anim": "yes",
+"hint": "",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 12.0
+},
+{
+"k": "sirayiTersCevi",
+"l": "Sırayı ters çevir",
+"g": null,
+"anim": "step",
+"hint": "",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 0
+}
+],
+"presets": [
+{
+"code": "GR",
+"name": "Giriş",
+"vals": {},
+"keys": {
+"ilerleme": [
+[
+0,
+100
+],
+[
+0.7,
+0
+]
+]
+},
+"cols": {},
+"at": "start"
+},
+{
+"code": "CK",
+"name": "Çıkış",
+"vals": {},
+"keys": {
+"ilerleme": [
+[
+-0.7,
+0
+],
+[
+0,
+100
+]
+]
+},
+"cols": {},
+"at": "end"
+},
+{
+"code": "AN",
+"name": "Animasyonlu",
+"vals": {},
+"keys": {
+"ilerleme": [
+[
+0,
+0
+],
+[
+1,
+100
+],
+[
+2,
+0
+]
+]
+},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 985,
+"ready": true
+},
+{
+"type": "hingemosaic",
+"name": "Menteşeli Mozaik Geçişi",
+"en": "",
+"cat": 13,
+"kind": "pixel",
+"desc": "Çok sayıdaki küçük panonun birbirine bağlı menteşeler üzerinden sırayla dönmesiyle ikinci görüntüyü açar; kart silme bağımsız kartlar, bu komşu bağlantılı yön ve gecikme.",
+"tags": [
+"Geçiş",
+"Mozaik"
+],
+"params": [
+{
+"k": "hedef",
+"l": "Hedef",
+"g": null,
+"anim": "no",
+"hint": "",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": ""
+},
+{
+"k": "satir",
+"l": "Satır",
+"g": null,
+"anim": "step",
+"hint": "",
+"kind": "jog",
+"min": 1.0,
+"max": 30.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 6.0
+},
+{
+"k": "sutun",
+"l": "Sütun",
+"g": null,
+"anim": "step",
+"hint": "",
+"kind": "jog",
+"min": 1.0,
+"max": 30.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 8.0
+},
+{
+"k": "gecikme",
+"l": "Gecikme",
+"g": null,
+"anim": "yes",
+"hint": "",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 40.0
+},
+{
+"k": "ilerleme",
+"l": "İlerleme",
+"g": null,
+"anim": "yes",
+"hint": "",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 0.0
+}
+],
+"presets": [
+{
+"code": "GR",
+"name": "Giriş",
+"vals": {},
+"keys": {
+"ilerleme": [
+[
+0,
+100
+],
+[
+0.7,
+0
+]
+]
+},
+"cols": {},
+"at": "start"
+},
+{
+"code": "CK",
+"name": "Çıkış",
+"vals": {},
+"keys": {
+"ilerleme": [
+[
+-0.7,
+0
+],
+[
+0,
+100
+]
+]
+},
+"cols": {},
+"at": "end"
+},
+{
+"code": "AN",
+"name": "Animasyonlu",
+"vals": {},
+"keys": {
+"ilerleme": [
+[
+0,
+0
+],
+[
+1,
+100
+],
+[
+2,
+0
+]
+]
+},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 986,
+"ready": true
+},
+{
+"type": "routewindow",
+"name": "Eğri Rota Üzerinde Pencere Geçişi",
+"en": "",
+"cat": 13,
+"kind": "pixel",
+"desc": "Bir görüntü penceresini düzenlenebilir eğri boyunca gezdirip geçtiği alanlarda ikinci klibi açar; dairesel açılış sabit merkezli, bu birikimli yol maskesi.",
+"tags": [
+"Geçiş",
+"Rota"
+],
+"params": [
+{
+"k": "hedef",
+"l": "Hedef",
+"g": null,
+"anim": "no",
+"hint": "",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": ""
+},
+{
+"k": "rota",
+"l": "Rota",
+"g": null,
+"anim": "no",
+"hint": "",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": ""
+},
+{
+"k": "pencereGeni",
+"l": "Pencere genişliği",
+"g": null,
+"anim": "yes",
+"hint": "",
+"kind": "jog",
+"min": 1.0,
+"max": 1000.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 80.0
+},
+{
+"k": "ilerleme",
+"l": "İlerleme",
+"g": null,
+"anim": "yes",
+"hint": "",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 0.0
+},
+{
+"k": "iziKaliTut",
+"l": "İzi kalıcı tut",
+"g": null,
+"anim": "step",
+"hint": "",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+}
+],
+"presets": [
+{
+"code": "GR",
+"name": "Giriş",
+"vals": {},
+"keys": {
+"ilerleme": [
+[
+0,
+100
+],
+[
+0.7,
+0
+]
+]
+},
+"cols": {},
+"at": "start"
+},
+{
+"code": "CK",
+"name": "Çıkış",
+"vals": {},
+"keys": {
+"ilerleme": [
+[
+-0.7,
+0
+],
+[
+0,
+100
+]
+]
+},
+"cols": {},
+"at": "end"
+},
+{
+"code": "AN",
+"name": "Animasyonlu",
+"vals": {},
+"keys": {
+"ilerleme": [
+[
+0,
+0
+],
+[
+1,
+100
+],
+[
+2,
+0
+]
+]
+},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 987,
+"ready": true
+},
+{
+"type": "multitimepanel",
+"name": "Pencereli Çoklu Zaman Öyküsü",
+"en": "",
+"cat": 14,
+"kind": "pixel",
+"desc": "Aynı klibin birden çok bağımsız zaman noktasını bir panelde gösterir; 621 zaman mozaiği her hücre için düzenli zaman adımı kullanır, bu elle veya olaylara bağlı klip pencereleri.",
+"tags": [
+"Pano",
+"Zaman"
+],
+"params": [
+{
+"k": "kaynak",
+"l": "Kaynak",
+"g": null,
+"anim": "no",
+"hint": "",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"hideUi": true,
+"def": ""
+},
+{
+"k": "pencere",
+"l": "Pencere",
+"g": null,
+"anim": "step",
+"hint": "",
+"kind": "jog",
+"min": 2.0,
+"max": 16.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 4.0
+},
+{
+"k": "zamanNokt",
+"l": "Zaman noktaları",
+"g": null,
+"anim": "no",
+"hint": "",
+"kind": "curve",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"hideUi": true,
+"def": [
+[
+0,
+0
+],
+[
+1,
+1
+]
+]
+},
+{
+"k": "bosluk",
+"l": "Boşluk",
+"g": null,
+"anim": "yes",
+"hint": "",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 8.0
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 988,
+"ready": true
+},
+{
+"type": "posehold",
+"name": "Kare Sonu Poz Tutma",
+"en": "",
+"cat": 14,
+"kind": "xform",
+"desc": "Bir hareketin seçilen tamamlanma anında durur, sonrasında yalnız belirlenen arka plan ve efektler akmaya devam eder; genel kare atlama tüm görüntüyü zamanlar.",
+"tags": [
+"Poz",
+"Dondurma"
+],
+"params": [
+{
+"k": "dondurulKatm",
+"l": "Dondurulacak katman",
+"g": null,
+"anim": "no",
+"hint": "",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": ""
+},
+{
+"k": "pozZama",
+"l": "Poz zamanı",
+"g": null,
+"anim": "yes",
+"hint": "",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.01,
+"jog": 0.01,
+"unit": "sn",
+"def": 1.0
+},
+{
+"k": "tutma",
+"l": "Tutma",
+"g": null,
+"anim": "yes",
+"hint": "",
+"kind": "jog",
+"min": 0.0,
+"max": 30.0,
+"step": 0.01,
+"jog": 0.01,
+"unit": "sn",
+"def": 0.5
+},
+{
+"k": "cikisYumu",
+"l": "Çıkış yumuşatma",
+"g": null,
+"anim": "yes",
+"hint": "",
+"kind": "jog",
+"min": 0.0,
+"max": 2.0,
+"step": 0.01,
+"jog": 0.01,
+"unit": "sn",
+"def": 0.1
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 989,
+"ready": true
+},
+{
+"type": "frametimes",
+"name": "Kare Süresi Görselleştirici",
+"en": "",
+"cat": 14,
+"kind": "pixel",
+"desc": "Video karelerinin sunum zaman damgalarını kullanarak kare süreleri, bekleme ve değişken FPS dağılımını renkli zaman şeridinde gösterir; 622 zamanı değiştirirken bu kaynak zamanlamasını analiz eder.",
+"tags": [
+"Kare",
+"Analiz"
+],
+"params": [
+{
+"k": "kaynak",
+"l": "Kaynak",
+"g": null,
+"anim": "no",
+"hint": "",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"hideUi": true,
+"def": ""
+},
+{
+"k": "zamanOlce",
+"l": "Zaman ölçeği",
+"g": null,
+"anim": "yes",
+"hint": "",
+"kind": "jog",
+"min": 0.1,
+"max": 60.0,
+"step": 0.01,
+"jog": 0.01,
+"unit": "sn",
+"hideUi": true,
+"def": 1.0
+},
+{
+"k": "uzunKareIsar",
+"l": "Uzun kareleri işaretle",
+"g": null,
+"anim": "step",
+"hint": "",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+},
+{
+"k": "uyariEsig",
+"l": "Uyarı eşiği",
+"g": null,
+"anim": "yes",
+"hint": "",
+"kind": "jog",
+"min": 1.0,
+"max": 500.0,
+"step": 0.01,
+"jog": 0.01,
+"unit": "ms",
+"def": 50.0
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 990,
+"ready": true
+},
+{
+"type": "cutcolormatch",
+"name": "Sahne Kesimi Sonrası Renk Uyumlama",
+"en": "",
+"cat": 0,
+"kind": "pixel",
+"desc": "Kesmenin iki yanındaki karelerin renk istatistiklerini karşılaştırıp yalnız geçiş aralığında uyum sağlar; 494 referansa renk eşleme bütün klibe sabit uygulanır.",
+"tags": [
+"Kesme",
+"Renk eşleme"
+],
+"params": [
+{
+"k": "komsuKlip",
+"l": "Komşu klip",
+"g": null,
+"anim": "no",
+"hint": "",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": ""
+},
+{
+"k": "analiz",
+"l": "Analiz",
+"g": null,
+"anim": "yes",
+"hint": "",
+"kind": "jog",
+"min": 0.05,
+"max": 5.0,
+"step": 0.01,
+"jog": 0.01,
+"unit": "sn",
+"def": 0.5
+},
+{
+"k": "gecis",
+"l": "Geçiş",
+"g": null,
+"anim": "yes",
+"hint": "",
+"kind": "jog",
+"min": 0.0,
+"max": 3.0,
+"step": 0.01,
+"jog": 0.01,
+"unit": "sn",
+"def": 0.3
+},
+{
+"k": "guc",
+"l": "Güç",
+"g": null,
+"anim": "yes",
+"hint": "",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 60.0
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 991,
+"ready": true
+},
+{
+"type": "jlcut",
+"name": "Geçiş Önü Ses Köprüsü",
+"en": "",
+"cat": 15,
+"kind": "audio-fx",
+"desc": "Görüntü kesilmeden önce ikinci klibin sesini veya sonra ilk klibin sesini duyuracak bağımsız görsel-ses zarfı oluşturur; 770 ses geçişi yalnız çapraz ses karışımıdır.",
+"tags": [
+"Ses",
+"Kurgu",
+"Geçiş"
+],
+"params": [
+{
+"k": "ikinciKlip",
+"l": "İkinci klip",
+"g": null,
+"anim": "no",
+"hint": "",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": ""
+},
+{
+"k": "bicim",
+"l": "Biçim",
+"g": null,
+"anim": "step",
+"hint": "",
+"kind": "choice",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"opts": [
+"J",
+"L"
+],
+"def": 0
+},
+{
+"k": "onSonPay",
+"l": "Ön/son pay",
+"g": null,
+"anim": "yes",
+"hint": "",
+"kind": "jog",
+"min": 0.0,
+"max": 10.0,
+"step": 0.01,
+"jog": 0.01,
+"unit": "sn",
+"def": 0.5
+},
+{
+"k": "sesGeci",
+"l": "Ses geçişi",
+"g": null,
+"anim": "yes",
+"hint": "",
+"kind": "jog",
+"min": 0.0,
+"max": 5.0,
+"step": 0.01,
+"jog": 0.01,
+"unit": "sn",
+"def": 0.2
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 992,
+"ready": true
+},
+{
+"type": "safeareacheck",
+"name": "Kadraj Güvenli Alan Kontrolü",
+"en": "",
+"cat": 11,
+"kind": "pixel",
+"desc": "Klipteki belirlenen önemli bölgelerin farklı ekran oranlarında kesilip kesilmediğini işaretler; 795 akıllı kadraj görüntüyü taşır, bu çoklu oran analizi.",
+"tags": [
+"Kadraj",
+"Güvenli alan"
+],
+"params": [
+{
+"k": "onemliBolg",
+"l": "Önemli bölgeler",
+"g": null,
+"anim": "no",
+"hint": "",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": ""
+},
+{
+"k": "oranlar",
+"l": "Oranlar",
+"g": null,
+"anim": "step",
+"hint": "",
+"kind": "choice",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"opts": [
+"Çoklu seçim"
+],
+"hideUi": true,
+"def": 0
+},
+{
+"k": "guvenPayi",
+"l": "Güven payı",
+"g": null,
+"anim": "yes",
+"hint": "",
+"kind": "jog",
+"min": 0.0,
+"max": 25.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 5.0
+},
+{
+"k": "ihlalUyar",
+"l": "İhlal uyarısı",
+"g": null,
+"anim": "step",
+"hint": "",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 993,
+"ready": true
+},
+{
+"type": "seamlessfix",
+"name": "Döşeme Ek Yeri Onarımı",
+"en": "",
+"cat": 7,
+"kind": "pixel",
+"desc": "Tekrarlanacak görselin karşılıklı kenarlarını renk ve doku sürekliliği için düzeltir; 172 döşeme tekrar eder, bu kaynak dokunun kesintisiz olması için düzenler.",
+"tags": [
+"Döşeme",
+"Onarım"
+],
+"params": [
+{
+"k": "kenarSeri",
+"l": "Kenar şeridi",
+"g": null,
+"anim": "yes",
+"hint": "",
+"kind": "jog",
+"min": 1.0,
+"max": 500.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 20.0
+},
+{
+"k": "eksen",
+"l": "Eksen",
+"g": null,
+"anim": "step",
+"hint": "",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"X",
+"Y",
+"İkisi"
+],
+"def": 0
+},
+{
+"k": "dokuKoru",
+"l": "Doku koruma",
+"g": null,
+"anim": "yes",
+"hint": "",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 75.0
+},
+{
+"k": "tekrarOniz",
+"l": "Tekrar önizleme",
+"g": null,
+"anim": "step",
+"hint": "",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 994,
+"ready": true
+},
+{
+"type": "flowconsistency",
+"name": "Kare Akış Tutarlılığı",
+"en": "",
+"cat": 14,
+"kind": "pixel",
+"desc": "Üretken veya manuel düzenlenmiş karelerde küçük rastgele görünüm değişikliklerini optik akışla komşu kareye bağlı tutar; zamansal gürültü temizleme yerine edit katmanı tutarlılığı.",
+"tags": [
+"Tutarlılık",
+"Zamansal"
+],
+"params": [
+{
+"k": "duzenlemMask",
+"l": "Düzenleme maskesi",
+"g": null,
+"anim": "no",
+"hint": "",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": ""
+},
+{
+"k": "baglilik",
+"l": "Bağlılık",
+"g": null,
+"anim": "yes",
+"hint": "",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 60.0
+},
+{
+"k": "komsu",
+"l": "Komşu",
+"g": null,
+"anim": "step",
+"hint": "",
+"kind": "jog",
+"min": 1.0,
+"max": 8.0,
+"step": 1,
+"jog": 1,
+"unit": "kare",
+"int": true,
+"def": 2.0
+},
+{
+"k": "okluzyonEsig",
+"l": "Oklüzyon eşiği",
+"g": null,
+"anim": "yes",
+"hint": "",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 20.0
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 995,
+"ready": true
+},
+{
+"type": "loopscanner",
+"name": "Zaman Döngüsü Uygunluk Tarayıcı",
+"en": "",
+"cat": 14,
+"kind": "pixel",
+"desc": "Klibin olası başlangıç ve bitiş karelerini görsel benzerliğe ve hareket uyumuna göre sıralar; 689 verilen döngü sınırlarını birleştirir, bu aday aralıkları analiz eder.",
+"tags": [
+"Döngü",
+"Analiz"
+],
+"params": [
+{
+"k": "enKisaSure",
+"l": "En kısa süre",
+"g": null,
+"anim": "yes",
+"hint": "",
+"kind": "jog",
+"min": 0.1,
+"max": 20.0,
+"step": 0.01,
+"jog": 0.01,
+"unit": "sn",
+"def": 0.5
+},
+{
+"k": "enUzun",
+"l": "En uzun",
+"g": null,
+"anim": "yes",
+"hint": "",
+"kind": "jog",
+"min": 0.5,
+"max": 60.0,
+"step": 0.01,
+"jog": 0.01,
+"unit": "sn",
+"def": 5.0
+},
+{
+"k": "aday",
+"l": "Aday",
+"g": null,
+"anim": "step",
+"hint": "",
+"kind": "jog",
+"min": 1.0,
+"max": 30.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 5.0
+},
+{
+"k": "hareketAgir",
+"l": "Hareket ağırlığı",
+"g": null,
+"anim": "yes",
+"hint": "",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 50.0
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 996,
+"ready": true
+},
+{
+"type": "multiscreen",
+"name": "Çoklu Ekran İçerik Dağıtımı",
+"en": "",
+"cat": 11,
+"kind": "pixel",
+"desc": "Tek geniş kompozisyonu farklı boyutlu ekran veya panel bölgelerine gerçek koordinat ve kenar boşluğu ile kırpar; 144 panel döşeme aynı içeriği kopyalar, bu tek kompozisyonu parçalara böler.",
+"tags": [
+"Ekran",
+"Dağıtım"
+],
+"params": [
+{
+"k": "ekran",
+"l": "Ekran",
+"g": null,
+"anim": "step",
+"hint": "",
+"kind": "jog",
+"min": 1.0,
+"max": 16.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 3.0
+},
+{
+"k": "duzen",
+"l": "Düzen",
+"g": null,
+"anim": "step",
+"hint": "",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Elle",
+"Yatay",
+"Dikey"
+],
+"def": 0
+},
+{
+"k": "cercevePayi",
+"l": "Çerçeve payı",
+"g": null,
+"anim": "yes",
+"hint": "",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 10.0
+},
+{
+"k": "ekranNuma",
+"l": "Ekran numaraları",
+"g": null,
+"anim": "step",
+"hint": "",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 0
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 997,
+"ready": true
+},
+{
+"type": "focustrack",
+"name": "Sanal Kamera Odak Derinliği Takibi",
+"en": "",
+"cat": 2,
+"kind": "pixel",
+"desc": "Hedef katmanın derinlik haritasını takip ederek odak düzlemini sürekli günceller; 123 derinlik bulanıklığı sabit odaklı, bu odak parametresini gerçek zamanlı bağlar.",
+"tags": [
+"Odak",
+"Derinlik"
+],
+"params": [
+{
+"k": "hedef",
+"l": "Hedef",
+"g": null,
+"anim": "no",
+"hint": "",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": ""
+},
+{
+"k": "derinlik",
+"l": "Derinlik",
+"g": null,
+"anim": "no",
+"hint": "",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": ""
+},
+{
+"k": "tepki",
+"l": "Tepki",
+"g": null,
+"anim": "yes",
+"hint": "",
+"kind": "jog",
+"min": 0.0,
+"max": 3.0,
+"step": 0.01,
+"jog": 0.01,
+"unit": "sn",
+"def": 0.3
+},
+{
+"k": "oncelik",
+"l": "Öncelik",
+"g": null,
+"anim": "yes",
+"hint": "",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 100.0
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 998,
+"ready": true
+},
+{
+"type": "edgeextend2",
+"name": "Klip Kenarı Devamlılık Genişletme",
+"en": "",
+"cat": 14,
+"kind": "pixel",
+"desc": "Video sınırlarında komşu karelerin görünür alanlarından içerik alarak kısa dolgu oluşturur; 347 tek arka plan büyütür, bu zamansal hareketle içerik yeniden kullanır.",
+"tags": [
+"Kenar",
+"Genişletme"
+],
+"params": [
+{
+"k": "genislet",
+"l": "Genişletme",
+"g": null,
+"anim": "yes",
+"hint": "",
+"kind": "jog",
+"min": 0.0,
+"max": 500.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 50.0
+},
+{
+"k": "aramaKare",
+"l": "Arama karesi",
+"g": null,
+"anim": "step",
+"hint": "",
+"kind": "jog",
+"min": 1.0,
+"max": 60.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 8.0
+},
+{
+"k": "kenarGeci",
+"l": "Kenar geçişi",
+"g": null,
+"anim": "yes",
+"hint": "",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 10.0
+},
+{
+"k": "yoksaSeffBira",
+"l": "Yoksa şeffaf bırak",
+"g": null,
+"anim": "step",
+"hint": "",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+}
+],
+"presets": [],
+"pad": {
+"k": "genislet"
+},
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 999,
+"ready": true
+},
+{
+"type": "stroboscope",
+"name": "Sabit Kamera Çoklu Pozisyon Panosu",
+"en": "",
+"cat": 14,
+"kind": "pixel",
+"desc": "Bir klipte takip edilen nesnenin farklı zamanlardaki konumlarını aynı sabit sahne üzerinde birbirinden ayrı maskelerle yerleştirir; 385 yankı sürekli saydam iz, bu seçilmiş temiz poz grubu üretir.",
+"tags": [
+"Poz",
+"Çoklu",
+"Hareket"
+],
+"params": [
+{
+"k": "nesneMask",
+"l": "Nesne maskesi",
+"g": null,
+"anim": "no",
+"hint": "",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": ""
+},
+{
+"k": "poz",
+"l": "Poz",
+"g": null,
+"anim": "step",
+"hint": "",
+"kind": "jog",
+"min": 2.0,
+"max": 30.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 5.0
+},
+{
+"k": "zamanAral",
+"l": "Zaman aralığı",
+"g": null,
+"anim": "yes",
+"hint": "",
+"kind": "jog",
+"min": 0.02,
+"max": 10.0,
+"step": 0.01,
+"jog": 0.01,
+"unit": "sn",
+"def": 0.5
+},
+{
+"k": "arkaPlanSabi",
+"l": "Arka planı sabitle",
+"g": null,
+"anim": "step",
+"hint": "",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 1000,
+"ready": true
 }
 ],
 "featured": [

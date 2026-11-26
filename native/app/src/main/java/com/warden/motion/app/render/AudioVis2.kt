@@ -7,7 +7,7 @@ import kotlin.math.*
 
 /** 1000 rehberi ses görselleştiricileri (959, 960, 962, 963, 964, 977, 978): projedeki sesten shader verisi (p_dv) */
 object AudioVis2 {
-    val TYPES = setOf("pitchcurve", "tuningmeter", "chromawheel", "tempocurve", "onsetdetect", "envelopeparts", "stereodir")
+    val TYPES = setOf("cutbeatpreview", "pitchcurve", "tuningmeter", "chromawheel", "tempocurve", "onsetdetect", "envelopeparts", "stereodir")
     private val envCache = HashMap<String, DoubleArray>()
     /** Seviye zarfı (saniyede 100 örnek, mono mutlak tepe) — katman başına önbellek */
     private fun env(l: Layer, pcm: Pcm): DoubleArray = envCache.getOrPut(l.id + l.src + pcm.frames) { val W = pcm.rate / 100; DoubleArray(pcm.frames / W) { b -> var m = 0.0; for (i in b * W until min(pcm.frames, (b + 1) * W)) m = max(m, abs((pcm.data[i * 2] + pcm.data[i * 2 + 1]) / 2.0)); m } }
@@ -33,6 +33,9 @@ object AudioVis2 {
                     for (L in lo..hi) { var c = 0.0; for (i in a until b - L) c += nov[i] * nov[i + L]; if (c > best) { best = c; bl = L } }; out[s] = 6000.0 / bl }
                 if (v("elleDuze") >= 0.5) for (s in 1 until 63) out[s] = (out[s - 1] + out[s] * 2 + out[s + 1]) / 4
                 out[64] = ((t - l.start + (l.srcIn ?: 0.0)) * 100 / en.size).coerceIn(0.0, 1.0); return out }
+            "cutbeatpreview" -> { val en = env(l, pcm); val i0 = (idx(t).toDouble() / pcm.frames * en.size).toInt(); val span = (v("arama") * 100).toInt().coerceIn(5, 300); val out = ArrayList<Double>(); var last = -1000
+                for (i in max(1, i0 - span)..min(en.size - 1, i0 + span)) { var mean = 0.0; for (k in 1..20) mean += en[max(0, i - k)]; mean /= 20; if (en[i] - en[i - 1] > 0.25 * (mean + 0.05) && i - last > 12) { out += (i - i0) / 100.0; last = i; if (out.size >= 16) break } }
+                return out.toDoubleArray() }
             "onsetdetect" -> { val en = env(l, pcm); val i0 = (idx(t).toDouble() / pcm.frames * en.size).toInt(); val th = 0.5 - v("duyarlil") / 220; val gap = max(1, (v("enAzAral") / 10).toInt()); val ages = ArrayList<Double>(); var last = Int.MAX_VALUE
                 for (i in i0 downTo max(1, i0 - 300)) { if (i >= en.size) continue; var mean = 0.0; for (k in 1..20) mean += en[max(0, i - k)]; mean /= 20; val mode = v("mod").roundToInt(); val nov = if (mode == 1) en[i] - mean else (en[i] - en[i - 1]) * (if (mode == 2) 1.5 else 2.0)
                     if (nov > th * (mean + 0.05) && last - i >= gap) { ages += (i0 - i) / 100.0; last = i; if (ages.size >= 8) break } }

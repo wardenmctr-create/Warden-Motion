@@ -21,7 +21,7 @@ class AudioFx3Test {
             if (i in (rate * 1.2).toInt() until (rate * 1.6).toInt()) (0.003 * sin(i * 1.7)).toFloat() else (0.4 * sin(2 * PI * 220 * t) + 0.2 * sin(2 * PI * 330 * t) * (if (c == 0) 1.0 else 0.3) + (if (i % (rate / 4) < 40) 0.6 else 0.0)).toFloat() }
         val fails = ArrayList<String>()
         for (type in AudioFx3.TYPES) {
-            if (type == "parallelchain" || type == "specmatch") continue // başka katman gerektirir
+            if (type == "parallelchain" || type == "specmatch" || type == "jlcut") continue // başka katman gerektirir
             var e = makeEffect(type); if (type == "silencegap") e = e.copy(v = (e.v ?: emptyMap()) + ("yalnizAnal" to Anim(0.0)))
             val l = Layer("A", "ses", "audio", 0.0, 2.0, effects = listOf(e)); val buf = src.copyOf()
             AudioFx.apply(l, buf, rate)

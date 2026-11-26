@@ -30,6 +30,7 @@ barrace
 batik
 beadwork
 beam
+behindobject
 bender
 bendit
 bendtocurve
@@ -170,6 +171,8 @@ curvaturemap
 curves
 curvmatte
 cutback
+cutbeatpreview
+cutcolormatch
 cyanotype
 cycloid
 cylinder
@@ -199,6 +202,7 @@ depthparallax
 depthpointsize
 depthpriority
 depthrim
+depthtransition
 depthview
 dice3d
 diffmap
@@ -225,6 +229,7 @@ edgecrystal
 edgedirextend
 edgedirmatte
 edgeextend
+edgeextend2
 edgeflow
 edges
 elasticline
@@ -263,6 +268,7 @@ flomotion
 floorreflect
 floorshadow
 flowconfidence
+flowconsistency
 flowerrosette
 flowfield
 flowlines
@@ -273,6 +279,7 @@ foamcells
 focusmap
 focuspull
 focusstack
+focustrack
 fog
 fold3d
 foldpanels
@@ -284,9 +291,11 @@ fractalnoise
 fractalpath
 fractalset
 frame
+framecheck
 frameoverflow
 framerepair
 frameshuffle
+frametimes
 freelens
 freqsep
 fresnelmatte
@@ -348,6 +357,7 @@ hextile
 highlightrecover
 highshadow
 hillshade
+hingemosaic
 histogram2
 holefill
 hollowbox
@@ -420,6 +430,7 @@ loftprofiles
 logconv
 lomo
 longshadow
+loopscanner
 loudmeter
 lowpoly
 lumakey
@@ -464,6 +475,8 @@ movingmatte
 mudcrack
 multicam
 multiscale
+multiscreen
+multitimepanel
 multiview
 nebula
 neonedge
@@ -516,6 +529,7 @@ pencilpressure
 penrose
 perspfix
 perspgrid
+perspmatch
 phasescope
 photocopy
 photofilter
@@ -584,6 +598,8 @@ rotsym
 roughen
 roughmeter
 roundcorners
+routewindow
+safeareacheck
 sandart
 sandcarve
 sandstorm
@@ -601,8 +617,10 @@ scatterplot
 scatterpx
 scratchart
 scratchreveal
+screeninscreen
 scribble
 seamallowance
+seamlessfix
 seamline3d
 sectioncap
 sectionview
@@ -672,6 +690,7 @@ stretchseg
 stringart
 stripes
 strobelight
+stroboscope
 stroke
 strokewrite
 subdivide
@@ -696,6 +715,7 @@ tetra
 texsegment
 texsimilar
 text3d
+texturecut
 texturize
 thicken3d
 thicknessmap
