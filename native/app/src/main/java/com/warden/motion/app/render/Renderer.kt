@@ -70,7 +70,7 @@ fun worldTransform(p: Project, l: Layer, t: Double, depth: Int = 0): TR {
     val par = if (l.parent != null && depth < 8) p.layers.find { it.id == l.parent } else null
     val pw = if (par != null) worldTransform(p, par, t, depth + 1) else null
     loc = rigLocal(p, l, t, loc, pw)
-    if (l.effects.isNotEmpty()) loc = Physics.local(p, l, t, loc)
+    if (l.effects.isNotEmpty()) { loc = Physics.local(p, l, t, loc); loc = Motion2.local(p, l, t, loc) }
     if (pw == null) return loc
     val a = pw.rot * PI / 180
     return TR(
@@ -170,7 +170,7 @@ class Renderer(private val ctx: Context, maxSide: Int = 2048, private val sync: 
         paint.color = parseCol(p.background, android.graphics.Color.WHITE)
         c.drawRect(0f, 0f, p.width.toFloat(), p.height.toFloat(), paint)
         c.clipRect(0f, 0f, p.width.toFloat(), p.height.toFloat())
-        for (l in p.layers) {
+        for (l in drawOrder(p, t)) {
             if (l.type == "audio" || l.hidden == true || t < l.start || t >= l.end) continue
             val m = l.mask?.let { id -> p.layers.find { it.id == id } }
             if (m != null) {
@@ -222,6 +222,11 @@ class Renderer(private val ctx: Context, maxSide: Int = 2048, private val sync: 
     private var echoMul = 1.0; private var echoBlend: BlendMode? = null; private var inEcho = false
     /** Canlı Bağlantı Çizgisi / Ölçü Oku: uçlara seçilen katmanların o anki konumu yazılır (katmanın kutusuna göre %) */
     private fun linkPoints(p: Project, l: Layer, e: Effect, t: Double, tr: TR): Effect {
+        if (e.type == "elasticline") { // iki uç katman: dv0..dv3 (katman birimi, kutu merkezine göre)
+            val ids = e.c?.get("uclar")?.split(',')?.filter { it.isNotBlank() } ?: return e; if (ids.size < 2) return e; var v = e.v ?: emptyMap()
+            ids.take(2).forEachIndexed { i, id -> val o = p.layers.find { it.id == id } ?: return e; val w = worldTransform(p, o, t); val a = -tr.rot * PI / 180; val dx = w.x - tr.x; val dy = w.y - tr.y; val sc = if (kotlin.math.abs(tr.scale) > 1e-6) tr.scale else 1.0
+                v = v + ("dv${i * 2}" to com.warden.motion.app.model.Anim((dx * cos(a) - dy * sin(a)) / sc)) + ("dv${i * 2 + 1}" to com.warden.motion.app.model.Anim((dx * sin(a) + dy * cos(a)) / sc)) }
+            return e.copy(v = v) }
         val pairs = when (e.type) { "connector" -> listOf("baslangiKatm" to "baslangiBagl", "bitisKatm" to "bitisBagl"); else -> return e }
         var v = e.v ?: emptyMap()
         for ((src, key) in pairs) { val o = e.c?.get(src)?.let { id -> p.layers.find { it.id == id } } ?: continue; val w = worldTransform(p, o, t)
@@ -252,6 +257,17 @@ class Renderer(private val ctx: Context, maxSide: Int = 2048, private val sync: 
         return mapOf("hist" to out)
     }
     private var historyDepth = 0
+    /** 693 Karakter Parça Sırası: seçili parçalar, açı eşiğine göre ana katmanın önüne ya da arkasına alınır */
+    private fun drawOrder(p: Project, t: Double): List<Layer> {
+        val hosts = p.layers.filter { h -> h.effects.any { it.type == "partorder" && it.on != false } }; if (hosts.isEmpty()) return p.layers
+        val list = p.layers.toMutableList()
+        for (h in hosts) for (e in h.effects) { if (e.type != "partorder" || e.on == false) continue
+            val ids = e.c?.get("parcalar")?.split(',')?.filter { it.isNotBlank() } ?: continue; val ang = e.value("aci", t); val mode = e.value("siraSabl", t).roundToInt()
+            val behind = when (mode) { 0 -> ang < 0; 2 -> kotlin.math.abs(((worldTransform(p, h, t).rot + ang) % 360 + 360) % 360 - 180) < 90; else -> false }; if (mode == 1) continue
+            val parts = list.filter { it.id in ids }; list.removeAll(parts); val hi = list.indexOfFirst { it.id == h.id }; if (hi < 0) continue
+            list.addAll(if (behind) hi else hi + 1, parts) }
+        return list
+    }
     private var flockXf: DoubleArray? = null
     private fun paintLayer(c: Canvas, p: Project, l: Layer, t: Double) {
         // 506 Sürü Hareketi: katman, sürüdeki her birey için kopyalanır

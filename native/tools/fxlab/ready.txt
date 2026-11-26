@@ -166,6 +166,7 @@ edgeband
 edgedirmatte
 edgeextend
 edges
+elasticline
 electricedges
 ellipsefx
 ellipsoid
@@ -177,6 +178,7 @@ exposurefuse
 exposurezones
 extrude
 eyedropper
+eyelid
 feather
 feedbackloop
 fftnotch
@@ -276,6 +278,7 @@ kernelfilter
 keylight
 knitting
 lathe3d
+lattice
 leaffall
 lens
 lensblur
@@ -379,6 +382,7 @@ pointcloud
 poissondots
 polar
 polardisp
+poseblend
 posterize
 powervoronoi
 prismfx

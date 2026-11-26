@@ -18,6 +18,7 @@ object Physics {
     private val cache = HashMap<String, Sim>()
 
     /** Önbellekli adım: init başlangıç durumu, step bir adım ilerletir */
+    fun sim(id: String, key: Int, start: Double, t: Double, init: () -> DoubleArray, step: (DoubleArray, Double) -> Unit) = run(id, key, start, t, init, step)
     private fun run(id: String, key: Int, start: Double, t: Double, init: () -> DoubleArray, step: (DoubleArray, Double) -> Unit): DoubleArray {
         var sim = cache[id]
         if (sim == null || sim.key != key || sim.t > t + 1e-9) { sim = Sim(key, start, init()); cache[id] = sim }

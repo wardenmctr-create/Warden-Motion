@@ -70,3 +70,17 @@ N8A([
  (673, "treerings", "Prosedürel", "pixel", ["Ağaç", "Halka"], None), (674, "foamcells", "Prosedürel", "gen", ["Köpük", "Hücre"], None),
  (675, "flowerrosette", "Prosedürel", "gen", ["Çiçek", "Rozet"], {"box": 0.3}),
 ])
+N8A([
+ (676, "lookat", "Taşı ve Dönüştür", "xform", ["Hedef", "Dönüş"], None), (677, "seek", "Taşı ve Dönüştür", "xform", ["Hedef", "Takip"], None),
+ (678, "flee", "Taşı ve Dönüştür", "xform", ["Hedef", "Kaçma"], None), (679, "keepbounds", "Taşı ve Dönüştür", "xform", ["Sınır", "Alan"], None),
+ (680, "velorient", "Taşı ve Dönüştür", "xform", ["Yön", "Hız"], None), (681, "velscale", "Taşı ve Dönüştür", "xform", ["Ölçek", "Hız"], None),
+ (682, "draginertia", "Taşı ve Dönüştür", "xform", ["Atalet", "Fizik"], None), (683, "motiondamp", "Taşı ve Dönüştür", "xform", ["Sönüm", "Yumuşatma"], None),
+ (684, "quantmotion", "Taşı ve Dönüştür", "xform", ["Basamak", "Hareket"], None), (685, "fitpath", "Taşı ve Dönüştür", "xform", ["Yol", "Alan"], None),
+ (687, "paramseq", "Taşı ve Dönüştür", "rig", ["Sıra", "Gecikme", "Grup"], None), (689, "loopblend", "Taşı ve Dönüştür", "xform", ["Döngü", "Birleştirme"], None),
+ (691, "eyelid", "Countryball", "pixel", ["Göz", "Kapak"], None), (692, "poseblend", "Countryball", "pixel", ["Göz", "İfade"], None),
+ (693, "partorder", "Countryball", "special", ["Sıra", "Aksesuar"], None), (694, "slideon", "Taşı ve Dönüştür", "xform", ["Yüzey", "Kayma"], None),
+ (695, "attach", "Taşı ve Dönüştür", "xform", ["Yapışma", "Bağlantı"], None), (696, "elasticline", "Diğer", "gen", ["Çizgi", "Elastik"], {"box": 1.0}),
+ (697, "jigglejoint", "Taşı ve Dönüştür", "xform", ["Eklem", "Sallanma"], None), (698, "dragchain", "Taşı ve Dönüştür", "rig", ["Sürükleme", "Grup"], None),
+ (699, "lattice", "Bükme ve Bozulma", "pixel", ["Kafes", "Deformasyon"], None), (700, "snapcurve", "Taşı ve Dönüştür", "xform", ["Eğri", "Yapışma"], None),
+])
+HIDE8.update({"lattice": ["kafesiSifi"]})

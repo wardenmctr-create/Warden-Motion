@@ -126688,6 +126688,1783 @@
 "heavy": false,
 "n": 675,
 "ready": true
+},
+{
+"type": "lookat",
+"name": "Hedefe Dön",
+"en": "",
+"cat": 6,
+"kind": "xform",
+"desc": "Nesneyi konumunu değiştirmeden hedef katmana veya noktaya doğru döndürür.",
+"tags": [
+"Hedef",
+"Dönüş"
+],
+"params": [
+{
+"k": "hedef",
+"l": "Hedef",
+"g": null,
+"anim": "no",
+"hint": "bakılacak katman veya nokta",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": ""
+},
+{
+"k": "aciOfse",
+"l": "Açı ofseti",
+"g": null,
+"anim": "yes",
+"hint": "nesnenin doğal bakış yönü telafisi",
+"kind": "jog",
+"min": -360.0,
+"max": 360.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"def": 0.0
+},
+{
+"k": "yumusatm",
+"l": "Yumuşatma",
+"g": null,
+"anim": "yes",
+"hint": "yön değişimi yumuşatma süresi",
+"kind": "jog",
+"min": 0.0,
+"max": 5.0,
+"step": 0.01,
+"jog": 0.01,
+"unit": "sn",
+"def": 0.15
+},
+{
+"k": "elleHedeNokt",
+"l": "Elle hedef noktası",
+"g": "Gelişmiş",
+"anim": "yes",
+"hint": "hedef katman seçilmemişse kullanılır",
+"kind": "jog",
+"two": true,
+"three": false,
+"min": -100,
+"max": 200,
+"defY": 50.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "box%",
+"def": 50.0
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Anlık bakış",
+"vals": {
+"yumusatm": 0.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 676,
+"ready": true
+},
+{
+"type": "seek",
+"name": "Hedefe Yaklaş",
+"en": "",
+"cat": 6,
+"kind": "xform",
+"desc": "Nesnenin seçilen hedefe kontrollü hızla yaklaşmasını sağlar; çizilen yola bağlı değildir.",
+"tags": [
+"Hedef",
+"Takip"
+],
+"params": [
+{
+"k": "hedef",
+"l": "Hedef",
+"g": null,
+"anim": "no",
+"hint": "izlenen hedef",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": ""
+},
+{
+"k": "hiz",
+"l": "Hız",
+"g": null,
+"anim": "yes",
+"hint": "en büyük yaklaşma hızı",
+"kind": "jog",
+"min": 0.0,
+"max": 5000.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 150.0
+},
+{
+"k": "durmaMesa",
+"l": "Durma mesafesi",
+"g": null,
+"anim": "yes",
+"hint": "hedefte bırakılacak mesafe",
+"kind": "jog",
+"min": 0.0,
+"max": 1000.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 20.0
+},
+{
+"k": "ivme",
+"l": "İvme",
+"g": "Gelişmiş",
+"anim": "yes",
+"hint": "hızın değişim sınırı",
+"kind": "jog",
+"min": 0.0,
+"max": 10000.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 300.0
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Yavaş yaklaşma",
+"vals": {
+"hiz": 60.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 677,
+"ready": true
+},
+{
+"type": "flee",
+"name": "Hedeften Uzaklaş",
+"en": "",
+"cat": 6,
+"kind": "xform",
+"desc": "Nesnenin hedefe yaklaştığında belirli etki yarıçapında uzaklaşmasını sağlar.",
+"tags": [
+"Hedef",
+"Kaçma"
+],
+"params": [
+{
+"k": "hedef",
+"l": "Hedef",
+"g": null,
+"anim": "no",
+"hint": "uzaklaşılacak hedef",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": ""
+},
+{
+"k": "etkiYari",
+"l": "Etki yarıçapı",
+"g": null,
+"anim": "yes",
+"hint": "etkinin başladığı uzaklık",
+"kind": "jog",
+"min": 1.0,
+"max": 3000.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 150.0
+},
+{
+"k": "itme",
+"l": "İtme",
+"g": null,
+"anim": "yes",
+"hint": "azami uzaklaşma hızı",
+"kind": "jog",
+"min": 0.0,
+"max": 5000.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 200.0
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 678,
+"ready": true
+},
+{
+"type": "keepbounds",
+"name": "Sınır İçinde Tut",
+"en": "",
+"cat": 6,
+"kind": "xform",
+"desc": "Nesnenin seçilen dikdörtgen veya maske alanından taşmasını engeller; fiziksel çarpışma şart değildir.",
+"tags": [
+"Sınır",
+"Alan"
+],
+"params": [
+{
+"k": "sinir",
+"l": "Sınır",
+"g": null,
+"anim": "no",
+"hint": "sınırlayıcı katman/maske",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": ""
+},
+{
+"k": "kirpDurd",
+"l": "Kırp/durdur",
+"g": null,
+"anim": "step",
+"hint": "görsel kırpma veya konum kısıtı",
+"kind": "choice",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"opts": [
+"Kırp",
+"Durdur"
+],
+"def": 1
+},
+{
+"k": "kenarPayi",
+"l": "Kenar payı",
+"g": null,
+"anim": "yes",
+"hint": "sınır içi güvenli boşluk",
+"kind": "jog",
+"min": 0.0,
+"max": 500.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 10.0
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 679,
+"ready": true
+},
+{
+"type": "velorient",
+"name": "Yönü Hıza Bağla",
+"en": "",
+"cat": 6,
+"kind": "xform",
+"desc": "Nesnenin yönünü anlık hareket vektörüne hizalar; elle çizilmiş yol gerektirmez.",
+"tags": [
+"Yön",
+"Hız"
+],
+"params": [
+{
+"k": "aciOfse",
+"l": "Açı ofseti",
+"g": null,
+"anim": "yes",
+"hint": "doğal yön ofseti",
+"kind": "jog",
+"min": -360.0,
+"max": 360.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"def": 0.0
+},
+{
+"k": "yumusatm",
+"l": "Yumuşatma",
+"g": null,
+"anim": "yes",
+"hint": "yön filtresi",
+"kind": "jog",
+"min": 0.0,
+"max": 5.0,
+"step": 0.01,
+"jog": 0.01,
+"unit": "sn",
+"def": 0.1
+},
+{
+"k": "asgariHiz",
+"l": "Asgari hız",
+"g": null,
+"anim": "yes",
+"hint": "açı güncelleme alt sınırı",
+"kind": "jog",
+"min": 0.0,
+"max": 1000.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 5.0
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Kesin yön",
+"vals": {
+"yumusatm": 0.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 680,
+"ready": true
+},
+{
+"type": "velscale",
+"name": "Hıza Bağlı Ölçek",
+"en": "",
+"cat": 6,
+"kind": "xform",
+"desc": "Hız arttıkça nesnenin boyutunu tanımlanan eğriye göre değiştirir; Ez ve Esnet'ten farklı tekdüze ölçek veya bağımsız parametre sürücüsü.",
+"tags": [
+"Ölçek",
+"Hız"
+],
+"params": [
+{
+"k": "hizOlceEgri",
+"l": "Hız/ölçek eğrisi",
+"g": null,
+"anim": "no",
+"hint": "0→100%, 1→120%",
+"kind": "curve",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"hideUi": true,
+"def": [
+[
+0,
+0
+],
+[
+1,
+1
+]
+]
+},
+{
+"k": "azamiHiz",
+"l": "Azami hız",
+"g": null,
+"anim": "yes",
+"hint": "eğrinin üst hız referansı",
+"kind": "jog",
+"min": 1.0,
+"max": 10000.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 300.0
+},
+{
+"k": "oraniKoru",
+"l": "Oranı koru",
+"g": null,
+"anim": "step",
+"hint": "X ve Y aynı oranda ölçeklenir",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 681,
+"ready": true
+},
+{
+"type": "draginertia",
+"name": "Sürükleme Ataleti",
+"en": "",
+"cat": 6,
+"kind": "xform",
+"desc": "Elle belirlenen hareket durduktan sonra nesnenin sanal ataletle kısa süre ilerlemesini sağlar.",
+"tags": [
+"Atalet",
+"Fizik"
+],
+"params": [
+{
+"k": "atalet",
+"l": "Atalet",
+"g": null,
+"anim": "yes",
+"hint": "kaynak hızından kalan atalet",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 60.0
+},
+{
+"k": "surtunme",
+"l": "Sürtünme",
+"g": null,
+"anim": "yes",
+"hint": "hızın sönme oranı",
+"kind": "jog",
+"min": 0.1,
+"max": 30.0,
+"step": 0.01,
+"jog": 0.01,
+"unit": "sn",
+"def": 4.0
+},
+{
+"k": "azamiSure",
+"l": "Azami süre",
+"g": null,
+"anim": "yes",
+"hint": "ataletin azami süresi",
+"kind": "jog",
+"min": 0.0,
+"max": 10.0,
+"step": 0.01,
+"jog": 0.01,
+"unit": "sn",
+"def": 1.0
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Kısa kayma",
+"vals": {
+"atalet": 30.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Uzun kayma",
+"vals": {
+"surtunme": 2.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 682,
+"ready": true
+},
+{
+"type": "motiondamp",
+"name": "Hareket Sönümleyici",
+"en": "",
+"cat": 6,
+"kind": "xform",
+"desc": "Keyframe konumundaki hızlı yön değişimlerini zamansal filtre ile yumuşatır; görüntü bulanıklığı oluşturmaz.",
+"tags": [
+"Sönüm",
+"Yumuşatma"
+],
+"params": [
+{
+"k": "sonum",
+"l": "Sönüm",
+"g": null,
+"anim": "yes",
+"hint": "hızlı değişimlerin bastırılması",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 60.0
+},
+{
+"k": "azamiGeci",
+"l": "Azami gecikme",
+"g": null,
+"anim": "yes",
+"hint": "izin verilen filtre gecikmesi",
+"kind": "jog",
+"min": 0.0,
+"max": 3.0,
+"step": 0.01,
+"jog": 0.01,
+"unit": "sn",
+"def": 0.2
+},
+{
+"k": "uclariKoru",
+"l": "Uçları koru",
+"g": null,
+"anim": "step",
+"hint": "ilk ve son pozları korur",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Hafif filtre",
+"vals": {
+"sonum": 25.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Yumuşak hareket",
+"vals": {
+"sonum": 85.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 683,
+"ready": true
+},
+{
+"type": "quantmotion",
+"name": "Hareketi Basamakla",
+"en": "",
+"cat": 6,
+"kind": "xform",
+"desc": "Belirli konum/ölçek/açı değerlerine yuvarlar; Kare Atla gibi zamanı dondurmaz.",
+"tags": [
+"Basamak",
+"Hareket"
+],
+"params": [
+{
+"k": "konumAdim",
+"l": "Konum adımı",
+"g": null,
+"anim": "yes",
+"hint": "konum ızgara adımı",
+"kind": "jog",
+"two": true,
+"three": false,
+"min": 0.0,
+"max": 500.0,
+"defY": 10.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 10.0
+},
+{
+"k": "aciAdim",
+"l": "Açı adımı",
+"g": null,
+"anim": "yes",
+"hint": "açı adımı",
+"kind": "jog",
+"min": 0.0,
+"max": 180.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"def": 15.0
+},
+{
+"k": "olcekAdim",
+"l": "Ölçek adımı",
+"g": null,
+"anim": "yes",
+"hint": "ölçek artış adımı",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 5.0
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 684,
+"ready": true
+},
+{
+"type": "fitpath",
+"name": "Hareket Alanına Uydur",
+"en": "",
+"cat": 6,
+"kind": "xform",
+"desc": "Kaynak hareket yolunu seçilen sahne alanına sığdırır, göreli pozları korur.",
+"tags": [
+"Yol",
+"Alan"
+],
+"params": [
+{
+"k": "hedefBoyu",
+"l": "Hedef boyut",
+"g": null,
+"anim": "yes",
+"hint": "hedef hareket alanı",
+"kind": "jog",
+"two": true,
+"three": false,
+"min": 1.0,
+"max": 10000.0,
+"defY": 400.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 600.0
+},
+{
+"k": "merkez",
+"l": "Merkez",
+"g": null,
+"anim": "yes",
+"hint": "alan merkezi",
+"kind": "jog",
+"two": true,
+"three": false,
+"min": -100,
+"max": 200,
+"defY": 50.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "box%",
+"def": 50.0
+},
+{
+"k": "oraniKoru",
+"l": "Oranı koru",
+"g": null,
+"anim": "step",
+"hint": "yolu orantılı ölçekler",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 685,
+"ready": true
+},
+{
+"type": "paramseq",
+"name": "Parametre Sıralayıcı",
+"en": "",
+"cat": 6,
+"kind": "rig",
+"desc": "Birden fazla kopyanın herhangi bir parametresini sıra boyunca farklı zamanda etkinleştirir.",
+"tags": [
+"Sıra",
+"Gecikme",
+"Grup"
+],
+"params": [
+{
+"k": "parametr",
+"l": "Parametre",
+"g": null,
+"anim": "step",
+"hint": "sıralanacak parametre",
+"kind": "choice",
+"min": 0,
+"max": 4,
+"step": 1,
+"jog": 1,
+"opts": [
+"Konum",
+"Ölçek",
+"Dönüş",
+"Opaklık",
+"desteklenen efekt değeri"
+],
+"def": 1
+},
+{
+"k": "gecikme",
+"l": "Gecikme",
+"g": null,
+"anim": "yes",
+"hint": "kopya başına gecikme",
+"kind": "jog",
+"min": -10.0,
+"max": 10.0,
+"step": 0.01,
+"jog": 0.01,
+"unit": "sn",
+"def": 0.1
+},
+{
+"k": "dagilim",
+"l": "Dağılım",
+"g": null,
+"anim": "no",
+"hint": "Doğrusal",
+"kind": "curve",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"hideUi": true,
+"def": [
+[
+0,
+0
+],
+[
+1,
+1
+]
+]
+},
+{
+"k": "kopyaGrub",
+"l": "Kopya grubu",
+"g": "Gelişmiş",
+"anim": "no",
+"hint": "indekslenecek katman/kopya listesi",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"multi": true,
+"def": ""
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Hızlı sıra",
+"vals": {
+"gecikme": 0.04
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Yavaş sıra",
+"vals": {
+"gecikme": 0.25
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 687,
+"ready": true
+},
+{
+"type": "loopblend",
+"name": "Döngü Birleştirme",
+"en": "",
+"cat": 6,
+"kind": "xform",
+"desc": "Katman animasyonunun son ve ilk bölümlerini harmanlayarak kesintisiz tekrar üretir.",
+"tags": [
+"Döngü",
+"Birleştirme"
+],
+"params": [
+{
+"k": "donguSure",
+"l": "Döngü süresi",
+"g": null,
+"anim": "yes",
+"hint": "tekrar periyodu",
+"kind": "jog",
+"min": 0.1,
+"max": 60.0,
+"step": 0.01,
+"jog": 0.01,
+"unit": "sn",
+"def": 2.0
+},
+{
+"k": "birlesimSure",
+"l": "Birleşim süresi",
+"g": null,
+"anim": "yes",
+"hint": "birleşim uzunluğu",
+"kind": "jog",
+"min": 0.0,
+"max": 30.0,
+"step": 0.01,
+"jog": 0.01,
+"unit": "sn",
+"def": 0.2
+},
+{
+"k": "ileriGeri",
+"l": "İleri/geri",
+"g": null,
+"anim": "step",
+"hint": "oynatma biçimi",
+"kind": "choice",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"opts": [
+"İleri",
+"İleri-geri"
+],
+"def": 0
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 689,
+"ready": true
+},
+{
+"type": "eyelid",
+"name": "Göz Kapağı Şekillendirici",
+"en": "",
+"cat": 16,
+"kind": "pixel",
+"desc": "Gözün kendisini ölçeklemek yerine üst ve alt kapak siluetlerini bağımsız yollarla hareket ettirir; mevcut kırpma gelişmiş modu adayı.",
+"tags": [
+"Göz",
+"Kapak"
+],
+"params": [
+{
+"k": "ustAltKapa",
+"l": "Üst/alt kapanma",
+"g": null,
+"anim": "yes",
+"hint": "üst ve alt kapağın kapanma oranı",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 0.0
+},
+{
+"k": "kavis",
+"l": "Kavis",
+"g": null,
+"anim": "yes",
+"hint": "kapak eğriliği",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 50.0
+},
+{
+"k": "gozMask",
+"l": "Göz maskesi",
+"g": null,
+"anim": "no",
+"hint": "göz şekli maskesi",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": ""
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 691,
+"ready": true
+},
+{
+"type": "poseblend",
+"name": "Göz İfade Karıştırıcı",
+"en": "",
+"cat": 16,
+"kind": "pixel",
+"desc": "İki hazırlanmış göz pozunu sürekli vektör şekil geçişiyle karıştırır; İfade Değiştir'in katman seçimine alternatif, mod adayı.",
+"tags": [
+"Göz",
+"İfade"
+],
+"params": [
+{
+"k": "ikiPoz",
+"l": "İki poz",
+"g": null,
+"anim": "no",
+"hint": "başlangıç ve hedef",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": ""
+},
+{
+"k": "karisim",
+"l": "Karışım",
+"g": null,
+"anim": "yes",
+"hint": "pozlar arası geçiş",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 0.0
+},
+{
+"k": "simetri",
+"l": "Simetri",
+"g": null,
+"anim": "step",
+"hint": "sağ/sol göz simetrisini korur",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Birinci poz",
+"vals": {
+"karisim": 0.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "İkinci poz",
+"vals": {
+"karisim": 100.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 692,
+"ready": true
+},
+{
+"type": "partorder",
+"name": "Karakter Parça Sırası",
+"en": "",
+"cat": 16,
+"kind": "special",
+"desc": "Aksesuar ve vücut parçalarının ön/arka sırasını açısal poz veya kullanıcı keyframe'iyle değiştirir.",
+"tags": [
+"Sıra",
+"Aksesuar"
+],
+"params": [
+{
+"k": "parcalar",
+"l": "Parçalar",
+"g": null,
+"anim": "no",
+"hint": "sıralanacak parçalar",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"multi": true,
+"def": ""
+},
+{
+"k": "aci",
+"l": "Açı",
+"g": null,
+"anim": "yes",
+"hint": "poz açısı",
+"kind": "jog",
+"min": -180.0,
+"max": 180.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"def": 0.0
+},
+{
+"k": "siraSabl",
+"l": "Sıra şablonu",
+"g": null,
+"anim": "step",
+"hint": "sıra kuralı",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Öne/arkaya",
+"Kullanıcı sırası",
+"Açı tablosu"
+],
+"def": 0
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 693,
+"ready": true
+},
+{
+"type": "slideon",
+"name": "Yüzey Üzerinde Kayma",
+"en": "",
+"cat": 6,
+"kind": "xform",
+"desc": "Bir aksesuarın karakterin dış konturu boyunca ilerlemesini ve kontura teğet dönmesini sağlar.",
+"tags": [
+"Yüzey",
+"Kayma"
+],
+"params": [
+{
+"k": "govde",
+"l": "Gövde",
+"g": null,
+"anim": "no",
+"hint": "kontur sağlayan gövde",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": ""
+},
+{
+"k": "konturIler",
+"l": "Kontur ilerlemesi",
+"g": null,
+"anim": "yes",
+"hint": "kontur üzerindeki konum",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 0.0
+},
+{
+"k": "uzaklik",
+"l": "Uzaklık",
+"g": null,
+"anim": "yes",
+"hint": "dışa/içe normal uzaklık",
+"kind": "jog",
+"min": -500.0,
+"max": 500.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 0.0
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Kontura otur",
+"vals": {
+"uzaklik": 0.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Dış aksesuar",
+"vals": {
+"uzaklik": 15.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 694,
+"ready": true
+},
+{
+"type": "attach",
+"name": "Yapışma ve Ayrılma",
+"en": "",
+"cat": 6,
+"kind": "xform",
+"desc": "İki katman seçilen anda bağlanır ve ayrılır; ayrıldığında dünya konumu korunur.",
+"tags": [
+"Yapışma",
+"Bağlantı"
+],
+"params": [
+{
+"k": "hedef",
+"l": "Hedef",
+"g": null,
+"anim": "no",
+"hint": "ebeveyn hedef",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": ""
+},
+{
+"k": "bagli",
+"l": "Bağlı",
+"g": null,
+"anim": "step",
+"hint": "bağlı veya bağımsız durum",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 0
+},
+{
+"k": "bagNokt",
+"l": "Bağ noktası",
+"g": null,
+"anim": "yes",
+"hint": "hedefin yerel bağlantı noktası",
+"kind": "jog",
+"two": true,
+"three": false,
+"min": -2000.0,
+"max": 2000.0,
+"defY": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 0.0
+},
+{
+"k": "ayrilmadDunyDonu",
+"l": "Ayrılmada dünya dönüşümünü koru",
+"g": "Gelişmiş",
+"anim": "step",
+"hint": "konum/dönüş sıçramasını önler",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Serbest",
+"vals": {
+"bagli": 0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Takip",
+"vals": {
+"bagli": 1
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 695,
+"ready": true
+},
+{
+"type": "elasticline",
+"name": "Elastik Çekme Çizgisi",
+"en": "",
+"cat": 11,
+"kind": "gen",
+"desc": "İki uç noktası katmanlara bağlı, orta kısmı gerilime göre kıvrılan stilize çizgi üretir; normal bağlantı çizgisinden farklı.",
+"tags": [
+"Çizgi",
+"Elastik"
+],
+"params": [
+{
+"k": "uclar",
+"l": "Uçlar",
+"g": null,
+"anim": "no",
+"hint": "bağlı katmanlar",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"multi": true,
+"def": ""
+},
+{
+"k": "gerilim",
+"l": "Gerilim",
+"g": null,
+"anim": "yes",
+"hint": "eğrinin gerginliği",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 60.0
+},
+{
+"k": "sarkma",
+"l": "Sarkma",
+"g": null,
+"anim": "yes",
+"hint": "orta bölümün sarkması",
+"kind": "jog",
+"min": 0.0,
+"max": 1000.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 30.0
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Gergin",
+"vals": {
+"gerilim": 95.0,
+"sarkma": 5.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Sarkık",
+"vals": {
+"gerilim": 20.0,
+"sarkma": 100.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": {
+"box": 1.0
+},
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 696,
+"ready": true
+},
+{
+"type": "jigglejoint",
+"name": "Katmanlar Arası Sallanan Eklem",
+"en": "",
+"cat": 6,
+"kind": "xform",
+"desc": "İki ayrı nesnenin bağlandığı nokta sabit kalırken alt nesne açısal yay davranışıyla sallanır.",
+"tags": [
+"Eklem",
+"Sallanma"
+],
+"params": [
+{
+"k": "ebeveyn",
+"l": "Ebeveyn",
+"g": null,
+"anim": "no",
+"hint": "bağlanan üst nesne",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": ""
+},
+{
+"k": "bagNokt",
+"l": "Bağ noktası",
+"g": null,
+"anim": "yes",
+"hint": "sabit yerel mafsal",
+"kind": "jog",
+"two": true,
+"three": false,
+"min": -2000.0,
+"max": 2000.0,
+"defY": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 0.0
+},
+{
+"k": "sertlik",
+"l": "Sertlik",
+"g": null,
+"anim": "yes",
+"hint": "açısal yayın sertliği",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 50.0
+},
+{
+"k": "sonum",
+"l": "Sönüm",
+"g": "Gelişmiş",
+"anim": "yes",
+"hint": "salınımın zamanla azalması",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 35.0
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Sert mafsal",
+"vals": {
+"sertlik": 90.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Yumuşak mafsal",
+"vals": {
+"sertlik": 20.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 697,
+"ready": true
+},
+{
+"type": "dragchain",
+"name": "Katman Sırası ile Sürükleme",
+"en": "",
+"cat": 6,
+"kind": "rig",
+"desc": "Seçili katmanlara farklı gecikme ve konum ağırlıkları uygular; birbirini izleyen zincir olmadan ortak hareket üretir.",
+"tags": [
+"Sürükleme",
+"Grup"
+],
+"params": [
+{
+"k": "katmanla",
+"l": "Katmanlar",
+"g": null,
+"anim": "no",
+"hint": "hareket uygulanan katmanlar",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"multi": true,
+"def": ""
+},
+{
+"k": "gecikme",
+"l": "Gecikme",
+"g": null,
+"anim": "yes",
+"hint": "katman başına gecikme",
+"kind": "jog",
+"min": -5.0,
+"max": 5.0,
+"step": 0.01,
+"jog": 0.01,
+"unit": "sn",
+"def": 0.08
+},
+{
+"k": "agirlik",
+"l": "Ağırlık",
+"g": null,
+"anim": "no",
+"hint": "1→0,5 doğrusal",
+"kind": "curve",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"hideUi": true,
+"def": [
+[
+0,
+0
+],
+[
+1,
+1
+]
+]
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Dalga sırası",
+"vals": {
+"gecikme": 0.12
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Birlikte",
+"vals": {
+"gecikme": 0.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 698,
+"ready": true
+},
+{
+"type": "lattice",
+"name": "Deforme Kafes",
+"en": "",
+"cat": 3,
+"kind": "pixel",
+"desc": "Bir nesnenin çevresindeki düzenlenebilir X/Y kafes noktalarıyla bütün silueti yumuşak olarak dönüştürür; kukla piminden farklı dış kafes.",
+"tags": [
+"Kafes",
+"Deformasyon"
+],
+"params": [
+{
+"k": "satirSutu",
+"l": "Satır/sütun",
+"g": null,
+"anim": "yes",
+"hint": "kontrol noktası ızgarası (her eksen)",
+"kind": "jog",
+"min": 2.0,
+"max": 16.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 4.0
+},
+{
+"k": "kafesNokt",
+"l": "Kafes noktası",
+"g": null,
+"anim": "yes",
+"hint": "seçili kontrolün yer değiştirmesi",
+"kind": "jog",
+"two": true,
+"three": false,
+"min": -2000.0,
+"max": 2000.0,
+"defY": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 0.0
+},
+{
+"k": "esneklik",
+"l": "Esneklik",
+"g": null,
+"anim": "yes",
+"hint": "yumuşak deformasyon oranı",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 70.0
+},
+{
+"k": "kafesiSifi",
+"l": "Kafesi sıfırla",
+"g": "Gelişmiş",
+"anim": "no",
+"hint": "kontrol noktalarını başlangıç ızgarasına getirir",
+"kind": "button",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"hideUi": true,
+"def": 0
+}
+],
+"presets": [
+{
+"code": "S2",
+"name": "Ayrıntılı kafes",
+"vals": {
+"esneklik": 85.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 699,
+"ready": true
+},
+{
+"type": "snapcurve",
+"name": "Çizgiye Yapışan Nesne",
+"en": "",
+"cat": 6,
+"kind": "xform",
+"desc": "Nesneyi hedef eğrinin en yakın noktasına sürekli projekte eder; yol ilerleme kontrolü zorunlu değildir.",
+"tags": [
+"Eğri",
+"Yapışma"
+],
+"params": [
+{
+"k": "egri",
+"l": "Eğri",
+"g": null,
+"anim": "no",
+"hint": "hedef eğri",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": ""
+},
+{
+"k": "uzaklik",
+"l": "Uzaklık",
+"g": null,
+"anim": "yes",
+"hint": "eğriden normal uzaklık",
+"kind": "jog",
+"min": -500.0,
+"max": 500.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 0.0
+},
+{
+"k": "tegeteDon",
+"l": "Teğete dön",
+"g": null,
+"anim": "step",
+"hint": "nesne yönünü eğrinin teğetine uydurur",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Yola hizala",
+"vals": {
+"uzaklik": 0.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Serbest yön",
+"vals": {
+"uzaklik": 15.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 700,
+"ready": true
 }
 ],
 "featured": [
