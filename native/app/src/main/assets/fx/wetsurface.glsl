@@ -2,9 +2,9 @@
 uniform sampler2D s_yansimaKatm, s_bgsrc; uniform float p_yansimaKatmOn, p_bgsrcOn;
 uniform float p_islaklik, p_yuzeyKara, p_yansimaGucu, p_puruzlul, p_suKali, p_yansimaBula, p_yansimaKayn, p_suBiri, p_birikintYogu, p_suAkis, p_akisHizi, p_alfaSiniKoru;
 void main() { vec4 s = texture(u_tex, v_uv); vec2 q = toUnit(here()); vec2 b = boxUV(here()); float w = p_islaklik / 100.0;
-  float pud = p_suBiri > 0.5 ? smoothstep(0.55 - p_birikintYogu / 200.0, 0.6 - p_birikintYogu / 200.0, fbm(q * 0.008, 4.0)) : 0.0;
+  float pud = p_suBiri > 0.5 ? smoothstep(0.55 - p_birikintYogu / 200.0, 0.6 - p_birikintYogu / 200.0, fbm01(q * 0.008, 4.0)) : 0.0;
   vec2 rip = p_suAkis > 0.5 ? vec2(sin(q.y * 0.2 + u_t * p_akisHizi * 0.2), cos(q.x * 0.17 + u_t * p_akisHizi * 0.15)) * 0.004 : vec2(0.0);
-  vec2 n = (vec2(fbm(q * 0.05, 3.0), fbm(q * 0.05 + 5.0, 3.0)) - 0.5) * p_puruzlul / 100.0 * 0.05 * (1.0 - pud) + rip;
+  vec2 n = (vec2(fbm01(q * 0.05, 3.0), fbm01(q * 0.05 + 5.0, 3.0)) - 0.5) * p_puruzlul / 100.0 * 0.05 * (1.0 - pud) + rip;
   vec2 ru = vec2(b.x, 1.0 - b.y) + n; vec3 refl;
   if (p_yansimaKayn > 1.5 && p_yansimaKatmOn > 0.5) refl = unpre(texture(s_yansimaKatm, clamp(ru, 0.0, 1.0)));
   else if (p_yansimaKayn > 0.5 && p_bgsrcOn > 0.5) refl = unpre(texture(s_bgsrc, clamp(ru, 0.0, 1.0)));

@@ -73,6 +73,7 @@ colorama
 colorbal
 coloremboss
 colorize
+colormatch
 colorprofile
 colorrange
 colorstab
@@ -91,13 +92,21 @@ crossblur
 crossprocess
 crt
 cube
+cubism
 curl
 curves
 cutback
 cylinder
 darkglow
 datacorrupt
+deadpixel
+debandfix
+deblock
 deblur
+dehalo
+dehaze
+deinterlace
+demoire
 denoise
 depthblur
 depthfog
@@ -120,6 +129,7 @@ emboss
 embroidery
 equalize
 exposure
+exposurefuse
 extrude
 eyedropper
 feather
@@ -129,6 +139,8 @@ flagpole3d
 flagwave
 flip3d
 flomotion
+floorreflect
+floorshadow
 foam
 fog
 fold3d
@@ -137,6 +149,7 @@ fractal
 fractalnoise
 fractalset
 frame
+freqsep
 fringe
 frostglass
 galaxy
@@ -161,6 +174,7 @@ gridwipe
 growparts
 grunge
 hair
+halation
 halftone
 halftonelines
 hdrsdr
@@ -196,6 +210,7 @@ keylight
 leaffall
 lens
 lensblur
+lensdirt
 lensflare
 levels
 lightglow
@@ -203,6 +218,7 @@ lightning
 lightrays
 lightsweep
 lightwipe
+lightwrap
 lincolorkey
 linesweep
 linrepeat
@@ -212,12 +228,14 @@ liquify
 logconv
 lomo
 longshadow
+lowpoly
 lumakey
 lumastamp
 lumetri
 lut
 magnify
 magnifybg
+markerpen
 maskblur
 median
 mercury
@@ -233,6 +251,7 @@ nightvision
 noise
 noisealpha
 noisehls
+normalmap
 octahedron
 offset
 oilpaint
@@ -240,9 +259,12 @@ oldfilm
 ominodiff
 ominoglass
 opticscomp
+origami
 pageturn
 paintbucket
+paintbynumber
 palettemap
+paperrelief
 particles
 particleworld
 pencilhatch
@@ -260,6 +282,7 @@ polar
 polardisp
 posterize
 pyramid
+quilling
 radialshadow
 radiowaves
 radrepeat
@@ -268,6 +291,7 @@ radwipe
 rain
 rays
 reflect
+relight
 remaphsv
 reorient360
 repeatpath
@@ -280,8 +304,10 @@ ring3d
 ringplanet
 ripple
 ripplepulse
+rollingfix
 roughen
 roundcorners
+sandart
 sandstorm
 scalewipe
 scanlines
@@ -289,6 +315,7 @@ scatter
 scatterfield
 scatterize
 scatterpx
+scratchart
 scribble
 selcolor
 sepia
@@ -301,6 +328,7 @@ shear
 sketch
 slant
 slices
+smartfill
 smear
 smoke
 smoothedges
@@ -325,6 +353,7 @@ stipple
 streaks
 streakstrips
 stretchseg
+stringart
 stripes
 strobelight
 stroke
@@ -344,6 +373,7 @@ tileshift
 tiltshift
 tinyplanet
 tornado
+tornpaper
 torus
 triprism
 tritone
@@ -352,6 +382,7 @@ twister
 underwater
 unsharp
 upscale
+uvmap
 vectorblur
 vegas
 vhs

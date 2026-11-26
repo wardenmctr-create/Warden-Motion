@@ -19,15 +19,43 @@ NEW = {  # n: (tür, kategori, tür(kind), etiketler, ped)
  459: ("embroidery", "Çizim ve Kenar", "pixel", ["Nakış", "İplik", "Kumaş"], {"add": 6}), 460: ("pencilhatch", "Çizim ve Kenar", "pixel", ["Kalem", "Tarama", "Eskiz"], None),
  461: ("photocopy", "Renk ve Işık", "pixel", ["Fotokopi", "Baskı", "Eski"], None), 462: ("datacorrupt", "Bükme ve Bozulma", "pixel", ["Bozulma", "Dijital", "Glitch"], None),
 }
+
+NEW.update({
+ 463: ("debandfix", "Renk ve Işık", "pixel", ["Onarım", "Bant", "Geçiş"], None), 464: ("deinterlace", "Diğer", "pixel", ["Onarım", "Video", "Tarama"], None),
+ 465: ("deadpixel", "Diğer", "pixel", ["Onarım", "Piksel"], None), 466: ("smartfill", "Maske ve Anahtar", "pixel", ["Onarım", "Doldurma", "Maske"], None),
+ 467: ("dehaze", "Renk ve Işık", "pixel", ["Onarım", "Pus", "Netlik"], None), 469: ("rollingfix", "Bükme ve Bozulma", "pixel", ["Onarım", "Video", "Eğilme"], None),
+ 470: ("demoire", "Diğer", "pixel", ["Onarım", "Desen"], None), 471: ("deblock", "Diğer", "pixel", ["Onarım", "Sıkıştırma", "Blok"], None),
+ 472: ("dehalo", "Çizim ve Kenar", "pixel", ["Onarım", "Kenar", "Hale"], None),
+ 474: ("stringart", "Çizim ve Kenar", "pixel", ["Sanat", "İplik", "Çivi"], None), 475: ("lowpoly", "Çizim ve Kenar", "pixel", ["Sanat", "Çokgen", "Üçgen"], None),
+ 476: ("markerpen", "Çizim ve Kenar", "pixel", ["Sanat", "Kalem", "Keçeli"], None), 477: ("tornpaper", "Çizim ve Kenar", "pixel", ["Sanat", "Kolaj", "Kâğıt"], None),
+ 478: ("quilling", "Çizim ve Kenar", "pixel", ["Sanat", "Kâğıt", "Kıvırma"], None), 479: ("origami", "Çizim ve Kenar", "pixel", ["Sanat", "Kâğıt", "Katlama"], None),
+ 480: ("sandart", "Çizim ve Kenar", "pixel", ["Sanat", "Kum", "Tanecik"], None), 481: ("scratchart", "Çizim ve Kenar", "pixel", ["Sanat", "Kazıma"], None),
+ 482: ("cubism", "Çizim ve Kenar", "pixel", ["Sanat", "Kübizm", "Geometri"], None), 483: ("paintbynumber", "Çizim ve Kenar", "pixel", ["Sanat", "Boyama", "Numara"], None),
+ 484: ("paperrelief", "Çizim ve Kenar", "pixel", ["Sanat", "Kâğıt", "Kabartma"], None),
+ 485: ("halation", "Renk ve Işık", "pixel", ["Işık", "Film", "Hale"], {"k": "yayilim", "mul": 1.5}), 486: ("lightwrap", "Renk ve Işık", "pixel", ["Işık", "Birleştirme"], None),
+ 487: ("lensdirt", "Renk ve Işık", "pixel", ["Işık", "Mercek", "Toz"], None), 488: ("relight", "Renk ve Işık", "pixel", ["Işık", "Aydınlatma", "Normal"], None),
+ 489: ("normalmap", "Renk ve Işık", "pixel", ["Normal", "Harita", "Yükseklik"], None), 490: ("uvmap", "Bükme ve Bozulma", "pixel", ["UV", "Eşleme", "Doku"], None),
+ 491: ("floorshadow", "Renk ve Işık", "pixel", ["Gölge", "Zemin"], {"box": 0.6}), 492: ("floorreflect", "Renk ve Işık", "pixel", ["Yansıma", "Zemin"], {"box": 0.8}),
+ 493: ("freqsep", "Renk ve Işık", "pixel", ["Rötuş", "Frekans"], None), 494: ("colormatch", "Renk ve Işık", "pixel", ["Renk", "Eşleme", "Referans"], None),
+ 495: ("exposurefuse", "Renk ve Işık", "pixel", ["Pozlama", "HDR", "Birleştirme"], None),
+})
+# Tek karelik motorda karşılığı olmayan (zaman/analiz isteyen) ayarlar gizlenir; seçenekler yalnız çalışanlarla sınırlanır
+HIDE = {"deinterlace": ["cikisHizi", "sahneKesiKoru"], "deadpixel": ["zamansalDogr", "dogrulamSure"], "smartfill": ["zamanTuta", "kareAral"], "dehaze": ["karelerArasDeng"],
+        "rollingfix": ["hareketKayn", "okumaSure"], "deblock": ["zamansalDeng"], "uvmap": ["eslemeYont", "orneklem"], "colormatch": ["referansZama", "zamansalYumu"],
+        "exposurefuse": ["otomatikHiza", "hayaletGoruAzal"], "datacorrupt": ["oncekiKareTasi", "kareHafi", "sahneDegiHafi"], "globe3d": [], "flagpole3d": [], "gear3d": ["baskaDislBagl", "baglantiDisl", "donusHiziDis"],
+        "depthparallax": [], "volumelight": []}
+TRIM = {("smartfill", "yontem"): 2, ("deinterlace", "alanSira"): 3}
 READY2 = set(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "ready2.txt")).read().split()) if os.path.exists(os.path.join(os.path.dirname(os.path.abspath(__file__)), "ready2.txt")) else set()
-_POS = _re.compile(r"(merkez|konum|ufuk|nokta)", _re.I)
+_POS = _re.compile(r"(merkez|konum|ufuk|nokta|kök|başlangıç$|bitiş$|bağlantı|hedef)", _re.I)
+MATS = ["Beyaz kâğıt", "Renkli kâğıt", "Kraft kâğıt", "Karton", "Parşömen", "Keçe"]
 _BASE3D = [copy.deepcopy(p) for p in _BY["cube"]["params"] if p.get("g") in ("3B Dönüşüm", "Kamera", "Işık ve Gölge", "Malzeme")]
 def _conv(p):
     q = {k: v for k, v in p.items() if k not in ("code",)}
     if q.get("two") and q.get("unit") in ("%", "") and _POS.search(q["l"]): q["unit"] = "box%"; q["min"], q["max"] = -100, 200
     if q["kind"] in ("toggle", "choice"): q["anim"] = "step"
     if q["kind"] in ("source", "button", "text", "info"): q["anim"] = "no"
-    if q["kind"] == "button" and not q.get("reset"): q["hideUi"] = True  # işlevi tanımlı olmayan eylem düğmeleri gösterilmez
+    if q["kind"] == "button" and not q.get("reset"): q["hideUi"] = True
+    if q["kind"] == "info" and p.get("code") == "Ş": q.update(kind="choice", min=0, max=len(MATS) - 1, def_=0, opts=list(MATS), anim="step")  # işlevi tanımlı olmayan eylem düğmeleri gösterilmez
     return q
 for n, (t, cat, kind, tags, pad) in NEW.items():
     s = _SP2[str(n)]
@@ -41,4 +69,7 @@ for n, (t, cat, kind, tags, pad) in NEW.items():
     e["ready"] = t in READY2
     e["hidden"] = not e["ready"]
     e["presets"] = []
+    for p in e["params"]:
+        if p["k"] in HIDE.get(t, []): p["hideUi"] = True
+        if (t, p["k"]) in TRIM: p["opts"] = p["opts"][:TRIM[(t, p["k"])]]; p["max"] = len(p["opts"]) - 1; p["def_"] = min(p["def_"], p["max"])
 NP = {}

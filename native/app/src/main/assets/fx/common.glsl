@@ -56,6 +56,7 @@ float fbm(vec2 p, float oct) { // oct: ondalıklı ayrıntı
   for (int i = 0; i < 8; i++) { float w = clamp(oct + 1.0 - float(i), 0.0, 1.0); if (w <= 0.0) break; s += pnoise(p) * a * w; n += a * w; p = p * 2.03 + 17.1; a *= 0.5; }
   return n > 0.0 ? s / n : 0.0;
 }
+float fbm01(vec2 p, float oct) { return fbm(p, oct) * 0.5 + 0.5; } // 0..1 aralığında
 
 // --- yardımcılar ---
 mat2 rot2(float deg) { float a = radians(deg), c = cos(a), s = sin(a); return mat2(c, s, -s, c); }

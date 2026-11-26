@@ -7,7 +7,7 @@ void main() { vec2 q = toUnit(here()) - p_merkez; float r = length(q); float Rh 
   vec2 dq = rot2(degrees(sw)) * (q - normalize(q + 1e-4) * bend); vec4 c = mix(texU(q + p_merkez), bgAt(dq + p_merkez), w > 0.0 ? 1.0 : 0.0);
   if (p_isikliDisk > 0.5) { float tilt = cos(radians(p_diskEgim)); vec2 dp = vec2(q.x, q.y / max(tilt, 0.08)); float dr = length(dp); float a = atan(dp.y, dp.x) - u_t * radians(p_diskDonuHizi);
     float ring = smoothstep(Rh * 1.3, Rh * 1.6, dr) * smoothstep(Rh * 1.6 + p_diskGeni, Rh * 1.4 + p_diskGeni * 0.5, dr);
-    float tb = mix(1.0, fbm(vec2(a * 3.0, dr * 0.05), 3.0) * 1.6, p_turbulan / 100.0); float x = clamp((dr - Rh * 1.4) / max(p_diskGeni, 1.0), 0.0, 1.0);
+    float tb = mix(1.0, fbm01(vec2(a * 3.0, dr * 0.05), 3.0) * 1.6, p_turbulan / 100.0); float x = clamp((dr - Rh * 1.4) / max(p_diskGeni, 1.0), 0.0, 1.0);
     vec3 dc = mix(c_icDiskReng, c_disDiskReng, x) * (1.0 + 0.6 * cos(atan(dp.y, dp.x))) ; float behind = step(0.0, -q.y) * step(dr, Rh * 1.6 + p_diskGeni);
     float occl = (r < Rh * 1.05 && q.y < 0.0) ? 0.0 : 1.0; c = overPre(vec4(dc, 1.0) * clamp(ring * tb, 0.0, 1.0) * occl, c); }
   float hole = 1.0 - smoothstep(Rh * 0.98, Rh * 1.02, r); c = overPre(vec4(0.0, 0.0, 0.0, 1.0) * hole, c);

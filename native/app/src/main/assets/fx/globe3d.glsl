@@ -11,7 +11,7 @@ vec4 surf(vec3 p, vec3 n) {
   vec3 d = earthDir(p); vec2 uv = llUV(d); vec4 A = texture(t_world_a, uv); vec4 Bm = texture(t_world_b, uv);
   float land = A.a * (1.0 - Bm.b); vec3 pol = A.a > 0.0 ? A.rgb / A.a : vec3(0.0); float lat = abs(d.y);
   vec3 ocean = mix(vec3(0.06, 0.24, 0.52), vec3(0.03, 0.12, 0.32), smoothstep(0.0, 0.8, lat)); vec3 col;
-  float det = fbm(uv * vec2(80.0, 40.0), 4.0);
+  float det = fbm01(uv * vec2(80.0, 40.0), 4.0);
   vec3 phys = mix(mix(vec3(0.20, 0.45, 0.18), vec3(0.62, 0.52, 0.32), smoothstep(0.15, 0.4, lat) * smoothstep(0.62, 0.42, lat) + det * 0.25), vec3(0.95), smoothstep(0.72, 0.85, lat));
   if (p_harita < 0.5) col = mix(ocean * 1.1, pol, land);
   else if (p_harita < 1.5) col = mix(ocean, phys, land);
@@ -21,7 +21,7 @@ vec4 surf(vec3 p, vec3 n) {
   if (p_ulkeSini > 0.5) { float w = max(p_sinirKali, 0.0) / 2048.0; float b = Bm.r; for (int i = 0; i < 4; i++) { vec2 o = vec2(cos(float(i) * 1.57), sin(float(i) * 1.57)) * w; b = max(b, texture(t_world_b, uv + o).r); } col = mix(col, c_sinirReng, clamp(b * 1.4, 0.0, 1.0) * step(0.001, p_sinirKali + 1e-3)); }
   float ocn = 1.0 - land; vec3 Ld = normalize(vec3(-p_isikKonu.x, p_isikKonu.y, -p_isikKonu.z) * -1.0 + vec3(0.0, 0.0, 1e-3));
   col += vec3(pow(max(dot(reflect(-normalize(vec3(0.3, 0.5, 1.0)), n), vec3(0.0, 0.0, 1.0)), 0.0), 24.0)) * ocn * p_okyanusYans / 100.0;
-  if (p_bulutlar > 0.5) { vec2 cu = uv + vec2(u_t * p_bulutHizi / 360.0, 0.0); float cl = smoothstep(0.55 - p_bulutYogu / 250.0, 0.85, fbm(cu * vec2(24.0, 12.0), 5.0) + 0.1); col = mix(col, vec3(1.0), cl * 0.85); }
+  if (p_bulutlar > 0.5) { vec2 cu = uv + vec2(u_t * p_bulutHizi / 360.0, 0.0); float cl = smoothstep(0.55 - p_bulutYogu / 250.0, 0.85, fbm01(cu * vec2(24.0, 12.0), 5.0) + 0.1); col = mix(col, vec3(1.0), cl * 0.85); }
   if (p_geceIsik > 0.5 && p_harita < 2.5) { float dark = smoothstep(0.1, -0.3, dot(n, normalize(vec3(-0.6, 0.4, 0.7)))); col += vec3(1.0, 0.75, 0.4) * Bm.g * dark * 1.5; }
   return vec4(col, 1.0);
 }

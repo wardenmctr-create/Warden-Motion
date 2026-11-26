@@ -5,7 +5,7 @@ void main() { vec4 s = texture(u_tex, v_uv); vec2 q = toUnit(here()); vec2 B = b
   for (int i = 0; i < 60; i++) { if (float(i) >= N) break; float fi = float(i); float per = life * 1.6; float ph = u_t / per + hash1(vec2(fi, seedf(p_tohum))); float cyc = floor(ph); float k = fract(ph) * 1.6;
     if (p_dongu < 0.5 && u_dur > 0.0 && cyc * per > u_dur) continue; if (k > 1.0) continue;
     vec2 h = hash2(vec2(fi + cyc * 13.7, seedf(p_tohum) + 3.0)); float ang = radians(p_yon + (hash1(vec2(fi, cyc + 9.0)) - 0.5) * 2.0 * p_yonDagi); vec2 dir = vec2(cos(ang), sin(ang));
-    vec2 st = (h - 0.5) * B * 1.4 - dir * B * 0.35; vec2 head = st + dir * p_hiz * k * life; float sz = p_buyukluk * (1.0 + (hash1(vec2(fi, cyc + 2.0)) - 0.5) * p_rastgeleBuyu / 50.0);
+    float dist = p_hiz * life; vec2 mid = (h - 0.5) * B; vec2 head = mid + dir * dist * (k - 0.5); float sz = p_buyukluk * (1.0 + (hash1(vec2(fi, cyc + 2.0)) - 0.5) * p_rastgeleBuyu / 50.0);
     vec2 d = q - head; float along = dot(d, -dir); float perp = abs(dot(d, vec2(-dir.y, dir.x))); float fade = sin(k * PI);
     float tail = step(0.0, along) * (1.0 - smoothstep(0.0, max(p_izUzun, 1.0), along)) * (1.0 - smoothstep(sz * 0.2, sz * 0.6 * (1.0 - along / max(p_izUzun, 1.0)) + 0.3, perp));
     float hd = 1.0 - smoothstep(sz * 0.3, sz, length(d)); float gl = exp(-length(d) / max(sz * 3.0, 1.0)) * p_parlama / 100.0 * 0.6;
@@ -20,7 +20,7 @@ void main() { vec2 q = toUnit(here()) - p_merkez; float r = length(q); float Rh 
   vec2 dq = rot2(degrees(sw)) * (q - normalize(q + 1e-4) * bend); vec4 c = mix(texU(q + p_merkez), bgAt(dq + p_merkez), w > 0.0 ? 1.0 : 0.0);
   if (p_isikliDisk > 0.5) { float tilt = cos(radians(p_diskEgim)); vec2 dp = vec2(q.x, q.y / max(tilt, 0.08)); float dr = length(dp); float a = atan(dp.y, dp.x) - u_t * radians(p_diskDonuHizi);
     float ring = smoothstep(Rh * 1.3, Rh * 1.6, dr) * smoothstep(Rh * 1.6 + p_diskGeni, Rh * 1.4 + p_diskGeni * 0.5, dr);
-    float tb = mix(1.0, fbm(vec2(a * 3.0, dr * 0.05), 3.0) * 1.6, p_turbulan / 100.0); float x = clamp((dr - Rh * 1.4) / max(p_diskGeni, 1.0), 0.0, 1.0);
+    float tb = mix(1.0, fbm01(vec2(a * 3.0, dr * 0.05), 3.0) * 1.6, p_turbulan / 100.0); float x = clamp((dr - Rh * 1.4) / max(p_diskGeni, 1.0), 0.0, 1.0);
     vec3 dc = mix(c_icDiskReng, c_disDiskReng, x) * (1.0 + 0.6 * cos(atan(dp.y, dp.x))) ; float behind = step(0.0, -q.y) * step(dr, Rh * 1.6 + p_diskGeni);
     float occl = (r < Rh * 1.05 && q.y < 0.0) ? 0.0 : 1.0; c = overPre(vec4(dc, 1.0) * clamp(ring * tb, 0.0, 1.0) * occl, c); }
   float hole = 1.0 - smoothstep(Rh * 0.98, Rh * 1.02, r); c = overPre(vec4(0.0, 0.0, 0.0, 1.0) * hole, c);
@@ -30,9 +30,9 @@ uniform vec2 p_merkez; uniform float p_buyukluk, p_gazYogu, p_ayrinti, p_turbula
 void main() { vec4 s = texture(u_tex, v_uv); vec2 q = (toUnit(here()) - p_merkez) / max(length(boxU()) * 0.5 * p_buyukluk / 100.0, 1.0); float sd = seedf(p_tohum); vec4 acc = vec4(0.0);
   int L = int(clamp(p_bulutKatm, 1.0, 8.0));
   for (int i = 0; i < 8; i++) { if (i >= L) break; float fi = float(i); float z = 1.0 + fi * p_derinlik / 100.0 * 0.5; vec2 p = q * (2.0 + fi * 0.7) * z + vec2(u_t * p_hareketHizi * 0.002 * (1.0 + fi), fi * 3.1) + sd;
-    vec2 warp = vec2(fbm(p + 1.7, 3.0), fbm(p + 9.2, 3.0)) * p_turbulan / 100.0 * 2.0; float f = fbm(p + warp, 2.0 + p_ayrinti / 25.0);
-    float d = smoothstep(1.0 - p_gazYogu / 100.0 * 0.8, 1.0, f + 0.35 - length(q) * 0.35); vec3 c = mix(mix(c_birinciRenk, c_ikinciRenk, fbm(p * 0.7 + 4.0, 3.0)), c_ucuncuRenk, smoothstep(0.55, 0.8, f));
-    acc = overPre(vec4(c, 1.0) * d * 0.55, acc); }
+    vec2 warp = vec2(fbm01(p + 1.7, 3.0), fbm01(p + 9.2, 3.0)) * p_turbulan / 100.0 * 2.0; float f = fbm01(p + warp, 2.0 + p_ayrinti / 25.0);
+    float d = smoothstep(0.95 - p_gazYogu / 100.0 * 0.7, 1.05, f * 1.25 + 0.3 - length(q) * 0.3); vec3 c = mix(mix(c_birinciRenk, c_ikinciRenk, fbm01(p * 0.7 + 4.0, 3.0)), c_ucuncuRenk, smoothstep(0.55, 0.8, f));
+    acc = overPre(vec4(c, 1.0) * d * 0.7, acc); acc.rgb += c * d * 0.25 * (1.0 - acc.a); }
   if (p_yildizla > 0.5) { vec2 g = toUnit(here()) / 6.0; vec2 id = floor(g); vec2 f = fract(g) - 0.5; float h = hash1(id + sd); float st = step(1.0 - p_yildizYogu / 100.0 * 0.25, h) * (1.0 - smoothstep(0.02, 0.12, length(f - (hash2(id) - 0.5) * 0.6)));
     acc = overPre(vec4(1.0) * st * (0.6 + 0.4 * sin(u_t * 3.0 + h * 40.0)), acc); }
   o = overPre(acc, s); }
@@ -40,11 +40,11 @@ void main() { vec4 s = texture(u_tex, v_uv); vec2 q = (toUnit(here()) - p_merkez
 uniform float p_buyukluk, p_yuzeyAyri, p_yuzeyHare, p_parlakli, p_gunesLeke, p_lekeYogu, p_korona, p_koronaYuks, p_plazmaYayl, p_yayBuyu, p_parlama; uniform vec3 c_anaRenk, c_sicakBolg, c_koyuBolg;
 void main() { vec4 s = texture(u_tex, v_uv); vec2 q = toUnit(here()); float R = max(p_buyukluk * 0.5, 2.0); float r = length(q) / R; vec4 acc = vec4(0.0);
   if (r < 1.0) { vec3 n = vec3(q / R, sqrt(1.0 - r * r)); vec2 uv = vec2(atan(n.x, n.z), asin(n.y)) * 4.0; float tt = u_t * p_yuzeyHare / 100.0;
-    vec4 v = voronoi(uv * (3.0 + p_yuzeyAyri / 10.0) + tt * 0.3); float gr = smoothstep(0.0, 0.6, v.y - v.x); float f = fbm(uv * 2.0 + tt * 0.2, 4.0);
+    vec4 v = voronoi(uv * (3.0 + p_yuzeyAyri / 10.0) + tt * 0.3); float gr = smoothstep(0.0, 0.6, v.y - v.x); float f = fbm01(uv * 2.0 + tt * 0.2, 4.0);
     vec3 c = mix(c_koyuBolg, mix(c_anaRenk, c_sicakBolg, f), 0.5 + gr * 0.5); c *= mix(0.55, 1.0, pow(n.z, 0.4)) * p_parlakli / 100.0;
     if (p_gunesLeke > 0.5) { vec4 sv = voronoi(uv * 0.9 + 11.0); float spot = step(hash1(sv.zw), p_lekeYogu / 100.0) * (1.0 - smoothstep(0.08, 0.22, sv.x)); c = mix(c, c_koyuBolg * 0.25, spot); }
     acc = vec4(clamp(c, 0.0, 1.5), 1.0) * smoothstep(1.0, 0.985, r); }
-  if (p_korona > 0.5) { float a = atan(q.y, q.x); float rays = 0.6 + 0.4 * fbm(vec2(a * 4.0, u_t * 0.3), 3.0); float cor = exp(-(r - 1.0) / max(p_koronaYuks / 100.0 * 0.6 * rays, 0.02)) * step(1.0, r); acc = overPre(vec4(c_sicakBolg, 1.0) * cor * 0.7, acc); }
+  if (p_korona > 0.5) { float a = atan(q.y, q.x); float rays = 0.6 + 0.4 * fbm01(vec2(a * 4.0, u_t * 0.3), 3.0); float cor = exp(-(r - 1.0) / max(p_koronaYuks / 100.0 * 0.6 * rays, 0.02)) * step(1.0, r); acc = overPre(vec4(c_sicakBolg, 1.0) * cor * 0.7, acc); }
   if (p_plazmaYayl > 0.5) { for (int i = 0; i < 4; i++) { float fi = float(i); float a0 = hash1(vec2(fi, 4.0)) * TAU; vec2 c = vec2(cos(a0), sin(a0)) * R; vec2 l = rot2(-degrees(a0) + 90.0) * (q - c);
       float H = R * p_yayBuyu / 100.0 * (0.6 + 0.4 * sin(u_t * 0.7 + fi)); float arc = abs(length(vec2(l.x, l.y * 1.0) - vec2(0.0, 0.0)) - H * 0.5); float m = (1.0 - smoothstep(0.0, R * 0.03, arc)) * step(0.0, -l.y + 0.0) * step(1.0, r);
       acc = overPre(vec4(c_anaRenk * 1.2, 1.0) * m * 0.8, acc); } }
@@ -54,20 +54,20 @@ void main() { vec4 s = texture(u_tex, v_uv); vec2 q = toUnit(here()); float R = 
 uniform vec2 p_merkez; uniform float p_gorunum, p_disYari, p_gozYari, p_yuksekli, p_donusHizi, p_sarmalKolSayi, p_sarmalSiki, p_bulutYogu, p_turbulan, p_opaklik, p_tohum; uniform vec3 c_bulutReng;
 void main() { vec4 s = texture(u_tex, v_uv); vec2 q = toUnit(here()) - p_merkez; float sd = seedf(p_tohum); float d = 0.0; vec3 col = c_bulutReng;
   if (p_gorunum < 0.5) { float r = length(q); float a = atan(q.y, q.x) + u_t * radians(p_donusHizi) * 0.3; float lr = log(max(r, 1.0)); float arms = max(floor(p_sarmalKolSayi), 1.0);
-    float sp = sin(a * arms + lr * p_sarmalSiki / 10.0 * arms); float f = fbm(vec2(a * 2.0, lr * 4.0) + sd, 5.0) * (1.0 + p_turbulan / 100.0) - p_turbulan / 200.0;
+    float sp = sin(a * arms - lr * p_sarmalSiki / 100.0 * 6.0); float f = fbm01(vec2(a * 2.0, lr * 4.0) + sd, 5.0) * (1.0 + p_turbulan / 100.0) - p_turbulan / 200.0;
     d = smoothstep(0.1, 0.9, (sp * 0.5 + 0.5) * 0.6 + f * 0.7) * smoothstep(p_disYari, p_disYari * 0.5, r) * smoothstep(p_gozYari * 0.6, p_gozYari * 1.4, r) * p_bulutYogu / 100.0 * 1.4;
     col = mix(c_bulutReng * 0.6, vec3(1.0), smoothstep(0.3, 0.9, f)); }
   else { float H = max(p_yuksekli, 10.0); float y = clamp((q.y + H * 0.5) / H, 0.0, 1.0); float w = mix(p_disYari, p_gozYari, pow(y, 0.6)) * (p_gorunum > 1.5 ? 0.6 : 1.0);
     float sway = sin(y * 3.0 + u_t * 1.3) * w * 0.25; float x = (q.x - sway) / max(w, 1.0); float inside = 1.0 - smoothstep(0.7, 1.0, abs(x));
-    float a = asin(clamp(x, -1.0, 1.0)) + u_t * radians(p_donusHizi); float f = fbm(vec2(a * 2.0, y * 8.0 - u_t * 0.5) + sd, 4.0);
+    float a = asin(clamp(x, -1.0, 1.0)) + u_t * radians(p_donusHizi); float f = fbm01(vec2(a * 2.0, y * 8.0 - u_t * 0.5) + sd, 4.0);
     d = inside * step(-H * 0.5, q.y) * step(q.y, H * 0.5) * smoothstep(0.2, 0.7, f * (1.0 + p_turbulan / 100.0)) * p_bulutYogu / 100.0 * 1.5; col = mix(c_bulutReng * 0.7, c_bulutReng * 1.2, f);
-    if (p_gorunum > 1.5) { float dust = smoothstep(H * 0.5, H * 0.3, q.y) * smoothstep(p_disYari * 1.5, 0.0, abs(q.x)) * fbm(q * 0.03 + u_t * 0.4, 3.0); d = max(d, dust); } }
+    if (p_gorunum > 1.5) { float dust = smoothstep(H * 0.5, H * 0.3, q.y) * smoothstep(p_disYari * 1.5, 0.0, abs(q.x)) * fbm01(q * 0.03 + u_t * 0.4, 3.0); d = max(d, dust); } }
   o = overPre(vec4(col, 1.0) * clamp(d, 0.0, 1.0) * p_opaklik / 100.0, s); }
 //== sandstorm
 uniform float p_yogunluk, p_kumBuyu, p_ruzgarHizi, p_ruzgarYonu, p_turbulan, p_tozTaba, p_gorusAzal, p_hareketBula, p_degiskenRuzg, p_ruzgarDegiSikl, p_tohum; uniform vec3 c_kumReng;
 void main() { vec4 s = texture(u_tex, v_uv); float gust = p_degiskenRuzg > 0.5 ? 0.6 + 0.8 * vnoise(vec2(u_t * p_ruzgarDegiSikl, 5.0)) : 1.0; vec2 dir = vec2(cos(radians(p_ruzgarYonu)), sin(radians(p_ruzgarYonu)));
   vec2 q = toUnit(here()); vec2 p = rot2(-p_ruzgarYonu) * q; float sd = seedf(p_tohum); float off = u_t * p_ruzgarHizi * gust;
-  float haze = fbm((p - vec2(off * 0.3, 0.0)) * 0.006 + sd, 4.0); haze = mix(haze, fbm((p - vec2(off * 0.3, 0.0)) * 0.006 + vec2(haze * p_turbulan / 30.0), 4.0), 0.5);
+  float haze = fbm01((p - vec2(off * 0.3, 0.0)) * 0.006 + sd, 4.0); haze = mix(haze, fbm01((p - vec2(off * 0.3, 0.0)) * 0.006 + vec2(haze * p_turbulan / 30.0), 4.0), 0.5);
   float grains = 0.0; float gs = max(p_kumBuyu, 0.5); vec2 g = vec2((p.x - off) / (gs * (1.0 + p_hareketBula / 10.0)), p.y / gs); vec2 id = floor(g);
   float h = hash1(id + sd); grains = step(1.0 - p_yogunluk / 100.0 * 0.35, h) * (1.0 - smoothstep(0.3, 0.5, abs(fract(g.y) - 0.5)));
   float ground = smoothstep(boxU().y * (0.5 - p_tozTaba / 100.0), boxU().y * 0.5, q.y) * p_tozTaba / 100.0;
@@ -104,21 +104,21 @@ void main() { vec4 s = texture(u_tex, v_uv); vec2 q = toUnit(here()); vec2 B = b
 //== frostglass
 uniform float p_donmaMikt, p_kristalBuyu, p_kristalYogu, p_dallanma, p_buzKali, p_bulanikl, p_isikKiri, p_donmaBasl, p_donmaAnim, p_donmaIler, p_tohum; uniform vec3 c_buzReng, c_kristalReng;
 void main() { vec4 s = texture(u_tex, v_uv); vec2 q = toUnit(here()); vec2 b = boxUV(here()); float sd = seedf(p_tohum);
-  float start = p_donmaBasl < 0.5 ? 1.0 - min(min(b.x, 1.0 - b.x), min(b.y, 1.0 - b.y)) * 2.0 : p_donmaBasl < 1.5 ? 1.0 - length(b - 0.5) * 1.6 : fbm(q * 0.01 + sd, 3.0) * 1.4;
-  float prog = (p_donmaAnim > 0.5 ? p_donmaIler : 100.0) / 100.0 * p_donmaMikt / 100.0; float f = smoothstep(1.0 - prog * 1.3, 1.0 - prog * 1.3 + 0.25, start + fbm(q * 0.02 + sd, 4.0) * 0.4);
+  float start = p_donmaBasl < 0.5 ? 1.0 - min(min(b.x, 1.0 - b.x), min(b.y, 1.0 - b.y)) * 2.0 : p_donmaBasl < 1.5 ? 1.0 - length(b - 0.5) * 1.6 : fbm01(q * 0.01 + sd, 3.0) * 1.4;
+  float prog = (p_donmaAnim > 0.5 ? p_donmaIler : 100.0) / 100.0 * p_donmaMikt / 100.0; float f = smoothstep(1.0 - prog * 1.3, 1.0 - prog * 1.3 + 0.25, start + fbm01(q * 0.02 + sd, 4.0) * 0.4);
   float cs = max(p_kristalBuyu, 1.0); vec4 v = voronoi(q / cs + sd); float edges = 1.0 - smoothstep(0.0, 0.06 + p_dallanma / 2000.0, v.y - v.x);
   float dend = 0.0; for (int k = 0; k < 3; k++) { vec4 w = voronoi(q / (cs * (0.5 - float(k) * 0.12)) + sd + float(k) * 3.0); dend = max(dend, (1.0 - smoothstep(0.0, 0.05, w.y - w.x)) * p_dallanma / 100.0); }
   float cr = clamp(edges + dend * p_kristalYogu / 100.0, 0.0, 1.0) * f;
-  vec2 rf = vec2(fbm(q * 0.05 + 1.0, 3.0), fbm(q * 0.05 + 7.0, 3.0)) - 0.5; vec4 bl = vec4(0.0); float br = p_bulanikl * f * u_s;
+  vec2 rf = vec2(fbm01(q * 0.05 + 1.0, 3.0), fbm01(q * 0.05 + 7.0, 3.0)) - 0.5; vec4 bl = vec4(0.0); float br = p_bulanikl * f * u_s;
   for (int i = 0; i < 8; i++) { float a = float(i) * TAU / 8.0; bl += texPx(here() + rf * p_isikKiri * u_s + vec2(cos(a), sin(a)) * br); } bl /= 8.0;
   vec4 c = mix(s, bl, f); c.rgb = mix(c.rgb, c_buzReng * c.a, f * p_buzKali / 100.0 * 0.5); c = overPre(vec4(c_kristalReng, 1.0) * cr * 0.8, c); o = c; }
 //== wetsurface
 uniform sampler2D s_yansimaKatm, s_bgsrc; uniform float p_yansimaKatmOn, p_bgsrcOn;
 uniform float p_islaklik, p_yuzeyKara, p_yansimaGucu, p_puruzlul, p_suKali, p_yansimaBula, p_yansimaKayn, p_suBiri, p_birikintYogu, p_suAkis, p_akisHizi, p_alfaSiniKoru;
 void main() { vec4 s = texture(u_tex, v_uv); vec2 q = toUnit(here()); vec2 b = boxUV(here()); float w = p_islaklik / 100.0;
-  float pud = p_suBiri > 0.5 ? smoothstep(0.55 - p_birikintYogu / 200.0, 0.6 - p_birikintYogu / 200.0, fbm(q * 0.008, 4.0)) : 0.0;
+  float pud = p_suBiri > 0.5 ? smoothstep(0.55 - p_birikintYogu / 200.0, 0.6 - p_birikintYogu / 200.0, fbm01(q * 0.008, 4.0)) : 0.0;
   vec2 rip = p_suAkis > 0.5 ? vec2(sin(q.y * 0.2 + u_t * p_akisHizi * 0.2), cos(q.x * 0.17 + u_t * p_akisHizi * 0.15)) * 0.004 : vec2(0.0);
-  vec2 n = (vec2(fbm(q * 0.05, 3.0), fbm(q * 0.05 + 5.0, 3.0)) - 0.5) * p_puruzlul / 100.0 * 0.05 * (1.0 - pud) + rip;
+  vec2 n = (vec2(fbm01(q * 0.05, 3.0), fbm01(q * 0.05 + 5.0, 3.0)) - 0.5) * p_puruzlul / 100.0 * 0.05 * (1.0 - pud) + rip;
   vec2 ru = vec2(b.x, 1.0 - b.y) + n; vec3 refl;
   if (p_yansimaKayn > 1.5 && p_yansimaKatmOn > 0.5) refl = unpre(texture(s_yansimaKatm, clamp(ru, 0.0, 1.0)));
   else if (p_yansimaKayn > 0.5 && p_bgsrcOn > 0.5) refl = unpre(texture(s_bgsrc, clamp(ru, 0.0, 1.0)));
@@ -178,7 +178,7 @@ void main() { vec4 s = texture(u_tex, v_uv); vec2 q = toUnit(here()); vec2 L = p
   else cone = 1.0;
   float fall = exp(-r / max(p_isinUzun, 1.0) * 2.0); float shaft = 1.0;
   if (p_katmanlaIsigEnge > 0.5) { float occ = 0.0; for (int i = 1; i <= 16; i++) { occ = max(occ, occAt(L + d * float(i) / 17.0)); } shaft = 1.0 - occ; }
-  float fog = 0.35 + 0.65 * fbm(q * 0.01 + u_t * 0.05, 3.0) * p_sisYogu / 100.0 * 2.0; float rays = mix(1.0, 0.6 + 0.4 * fbm(vec2(atan(d.y, d.x) * 8.0, u_t * 0.1), 2.0), p_isikSaci / 100.0);
+  float fog = 0.35 + 0.65 * fbm01(q * 0.01 + u_t * 0.05, 3.0) * p_sisYogu / 100.0 * 2.0; float rays = mix(1.0, 0.6 + 0.4 * fbm01(vec2(atan(d.y, d.x) * 8.0, u_t * 0.1), 2.0), p_isikSaci / 100.0);
   float I = cone * fall * shaft * fog * rays * p_isikGucu / 100.0; float dust = 0.0;
   if (p_havadakiTozl > 0.5) { vec2 g = (q + vec2(u_t * 4.0, -u_t * 6.0)) / 7.0; vec2 id = floor(g); float hh = hash1(id); dust = step(1.0 - p_tozYogu / 100.0 * 0.3, hh) * (1.0 - smoothstep(0.03, 0.12, length(fract(g) - 0.5 - (hash2(id) - 0.5) * 0.6))) * cone * fall; }
   o = overPre(vec4(c_isikReng, 1.0) * clamp(I * 0.8 + dust, 0.0, 1.0), s); }
