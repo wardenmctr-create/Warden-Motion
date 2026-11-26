@@ -92522,6 +92522,12862 @@
 "heavy": false,
 "n": 432,
 "ready": true
+},
+{
+"type": "globe3d",
+"name": "Üç Boyutlu Dünya",
+"en": "",
+"cat": 5,
+"kind": "3d",
+"desc": "Döndürülebilir ve farklı harita görünümlerine sahip Dünya modeli.",
+"tags": [
+"Dünya",
+"Harita",
+"Gezegen"
+],
+"params": [
+{
+"k": "buyukluk",
+"l": "Büyüklük",
+"anim": "yes",
+"kind": "jog",
+"min": 10.0,
+"max": 2000.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 220
+},
+{
+"k": "eksenEgik",
+"l": "Eksen eğikliği",
+"anim": "yes",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"def": 23.44
+},
+{
+"k": "enlem",
+"l": "Enlem",
+"anim": "yes",
+"kind": "jog",
+"min": -90.0,
+"max": 90.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"def": 0.0
+},
+{
+"k": "boylam",
+"l": "Boylam",
+"anim": "yes",
+"kind": "jog",
+"min": -180.0,
+"max": 180.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"def": 0.0
+},
+{
+"k": "basiklik",
+"l": "Basıklık",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 30.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 0.3
+},
+{
+"k": "harita",
+"l": "Harita",
+"anim": "step",
+"kind": "choice",
+"min": 0,
+"max": 4,
+"step": 1,
+"jog": 1,
+"opts": [
+"Siyasi",
+"Fiziksel",
+"Uydu",
+"Gece",
+"Özel"
+],
+"def": 0
+},
+{
+"k": "ozelHari",
+"l": "Özel harita",
+"anim": "no",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"hint": "Dosya / görsel",
+"def": ""
+},
+{
+"k": "ulkeSini",
+"l": "Ülke sınırları",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 0
+},
+{
+"k": "sinirReng",
+"l": "Sınır rengi",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#000000"
+},
+{
+"k": "sinirKali",
+"l": "Sınır kalınlığı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 20.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 1.0
+},
+{
+"k": "atmosfer",
+"l": "Atmosfer",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+},
+{
+"k": "atmosferReng",
+"l": "Atmosfer rengi",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#2F7BFF"
+},
+{
+"k": "atmosferKali",
+"l": "Atmosfer kalınlığı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 30.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 4.0
+},
+{
+"k": "bulutlar",
+"l": "Bulutlar",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+},
+{
+"k": "bulutYogu",
+"l": "Bulut yoğunluğu",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 35.0
+},
+{
+"k": "bulutHizi",
+"l": "Bulut hızı",
+"anim": "yes",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"def": 10.0
+},
+{
+"k": "geceIsik",
+"l": "Gece ışıkları",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 0
+},
+{
+"k": "okyanusYans",
+"l": "Okyanus yansıması",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 25.0
+},
+{
+"k": "yonelimXY",
+"l": "Dönüş",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -3600,
+"max": 3600,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"g": "3B Dönüşüm",
+"def": 0.0
+},
+{
+"k": "surekliDonuX",
+"l": "Dönüş hızı (°/sn)",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -3600.0,
+"max": 3600.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"g": "3B Dönüşüm",
+"def": 0.0
+},
+{
+"k": "konumXY",
+"l": "Konum",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -5000,
+"max": 5000,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"g": "3B Dönüşüm",
+"def": 0.0
+},
+{
+"k": "perspekt",
+"l": "Kamera",
+"anim": "step",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Perspektif",
+"Ortografik",
+"Proje kamerası"
+],
+"src": "Seçim",
+"g": "Kamera",
+"def": 0
+},
+{
+"k": "gorusAcis",
+"l": "Görüş açısı",
+"anim": "yes",
+"kind": "jog",
+"min": 10.0,
+"max": 120.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "Cetvel",
+"g": "Kamera",
+"def": 45.0
+},
+{
+"k": "isikEtki",
+"l": "Işık etkin",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"g": "Işık ve Gölge",
+"def": 1
+},
+{
+"k": "isikKonu",
+"l": "Işık konumu",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -4000.0,
+"max": 4000.0,
+"defY": -100.0,
+"defZ": -200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"g": "Işık ve Gölge",
+"def": -100.0
+},
+{
+"k": "isikReng",
+"l": "Işık rengi",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"src": "Renk seçici",
+"g": "Işık ve Gölge",
+"def": "#FFFFFF"
+},
+{
+"k": "ortamIsig",
+"l": "Ortam ışığı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"g": "Işık ve Gölge",
+"def": 45.0
+},
+{
+"k": "yonluIsikGucu",
+"l": "Işık gücü",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"g": "Işık ve Gölge",
+"def": 65.0
+},
+{
+"k": "parlakYans",
+"l": "Parlaklık",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"g": "Malzeme",
+"def": 20.0
+},
+{
+"k": "puruzlul",
+"l": "Pürüzlülük",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"g": "Malzeme",
+"def": 50.0
+},
+{
+"k": "arkaYuzlGost",
+"l": "Arka yüzleri göster",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"g": "Işık ve Gölge",
+"def": 0
+},
+{
+"k": "kenarYumu",
+"l": "Kenar yumuşatma",
+"anim": "no",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Kapalı",
+"Otomatik",
+"Yüksek"
+],
+"src": "Seçim",
+"g": "Işık ve Gölge",
+"def": 1
+},
+{
+"k": "olcekXYZ",
+"l": "Ölçek",
+"kind": "jog",
+"three": true,
+"min": 1,
+"max": 1000,
+"defY": 100,
+"defZ": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "3B Dönüşüm",
+"link": true,
+"def": 100
+},
+{
+"k": "orantili",
+"l": "Orantılı ölçek",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "3B Dönüşüm",
+"def": 1
+},
+{
+"k": "donusMerk",
+"l": "Dönüş merkezi",
+"kind": "jog",
+"three": true,
+"min": -5000,
+"max": 5000,
+"defY": 0,
+"defZ": 0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "3B Dönüşüm",
+"def": 0
+},
+{
+"k": "donusYontem",
+"l": "Dönüş yöntemi",
+"kind": "choice",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"opts": [
+"Eksen bazlı",
+"En kısa yönelim"
+],
+"unit": "",
+"anim": "step",
+"g": "3B Dönüşüm",
+"def": 0
+},
+{
+"k": "otoDonus",
+"l": "Otomatik dönüş",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "3B Dönüşüm",
+"def": 0
+},
+{
+"k": "kameraUzak",
+"l": "Kamera uzaklığı",
+"kind": "jog",
+"min": 10,
+"max": 10000,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "Kamera",
+"def": 800
+},
+{
+"k": "perspGuc",
+"l": "Perspektif gücü",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Kamera",
+"def": 100
+},
+{
+"k": "malzeme",
+"l": "Malzeme",
+"kind": "choice",
+"min": 0,
+"max": 7,
+"step": 1,
+"jog": 1,
+"opts": [
+"Mat",
+"Metal",
+"Plastik",
+"Cam",
+"Kâğıt",
+"Karton",
+"Ahşap",
+"Özel"
+],
+"unit": "",
+"anim": "step",
+"g": "Malzeme",
+"def": 0
+},
+{
+"k": "tabanRenk",
+"l": "Taban rengi",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "yes",
+"g": "Malzeme",
+"def": "#FFFFFF"
+},
+{
+"k": "ozelDoku3",
+"l": "Özel doku",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"anim": "no",
+"g": "Malzeme",
+"hint": "Görsel / katman",
+"vis": {
+"k": "malzeme",
+"in": [
+7
+]
+},
+"def": ""
+},
+{
+"k": "dokuGucu3",
+"l": "Doku gücü",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Malzeme",
+"def": 100
+},
+{
+"k": "dokuOlcek3",
+"l": "Doku ölçeği",
+"kind": "jog",
+"min": 1,
+"max": 1000,
+"defY": 100,
+"step": 0.1,
+"jog": 0.1,
+"two": true,
+"unit": "%",
+"anim": "yes",
+"g": "Malzeme",
+"link": true,
+"def": 100
+},
+{
+"k": "dokuKonum3",
+"l": "Doku konumu",
+"kind": "jog",
+"min": -4000,
+"max": 4000,
+"defY": 0,
+"step": 0.1,
+"jog": 0.1,
+"two": true,
+"unit": "px",
+"anim": "yes",
+"g": "Malzeme",
+"link": false,
+"def": 0
+},
+{
+"k": "dokuAci3",
+"l": "Doku açısı",
+"kind": "jog",
+"min": -360,
+"max": 360,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"anim": "yes",
+"g": "Malzeme",
+"def": 0
+},
+{
+"k": "metalik",
+"l": "Metalik görünüm",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Malzeme",
+"def": 0
+},
+{
+"k": "kabartma3",
+"l": "Kabartma",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Malzeme",
+"def": 0
+},
+{
+"k": "opaklik3",
+"l": "Opaklık",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Malzeme",
+"def": 100
+},
+{
+"k": "golgelendirme",
+"l": "Gölgelendirme",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Düz",
+"Noktasal",
+"Yönlü"
+],
+"unit": "",
+"anim": "step",
+"g": "Işık ve Gölge",
+"def": 1
+},
+{
+"k": "golgeOlustur",
+"l": "Gölge oluştur",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Işık ve Gölge",
+"def": 1
+},
+{
+"k": "golgeOpak3",
+"l": "Gölge opaklığı",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Işık ve Gölge",
+"vis": {
+"k": "golgeOlustur",
+"in": [
+1
+]
+},
+"def": 35
+},
+{
+"k": "golgeYumu3",
+"l": "Gölge yumuşaklığı",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "Işık ve Gölge",
+"vis": {
+"k": "golgeOlustur",
+"in": [
+1
+]
+},
+"def": 12
+},
+{
+"k": "kalite3",
+"l": "Geometri kalitesi",
+"kind": "choice",
+"min": 0,
+"max": 4,
+"step": 1,
+"jog": 1,
+"opts": [
+"Otomatik",
+"Düşük",
+"Orta",
+"Yüksek",
+"Ultra"
+],
+"unit": "",
+"anim": "step",
+"g": "Işık ve Gölge",
+"def": 0
+}
+],
+"presets": [
+{
+"code": "SD",
+"name": "Siyasi Dünya",
+"vals": {
+"harita": 0,
+"ulkeSini": 1,
+"bulutlar": 0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "GD",
+"name": "Gerçekçi Dünya",
+"vals": {
+"harita": 2,
+"bulutlar": 1,
+"atmosfer": 1
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "GC",
+"name": "Gece",
+"vals": {
+"harita": 3,
+"geceIsik": 1,
+"bulutlar": 0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "CF",
+"name": "Çizgi film",
+"vals": {
+"harita": 0,
+"ulkeSini": 1,
+"sinirKali": 3,
+"bulutlar": 0,
+"atmosferKali": 8
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "KD",
+"name": "Karton Dünya",
+"vals": {
+"harita": 1,
+"malzeme": 5,
+"bulutlar": 0,
+"atmosfer": 0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": {
+"box": 0.45
+},
+"passes": null,
+"info": null,
+"heavy": true,
+"n": 433,
+"ready": true,
+"hidden": false
+},
+{
+"type": "planet3d",
+"name": "Üç Boyutlu Gezegen",
+"en": "",
+"cat": 5,
+"kind": "3d",
+"desc": "Üç Boyutlu Gezegen",
+"tags": [
+"Gezegen",
+"Uzay"
+],
+"params": [
+{
+"k": "gezegenTuru",
+"l": "Gezegen türü",
+"anim": "step",
+"kind": "choice",
+"min": 0,
+"max": 5,
+"step": 1,
+"jog": 1,
+"opts": [
+"Kayalık",
+"Gaz devi",
+"Buz",
+"Çöl",
+"Lav",
+"Okyanus"
+],
+"def": 0
+},
+{
+"k": "buyukluk",
+"l": "Büyüklük",
+"anim": "yes",
+"kind": "jog",
+"min": 10.0,
+"max": 2000.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 220
+},
+{
+"k": "anaRenk",
+"l": "Ana renk",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#FF8F1F"
+},
+{
+"k": "ikinciRenk",
+"l": "İkinci renk",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#E53935"
+},
+{
+"k": "yuzeyAyri",
+"l": "Yüzey ayrıntısı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 60.0
+},
+{
+"k": "kraterYogu",
+"l": "Krater yoğunluğu",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 20.0
+},
+{
+"k": "kraterBuyu",
+"l": "Krater büyüklüğü",
+"anim": "yes",
+"kind": "jog",
+"min": 1.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 15.0
+},
+{
+"k": "yuzeyYuks",
+"l": "Yüzey yükseltisi",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 30.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 10.0
+},
+{
+"k": "bulutSeriSayi",
+"l": "Bulut şeridi sayısı",
+"anim": "yes",
+"kind": "jog",
+"min": 1.0,
+"max": 50.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 8.0
+},
+{
+"k": "firtinaYogu",
+"l": "Fırtına yoğunluğu",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 30.0
+},
+{
+"k": "atmosferKali",
+"l": "Atmosfer kalınlığı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 30.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 5.0
+},
+{
+"k": "atmosferReng",
+"l": "Atmosfer rengi",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#FFC27A"
+},
+{
+"k": "tohum",
+"l": "Tohum",
+"anim": "yes",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"reseed": true,
+"def": 1.0
+},
+{
+"k": "yonelimXY",
+"l": "Dönüş",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -3600,
+"max": 3600,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"g": "3B Dönüşüm",
+"def": 0.0
+},
+{
+"k": "surekliDonuX",
+"l": "Dönüş hızı (°/sn)",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -3600.0,
+"max": 3600.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"g": "3B Dönüşüm",
+"def": 0.0
+},
+{
+"k": "konumXY",
+"l": "Konum",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -5000,
+"max": 5000,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"g": "3B Dönüşüm",
+"def": 0.0
+},
+{
+"k": "perspekt",
+"l": "Kamera",
+"anim": "step",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Perspektif",
+"Ortografik",
+"Proje kamerası"
+],
+"src": "Seçim",
+"g": "Kamera",
+"def": 0
+},
+{
+"k": "gorusAcis",
+"l": "Görüş açısı",
+"anim": "yes",
+"kind": "jog",
+"min": 10.0,
+"max": 120.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "Cetvel",
+"g": "Kamera",
+"def": 45.0
+},
+{
+"k": "isikEtki",
+"l": "Işık etkin",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"g": "Işık ve Gölge",
+"def": 1
+},
+{
+"k": "isikKonu",
+"l": "Işık konumu",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -4000.0,
+"max": 4000.0,
+"defY": -100.0,
+"defZ": -200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"g": "Işık ve Gölge",
+"def": -100.0
+},
+{
+"k": "isikReng",
+"l": "Işık rengi",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"src": "Renk seçici",
+"g": "Işık ve Gölge",
+"def": "#FFFFFF"
+},
+{
+"k": "ortamIsig",
+"l": "Ortam ışığı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"g": "Işık ve Gölge",
+"def": 45.0
+},
+{
+"k": "yonluIsikGucu",
+"l": "Işık gücü",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"g": "Işık ve Gölge",
+"def": 65.0
+},
+{
+"k": "parlakYans",
+"l": "Parlaklık",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"g": "Malzeme",
+"def": 20.0
+},
+{
+"k": "puruzlul",
+"l": "Pürüzlülük",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"g": "Malzeme",
+"def": 50.0
+},
+{
+"k": "arkaYuzlGost",
+"l": "Arka yüzleri göster",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"g": "Işık ve Gölge",
+"def": 0
+},
+{
+"k": "kenarYumu",
+"l": "Kenar yumuşatma",
+"anim": "no",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Kapalı",
+"Otomatik",
+"Yüksek"
+],
+"src": "Seçim",
+"g": "Işık ve Gölge",
+"def": 1
+},
+{
+"k": "olcekXYZ",
+"l": "Ölçek",
+"kind": "jog",
+"three": true,
+"min": 1,
+"max": 1000,
+"defY": 100,
+"defZ": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "3B Dönüşüm",
+"link": true,
+"def": 100
+},
+{
+"k": "orantili",
+"l": "Orantılı ölçek",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "3B Dönüşüm",
+"def": 1
+},
+{
+"k": "donusMerk",
+"l": "Dönüş merkezi",
+"kind": "jog",
+"three": true,
+"min": -5000,
+"max": 5000,
+"defY": 0,
+"defZ": 0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "3B Dönüşüm",
+"def": 0
+},
+{
+"k": "donusYontem",
+"l": "Dönüş yöntemi",
+"kind": "choice",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"opts": [
+"Eksen bazlı",
+"En kısa yönelim"
+],
+"unit": "",
+"anim": "step",
+"g": "3B Dönüşüm",
+"def": 0
+},
+{
+"k": "otoDonus",
+"l": "Otomatik dönüş",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "3B Dönüşüm",
+"def": 0
+},
+{
+"k": "kameraUzak",
+"l": "Kamera uzaklığı",
+"kind": "jog",
+"min": 10,
+"max": 10000,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "Kamera",
+"def": 800
+},
+{
+"k": "perspGuc",
+"l": "Perspektif gücü",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Kamera",
+"def": 100
+},
+{
+"k": "malzeme",
+"l": "Malzeme",
+"kind": "choice",
+"min": 0,
+"max": 7,
+"step": 1,
+"jog": 1,
+"opts": [
+"Mat",
+"Metal",
+"Plastik",
+"Cam",
+"Kâğıt",
+"Karton",
+"Ahşap",
+"Özel"
+],
+"unit": "",
+"anim": "step",
+"g": "Malzeme",
+"def": 0
+},
+{
+"k": "tabanRenk",
+"l": "Taban rengi",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "yes",
+"g": "Malzeme",
+"def": "#FFFFFF"
+},
+{
+"k": "ozelDoku3",
+"l": "Özel doku",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"anim": "no",
+"g": "Malzeme",
+"hint": "Görsel / katman",
+"vis": {
+"k": "malzeme",
+"in": [
+7
+]
+},
+"def": ""
+},
+{
+"k": "dokuGucu3",
+"l": "Doku gücü",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Malzeme",
+"def": 100
+},
+{
+"k": "dokuOlcek3",
+"l": "Doku ölçeği",
+"kind": "jog",
+"min": 1,
+"max": 1000,
+"defY": 100,
+"step": 0.1,
+"jog": 0.1,
+"two": true,
+"unit": "%",
+"anim": "yes",
+"g": "Malzeme",
+"link": true,
+"def": 100
+},
+{
+"k": "dokuKonum3",
+"l": "Doku konumu",
+"kind": "jog",
+"min": -4000,
+"max": 4000,
+"defY": 0,
+"step": 0.1,
+"jog": 0.1,
+"two": true,
+"unit": "px",
+"anim": "yes",
+"g": "Malzeme",
+"link": false,
+"def": 0
+},
+{
+"k": "dokuAci3",
+"l": "Doku açısı",
+"kind": "jog",
+"min": -360,
+"max": 360,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"anim": "yes",
+"g": "Malzeme",
+"def": 0
+},
+{
+"k": "metalik",
+"l": "Metalik görünüm",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Malzeme",
+"def": 0
+},
+{
+"k": "kabartma3",
+"l": "Kabartma",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Malzeme",
+"def": 0
+},
+{
+"k": "opaklik3",
+"l": "Opaklık",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Malzeme",
+"def": 100
+},
+{
+"k": "golgelendirme",
+"l": "Gölgelendirme",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Düz",
+"Noktasal",
+"Yönlü"
+],
+"unit": "",
+"anim": "step",
+"g": "Işık ve Gölge",
+"def": 1
+},
+{
+"k": "golgeOlustur",
+"l": "Gölge oluştur",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Işık ve Gölge",
+"def": 1
+},
+{
+"k": "golgeOpak3",
+"l": "Gölge opaklığı",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Işık ve Gölge",
+"vis": {
+"k": "golgeOlustur",
+"in": [
+1
+]
+},
+"def": 35
+},
+{
+"k": "golgeYumu3",
+"l": "Gölge yumuşaklığı",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "Işık ve Gölge",
+"vis": {
+"k": "golgeOlustur",
+"in": [
+1
+]
+},
+"def": 12
+},
+{
+"k": "kalite3",
+"l": "Geometri kalitesi",
+"kind": "choice",
+"min": 0,
+"max": 4,
+"step": 1,
+"jog": 1,
+"opts": [
+"Otomatik",
+"Düşük",
+"Orta",
+"Yüksek",
+"Ultra"
+],
+"unit": "",
+"anim": "step",
+"g": "Işık ve Gölge",
+"def": 0
+}
+],
+"presets": [
+{
+"code": "MR",
+"name": "Mars",
+"vals": {
+"gezegenTuru": 3,
+"kraterYogu": 30
+},
+"keys": {},
+"cols": {
+"anaRenk": "#C1440E",
+"ikinciRenk": "#7A2A10",
+"atmosferReng": "#E8A07A"
+},
+"at": "start"
+},
+{
+"code": "JP",
+"name": "Jüpiter",
+"vals": {
+"gezegenTuru": 1,
+"bulutSeriSayi": 14,
+"firtinaYogu": 50
+},
+"keys": {},
+"cols": {
+"anaRenk": "#D8B48A",
+"ikinciRenk": "#9C6B4A"
+},
+"at": "start"
+},
+{
+"code": "NP",
+"name": "Neptün",
+"vals": {
+"gezegenTuru": 1,
+"bulutSeriSayi": 6,
+"firtinaYogu": 20
+},
+"keys": {},
+"cols": {
+"anaRenk": "#3B6BE0",
+"ikinciRenk": "#1B2F8A",
+"atmosferReng": "#8FC8FF"
+},
+"at": "start"
+},
+{
+"code": "LV",
+"name": "Lav gezegeni",
+"vals": {
+"gezegenTuru": 4
+},
+"keys": {},
+"cols": {
+"anaRenk": "#2A1A14",
+"ikinciRenk": "#FF5A1F"
+},
+"at": "start"
+},
+{
+"code": "HY",
+"name": "Hayalî gezegen",
+"vals": {
+"gezegenTuru": 5,
+"tohum": 7
+},
+"keys": {},
+"cols": {
+"anaRenk": "#22C3B5",
+"ikinciRenk": "#8E44D9"
+},
+"at": "start"
+}
+],
+"pad": {
+"box": 0.45
+},
+"passes": null,
+"info": null,
+"heavy": true,
+"n": 434,
+"ready": true,
+"hidden": false
+},
+{
+"type": "ringplanet",
+"name": "Halkalı Gezegen",
+"en": "",
+"cat": 5,
+"kind": "3d",
+"desc": "Bu efekt Üç Boyutlu Gezegen motorunun halka moduyla da sunulabilir.",
+"tags": [
+"Gezegen",
+"Halka",
+"Uzay"
+],
+"params": [
+{
+"k": "gezegenGovd",
+"l": "Gezegen gövdesi",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+},
+{
+"k": "gezegenBuyu",
+"l": "Gezegen büyüklüğü",
+"anim": "yes",
+"kind": "jog",
+"min": 10.0,
+"max": 2000.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 200.0
+},
+{
+"k": "icHalkYari",
+"l": "İç halka yarıçapı",
+"anim": "yes",
+"kind": "jog",
+"min": 105.0,
+"max": 500.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 130.0
+},
+{
+"k": "disHalkYari",
+"l": "Dış halka yarıçapı",
+"anim": "yes",
+"kind": "jog",
+"min": 110.0,
+"max": 1000.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 220.0
+},
+{
+"k": "halkaSayi",
+"l": "Halka sayısı",
+"anim": "yes",
+"kind": "jog",
+"min": 1.0,
+"max": 30.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 6.0
+},
+{
+"k": "halkaBosl",
+"l": "Halka boşluğu",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 90.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 8.0
+},
+{
+"k": "halkaKali",
+"l": "Halka kalınlığı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 3.0
+},
+{
+"k": "halkaEgim",
+"l": "Halka eğimi",
+"anim": "yes",
+"kind": "jog",
+"two": false,
+"three": true,
+"min": -4000,
+"max": 4000,
+"defY": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"defZ": 0.0,
+"def": 25.0
+},
+{
+"k": "anaRenk",
+"l": "Ana renk",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#C9A27A"
+},
+{
+"k": "ikinciRenk",
+"l": "İkinci renk",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#8A8F98"
+},
+{
+"k": "parcacikYogu",
+"l": "Parçacık yoğunluğu",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 70.0
+},
+{
+"k": "halkaOpak",
+"l": "Halka opaklığı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 80.0
+},
+{
+"k": "donusHizi",
+"l": "Dönüş hızı",
+"anim": "yes",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"def": 15.0
+},
+{
+"k": "karsilikGolg",
+"l": "Karşılıklı gölge",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+},
+{
+"k": "yonelimXY",
+"l": "Dönüş",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -3600,
+"max": 3600,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"g": "3B Dönüşüm",
+"def": 0.0
+},
+{
+"k": "surekliDonuX",
+"l": "Dönüş hızı (°/sn)",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -3600.0,
+"max": 3600.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"g": "3B Dönüşüm",
+"def": 0.0
+},
+{
+"k": "konumXY",
+"l": "Konum",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -5000,
+"max": 5000,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"g": "3B Dönüşüm",
+"def": 0.0
+},
+{
+"k": "perspekt",
+"l": "Kamera",
+"anim": "step",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Perspektif",
+"Ortografik",
+"Proje kamerası"
+],
+"src": "Seçim",
+"g": "Kamera",
+"def": 0
+},
+{
+"k": "gorusAcis",
+"l": "Görüş açısı",
+"anim": "yes",
+"kind": "jog",
+"min": 10.0,
+"max": 120.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "Cetvel",
+"g": "Kamera",
+"def": 45.0
+},
+{
+"k": "isikEtki",
+"l": "Işık etkin",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"g": "Işık ve Gölge",
+"def": 1
+},
+{
+"k": "isikKonu",
+"l": "Işık konumu",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -4000.0,
+"max": 4000.0,
+"defY": -100.0,
+"defZ": -200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"g": "Işık ve Gölge",
+"def": -100.0
+},
+{
+"k": "isikReng",
+"l": "Işık rengi",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"src": "Renk seçici",
+"g": "Işık ve Gölge",
+"def": "#FFFFFF"
+},
+{
+"k": "ortamIsig",
+"l": "Ortam ışığı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"g": "Işık ve Gölge",
+"def": 45.0
+},
+{
+"k": "yonluIsikGucu",
+"l": "Işık gücü",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"g": "Işık ve Gölge",
+"def": 65.0
+},
+{
+"k": "parlakYans",
+"l": "Parlaklık",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"g": "Malzeme",
+"def": 20.0
+},
+{
+"k": "puruzlul",
+"l": "Pürüzlülük",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"g": "Malzeme",
+"def": 50.0
+},
+{
+"k": "arkaYuzlGost",
+"l": "Arka yüzleri göster",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"g": "Işık ve Gölge",
+"def": 0
+},
+{
+"k": "kenarYumu",
+"l": "Kenar yumuşatma",
+"anim": "no",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Kapalı",
+"Otomatik",
+"Yüksek"
+],
+"src": "Seçim",
+"g": "Işık ve Gölge",
+"def": 1
+},
+{
+"k": "olcekXYZ",
+"l": "Ölçek",
+"kind": "jog",
+"three": true,
+"min": 1,
+"max": 1000,
+"defY": 100,
+"defZ": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "3B Dönüşüm",
+"link": true,
+"def": 100
+},
+{
+"k": "orantili",
+"l": "Orantılı ölçek",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "3B Dönüşüm",
+"def": 1
+},
+{
+"k": "donusMerk",
+"l": "Dönüş merkezi",
+"kind": "jog",
+"three": true,
+"min": -5000,
+"max": 5000,
+"defY": 0,
+"defZ": 0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "3B Dönüşüm",
+"def": 0
+},
+{
+"k": "donusYontem",
+"l": "Dönüş yöntemi",
+"kind": "choice",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"opts": [
+"Eksen bazlı",
+"En kısa yönelim"
+],
+"unit": "",
+"anim": "step",
+"g": "3B Dönüşüm",
+"def": 0
+},
+{
+"k": "otoDonus",
+"l": "Otomatik dönüş",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "3B Dönüşüm",
+"def": 0
+},
+{
+"k": "kameraUzak",
+"l": "Kamera uzaklığı",
+"kind": "jog",
+"min": 10,
+"max": 10000,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "Kamera",
+"def": 800
+},
+{
+"k": "perspGuc",
+"l": "Perspektif gücü",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Kamera",
+"def": 100
+},
+{
+"k": "malzeme",
+"l": "Malzeme",
+"kind": "choice",
+"min": 0,
+"max": 7,
+"step": 1,
+"jog": 1,
+"opts": [
+"Mat",
+"Metal",
+"Plastik",
+"Cam",
+"Kâğıt",
+"Karton",
+"Ahşap",
+"Özel"
+],
+"unit": "",
+"anim": "step",
+"g": "Malzeme",
+"def": 0
+},
+{
+"k": "tabanRenk",
+"l": "Taban rengi",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "yes",
+"g": "Malzeme",
+"def": "#FFFFFF"
+},
+{
+"k": "ozelDoku3",
+"l": "Özel doku",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"anim": "no",
+"g": "Malzeme",
+"hint": "Görsel / katman",
+"vis": {
+"k": "malzeme",
+"in": [
+7
+]
+},
+"def": ""
+},
+{
+"k": "dokuGucu3",
+"l": "Doku gücü",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Malzeme",
+"def": 100
+},
+{
+"k": "dokuOlcek3",
+"l": "Doku ölçeği",
+"kind": "jog",
+"min": 1,
+"max": 1000,
+"defY": 100,
+"step": 0.1,
+"jog": 0.1,
+"two": true,
+"unit": "%",
+"anim": "yes",
+"g": "Malzeme",
+"link": true,
+"def": 100
+},
+{
+"k": "dokuKonum3",
+"l": "Doku konumu",
+"kind": "jog",
+"min": -4000,
+"max": 4000,
+"defY": 0,
+"step": 0.1,
+"jog": 0.1,
+"two": true,
+"unit": "px",
+"anim": "yes",
+"g": "Malzeme",
+"link": false,
+"def": 0
+},
+{
+"k": "dokuAci3",
+"l": "Doku açısı",
+"kind": "jog",
+"min": -360,
+"max": 360,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"anim": "yes",
+"g": "Malzeme",
+"def": 0
+},
+{
+"k": "metalik",
+"l": "Metalik görünüm",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Malzeme",
+"def": 0
+},
+{
+"k": "kabartma3",
+"l": "Kabartma",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Malzeme",
+"def": 0
+},
+{
+"k": "opaklik3",
+"l": "Opaklık",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Malzeme",
+"def": 100
+},
+{
+"k": "golgelendirme",
+"l": "Gölgelendirme",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Düz",
+"Noktasal",
+"Yönlü"
+],
+"unit": "",
+"anim": "step",
+"g": "Işık ve Gölge",
+"def": 1
+},
+{
+"k": "golgeOlustur",
+"l": "Gölge oluştur",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Işık ve Gölge",
+"def": 1
+},
+{
+"k": "golgeOpak3",
+"l": "Gölge opaklığı",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Işık ve Gölge",
+"vis": {
+"k": "golgeOlustur",
+"in": [
+1
+]
+},
+"def": 35
+},
+{
+"k": "golgeYumu3",
+"l": "Gölge yumuşaklığı",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "Işık ve Gölge",
+"vis": {
+"k": "golgeOlustur",
+"in": [
+1
+]
+},
+"def": 12
+},
+{
+"k": "kalite3",
+"l": "Geometri kalitesi",
+"kind": "choice",
+"min": 0,
+"max": 4,
+"step": 1,
+"jog": 1,
+"opts": [
+"Otomatik",
+"Düşük",
+"Orta",
+"Yüksek",
+"Ultra"
+],
+"unit": "",
+"anim": "step",
+"g": "Işık ve Gölge",
+"def": 0
+}
+],
+"presets": [
+{
+"code": "ST",
+"name": "Satürn",
+"vals": {},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "BH",
+"name": "Buz halkası",
+"vals": {
+"parcacikYogu": 85
+},
+"keys": {},
+"cols": {
+"anaRenk": "#DDEBFF",
+"ikinciRenk": "#8FC8FF"
+},
+"at": "start"
+},
+{
+"code": "TH",
+"name": "Toz halkası",
+"vals": {
+"parcacikYogu": 45,
+"halkaOpak": 55
+},
+"keys": {},
+"cols": {
+"anaRenk": "#B89B7A",
+"ikinciRenk": "#6B5544"
+},
+"at": "start"
+},
+{
+"code": "NH",
+"name": "Neon halka",
+"vals": {
+"halkaSayi": 3,
+"halkaBosl": 30
+},
+"keys": {},
+"cols": {
+"anaRenk": "#22D3E6",
+"ikinciRenk": "#FF6FAE"
+},
+"at": "start"
+}
+],
+"pad": {
+"box": 0.8
+},
+"passes": null,
+"info": null,
+"heavy": true,
+"n": 435,
+"ready": true,
+"hidden": false
+},
+{
+"type": "flagpole3d",
+"name": "Üç Boyutlu Bayrak Direği",
+"en": "",
+"cat": 5,
+"kind": "3d",
+"desc": "Bayrak Dalgalanması ile üç boyutlu direk modelini birleştirir.",
+"tags": [
+"Bayrak",
+"Direk",
+"Rüzgâr"
+],
+"params": [
+{
+"k": "bayrakKatm",
+"l": "Bayrak katmanı",
+"anim": "no",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"hint": "Katman",
+"def": ""
+},
+{
+"k": "bayrakGors",
+"l": "Bayrak görseli",
+"anim": "no",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"hint": "Dosya / görsel",
+"def": ""
+},
+{
+"k": "bayrakBoyu",
+"l": "Bayrak boyutu",
+"anim": "yes",
+"kind": "jog",
+"two": true,
+"three": false,
+"min": -4000,
+"max": 4000,
+"defY": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 150
+},
+{
+"k": "enBoyOran",
+"l": "En-boy oranını koru",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+},
+{
+"k": "sabitKena",
+"l": "Sabit kenar",
+"anim": "step",
+"kind": "choice",
+"min": 0,
+"max": 4,
+"step": 1,
+"jog": 1,
+"opts": [
+"Sol",
+"Sağ",
+"Üst",
+"Alt",
+"Özel"
+],
+"def": 0
+},
+{
+"k": "dalgaYuks",
+"l": "Dalga yüksekliği",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 500.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 22.0
+},
+{
+"k": "dalgaBoyu",
+"l": "Dalga boyu",
+"anim": "yes",
+"kind": "jog",
+"min": 1.0,
+"max": 1000.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 110.0
+},
+{
+"k": "ruzgarHizi",
+"l": "Rüzgâr hızı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 10.0,
+"step": 0.01,
+"jog": 0.01,
+"unit": "Hz",
+"def": 1.2
+},
+{
+"k": "kumasSert",
+"l": "Kumaş sertliği",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 50.0
+},
+{
+"k": "diregiGost",
+"l": "Direği göster",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+},
+{
+"k": "direkYuks",
+"l": "Direk yüksekliği",
+"anim": "yes",
+"kind": "jog",
+"min": 10.0,
+"max": 5000.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 320
+},
+{
+"k": "direkKali",
+"l": "Direk kalınlığı",
+"anim": "yes",
+"kind": "jog",
+"min": 1.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 12.0
+},
+{
+"k": "direkMalz",
+"l": "Direk malzemesi",
+"anim": "step",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Metal",
+"Ahşap",
+"Plastik"
+],
+"def": 0
+},
+{
+"k": "direkReng",
+"l": "Direk rengi",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#8A8F98"
+},
+{
+"k": "direkTepe",
+"l": "Direk tepesi",
+"anim": "step",
+"kind": "choice",
+"min": 0,
+"max": 3,
+"step": 1,
+"jog": 1,
+"opts": [
+"Küre",
+"Düz",
+"Sivri",
+"Yok"
+],
+"def": 0
+},
+{
+"k": "bayraginYuks",
+"l": "Bayrağın yüksekliği",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 90.0
+},
+{
+"k": "baglantiIpi",
+"l": "Bağlantı ipi",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+},
+{
+"k": "ipKali",
+"l": "İp kalınlığı",
+"anim": "yes",
+"kind": "jog",
+"min": 1.0,
+"max": 20.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 2.0
+},
+{
+"k": "yonelimXY",
+"l": "Dönüş",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -3600,
+"max": 3600,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"g": "3B Dönüşüm",
+"def": 0.0
+},
+{
+"k": "surekliDonuX",
+"l": "Dönüş hızı (°/sn)",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -3600.0,
+"max": 3600.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"g": "3B Dönüşüm",
+"def": 0.0
+},
+{
+"k": "konumXY",
+"l": "Konum",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -5000,
+"max": 5000,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"g": "3B Dönüşüm",
+"def": 0.0
+},
+{
+"k": "perspekt",
+"l": "Kamera",
+"anim": "step",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Perspektif",
+"Ortografik",
+"Proje kamerası"
+],
+"src": "Seçim",
+"g": "Kamera",
+"def": 0
+},
+{
+"k": "gorusAcis",
+"l": "Görüş açısı",
+"anim": "yes",
+"kind": "jog",
+"min": 10.0,
+"max": 120.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "Cetvel",
+"g": "Kamera",
+"def": 45.0
+},
+{
+"k": "isikEtki",
+"l": "Işık etkin",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"g": "Işık ve Gölge",
+"def": 1
+},
+{
+"k": "isikKonu",
+"l": "Işık konumu",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -4000.0,
+"max": 4000.0,
+"defY": -100.0,
+"defZ": -200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"g": "Işık ve Gölge",
+"def": -100.0
+},
+{
+"k": "isikReng",
+"l": "Işık rengi",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"src": "Renk seçici",
+"g": "Işık ve Gölge",
+"def": "#FFFFFF"
+},
+{
+"k": "ortamIsig",
+"l": "Ortam ışığı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"g": "Işık ve Gölge",
+"def": 45.0
+},
+{
+"k": "yonluIsikGucu",
+"l": "Işık gücü",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"g": "Işık ve Gölge",
+"def": 65.0
+},
+{
+"k": "parlakYans",
+"l": "Parlaklık",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"g": "Malzeme",
+"def": 20.0
+},
+{
+"k": "puruzlul",
+"l": "Pürüzlülük",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"g": "Malzeme",
+"def": 50.0
+},
+{
+"k": "arkaYuzlGost",
+"l": "Arka yüzleri göster",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"g": "Işık ve Gölge",
+"def": 0
+},
+{
+"k": "kenarYumu",
+"l": "Kenar yumuşatma",
+"anim": "no",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Kapalı",
+"Otomatik",
+"Yüksek"
+],
+"src": "Seçim",
+"g": "Işık ve Gölge",
+"def": 1
+},
+{
+"k": "olcekXYZ",
+"l": "Ölçek",
+"kind": "jog",
+"three": true,
+"min": 1,
+"max": 1000,
+"defY": 100,
+"defZ": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "3B Dönüşüm",
+"link": true,
+"def": 100
+},
+{
+"k": "orantili",
+"l": "Orantılı ölçek",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "3B Dönüşüm",
+"def": 1
+},
+{
+"k": "donusMerk",
+"l": "Dönüş merkezi",
+"kind": "jog",
+"three": true,
+"min": -5000,
+"max": 5000,
+"defY": 0,
+"defZ": 0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "3B Dönüşüm",
+"def": 0
+},
+{
+"k": "donusYontem",
+"l": "Dönüş yöntemi",
+"kind": "choice",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"opts": [
+"Eksen bazlı",
+"En kısa yönelim"
+],
+"unit": "",
+"anim": "step",
+"g": "3B Dönüşüm",
+"def": 0
+},
+{
+"k": "otoDonus",
+"l": "Otomatik dönüş",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "3B Dönüşüm",
+"def": 0
+},
+{
+"k": "kameraUzak",
+"l": "Kamera uzaklığı",
+"kind": "jog",
+"min": 10,
+"max": 10000,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "Kamera",
+"def": 800
+},
+{
+"k": "perspGuc",
+"l": "Perspektif gücü",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Kamera",
+"def": 100
+},
+{
+"k": "malzeme",
+"l": "Malzeme",
+"kind": "choice",
+"min": 0,
+"max": 7,
+"step": 1,
+"jog": 1,
+"opts": [
+"Mat",
+"Metal",
+"Plastik",
+"Cam",
+"Kâğıt",
+"Karton",
+"Ahşap",
+"Özel"
+],
+"unit": "",
+"anim": "step",
+"g": "Malzeme",
+"def": 0
+},
+{
+"k": "tabanRenk",
+"l": "Taban rengi",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "yes",
+"g": "Malzeme",
+"def": "#FFFFFF"
+},
+{
+"k": "ozelDoku3",
+"l": "Özel doku",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"anim": "no",
+"g": "Malzeme",
+"hint": "Görsel / katman",
+"vis": {
+"k": "malzeme",
+"in": [
+7
+]
+},
+"def": ""
+},
+{
+"k": "dokuGucu3",
+"l": "Doku gücü",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Malzeme",
+"def": 100
+},
+{
+"k": "dokuOlcek3",
+"l": "Doku ölçeği",
+"kind": "jog",
+"min": 1,
+"max": 1000,
+"defY": 100,
+"step": 0.1,
+"jog": 0.1,
+"two": true,
+"unit": "%",
+"anim": "yes",
+"g": "Malzeme",
+"link": true,
+"def": 100
+},
+{
+"k": "dokuKonum3",
+"l": "Doku konumu",
+"kind": "jog",
+"min": -4000,
+"max": 4000,
+"defY": 0,
+"step": 0.1,
+"jog": 0.1,
+"two": true,
+"unit": "px",
+"anim": "yes",
+"g": "Malzeme",
+"link": false,
+"def": 0
+},
+{
+"k": "dokuAci3",
+"l": "Doku açısı",
+"kind": "jog",
+"min": -360,
+"max": 360,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"anim": "yes",
+"g": "Malzeme",
+"def": 0
+},
+{
+"k": "metalik",
+"l": "Metalik görünüm",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Malzeme",
+"def": 0
+},
+{
+"k": "kabartma3",
+"l": "Kabartma",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Malzeme",
+"def": 0
+},
+{
+"k": "opaklik3",
+"l": "Opaklık",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Malzeme",
+"def": 100
+},
+{
+"k": "golgelendirme",
+"l": "Gölgelendirme",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Düz",
+"Noktasal",
+"Yönlü"
+],
+"unit": "",
+"anim": "step",
+"g": "Işık ve Gölge",
+"def": 1
+},
+{
+"k": "golgeOlustur",
+"l": "Gölge oluştur",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Işık ve Gölge",
+"def": 1
+},
+{
+"k": "golgeOpak3",
+"l": "Gölge opaklığı",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Işık ve Gölge",
+"vis": {
+"k": "golgeOlustur",
+"in": [
+1
+]
+},
+"def": 35
+},
+{
+"k": "golgeYumu3",
+"l": "Gölge yumuşaklığı",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "Işık ve Gölge",
+"vis": {
+"k": "golgeOlustur",
+"in": [
+1
+]
+},
+"def": 12
+},
+{
+"k": "kalite3",
+"l": "Geometri kalitesi",
+"kind": "choice",
+"min": 0,
+"max": 4,
+"step": 1,
+"jog": 1,
+"opts": [
+"Otomatik",
+"Düşük",
+"Orta",
+"Yüksek",
+"Ultra"
+],
+"unit": "",
+"anim": "step",
+"g": "Işık ve Gölge",
+"def": 0
+}
+],
+"presets": [
+{
+"code": "MB",
+"name": "Masa bayrağı",
+"vals": {
+"direkYuks": 260,
+"direkKali": 5,
+"dalgaYuks": 6,
+"direkTepe": 0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "TB",
+"name": "Tören bayrağı",
+"vals": {
+"direkYuks": 800,
+"dalgaYuks": 26,
+"ruzgarHizi": 0.8
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "CF",
+"name": "Çizgi film",
+"vals": {
+"dalgaYuks": 30,
+"dalgaBoyu": 160,
+"direkMalz": 2
+},
+"keys": {},
+"cols": {
+"direkReng": "#FFD43B"
+},
+"at": "start"
+},
+{
+"code": "GR",
+"name": "Güçlü rüzgâr",
+"vals": {
+"dalgaYuks": 45,
+"dalgaBoyu": 80,
+"ruzgarHizi": 2.5
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": {
+"box": 0.6
+},
+"passes": null,
+"info": null,
+"heavy": true,
+"n": 436,
+"ready": true,
+"hidden": false
+},
+{
+"type": "book3d",
+"name": "Üç Boyutlu Kitap",
+"en": "",
+"cat": 5,
+"kind": "3d",
+"desc": "Üç Boyutlu Kitap",
+"tags": [
+"Kitap",
+"Sayfa"
+],
+"params": [
+{
+"k": "kitapBoyu",
+"l": "Kitap boyutu",
+"anim": "yes",
+"kind": "jog",
+"two": true,
+"three": false,
+"min": -4000,
+"max": 4000,
+"defY": 210,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 150
+},
+{
+"k": "kalinlik",
+"l": "Kalınlık",
+"anim": "yes",
+"kind": "jog",
+"min": 1.0,
+"max": 500.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 40.0
+},
+{
+"k": "sayfaSayi",
+"l": "Sayfa sayısı",
+"anim": "yes",
+"kind": "jog",
+"min": 1.0,
+"max": 1000.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 120.0
+},
+{
+"k": "kapakKali",
+"l": "Kapak kalınlığı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 50.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 4.0
+},
+{
+"k": "acilmaAcis",
+"l": "Açılma açısı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 180.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"def": 0.0
+},
+{
+"k": "acikSayf",
+"l": "Açık sayfa",
+"anim": "yes",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 1.0
+},
+{
+"k": "sayfaCevi",
+"l": "Sayfa çevirme",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 0.0
+},
+{
+"k": "sayfaKivr",
+"l": "Sayfa kıvrımı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 35.0
+},
+{
+"k": "sayfaSert",
+"l": "Sayfa sertliği",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 40.0
+},
+{
+"k": "onKapaGors",
+"l": "Ön kapak görseli",
+"anim": "no",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"hint": "Dosya / görsel",
+"def": ""
+},
+{
+"k": "arkaKapaGors",
+"l": "Arka kapak görseli",
+"anim": "no",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"hint": "Dosya / görsel",
+"def": ""
+},
+{
+"k": "kitapSirtGors",
+"l": "Kitap sırtı görseli",
+"anim": "no",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"hint": "Dosya / görsel",
+"def": ""
+},
+{
+"k": "sayfaGors",
+"l": "Sayfa görselleri",
+"anim": "no",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"hint": "Dosya / görsel",
+"def": ""
+},
+{
+"k": "sayfaReng",
+"l": "Sayfa rengi",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#F3E9D2"
+},
+{
+"k": "sayfaCizg",
+"l": "Sayfa çizgileri",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+},
+{
+"k": "sayfaGolg",
+"l": "Sayfa gölgeleri",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+},
+{
+"k": "yonelimXY",
+"l": "Dönüş",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -3600,
+"max": 3600,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"g": "3B Dönüşüm",
+"def": 0.0
+},
+{
+"k": "surekliDonuX",
+"l": "Dönüş hızı (°/sn)",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -3600.0,
+"max": 3600.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"g": "3B Dönüşüm",
+"def": 0.0
+},
+{
+"k": "konumXY",
+"l": "Konum",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -5000,
+"max": 5000,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"g": "3B Dönüşüm",
+"def": 0.0
+},
+{
+"k": "perspekt",
+"l": "Kamera",
+"anim": "step",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Perspektif",
+"Ortografik",
+"Proje kamerası"
+],
+"src": "Seçim",
+"g": "Kamera",
+"def": 0
+},
+{
+"k": "gorusAcis",
+"l": "Görüş açısı",
+"anim": "yes",
+"kind": "jog",
+"min": 10.0,
+"max": 120.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "Cetvel",
+"g": "Kamera",
+"def": 45.0
+},
+{
+"k": "isikEtki",
+"l": "Işık etkin",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"g": "Işık ve Gölge",
+"def": 1
+},
+{
+"k": "isikKonu",
+"l": "Işık konumu",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -4000.0,
+"max": 4000.0,
+"defY": -100.0,
+"defZ": -200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"g": "Işık ve Gölge",
+"def": -100.0
+},
+{
+"k": "isikReng",
+"l": "Işık rengi",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"src": "Renk seçici",
+"g": "Işık ve Gölge",
+"def": "#FFFFFF"
+},
+{
+"k": "ortamIsig",
+"l": "Ortam ışığı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"g": "Işık ve Gölge",
+"def": 45.0
+},
+{
+"k": "yonluIsikGucu",
+"l": "Işık gücü",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"g": "Işık ve Gölge",
+"def": 65.0
+},
+{
+"k": "parlakYans",
+"l": "Parlaklık",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"g": "Malzeme",
+"def": 20.0
+},
+{
+"k": "puruzlul",
+"l": "Pürüzlülük",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"g": "Malzeme",
+"def": 50.0
+},
+{
+"k": "arkaYuzlGost",
+"l": "Arka yüzleri göster",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"g": "Işık ve Gölge",
+"def": 0
+},
+{
+"k": "kenarYumu",
+"l": "Kenar yumuşatma",
+"anim": "no",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Kapalı",
+"Otomatik",
+"Yüksek"
+],
+"src": "Seçim",
+"g": "Işık ve Gölge",
+"def": 1
+},
+{
+"k": "olcekXYZ",
+"l": "Ölçek",
+"kind": "jog",
+"three": true,
+"min": 1,
+"max": 1000,
+"defY": 100,
+"defZ": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "3B Dönüşüm",
+"link": true,
+"def": 100
+},
+{
+"k": "orantili",
+"l": "Orantılı ölçek",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "3B Dönüşüm",
+"def": 1
+},
+{
+"k": "donusMerk",
+"l": "Dönüş merkezi",
+"kind": "jog",
+"three": true,
+"min": -5000,
+"max": 5000,
+"defY": 0,
+"defZ": 0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "3B Dönüşüm",
+"def": 0
+},
+{
+"k": "donusYontem",
+"l": "Dönüş yöntemi",
+"kind": "choice",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"opts": [
+"Eksen bazlı",
+"En kısa yönelim"
+],
+"unit": "",
+"anim": "step",
+"g": "3B Dönüşüm",
+"def": 0
+},
+{
+"k": "otoDonus",
+"l": "Otomatik dönüş",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "3B Dönüşüm",
+"def": 0
+},
+{
+"k": "kameraUzak",
+"l": "Kamera uzaklığı",
+"kind": "jog",
+"min": 10,
+"max": 10000,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "Kamera",
+"def": 800
+},
+{
+"k": "perspGuc",
+"l": "Perspektif gücü",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Kamera",
+"def": 100
+},
+{
+"k": "malzeme",
+"l": "Malzeme",
+"kind": "choice",
+"min": 0,
+"max": 7,
+"step": 1,
+"jog": 1,
+"opts": [
+"Mat",
+"Metal",
+"Plastik",
+"Cam",
+"Kâğıt",
+"Karton",
+"Ahşap",
+"Özel"
+],
+"unit": "",
+"anim": "step",
+"g": "Malzeme",
+"def": 0
+},
+{
+"k": "tabanRenk",
+"l": "Taban rengi",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "yes",
+"g": "Malzeme",
+"def": "#FFFFFF"
+},
+{
+"k": "ozelDoku3",
+"l": "Özel doku",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"anim": "no",
+"g": "Malzeme",
+"hint": "Görsel / katman",
+"vis": {
+"k": "malzeme",
+"in": [
+7
+]
+},
+"def": ""
+},
+{
+"k": "dokuGucu3",
+"l": "Doku gücü",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Malzeme",
+"def": 100
+},
+{
+"k": "dokuOlcek3",
+"l": "Doku ölçeği",
+"kind": "jog",
+"min": 1,
+"max": 1000,
+"defY": 100,
+"step": 0.1,
+"jog": 0.1,
+"two": true,
+"unit": "%",
+"anim": "yes",
+"g": "Malzeme",
+"link": true,
+"def": 100
+},
+{
+"k": "dokuKonum3",
+"l": "Doku konumu",
+"kind": "jog",
+"min": -4000,
+"max": 4000,
+"defY": 0,
+"step": 0.1,
+"jog": 0.1,
+"two": true,
+"unit": "px",
+"anim": "yes",
+"g": "Malzeme",
+"link": false,
+"def": 0
+},
+{
+"k": "dokuAci3",
+"l": "Doku açısı",
+"kind": "jog",
+"min": -360,
+"max": 360,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"anim": "yes",
+"g": "Malzeme",
+"def": 0
+},
+{
+"k": "metalik",
+"l": "Metalik görünüm",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Malzeme",
+"def": 0
+},
+{
+"k": "kabartma3",
+"l": "Kabartma",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Malzeme",
+"def": 0
+},
+{
+"k": "opaklik3",
+"l": "Opaklık",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Malzeme",
+"def": 100
+},
+{
+"k": "golgelendirme",
+"l": "Gölgelendirme",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Düz",
+"Noktasal",
+"Yönlü"
+],
+"unit": "",
+"anim": "step",
+"g": "Işık ve Gölge",
+"def": 1
+},
+{
+"k": "golgeOlustur",
+"l": "Gölge oluştur",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Işık ve Gölge",
+"def": 1
+},
+{
+"k": "golgeOpak3",
+"l": "Gölge opaklığı",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Işık ve Gölge",
+"vis": {
+"k": "golgeOlustur",
+"in": [
+1
+]
+},
+"def": 35
+},
+{
+"k": "golgeYumu3",
+"l": "Gölge yumuşaklığı",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "Işık ve Gölge",
+"vis": {
+"k": "golgeOlustur",
+"in": [
+1
+]
+},
+"def": 12
+},
+{
+"k": "kalite3",
+"l": "Geometri kalitesi",
+"kind": "choice",
+"min": 0,
+"max": 4,
+"step": 1,
+"jog": 1,
+"opts": [
+"Otomatik",
+"Düşük",
+"Orta",
+"Yüksek",
+"Ultra"
+],
+"unit": "",
+"anim": "step",
+"g": "Işık ve Gölge",
+"def": 0
+}
+],
+"presets": [
+{
+"code": "TK",
+"name": "Tarih kitabı",
+"vals": {
+"acilmaAcis": 120
+},
+"keys": {},
+"cols": {
+"sayfaReng": "#F3E9D2"
+},
+"at": "start"
+},
+{
+"code": "AT",
+"name": "Atlas",
+"vals": {
+"acilmaAcis": 160,
+"kalinlik": 25
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "DF",
+"name": "Defter",
+"vals": {
+"sayfaCizg": 1,
+"acilmaAcis": 150,
+"kapakKali": 2
+},
+"keys": {},
+"cols": {
+"sayfaReng": "#FFFFFF"
+},
+"at": "start"
+},
+{
+"code": "EK",
+"name": "Eski kitap",
+"vals": {
+"acilmaAcis": 110,
+"sayfaKivr": 60
+},
+"keys": {},
+"cols": {
+"sayfaReng": "#E0C99A"
+},
+"at": "start"
+},
+{
+"code": "CR",
+"name": "Çizgi roman",
+"vals": {
+"acilmaAcis": 170,
+"kalinlik": 12
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": {
+"box": 0.6
+},
+"passes": null,
+"info": null,
+"heavy": true,
+"n": 437,
+"ready": true,
+"hidden": false
+},
+{
+"type": "dice3d",
+"name": "Üç Boyutlu Zar",
+"en": "",
+"cat": 5,
+"kind": "3d",
+"desc": "Bu efekt yalnızca dekoratif animasyon ve oyun görselleri içindir.",
+"tags": [
+"Zar",
+"Oyun"
+],
+"params": [
+{
+"k": "yuzSayi",
+"l": "Yüz sayısı",
+"anim": "step",
+"kind": "choice",
+"min": 0,
+"max": 4,
+"step": 1,
+"jog": 1,
+"opts": [
+"4",
+"6",
+"8",
+"12",
+"20"
+],
+"def": 1
+},
+{
+"k": "buyukluk",
+"l": "Büyüklük",
+"anim": "yes",
+"kind": "jog",
+"min": 10.0,
+"max": 1000.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 150.0
+},
+{
+"k": "koseYuva",
+"l": "Köşe yuvarlaklığı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 50.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 8.0
+},
+{
+"k": "kenarPahi",
+"l": "Kenar pahı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 30.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 3.0
+},
+{
+"k": "yuzGoru",
+"l": "Yüz görünümü",
+"anim": "step",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Nokta",
+"Sayı",
+"Özel görsel"
+],
+"def": 0
+},
+{
+"k": "noktaBuyu",
+"l": "Nokta büyüklüğü",
+"anim": "yes",
+"kind": "jog",
+"min": 1.0,
+"max": 40.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 12.0
+},
+{
+"k": "noktaDeri",
+"l": "Nokta derinliği",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 20.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 2.0
+},
+{
+"k": "zarReng",
+"l": "Zar rengi",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#FFFFFF"
+},
+{
+"k": "isaretReng",
+"l": "İşaret rengi",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#000000"
+},
+{
+"k": "herYuzIcin",
+"l": "Her yüz için ayrı görsel",
+"anim": "no",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"hint": "Dosya / görsel",
+"def": ""
+},
+{
+"k": "otomatikYuva",
+"l": "Otomatik yuvarlanma",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 0
+},
+{
+"k": "yuvarlanIler",
+"l": "Yuvarlanma ilerlemesi",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 0.0
+},
+{
+"k": "sicramaYuks",
+"l": "Sıçrama yüksekliği",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 500.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 20.0
+},
+{
+"k": "sonYuz",
+"l": "Son yüz",
+"anim": "yes",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 6.0
+},
+{
+"k": "tohum",
+"l": "Tohum",
+"anim": "yes",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"reseed": true,
+"def": 1.0
+},
+{
+"k": "yonelimXY",
+"l": "Dönüş",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -3600,
+"max": 3600,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"g": "3B Dönüşüm",
+"def": 0.0
+},
+{
+"k": "surekliDonuX",
+"l": "Dönüş hızı (°/sn)",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -3600.0,
+"max": 3600.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"g": "3B Dönüşüm",
+"def": 0.0
+},
+{
+"k": "konumXY",
+"l": "Konum",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -5000,
+"max": 5000,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"g": "3B Dönüşüm",
+"def": 0.0
+},
+{
+"k": "perspekt",
+"l": "Kamera",
+"anim": "step",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Perspektif",
+"Ortografik",
+"Proje kamerası"
+],
+"src": "Seçim",
+"g": "Kamera",
+"def": 0
+},
+{
+"k": "gorusAcis",
+"l": "Görüş açısı",
+"anim": "yes",
+"kind": "jog",
+"min": 10.0,
+"max": 120.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "Cetvel",
+"g": "Kamera",
+"def": 45.0
+},
+{
+"k": "isikEtki",
+"l": "Işık etkin",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"g": "Işık ve Gölge",
+"def": 1
+},
+{
+"k": "isikKonu",
+"l": "Işık konumu",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -4000.0,
+"max": 4000.0,
+"defY": -100.0,
+"defZ": -200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"g": "Işık ve Gölge",
+"def": -100.0
+},
+{
+"k": "isikReng",
+"l": "Işık rengi",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"src": "Renk seçici",
+"g": "Işık ve Gölge",
+"def": "#FFFFFF"
+},
+{
+"k": "ortamIsig",
+"l": "Ortam ışığı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"g": "Işık ve Gölge",
+"def": 45.0
+},
+{
+"k": "yonluIsikGucu",
+"l": "Işık gücü",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"g": "Işık ve Gölge",
+"def": 65.0
+},
+{
+"k": "parlakYans",
+"l": "Parlaklık",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"g": "Malzeme",
+"def": 20.0
+},
+{
+"k": "puruzlul",
+"l": "Pürüzlülük",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"g": "Malzeme",
+"def": 50.0
+},
+{
+"k": "arkaYuzlGost",
+"l": "Arka yüzleri göster",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"g": "Işık ve Gölge",
+"def": 0
+},
+{
+"k": "kenarYumu",
+"l": "Kenar yumuşatma",
+"anim": "no",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Kapalı",
+"Otomatik",
+"Yüksek"
+],
+"src": "Seçim",
+"g": "Işık ve Gölge",
+"def": 1
+},
+{
+"k": "olcekXYZ",
+"l": "Ölçek",
+"kind": "jog",
+"three": true,
+"min": 1,
+"max": 1000,
+"defY": 100,
+"defZ": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "3B Dönüşüm",
+"link": true,
+"def": 100
+},
+{
+"k": "orantili",
+"l": "Orantılı ölçek",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "3B Dönüşüm",
+"def": 1
+},
+{
+"k": "donusMerk",
+"l": "Dönüş merkezi",
+"kind": "jog",
+"three": true,
+"min": -5000,
+"max": 5000,
+"defY": 0,
+"defZ": 0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "3B Dönüşüm",
+"def": 0
+},
+{
+"k": "donusYontem",
+"l": "Dönüş yöntemi",
+"kind": "choice",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"opts": [
+"Eksen bazlı",
+"En kısa yönelim"
+],
+"unit": "",
+"anim": "step",
+"g": "3B Dönüşüm",
+"def": 0
+},
+{
+"k": "otoDonus",
+"l": "Otomatik dönüş",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "3B Dönüşüm",
+"def": 0
+},
+{
+"k": "kameraUzak",
+"l": "Kamera uzaklığı",
+"kind": "jog",
+"min": 10,
+"max": 10000,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "Kamera",
+"def": 800
+},
+{
+"k": "perspGuc",
+"l": "Perspektif gücü",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Kamera",
+"def": 100
+},
+{
+"k": "malzeme",
+"l": "Malzeme",
+"kind": "choice",
+"min": 0,
+"max": 7,
+"step": 1,
+"jog": 1,
+"opts": [
+"Mat",
+"Metal",
+"Plastik",
+"Cam",
+"Kâğıt",
+"Karton",
+"Ahşap",
+"Özel"
+],
+"unit": "",
+"anim": "step",
+"g": "Malzeme",
+"def": 0
+},
+{
+"k": "tabanRenk",
+"l": "Taban rengi",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "yes",
+"g": "Malzeme",
+"def": "#FFFFFF"
+},
+{
+"k": "ozelDoku3",
+"l": "Özel doku",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"anim": "no",
+"g": "Malzeme",
+"hint": "Görsel / katman",
+"vis": {
+"k": "malzeme",
+"in": [
+7
+]
+},
+"def": ""
+},
+{
+"k": "dokuGucu3",
+"l": "Doku gücü",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Malzeme",
+"def": 100
+},
+{
+"k": "dokuOlcek3",
+"l": "Doku ölçeği",
+"kind": "jog",
+"min": 1,
+"max": 1000,
+"defY": 100,
+"step": 0.1,
+"jog": 0.1,
+"two": true,
+"unit": "%",
+"anim": "yes",
+"g": "Malzeme",
+"link": true,
+"def": 100
+},
+{
+"k": "dokuKonum3",
+"l": "Doku konumu",
+"kind": "jog",
+"min": -4000,
+"max": 4000,
+"defY": 0,
+"step": 0.1,
+"jog": 0.1,
+"two": true,
+"unit": "px",
+"anim": "yes",
+"g": "Malzeme",
+"link": false,
+"def": 0
+},
+{
+"k": "dokuAci3",
+"l": "Doku açısı",
+"kind": "jog",
+"min": -360,
+"max": 360,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"anim": "yes",
+"g": "Malzeme",
+"def": 0
+},
+{
+"k": "metalik",
+"l": "Metalik görünüm",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Malzeme",
+"def": 0
+},
+{
+"k": "kabartma3",
+"l": "Kabartma",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Malzeme",
+"def": 0
+},
+{
+"k": "opaklik3",
+"l": "Opaklık",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Malzeme",
+"def": 100
+},
+{
+"k": "golgelendirme",
+"l": "Gölgelendirme",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Düz",
+"Noktasal",
+"Yönlü"
+],
+"unit": "",
+"anim": "step",
+"g": "Işık ve Gölge",
+"def": 1
+},
+{
+"k": "golgeOlustur",
+"l": "Gölge oluştur",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Işık ve Gölge",
+"def": 1
+},
+{
+"k": "golgeOpak3",
+"l": "Gölge opaklığı",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Işık ve Gölge",
+"vis": {
+"k": "golgeOlustur",
+"in": [
+1
+]
+},
+"def": 35
+},
+{
+"k": "golgeYumu3",
+"l": "Gölge yumuşaklığı",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "Işık ve Gölge",
+"vis": {
+"k": "golgeOlustur",
+"in": [
+1
+]
+},
+"def": 12
+},
+{
+"k": "kalite3",
+"l": "Geometri kalitesi",
+"kind": "choice",
+"min": 0,
+"max": 4,
+"step": 1,
+"jog": 1,
+"opts": [
+"Otomatik",
+"Düşük",
+"Orta",
+"Yüksek",
+"Ultra"
+],
+"unit": "",
+"anim": "step",
+"g": "Işık ve Gölge",
+"def": 0
+}
+],
+"presets": [
+{
+"code": "KZ",
+"name": "Klasik zar",
+"vals": {},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "AZ",
+"name": "Ahşap",
+"vals": {
+"malzeme": 6
+},
+"keys": {},
+"cols": {
+"zarReng": "#C9A27A",
+"isaretReng": "#3A2414"
+},
+"at": "start"
+},
+{
+"code": "MZ",
+"name": "Metal",
+"vals": {
+"malzeme": 1
+},
+"keys": {},
+"cols": {
+"zarReng": "#C0C0C8"
+},
+"at": "start"
+},
+{
+"code": "YV",
+"name": "Yuvarlanan zar",
+"vals": {
+"otomatikYuva": 1
+},
+"keys": {
+"yuvarlanIler": [
+[
+0,
+0
+],
+[
+1.5,
+100
+]
+]
+},
+"cols": {},
+"at": "start"
+}
+],
+"pad": {
+"box": 0.45
+},
+"passes": null,
+"info": null,
+"heavy": true,
+"n": 438,
+"ready": true,
+"hidden": false
+},
+{
+"type": "gear3d",
+"name": "Üç Boyutlu Dişli",
+"en": "",
+"cat": 5,
+"kind": "3d",
+"desc": "Üç Boyutlu Dişli",
+"tags": [
+"Dişli",
+"Mekanik"
+],
+"params": [
+{
+"k": "cap",
+"l": "Çap",
+"anim": "yes",
+"kind": "jog",
+"min": 10.0,
+"max": 2000.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 200.0
+},
+{
+"k": "kalinlik",
+"l": "Kalınlık",
+"anim": "yes",
+"kind": "jog",
+"min": 1.0,
+"max": 500.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 25.0
+},
+{
+"k": "disSayi",
+"l": "Diş sayısı",
+"anim": "yes",
+"kind": "jog",
+"min": 3.0,
+"max": 150.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 16.0
+},
+{
+"k": "disYuks",
+"l": "Diş yüksekliği",
+"anim": "yes",
+"kind": "jog",
+"min": 1.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 15.0
+},
+{
+"k": "disGeni",
+"l": "Diş genişliği",
+"anim": "yes",
+"kind": "jog",
+"min": 10.0,
+"max": 90.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 50.0
+},
+{
+"k": "merkezDeli",
+"l": "Merkez deliği",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 90.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 25.0
+},
+{
+"k": "destekKoll",
+"l": "Destek kolları",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 0
+},
+{
+"k": "destekKoluSayi",
+"l": "Destek kolu sayısı",
+"anim": "yes",
+"kind": "jog",
+"min": 2.0,
+"max": 20.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 5.0
+},
+{
+"k": "donusHizi",
+"l": "Dönüş hızı",
+"anim": "yes",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"def": 60.0
+},
+{
+"k": "baskaDislBagl",
+"l": "Başka dişliye bağla",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 0
+},
+{
+"k": "baglantiDisl",
+"l": "Bağlantılı dişli",
+"anim": "no",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"hint": "Katman",
+"def": ""
+},
+{
+"k": "donusHiziDis",
+"l": "Dönüş hızını diş sayısına göre eşleştir",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+},
+{
+"k": "yonelimXY",
+"l": "Dönüş",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -3600,
+"max": 3600,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"g": "3B Dönüşüm",
+"def": 0.0
+},
+{
+"k": "surekliDonuX",
+"l": "Dönüş hızı (°/sn)",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -3600.0,
+"max": 3600.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"g": "3B Dönüşüm",
+"def": 0.0
+},
+{
+"k": "konumXY",
+"l": "Konum",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -5000,
+"max": 5000,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"g": "3B Dönüşüm",
+"def": 0.0
+},
+{
+"k": "perspekt",
+"l": "Kamera",
+"anim": "step",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Perspektif",
+"Ortografik",
+"Proje kamerası"
+],
+"src": "Seçim",
+"g": "Kamera",
+"def": 0
+},
+{
+"k": "gorusAcis",
+"l": "Görüş açısı",
+"anim": "yes",
+"kind": "jog",
+"min": 10.0,
+"max": 120.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "Cetvel",
+"g": "Kamera",
+"def": 45.0
+},
+{
+"k": "isikEtki",
+"l": "Işık etkin",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"g": "Işık ve Gölge",
+"def": 1
+},
+{
+"k": "isikKonu",
+"l": "Işık konumu",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -4000.0,
+"max": 4000.0,
+"defY": -100.0,
+"defZ": -200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"g": "Işık ve Gölge",
+"def": -100.0
+},
+{
+"k": "isikReng",
+"l": "Işık rengi",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"src": "Renk seçici",
+"g": "Işık ve Gölge",
+"def": "#FFFFFF"
+},
+{
+"k": "ortamIsig",
+"l": "Ortam ışığı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"g": "Işık ve Gölge",
+"def": 45.0
+},
+{
+"k": "yonluIsikGucu",
+"l": "Işık gücü",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"g": "Işık ve Gölge",
+"def": 65.0
+},
+{
+"k": "parlakYans",
+"l": "Parlaklık",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"g": "Malzeme",
+"def": 20.0
+},
+{
+"k": "puruzlul",
+"l": "Pürüzlülük",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"g": "Malzeme",
+"def": 50.0
+},
+{
+"k": "arkaYuzlGost",
+"l": "Arka yüzleri göster",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"g": "Işık ve Gölge",
+"def": 0
+},
+{
+"k": "kenarYumu",
+"l": "Kenar yumuşatma",
+"anim": "no",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Kapalı",
+"Otomatik",
+"Yüksek"
+],
+"src": "Seçim",
+"g": "Işık ve Gölge",
+"def": 1
+},
+{
+"k": "olcekXYZ",
+"l": "Ölçek",
+"kind": "jog",
+"three": true,
+"min": 1,
+"max": 1000,
+"defY": 100,
+"defZ": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "3B Dönüşüm",
+"link": true,
+"def": 100
+},
+{
+"k": "orantili",
+"l": "Orantılı ölçek",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "3B Dönüşüm",
+"def": 1
+},
+{
+"k": "donusMerk",
+"l": "Dönüş merkezi",
+"kind": "jog",
+"three": true,
+"min": -5000,
+"max": 5000,
+"defY": 0,
+"defZ": 0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "3B Dönüşüm",
+"def": 0
+},
+{
+"k": "donusYontem",
+"l": "Dönüş yöntemi",
+"kind": "choice",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"opts": [
+"Eksen bazlı",
+"En kısa yönelim"
+],
+"unit": "",
+"anim": "step",
+"g": "3B Dönüşüm",
+"def": 0
+},
+{
+"k": "otoDonus",
+"l": "Otomatik dönüş",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "3B Dönüşüm",
+"def": 0
+},
+{
+"k": "kameraUzak",
+"l": "Kamera uzaklığı",
+"kind": "jog",
+"min": 10,
+"max": 10000,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "Kamera",
+"def": 800
+},
+{
+"k": "perspGuc",
+"l": "Perspektif gücü",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Kamera",
+"def": 100
+},
+{
+"k": "malzeme",
+"l": "Malzeme",
+"kind": "choice",
+"min": 0,
+"max": 7,
+"step": 1,
+"jog": 1,
+"opts": [
+"Mat",
+"Metal",
+"Plastik",
+"Cam",
+"Kâğıt",
+"Karton",
+"Ahşap",
+"Özel"
+],
+"unit": "",
+"anim": "step",
+"g": "Malzeme",
+"def": 0
+},
+{
+"k": "tabanRenk",
+"l": "Taban rengi",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "yes",
+"g": "Malzeme",
+"def": "#FFFFFF"
+},
+{
+"k": "ozelDoku3",
+"l": "Özel doku",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"anim": "no",
+"g": "Malzeme",
+"hint": "Görsel / katman",
+"vis": {
+"k": "malzeme",
+"in": [
+7
+]
+},
+"def": ""
+},
+{
+"k": "dokuGucu3",
+"l": "Doku gücü",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Malzeme",
+"def": 100
+},
+{
+"k": "dokuOlcek3",
+"l": "Doku ölçeği",
+"kind": "jog",
+"min": 1,
+"max": 1000,
+"defY": 100,
+"step": 0.1,
+"jog": 0.1,
+"two": true,
+"unit": "%",
+"anim": "yes",
+"g": "Malzeme",
+"link": true,
+"def": 100
+},
+{
+"k": "dokuKonum3",
+"l": "Doku konumu",
+"kind": "jog",
+"min": -4000,
+"max": 4000,
+"defY": 0,
+"step": 0.1,
+"jog": 0.1,
+"two": true,
+"unit": "px",
+"anim": "yes",
+"g": "Malzeme",
+"link": false,
+"def": 0
+},
+{
+"k": "dokuAci3",
+"l": "Doku açısı",
+"kind": "jog",
+"min": -360,
+"max": 360,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"anim": "yes",
+"g": "Malzeme",
+"def": 0
+},
+{
+"k": "metalik",
+"l": "Metalik görünüm",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Malzeme",
+"def": 0
+},
+{
+"k": "kabartma3",
+"l": "Kabartma",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Malzeme",
+"def": 0
+},
+{
+"k": "opaklik3",
+"l": "Opaklık",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Malzeme",
+"def": 100
+},
+{
+"k": "golgelendirme",
+"l": "Gölgelendirme",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Düz",
+"Noktasal",
+"Yönlü"
+],
+"unit": "",
+"anim": "step",
+"g": "Işık ve Gölge",
+"def": 1
+},
+{
+"k": "golgeOlustur",
+"l": "Gölge oluştur",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Işık ve Gölge",
+"def": 1
+},
+{
+"k": "golgeOpak3",
+"l": "Gölge opaklığı",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Işık ve Gölge",
+"vis": {
+"k": "golgeOlustur",
+"in": [
+1
+]
+},
+"def": 35
+},
+{
+"k": "golgeYumu3",
+"l": "Gölge yumuşaklığı",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "Işık ve Gölge",
+"vis": {
+"k": "golgeOlustur",
+"in": [
+1
+]
+},
+"def": 12
+},
+{
+"k": "kalite3",
+"l": "Geometri kalitesi",
+"kind": "choice",
+"min": 0,
+"max": 4,
+"step": 1,
+"jog": 1,
+"opts": [
+"Otomatik",
+"Düşük",
+"Orta",
+"Yüksek",
+"Ultra"
+],
+"unit": "",
+"anim": "step",
+"g": "Işık ve Gölge",
+"def": 0
+}
+],
+"presets": [
+{
+"code": "SD",
+"name": "Saat dişlisi",
+"vals": {
+"disSayi": 40,
+"disYuks": 8,
+"kalinlik": 8,
+"destekKoll": 1
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "MD",
+"name": "Mekanik dişli",
+"vals": {
+"disSayi": 16,
+"kalinlik": 30,
+"malzeme": 1
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "CF",
+"name": "Çizgi film",
+"vals": {
+"disSayi": 10,
+"disYuks": 25,
+"destekKoll": 1,
+"destekKoluSayi": 4
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": {
+"box": 0.45
+},
+"passes": null,
+"info": null,
+"heavy": true,
+"n": 439,
+"ready": true,
+"hidden": false
+},
+{
+"type": "chain3d",
+"name": "Üç Boyutlu Zincir",
+"en": "",
+"cat": 5,
+"kind": "3d",
+"desc": "Üç Boyutlu Zincir",
+"tags": [
+"Zincir",
+"Metal"
+],
+"params": [
+{
+"k": "halkaSayi",
+"l": "Halka sayısı",
+"anim": "yes",
+"kind": "jog",
+"min": 1.0,
+"max": 200.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 20.0
+},
+{
+"k": "halkaBoyu",
+"l": "Halka boyutu",
+"anim": "yes",
+"kind": "jog",
+"two": true,
+"three": false,
+"min": -4000,
+"max": 4000,
+"defY": 50.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 30.0
+},
+{
+"k": "halkaKali",
+"l": "Halka kalınlığı",
+"anim": "yes",
+"kind": "jog",
+"min": 1.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 5.0
+},
+{
+"k": "halkaAral",
+"l": "Halka aralığı",
+"anim": "yes",
+"kind": "jog",
+"min": 1.0,
+"max": 300.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 20.0
+},
+{
+"k": "ardisikHalkDonu",
+"l": "Ardışık halka dönüşü",
+"anim": "yes",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"def": 90.0
+},
+{
+"k": "halkaBici",
+"l": "Halka biçimi",
+"anim": "step",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Oval",
+"Yuvarlak",
+"Kare"
+],
+"def": 0
+},
+{
+"k": "yol",
+"l": "Yol",
+"anim": "step",
+"kind": "choice",
+"min": 0,
+"max": 4,
+"step": 1,
+"jog": 1,
+"opts": [
+"Düz",
+"Yay",
+"Daire",
+"Sarkık",
+"Özel"
+],
+"def": 0
+},
+{
+"k": "sarkma",
+"l": "Sarkma",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 2000.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 60.0
+},
+{
+"k": "baslangiNokt",
+"l": "Başlangıç noktası",
+"anim": "yes",
+"kind": "jog",
+"two": true,
+"three": false,
+"min": -100,
+"max": 200,
+"defY": 50,
+"step": 0.1,
+"jog": 0.1,
+"unit": "box%",
+"def": 15
+},
+{
+"k": "bitisNokt",
+"l": "Bitiş noktası",
+"anim": "yes",
+"kind": "jog",
+"two": true,
+"three": false,
+"min": -100,
+"max": 200,
+"defY": 50,
+"step": 0.1,
+"jog": 0.1,
+"unit": "box%",
+"def": 85
+},
+{
+"k": "sallanma",
+"l": "Sallanma",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 0
+},
+{
+"k": "sallanmaBuyu",
+"l": "Sallanma büyüklüğü",
+"anim": "yes",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"def": 15.0
+},
+{
+"k": "sallanmaHizi",
+"l": "Sallanma hızı",
+"anim": "yes",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.01,
+"jog": 0.01,
+"unit": "Hz",
+"def": 1.0
+},
+{
+"k": "yonelimXY",
+"l": "Dönüş",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -3600,
+"max": 3600,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"g": "3B Dönüşüm",
+"def": 0.0
+},
+{
+"k": "surekliDonuX",
+"l": "Dönüş hızı (°/sn)",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -3600.0,
+"max": 3600.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"g": "3B Dönüşüm",
+"def": 0.0
+},
+{
+"k": "konumXY",
+"l": "Konum",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -5000,
+"max": 5000,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"g": "3B Dönüşüm",
+"def": 0.0
+},
+{
+"k": "perspekt",
+"l": "Kamera",
+"anim": "step",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Perspektif",
+"Ortografik",
+"Proje kamerası"
+],
+"src": "Seçim",
+"g": "Kamera",
+"def": 0
+},
+{
+"k": "gorusAcis",
+"l": "Görüş açısı",
+"anim": "yes",
+"kind": "jog",
+"min": 10.0,
+"max": 120.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "Cetvel",
+"g": "Kamera",
+"def": 45.0
+},
+{
+"k": "isikEtki",
+"l": "Işık etkin",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"g": "Işık ve Gölge",
+"def": 1
+},
+{
+"k": "isikKonu",
+"l": "Işık konumu",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -4000.0,
+"max": 4000.0,
+"defY": -100.0,
+"defZ": -200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"g": "Işık ve Gölge",
+"def": -100.0
+},
+{
+"k": "isikReng",
+"l": "Işık rengi",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"src": "Renk seçici",
+"g": "Işık ve Gölge",
+"def": "#FFFFFF"
+},
+{
+"k": "ortamIsig",
+"l": "Ortam ışığı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"g": "Işık ve Gölge",
+"def": 45.0
+},
+{
+"k": "yonluIsikGucu",
+"l": "Işık gücü",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"g": "Işık ve Gölge",
+"def": 65.0
+},
+{
+"k": "parlakYans",
+"l": "Parlaklık",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"g": "Malzeme",
+"def": 20.0
+},
+{
+"k": "puruzlul",
+"l": "Pürüzlülük",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"g": "Malzeme",
+"def": 50.0
+},
+{
+"k": "arkaYuzlGost",
+"l": "Arka yüzleri göster",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"g": "Işık ve Gölge",
+"def": 0
+},
+{
+"k": "kenarYumu",
+"l": "Kenar yumuşatma",
+"anim": "no",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Kapalı",
+"Otomatik",
+"Yüksek"
+],
+"src": "Seçim",
+"g": "Işık ve Gölge",
+"def": 1
+},
+{
+"k": "olcekXYZ",
+"l": "Ölçek",
+"kind": "jog",
+"three": true,
+"min": 1,
+"max": 1000,
+"defY": 100,
+"defZ": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "3B Dönüşüm",
+"link": true,
+"def": 100
+},
+{
+"k": "orantili",
+"l": "Orantılı ölçek",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "3B Dönüşüm",
+"def": 1
+},
+{
+"k": "donusMerk",
+"l": "Dönüş merkezi",
+"kind": "jog",
+"three": true,
+"min": -5000,
+"max": 5000,
+"defY": 0,
+"defZ": 0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "3B Dönüşüm",
+"def": 0
+},
+{
+"k": "donusYontem",
+"l": "Dönüş yöntemi",
+"kind": "choice",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"opts": [
+"Eksen bazlı",
+"En kısa yönelim"
+],
+"unit": "",
+"anim": "step",
+"g": "3B Dönüşüm",
+"def": 0
+},
+{
+"k": "otoDonus",
+"l": "Otomatik dönüş",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "3B Dönüşüm",
+"def": 0
+},
+{
+"k": "kameraUzak",
+"l": "Kamera uzaklığı",
+"kind": "jog",
+"min": 10,
+"max": 10000,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "Kamera",
+"def": 800
+},
+{
+"k": "perspGuc",
+"l": "Perspektif gücü",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Kamera",
+"def": 100
+},
+{
+"k": "malzeme",
+"l": "Malzeme",
+"kind": "choice",
+"min": 0,
+"max": 7,
+"step": 1,
+"jog": 1,
+"opts": [
+"Mat",
+"Metal",
+"Plastik",
+"Cam",
+"Kâğıt",
+"Karton",
+"Ahşap",
+"Özel"
+],
+"unit": "",
+"anim": "step",
+"g": "Malzeme",
+"def": 0
+},
+{
+"k": "tabanRenk",
+"l": "Taban rengi",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "yes",
+"g": "Malzeme",
+"def": "#FFFFFF"
+},
+{
+"k": "ozelDoku3",
+"l": "Özel doku",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"anim": "no",
+"g": "Malzeme",
+"hint": "Görsel / katman",
+"vis": {
+"k": "malzeme",
+"in": [
+7
+]
+},
+"def": ""
+},
+{
+"k": "dokuGucu3",
+"l": "Doku gücü",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Malzeme",
+"def": 100
+},
+{
+"k": "dokuOlcek3",
+"l": "Doku ölçeği",
+"kind": "jog",
+"min": 1,
+"max": 1000,
+"defY": 100,
+"step": 0.1,
+"jog": 0.1,
+"two": true,
+"unit": "%",
+"anim": "yes",
+"g": "Malzeme",
+"link": true,
+"def": 100
+},
+{
+"k": "dokuKonum3",
+"l": "Doku konumu",
+"kind": "jog",
+"min": -4000,
+"max": 4000,
+"defY": 0,
+"step": 0.1,
+"jog": 0.1,
+"two": true,
+"unit": "px",
+"anim": "yes",
+"g": "Malzeme",
+"link": false,
+"def": 0
+},
+{
+"k": "dokuAci3",
+"l": "Doku açısı",
+"kind": "jog",
+"min": -360,
+"max": 360,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"anim": "yes",
+"g": "Malzeme",
+"def": 0
+},
+{
+"k": "metalik",
+"l": "Metalik görünüm",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Malzeme",
+"def": 0
+},
+{
+"k": "kabartma3",
+"l": "Kabartma",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Malzeme",
+"def": 0
+},
+{
+"k": "opaklik3",
+"l": "Opaklık",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Malzeme",
+"def": 100
+},
+{
+"k": "golgelendirme",
+"l": "Gölgelendirme",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Düz",
+"Noktasal",
+"Yönlü"
+],
+"unit": "",
+"anim": "step",
+"g": "Işık ve Gölge",
+"def": 1
+},
+{
+"k": "golgeOlustur",
+"l": "Gölge oluştur",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Işık ve Gölge",
+"def": 1
+},
+{
+"k": "golgeOpak3",
+"l": "Gölge opaklığı",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Işık ve Gölge",
+"vis": {
+"k": "golgeOlustur",
+"in": [
+1
+]
+},
+"def": 35
+},
+{
+"k": "golgeYumu3",
+"l": "Gölge yumuşaklığı",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "Işık ve Gölge",
+"vis": {
+"k": "golgeOlustur",
+"in": [
+1
+]
+},
+"def": 12
+},
+{
+"k": "kalite3",
+"l": "Geometri kalitesi",
+"kind": "choice",
+"min": 0,
+"max": 4,
+"step": 1,
+"jog": 1,
+"opts": [
+"Otomatik",
+"Düşük",
+"Orta",
+"Yüksek",
+"Ultra"
+],
+"unit": "",
+"anim": "step",
+"g": "Işık ve Gölge",
+"def": 0
+}
+],
+"presets": [
+{
+"code": "MZ",
+"name": "Metal zincir",
+"vals": {
+"malzeme": 1
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "DZ",
+"name": "Dekoratif zincir",
+"vals": {
+"halkaBici": 1,
+"yol": 1
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "AZ",
+"name": "Altın zincir",
+"vals": {
+"malzeme": 1,
+"yol": 3
+},
+"keys": {},
+"cols": {
+"tabanRenk": "#D4AF37"
+},
+"at": "start"
+}
+],
+"pad": {
+"box": 0.6
+},
+"passes": null,
+"info": null,
+"heavy": true,
+"n": 440,
+"ready": true,
+"hidden": false
+},
+{
+"type": "coin3d",
+"name": "Üç Boyutlu Madeni Para",
+"en": "",
+"cat": 5,
+"kind": "3d",
+"desc": "Üç Boyutlu Madeni Para",
+"tags": [
+"Para",
+"Rozet"
+],
+"params": [
+{
+"k": "cap",
+"l": "Çap",
+"anim": "yes",
+"kind": "jog",
+"min": 10.0,
+"max": 2000.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 180.0
+},
+{
+"k": "kalinlik",
+"l": "Kalınlık",
+"anim": "yes",
+"kind": "jog",
+"min": 1.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 8.0
+},
+{
+"k": "pah",
+"l": "Pah",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 30.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 2.0
+},
+{
+"k": "bicim",
+"l": "Biçim",
+"anim": "step",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Yuvarlak",
+"Çokgen",
+"Özel"
+],
+"def": 0
+},
+{
+"k": "kenarSayi",
+"l": "Kenar sayısı",
+"anim": "yes",
+"kind": "jog",
+"min": 3.0,
+"max": 50.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 8.0
+},
+{
+"k": "tirtikliKena",
+"l": "Tırtıklı kenar",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+},
+{
+"k": "tirtikSayi",
+"l": "Tırtık sayısı",
+"anim": "yes",
+"kind": "jog",
+"min": 10.0,
+"max": 300.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 100.0
+},
+{
+"k": "tirtikDeri",
+"l": "Tırtık derinliği",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 10.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 1.0
+},
+{
+"k": "onYuz",
+"l": "Ön yüz",
+"anim": "no",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"hint": "Dosya / görsel",
+"def": ""
+},
+{
+"k": "arkaYuz",
+"l": "Arka yüz",
+"anim": "no",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"hint": "Dosya / görsel",
+"def": ""
+},
+{
+"k": "yuzeyKaba",
+"l": "Yüzey kabartması",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 35.0
+},
+{
+"k": "otomatikDonm",
+"l": "Otomatik dönme",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 0
+},
+{
+"k": "donmeHizi",
+"l": "Dönme hızı",
+"anim": "yes",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"def": 90.0
+},
+{
+"k": "yalpalam",
+"l": "Yalpalama",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 45.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"def": 5.0
+},
+{
+"k": "yonelimXY",
+"l": "Dönüş",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -3600,
+"max": 3600,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"g": "3B Dönüşüm",
+"def": 0.0
+},
+{
+"k": "surekliDonuX",
+"l": "Dönüş hızı (°/sn)",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -3600.0,
+"max": 3600.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"g": "3B Dönüşüm",
+"def": 0.0
+},
+{
+"k": "konumXY",
+"l": "Konum",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -5000,
+"max": 5000,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"g": "3B Dönüşüm",
+"def": 0.0
+},
+{
+"k": "perspekt",
+"l": "Kamera",
+"anim": "step",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Perspektif",
+"Ortografik",
+"Proje kamerası"
+],
+"src": "Seçim",
+"g": "Kamera",
+"def": 0
+},
+{
+"k": "gorusAcis",
+"l": "Görüş açısı",
+"anim": "yes",
+"kind": "jog",
+"min": 10.0,
+"max": 120.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "Cetvel",
+"g": "Kamera",
+"def": 45.0
+},
+{
+"k": "isikEtki",
+"l": "Işık etkin",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"g": "Işık ve Gölge",
+"def": 1
+},
+{
+"k": "isikKonu",
+"l": "Işık konumu",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -4000.0,
+"max": 4000.0,
+"defY": -100.0,
+"defZ": -200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"g": "Işık ve Gölge",
+"def": -100.0
+},
+{
+"k": "isikReng",
+"l": "Işık rengi",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"src": "Renk seçici",
+"g": "Işık ve Gölge",
+"def": "#FFFFFF"
+},
+{
+"k": "ortamIsig",
+"l": "Ortam ışığı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"g": "Işık ve Gölge",
+"def": 45.0
+},
+{
+"k": "yonluIsikGucu",
+"l": "Işık gücü",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"g": "Işık ve Gölge",
+"def": 65.0
+},
+{
+"k": "parlakYans",
+"l": "Parlaklık",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"g": "Malzeme",
+"def": 20.0
+},
+{
+"k": "puruzlul",
+"l": "Pürüzlülük",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"g": "Malzeme",
+"def": 50.0
+},
+{
+"k": "arkaYuzlGost",
+"l": "Arka yüzleri göster",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"g": "Işık ve Gölge",
+"def": 0
+},
+{
+"k": "kenarYumu",
+"l": "Kenar yumuşatma",
+"anim": "no",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Kapalı",
+"Otomatik",
+"Yüksek"
+],
+"src": "Seçim",
+"g": "Işık ve Gölge",
+"def": 1
+},
+{
+"k": "olcekXYZ",
+"l": "Ölçek",
+"kind": "jog",
+"three": true,
+"min": 1,
+"max": 1000,
+"defY": 100,
+"defZ": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "3B Dönüşüm",
+"link": true,
+"def": 100
+},
+{
+"k": "orantili",
+"l": "Orantılı ölçek",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "3B Dönüşüm",
+"def": 1
+},
+{
+"k": "donusMerk",
+"l": "Dönüş merkezi",
+"kind": "jog",
+"three": true,
+"min": -5000,
+"max": 5000,
+"defY": 0,
+"defZ": 0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "3B Dönüşüm",
+"def": 0
+},
+{
+"k": "donusYontem",
+"l": "Dönüş yöntemi",
+"kind": "choice",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"opts": [
+"Eksen bazlı",
+"En kısa yönelim"
+],
+"unit": "",
+"anim": "step",
+"g": "3B Dönüşüm",
+"def": 0
+},
+{
+"k": "otoDonus",
+"l": "Otomatik dönüş",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "3B Dönüşüm",
+"def": 0
+},
+{
+"k": "kameraUzak",
+"l": "Kamera uzaklığı",
+"kind": "jog",
+"min": 10,
+"max": 10000,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "Kamera",
+"def": 800
+},
+{
+"k": "perspGuc",
+"l": "Perspektif gücü",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Kamera",
+"def": 100
+},
+{
+"k": "malzeme",
+"l": "Malzeme",
+"kind": "choice",
+"min": 0,
+"max": 7,
+"step": 1,
+"jog": 1,
+"opts": [
+"Mat",
+"Metal",
+"Plastik",
+"Cam",
+"Kâğıt",
+"Karton",
+"Ahşap",
+"Özel"
+],
+"unit": "",
+"anim": "step",
+"g": "Malzeme",
+"def": 0
+},
+{
+"k": "tabanRenk",
+"l": "Taban rengi",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "yes",
+"g": "Malzeme",
+"def": "#FFFFFF"
+},
+{
+"k": "ozelDoku3",
+"l": "Özel doku",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"anim": "no",
+"g": "Malzeme",
+"hint": "Görsel / katman",
+"vis": {
+"k": "malzeme",
+"in": [
+7
+]
+},
+"def": ""
+},
+{
+"k": "dokuGucu3",
+"l": "Doku gücü",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Malzeme",
+"def": 100
+},
+{
+"k": "dokuOlcek3",
+"l": "Doku ölçeği",
+"kind": "jog",
+"min": 1,
+"max": 1000,
+"defY": 100,
+"step": 0.1,
+"jog": 0.1,
+"two": true,
+"unit": "%",
+"anim": "yes",
+"g": "Malzeme",
+"link": true,
+"def": 100
+},
+{
+"k": "dokuKonum3",
+"l": "Doku konumu",
+"kind": "jog",
+"min": -4000,
+"max": 4000,
+"defY": 0,
+"step": 0.1,
+"jog": 0.1,
+"two": true,
+"unit": "px",
+"anim": "yes",
+"g": "Malzeme",
+"link": false,
+"def": 0
+},
+{
+"k": "dokuAci3",
+"l": "Doku açısı",
+"kind": "jog",
+"min": -360,
+"max": 360,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"anim": "yes",
+"g": "Malzeme",
+"def": 0
+},
+{
+"k": "metalik",
+"l": "Metalik görünüm",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Malzeme",
+"def": 0
+},
+{
+"k": "kabartma3",
+"l": "Kabartma",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Malzeme",
+"def": 0
+},
+{
+"k": "opaklik3",
+"l": "Opaklık",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Malzeme",
+"def": 100
+},
+{
+"k": "golgelendirme",
+"l": "Gölgelendirme",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Düz",
+"Noktasal",
+"Yönlü"
+],
+"unit": "",
+"anim": "step",
+"g": "Işık ve Gölge",
+"def": 1
+},
+{
+"k": "golgeOlustur",
+"l": "Gölge oluştur",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Işık ve Gölge",
+"def": 1
+},
+{
+"k": "golgeOpak3",
+"l": "Gölge opaklığı",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Işık ve Gölge",
+"vis": {
+"k": "golgeOlustur",
+"in": [
+1
+]
+},
+"def": 35
+},
+{
+"k": "golgeYumu3",
+"l": "Gölge yumuşaklığı",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "Işık ve Gölge",
+"vis": {
+"k": "golgeOlustur",
+"in": [
+1
+]
+},
+"def": 12
+},
+{
+"k": "kalite3",
+"l": "Geometri kalitesi",
+"kind": "choice",
+"min": 0,
+"max": 4,
+"step": 1,
+"jog": 1,
+"opts": [
+"Otomatik",
+"Düşük",
+"Orta",
+"Yüksek",
+"Ultra"
+],
+"unit": "",
+"anim": "step",
+"g": "Işık ve Gölge",
+"def": 0
+}
+],
+"presets": [
+{
+"code": "AL",
+"name": "Altın",
+"vals": {
+"malzeme": 1
+},
+"keys": {},
+"cols": {
+"tabanRenk": "#D4AF37"
+},
+"at": "start"
+},
+{
+"code": "GM",
+"name": "Gümüş",
+"vals": {
+"malzeme": 1
+},
+"keys": {},
+"cols": {
+"tabanRenk": "#C0C0C8"
+},
+"at": "start"
+},
+{
+"code": "BR",
+"name": "Bronz",
+"vals": {
+"malzeme": 1
+},
+"keys": {},
+"cols": {
+"tabanRenk": "#A97142"
+},
+"at": "start"
+},
+{
+"code": "OP",
+"name": "Oyun parası",
+"vals": {
+"otomatikDonm": 1,
+"donmeHizi": 180,
+"malzeme": 1
+},
+"keys": {},
+"cols": {
+"tabanRenk": "#FFD43B"
+},
+"at": "start"
+},
+{
+"code": "UR",
+"name": "Ülke rozeti",
+"vals": {
+"bicim": 1,
+"kenarSayi": 8,
+"tirtikliKena": 0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": {
+"box": 0.45
+},
+"passes": null,
+"info": null,
+"heavy": true,
+"n": 441,
+"ready": true,
+"hidden": false
+},
+{
+"type": "pipe3d",
+"name": "Üç Boyutlu Boru",
+"en": "",
+"cat": 5,
+"kind": "3d",
+"desc": "Üç Boyutlu Boru",
+"tags": [
+"Boru",
+"Tüp"
+],
+"params": [
+{
+"k": "disCap",
+"l": "Dış çap",
+"anim": "yes",
+"kind": "jog",
+"min": 2.0,
+"max": 1000.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 80.0
+},
+{
+"k": "uzunluk",
+"l": "Uzunluk",
+"anim": "yes",
+"kind": "jog",
+"min": 10.0,
+"max": 5000.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 260
+},
+{
+"k": "duvarKali",
+"l": "Duvar kalınlığı",
+"anim": "yes",
+"kind": "jog",
+"min": 1.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 8.0
+},
+{
+"k": "kesit",
+"l": "Kesit",
+"anim": "step",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Daire",
+"Kare",
+"Altıgen"
+],
+"def": 0
+},
+{
+"k": "boruYolu",
+"l": "Boru yolu",
+"anim": "step",
+"kind": "choice",
+"min": 0,
+"max": 3,
+"step": 1,
+"jog": 1,
+"opts": [
+"Düz",
+"Yay",
+"Sarmal",
+"Özel"
+],
+"def": 0
+},
+{
+"k": "bukulmeAcis",
+"l": "Bükülme açısı",
+"anim": "yes",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"def": 0.0
+},
+{
+"k": "bukulmeYari",
+"l": "Bükülme yarıçapı",
+"anim": "yes",
+"kind": "jog",
+"min": 1.0,
+"max": 2000.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 150.0
+},
+{
+"k": "koniklik",
+"l": "Koniklik",
+"anim": "yes",
+"kind": "jog",
+"min": -90.0,
+"max": 90.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 0.0
+},
+{
+"k": "baslangiKapa",
+"l": "Başlangıç kapağı",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 0
+},
+{
+"k": "bitisKapa",
+"l": "Bitiş kapağı",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 0
+},
+{
+"k": "icYuzeGost",
+"l": "İç yüzeyi göster",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+},
+{
+"k": "icYuzeReng",
+"l": "İç yüzey rengi",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#8A8F98"
+},
+{
+"k": "yonelimXY",
+"l": "Dönüş",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -3600,
+"max": 3600,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"g": "3B Dönüşüm",
+"def": 0.0
+},
+{
+"k": "surekliDonuX",
+"l": "Dönüş hızı (°/sn)",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -3600.0,
+"max": 3600.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"g": "3B Dönüşüm",
+"def": 0.0
+},
+{
+"k": "konumXY",
+"l": "Konum",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -5000,
+"max": 5000,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"g": "3B Dönüşüm",
+"def": 0.0
+},
+{
+"k": "perspekt",
+"l": "Kamera",
+"anim": "step",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Perspektif",
+"Ortografik",
+"Proje kamerası"
+],
+"src": "Seçim",
+"g": "Kamera",
+"def": 0
+},
+{
+"k": "gorusAcis",
+"l": "Görüş açısı",
+"anim": "yes",
+"kind": "jog",
+"min": 10.0,
+"max": 120.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "Cetvel",
+"g": "Kamera",
+"def": 45.0
+},
+{
+"k": "isikEtki",
+"l": "Işık etkin",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"g": "Işık ve Gölge",
+"def": 1
+},
+{
+"k": "isikKonu",
+"l": "Işık konumu",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -4000.0,
+"max": 4000.0,
+"defY": -100.0,
+"defZ": -200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"g": "Işık ve Gölge",
+"def": -100.0
+},
+{
+"k": "isikReng",
+"l": "Işık rengi",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"src": "Renk seçici",
+"g": "Işık ve Gölge",
+"def": "#FFFFFF"
+},
+{
+"k": "ortamIsig",
+"l": "Ortam ışığı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"g": "Işık ve Gölge",
+"def": 45.0
+},
+{
+"k": "yonluIsikGucu",
+"l": "Işık gücü",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"g": "Işık ve Gölge",
+"def": 65.0
+},
+{
+"k": "parlakYans",
+"l": "Parlaklık",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"g": "Malzeme",
+"def": 20.0
+},
+{
+"k": "puruzlul",
+"l": "Pürüzlülük",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"g": "Malzeme",
+"def": 50.0
+},
+{
+"k": "arkaYuzlGost",
+"l": "Arka yüzleri göster",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"g": "Işık ve Gölge",
+"def": 0
+},
+{
+"k": "kenarYumu",
+"l": "Kenar yumuşatma",
+"anim": "no",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Kapalı",
+"Otomatik",
+"Yüksek"
+],
+"src": "Seçim",
+"g": "Işık ve Gölge",
+"def": 1
+},
+{
+"k": "olcekXYZ",
+"l": "Ölçek",
+"kind": "jog",
+"three": true,
+"min": 1,
+"max": 1000,
+"defY": 100,
+"defZ": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "3B Dönüşüm",
+"link": true,
+"def": 100
+},
+{
+"k": "orantili",
+"l": "Orantılı ölçek",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "3B Dönüşüm",
+"def": 1
+},
+{
+"k": "donusMerk",
+"l": "Dönüş merkezi",
+"kind": "jog",
+"three": true,
+"min": -5000,
+"max": 5000,
+"defY": 0,
+"defZ": 0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "3B Dönüşüm",
+"def": 0
+},
+{
+"k": "donusYontem",
+"l": "Dönüş yöntemi",
+"kind": "choice",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"opts": [
+"Eksen bazlı",
+"En kısa yönelim"
+],
+"unit": "",
+"anim": "step",
+"g": "3B Dönüşüm",
+"def": 0
+},
+{
+"k": "otoDonus",
+"l": "Otomatik dönüş",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "3B Dönüşüm",
+"def": 0
+},
+{
+"k": "kameraUzak",
+"l": "Kamera uzaklığı",
+"kind": "jog",
+"min": 10,
+"max": 10000,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "Kamera",
+"def": 800
+},
+{
+"k": "perspGuc",
+"l": "Perspektif gücü",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Kamera",
+"def": 100
+},
+{
+"k": "malzeme",
+"l": "Malzeme",
+"kind": "choice",
+"min": 0,
+"max": 7,
+"step": 1,
+"jog": 1,
+"opts": [
+"Mat",
+"Metal",
+"Plastik",
+"Cam",
+"Kâğıt",
+"Karton",
+"Ahşap",
+"Özel"
+],
+"unit": "",
+"anim": "step",
+"g": "Malzeme",
+"def": 0
+},
+{
+"k": "tabanRenk",
+"l": "Taban rengi",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "yes",
+"g": "Malzeme",
+"def": "#FFFFFF"
+},
+{
+"k": "ozelDoku3",
+"l": "Özel doku",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"anim": "no",
+"g": "Malzeme",
+"hint": "Görsel / katman",
+"vis": {
+"k": "malzeme",
+"in": [
+7
+]
+},
+"def": ""
+},
+{
+"k": "dokuGucu3",
+"l": "Doku gücü",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Malzeme",
+"def": 100
+},
+{
+"k": "dokuOlcek3",
+"l": "Doku ölçeği",
+"kind": "jog",
+"min": 1,
+"max": 1000,
+"defY": 100,
+"step": 0.1,
+"jog": 0.1,
+"two": true,
+"unit": "%",
+"anim": "yes",
+"g": "Malzeme",
+"link": true,
+"def": 100
+},
+{
+"k": "dokuKonum3",
+"l": "Doku konumu",
+"kind": "jog",
+"min": -4000,
+"max": 4000,
+"defY": 0,
+"step": 0.1,
+"jog": 0.1,
+"two": true,
+"unit": "px",
+"anim": "yes",
+"g": "Malzeme",
+"link": false,
+"def": 0
+},
+{
+"k": "dokuAci3",
+"l": "Doku açısı",
+"kind": "jog",
+"min": -360,
+"max": 360,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"anim": "yes",
+"g": "Malzeme",
+"def": 0
+},
+{
+"k": "metalik",
+"l": "Metalik görünüm",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Malzeme",
+"def": 0
+},
+{
+"k": "kabartma3",
+"l": "Kabartma",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Malzeme",
+"def": 0
+},
+{
+"k": "opaklik3",
+"l": "Opaklık",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Malzeme",
+"def": 100
+},
+{
+"k": "golgelendirme",
+"l": "Gölgelendirme",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Düz",
+"Noktasal",
+"Yönlü"
+],
+"unit": "",
+"anim": "step",
+"g": "Işık ve Gölge",
+"def": 1
+},
+{
+"k": "golgeOlustur",
+"l": "Gölge oluştur",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Işık ve Gölge",
+"def": 1
+},
+{
+"k": "golgeOpak3",
+"l": "Gölge opaklığı",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Işık ve Gölge",
+"vis": {
+"k": "golgeOlustur",
+"in": [
+1
+]
+},
+"def": 35
+},
+{
+"k": "golgeYumu3",
+"l": "Gölge yumuşaklığı",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "Işık ve Gölge",
+"vis": {
+"k": "golgeOlustur",
+"in": [
+1
+]
+},
+"def": 12
+},
+{
+"k": "kalite3",
+"l": "Geometri kalitesi",
+"kind": "choice",
+"min": 0,
+"max": 4,
+"step": 1,
+"jog": 1,
+"opts": [
+"Otomatik",
+"Düşük",
+"Orta",
+"Yüksek",
+"Ultra"
+],
+"unit": "",
+"anim": "step",
+"g": "Işık ve Gölge",
+"def": 0
+}
+],
+"presets": [
+{
+"code": "CB",
+"name": "Cam boru",
+"vals": {
+"malzeme": 3
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "MB",
+"name": "Metal boru",
+"vals": {
+"malzeme": 1
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "NB",
+"name": "Neon boru",
+"vals": {
+"boruYolu": 2
+},
+"keys": {},
+"cols": {
+"tabanRenk": "#22D3E6"
+},
+"at": "start"
+},
+{
+"code": "KR",
+"name": "Karton rulo",
+"vals": {
+"malzeme": 5,
+"duvarKali": 3
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": {
+"box": 0.6
+},
+"passes": null,
+"info": null,
+"heavy": true,
+"n": 442,
+"ready": true,
+"hidden": false
+},
+{
+"type": "meteors",
+"name": "Meteor Yağmuru",
+"en": "",
+"cat": 12,
+"kind": "gen",
+"desc": "Meteor Yağmuru",
+"tags": [
+"Uzay",
+"Gökyüzü",
+"Parçacık"
+],
+"params": [
+{
+"k": "meteorYogu",
+"l": "Meteor yoğunluğu",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 200.0,
+"step": 0.01,
+"jog": 0.01,
+"unit": "",
+"def": 15.0
+},
+{
+"k": "buyukluk",
+"l": "Büyüklük",
+"anim": "yes",
+"kind": "jog",
+"min": 1.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 4.0
+},
+{
+"k": "rastgeleBuyu",
+"l": "Rastgele büyüklük",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 50.0
+},
+{
+"k": "hiz",
+"l": "Hız",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 5000.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 600.0
+},
+{
+"k": "yon",
+"l": "Yön",
+"anim": "yes",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"def": 135.0
+},
+{
+"k": "yonDagi",
+"l": "Yön dağılımı",
+"anim": "yes",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"def": 20.0
+},
+{
+"k": "yasamSure",
+"l": "Yaşam süresi",
+"anim": "yes",
+"kind": "jog",
+"min": 0.1,
+"max": 20.0,
+"step": 0.01,
+"jog": 0.01,
+"unit": "sn",
+"def": 1.5
+},
+{
+"k": "izUzun",
+"l": "İz uzunluğu",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 1000.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 150.0
+},
+{
+"k": "meteorReng",
+"l": "Meteor rengi",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#FFFFFF"
+},
+{
+"k": "kuyrukReng",
+"l": "Kuyruk rengi",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#2F7BFF"
+},
+{
+"k": "parlama",
+"l": "Parlama",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 70.0
+},
+{
+"k": "tohum",
+"l": "Tohum",
+"anim": "yes",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"reseed": true,
+"def": 1.0
+},
+{
+"k": "dongu",
+"l": "Döngü",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 0
+}
+],
+"presets": [
+{
+"code": "YK",
+"name": "Yıldız kayması",
+"vals": {
+"meteorYogu": 4,
+"buyukluk": 3
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "RM",
+"name": "Renkli meteor",
+"vals": {
+"meteorYogu": 20
+},
+"keys": {},
+"cols": {
+"kuyrukReng": "#FF6FAE"
+},
+"at": "start"
+},
+{
+"code": "CG",
+"name": "Çizgi film gökyüzü",
+"vals": {
+"meteorYogu": 10,
+"buyukluk": 8,
+"izUzun": 90
+},
+"keys": {},
+"cols": {
+"meteorReng": "#FFD43B",
+"kuyrukReng": "#FF8F1F"
+},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 443,
+"ready": true,
+"hidden": false
+},
+{
+"type": "blackhole",
+"name": "Kara Delik",
+"en": "",
+"cat": 12,
+"kind": "pixel",
+"desc": "Kara Delik",
+"tags": [
+"Uzay",
+"Bükme",
+"Mercek"
+],
+"params": [
+{
+"k": "merkez",
+"l": "Merkez",
+"anim": "yes",
+"kind": "jog",
+"two": true,
+"three": false,
+"min": -100,
+"max": 200,
+"defY": 50.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "box%",
+"def": 50.0
+},
+{
+"k": "merkezYari",
+"l": "Merkez yarıçapı",
+"anim": "yes",
+"kind": "jog",
+"min": 1.0,
+"max": 2000.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 100.0
+},
+{
+"k": "bukulmeAlan",
+"l": "Bükülme alanı",
+"anim": "yes",
+"kind": "jog",
+"min": 1.0,
+"max": 3000.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 300.0
+},
+{
+"k": "mercekEtki",
+"l": "Mercek etkisi",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 70.0
+},
+{
+"k": "girdapEtki",
+"l": "Girdap etkisi",
+"anim": "yes",
+"kind": "jog",
+"min": -200.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 35.0
+},
+{
+"k": "arkaPlanBuk",
+"l": "Arka planı bük",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+},
+{
+"k": "bukuleceKatm",
+"l": "Bükülecek katman",
+"anim": "no",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"hint": "Katman",
+"def": ""
+},
+{
+"k": "isikliDisk",
+"l": "Işıklı disk",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+},
+{
+"k": "diskGeni",
+"l": "Disk genişliği",
+"anim": "yes",
+"kind": "jog",
+"min": 1.0,
+"max": 1000.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 80.0
+},
+{
+"k": "diskEgim",
+"l": "Disk eğimi",
+"anim": "yes",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"def": 65.0
+},
+{
+"k": "diskDonuHizi",
+"l": "Disk dönüş hızı",
+"anim": "yes",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"def": 45.0
+},
+{
+"k": "icDiskReng",
+"l": "İç disk rengi",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#FFFFFF"
+},
+{
+"k": "disDiskReng",
+"l": "Dış disk rengi",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#FF8F1F"
+},
+{
+"k": "turbulan",
+"l": "Türbülans",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 40.0
+},
+{
+"k": "parlama",
+"l": "Parlama",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 80.0
+}
+],
+"presets": [
+{
+"code": "SK",
+"name": "Sinematik kara delik",
+"vals": {},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "KP",
+"name": "Kozmik portal",
+"vals": {
+"diskEgim": 0,
+"girdapEtki": 70
+},
+"keys": {},
+"cols": {
+"icDiskReng": "#E6F1FF",
+"disDiskReng": "#8E44D9"
+},
+"at": "start"
+},
+{
+"code": "MG",
+"name": "Mavi girdap",
+"vals": {
+"girdapEtki": 60,
+"diskEgim": 40
+},
+"keys": {},
+"cols": {
+"icDiskReng": "#FFFFFF",
+"disDiskReng": "#2F7BFF"
+},
+"at": "start"
+}
+],
+"pad": {
+"box": 0.3
+},
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 444,
+"ready": true,
+"hidden": false
+},
+{
+"type": "nebula",
+"name": "Yıldız Bulutsusu",
+"en": "",
+"cat": 4,
+"kind": "gen",
+"desc": "Yıldız Bulutsusu",
+"tags": [
+"Uzay",
+"Bulut",
+"Renk"
+],
+"params": [
+{
+"k": "merkez",
+"l": "Merkez",
+"anim": "yes",
+"kind": "jog",
+"two": true,
+"three": false,
+"min": -100,
+"max": 200,
+"defY": 50.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "box%",
+"def": 50.0
+},
+{
+"k": "buyukluk",
+"l": "Büyüklük",
+"anim": "yes",
+"kind": "jog",
+"min": 10.0,
+"max": 1000.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 100.0
+},
+{
+"k": "gazYogu",
+"l": "Gaz yoğunluğu",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 65.0
+},
+{
+"k": "ayrinti",
+"l": "Ayrıntı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 60.0
+},
+{
+"k": "turbulan",
+"l": "Türbülans",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 45.0
+},
+{
+"k": "bulutKatm",
+"l": "Bulut katmanı",
+"anim": "yes",
+"kind": "jog",
+"min": 1.0,
+"max": 12.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 5.0
+},
+{
+"k": "birinciRenk",
+"l": "Birinci renk",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#8E44D9"
+},
+{
+"k": "ikinciRenk",
+"l": "İkinci renk",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#2F7BFF"
+},
+{
+"k": "ucuncuRenk",
+"l": "Üçüncü renk",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#FF6FAE"
+},
+{
+"k": "hareketHizi",
+"l": "Hareket hızı",
+"anim": "yes",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 10.0
+},
+{
+"k": "yildizla",
+"l": "Yıldızlar",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+},
+{
+"k": "yildizYogu",
+"l": "Yıldız yoğunluğu",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 35.0
+},
+{
+"k": "derinlik",
+"l": "Derinlik",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 50.0
+},
+{
+"k": "tohum",
+"l": "Tohum",
+"anim": "yes",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"reseed": true,
+"def": 1.0
+}
+],
+"presets": [
+{
+"code": "MB",
+"name": "Mavi bulutsu",
+"vals": {},
+"keys": {},
+"cols": {
+"birinciRenk": "#1B2A55",
+"ikinciRenk": "#2F7BFF",
+"ucuncuRenk": "#22D3E6"
+},
+"at": "start"
+},
+{
+"code": "KB",
+"name": "Kırmızı bulutsu",
+"vals": {},
+"keys": {},
+"cols": {
+"birinciRenk": "#7B1E2B",
+"ikinciRenk": "#E53935",
+"ucuncuRenk": "#FF8F1F"
+},
+"at": "start"
+},
+{
+"code": "MU",
+"name": "Mor uzay",
+"vals": {},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "KU",
+"name": "Karanlık uzay",
+"vals": {
+"gazYogu": 30,
+"yildizYogu": 60
+},
+"keys": {},
+"cols": {
+"birinciRenk": "#0B0F1E",
+"ikinciRenk": "#1B2A55",
+"ucuncuRenk": "#44474D"
+},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 445,
+"ready": true,
+"hidden": false
+},
+{
+"type": "sunsurface",
+"name": "Güneş Yüzeyi",
+"en": "",
+"cat": 4,
+"kind": "gen",
+"desc": "Güneş Yüzeyi",
+"tags": [
+"Güneş",
+"Yıldız",
+"Uzay"
+],
+"params": [
+{
+"k": "buyukluk",
+"l": "Büyüklük",
+"anim": "yes",
+"kind": "jog",
+"min": 10.0,
+"max": 2000.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 200
+},
+{
+"k": "anaRenk",
+"l": "Ana renk",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#FF8F1F"
+},
+{
+"k": "sicakBolg",
+"l": "Sıcak bölge",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#FFD43B"
+},
+{
+"k": "koyuBolg",
+"l": "Koyu bölge",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#E53935"
+},
+{
+"k": "yuzeyAyri",
+"l": "Yüzey ayrıntısı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 70.0
+},
+{
+"k": "yuzeyHare",
+"l": "Yüzey hareketi",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 40.0
+},
+{
+"k": "parlakli",
+"l": "Parlaklık",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 300.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 100.0
+},
+{
+"k": "gunesLeke",
+"l": "Güneş lekeleri",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+},
+{
+"k": "lekeYogu",
+"l": "Leke yoğunluğu",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 10.0
+},
+{
+"k": "korona",
+"l": "Korona",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+},
+{
+"k": "koronaYuks",
+"l": "Korona yüksekliği",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 500.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 50.0
+},
+{
+"k": "plazmaYayl",
+"l": "Plazma yayları",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+},
+{
+"k": "yayBuyu",
+"l": "Yay büyüklüğü",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 300.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 30.0
+},
+{
+"k": "parlama",
+"l": "Parlama",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 300.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 80.0
+}
+],
+"presets": [
+{
+"code": "SY",
+"name": "Sarı yıldız",
+"vals": {},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "MY",
+"name": "Mavi yıldız",
+"vals": {},
+"keys": {},
+"cols": {
+"anaRenk": "#5AA0FF",
+"sicakBolg": "#E6F1FF",
+"koyuBolg": "#1B4FD9"
+},
+"at": "start"
+},
+{
+"code": "KD",
+"name": "Kırmızı dev",
+"vals": {
+"buyukluk": 400
+},
+"keys": {},
+"cols": {
+"anaRenk": "#E53935",
+"sicakBolg": "#FF8F1F",
+"koyuBolg": "#7B1E2B"
+},
+"at": "start"
+},
+{
+"code": "SG",
+"name": "Stilize Güneş",
+"vals": {
+"yuzeyAyri": 30,
+"plazmaYayl": 0,
+"lekeYogu": 0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": {
+"box": 0.4
+},
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 446,
+"ready": true,
+"hidden": false
+},
+{
+"type": "tornado",
+"name": "Kasırga",
+"en": "",
+"cat": 12,
+"kind": "gen",
+"desc": "Kasırga",
+"tags": [
+"Fırtına",
+"Girdap",
+"Hava"
+],
+"params": [
+{
+"k": "gorunum",
+"l": "Görünüm",
+"anim": "step",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Üstten",
+"Yandan huni",
+"Toz girdabı"
+],
+"def": 0
+},
+{
+"k": "merkez",
+"l": "Merkez",
+"anim": "yes",
+"kind": "jog",
+"two": true,
+"three": false,
+"min": -100,
+"max": 200,
+"defY": 50.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "box%",
+"def": 50.0
+},
+{
+"k": "disYari",
+"l": "Dış yarıçap",
+"anim": "yes",
+"kind": "jog",
+"min": 10.0,
+"max": 2000.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 300.0
+},
+{
+"k": "gozYari",
+"l": "Göz yarıçapı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 500.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 40.0
+},
+{
+"k": "yuksekli",
+"l": "Yükseklik",
+"anim": "yes",
+"kind": "jog",
+"min": 10.0,
+"max": 3000.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 500.0
+},
+{
+"k": "donusHizi",
+"l": "Dönüş hızı",
+"anim": "yes",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"def": 90.0
+},
+{
+"k": "sarmalKolSayi",
+"l": "Sarmal kol sayısı",
+"anim": "yes",
+"kind": "jog",
+"min": 1.0,
+"max": 20.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 5.0
+},
+{
+"k": "sarmalSiki",
+"l": "Sarmal sıkılığı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 60.0
+},
+{
+"k": "bulutYogu",
+"l": "Bulut yoğunluğu",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 70.0
+},
+{
+"k": "turbulan",
+"l": "Türbülans",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 50.0
+},
+{
+"k": "bulutReng",
+"l": "Bulut rengi",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#8A8F98"
+},
+{
+"k": "opaklik",
+"l": "Opaklık",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 85.0
+},
+{
+"k": "tohum",
+"l": "Tohum",
+"anim": "yes",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"reseed": true,
+"def": 1.0
+}
+],
+"presets": [
+{
+"code": "UG",
+"name": "Uydu görünümü",
+"vals": {
+"gorunum": 0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "CF",
+"name": "Çizgi film",
+"vals": {
+"gorunum": 1,
+"turbulan": 20
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "TG",
+"name": "Toz girdabı",
+"vals": {
+"gorunum": 2
+},
+"keys": {},
+"cols": {
+"bulutReng": "#C9A27A"
+},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 447,
+"ready": true,
+"hidden": false
+},
+{
+"type": "sandstorm",
+"name": "Kum Fırtınası",
+"en": "",
+"cat": 12,
+"kind": "pixel",
+"desc": "Kum Fırtınası",
+"tags": [
+"Kum",
+"Toz",
+"Rüzgâr"
+],
+"params": [
+{
+"k": "yogunluk",
+"l": "Yoğunluk",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 70.0
+},
+{
+"k": "kumBuyu",
+"l": "Kum büyüklüğü",
+"anim": "yes",
+"kind": "jog",
+"min": 0.5,
+"max": 30.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 2.0
+},
+{
+"k": "ruzgarHizi",
+"l": "Rüzgâr hızı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 3000.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 350.0
+},
+{
+"k": "ruzgarYonu",
+"l": "Rüzgâr yönü",
+"anim": "yes",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"def": 0.0
+},
+{
+"k": "turbulan",
+"l": "Türbülans",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 45.0
+},
+{
+"k": "tozTaba",
+"l": "Toz tabakası",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 40.0
+},
+{
+"k": "gorusAzal",
+"l": "Görüş azalması",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 30.0
+},
+{
+"k": "kumReng",
+"l": "Kum rengi",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#7A4E2D"
+},
+{
+"k": "hareketBula",
+"l": "Hareket bulanıklığı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 35.0
+},
+{
+"k": "degiskenRuzg",
+"l": "Değişken rüzgâr",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+},
+{
+"k": "ruzgarDegiSikl",
+"l": "Rüzgâr değişim sıklığı",
+"anim": "yes",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.01,
+"jog": 0.01,
+"unit": "Hz",
+"def": 0.5
+},
+{
+"k": "tohum",
+"l": "Tohum",
+"anim": "yes",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"reseed": true,
+"def": 1.0
+}
+],
+"presets": [
+{
+"code": "HT",
+"name": "Hafif toz",
+"vals": {
+"yogunluk": 35,
+"gorusAzal": 10
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "CL",
+"name": "Çöl",
+"vals": {},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "CK",
+"name": "Çizgi film kumu",
+"vals": {
+"kumBuyu": 4,
+"turbulan": 20
+},
+"keys": {},
+"cols": {
+"kumReng": "#D8B97A"
+},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 448,
+"ready": true,
+"hidden": false
+},
+{
+"type": "leaffall",
+"name": "Yaprak Yağmuru",
+"en": "",
+"cat": 12,
+"kind": "gen",
+"desc": "Yaprak Yağmuru",
+"tags": [
+"Yaprak",
+"Mevsim",
+"Parçacık"
+],
+"params": [
+{
+"k": "yaprakTuru",
+"l": "Yaprak türü",
+"anim": "step",
+"kind": "choice",
+"min": 0,
+"max": 4,
+"step": 1,
+"jog": 1,
+"opts": [
+"Sonbahar",
+"Meşe",
+"Akçaağaç",
+"Çiçek",
+"Özel"
+],
+"def": 0
+},
+{
+"k": "ozelYaprGors",
+"l": "Özel yaprak görseli",
+"anim": "no",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"hint": "Dosya / görsel",
+"def": ""
+},
+{
+"k": "yaprakSayi",
+"l": "Yaprak sayısı",
+"anim": "yes",
+"kind": "jog",
+"min": 1.0,
+"max": 1000.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 80.0
+},
+{
+"k": "buyukluk",
+"l": "Büyüklük",
+"anim": "yes",
+"kind": "jog",
+"min": 1.0,
+"max": 300.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 25.0
+},
+{
+"k": "buyuklukRast",
+"l": "Büyüklük rastgeleliği",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 60.0
+},
+{
+"k": "yaprakRenk",
+"l": "Yaprak renkleri",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#FFFFFF"
+},
+{
+"k": "dusmeHizi",
+"l": "Düşme hızı",
+"anim": "yes",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 80.0
+},
+{
+"k": "ruzgar",
+"l": "Rüzgâr",
+"anim": "yes",
+"kind": "jog",
+"two": true,
+"three": false,
+"min": -4000,
+"max": 4000,
+"defY": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 50.0
+},
+{
+"k": "sallanmaGeni",
+"l": "Sallanma genişliği",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 300.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 30.0
+},
+{
+"k": "sallanmaHizi",
+"l": "Sallanma hızı",
+"anim": "yes",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.01,
+"jog": 0.01,
+"unit": "Hz",
+"def": 1.0
+},
+{
+"k": "donmeHizi",
+"l": "Dönme hızı",
+"anim": "yes",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"def": 45.0
+},
+{
+"k": "p3bDonu",
+"l": "3B dönüş",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+},
+{
+"k": "derinlikDagi",
+"l": "Derinlik dağılımı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 60.0
+},
+{
+"k": "dongu",
+"l": "Döngü",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+}
+],
+"presets": [
+{
+"code": "SB",
+"name": "Sonbahar",
+"vals": {
+"yaprakTuru": 0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "IB",
+"name": "İlkbahar",
+"vals": {
+"yaprakTuru": 1
+},
+"keys": {},
+"cols": {
+"yaprakRenk": "#9BE27A"
+},
+"at": "start"
+},
+{
+"code": "KC",
+"name": "Kiraz çiçeği",
+"vals": {
+"yaprakTuru": 3,
+"buyukluk": 14
+},
+"keys": {},
+"cols": {
+"yaprakRenk": "#FFC0D9"
+},
+"at": "start"
+},
+{
+"code": "YY",
+"name": "Yeşil yapraklar",
+"vals": {
+"yaprakTuru": 1
+},
+"keys": {},
+"cols": {
+"yaprakRenk": "#3BB54A"
+},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 449,
+"ready": true,
+"hidden": false
+},
+{
+"type": "droplets",
+"name": "Su Damlacıkları",
+"en": "",
+"cat": 12,
+"kind": "pixel",
+"desc": "Su Damlacıkları",
+"tags": [
+"Su",
+"Damla",
+"Cam"
+],
+"params": [
+{
+"k": "damlaSayi",
+"l": "Damla sayısı",
+"anim": "yes",
+"kind": "jog",
+"min": 1.0,
+"max": 500.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 45.0
+},
+{
+"k": "damlaBuyu",
+"l": "Damla büyüklüğü",
+"anim": "yes",
+"kind": "jog",
+"min": 1.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 18.0
+},
+{
+"k": "buyuklukRast",
+"l": "Büyüklük rastgeleliği",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 65.0
+},
+{
+"k": "yuvarlak",
+"l": "Yuvarlaklık",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 80.0
+},
+{
+"k": "yukselti",
+"l": "Yükselti",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 60.0
+},
+{
+"k": "saydamli",
+"l": "Saydamlık",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 85.0
+},
+{
+"k": "isikKiri",
+"l": "Işık kırılması",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 40.0
+},
+{
+"k": "kenarParl",
+"l": "Kenar parlaklığı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 35.0
+},
+{
+"k": "damlaHare",
+"l": "Damla hareketi",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+},
+{
+"k": "akisHizi",
+"l": "Akış hızı",
+"anim": "yes",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 30.0
+},
+{
+"k": "akisYonu",
+"l": "Akış yönü",
+"anim": "yes",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"def": 90.0
+},
+{
+"k": "damlaIzi",
+"l": "Damla izi",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+},
+{
+"k": "izUzun",
+"l": "İz uzunluğu",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 500.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 40.0
+},
+{
+"k": "damlalarBirl",
+"l": "Damlaları birleştir",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 0
+}
+],
+"presets": [
+{
+"code": "YP",
+"name": "Yağmurlu pencere",
+"vals": {
+"damlaSayi": 70,
+"damlaHare": 1
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "CY",
+"name": "Çiy",
+"vals": {
+"damlaSayi": 120,
+"damlaBuyu": 6,
+"damlaHare": 0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "KD",
+"name": "Kamera damlası",
+"vals": {
+"damlaSayi": 8,
+"damlaBuyu": 60,
+"damlaHare": 0,
+"isikKiri": 70
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 450,
+"ready": true,
+"hidden": false
+},
+{
+"type": "frostglass",
+"name": "Donmuş Cam",
+"en": "",
+"cat": 12,
+"kind": "pixel",
+"desc": "Donmuş Cam",
+"tags": [
+"Buz",
+"Kırağı",
+"Cam"
+],
+"params": [
+{
+"k": "donmaMikt",
+"l": "Donma miktarı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 65.0
+},
+{
+"k": "kristalBuyu",
+"l": "Kristal büyüklüğü",
+"anim": "yes",
+"kind": "jog",
+"min": 1.0,
+"max": 500.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 35.0
+},
+{
+"k": "kristalYogu",
+"l": "Kristal yoğunluğu",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 60.0
+},
+{
+"k": "dallanma",
+"l": "Dallanma",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 55.0
+},
+{
+"k": "buzKali",
+"l": "Buz kalınlığı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 30.0
+},
+{
+"k": "bulanikl",
+"l": "Bulanıklık",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 12.0
+},
+{
+"k": "isikKiri",
+"l": "Işık kırılması",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 25.0
+},
+{
+"k": "buzReng",
+"l": "Buz rengi",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#2F7BFF"
+},
+{
+"k": "kristalReng",
+"l": "Kristal rengi",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#FFFFFF"
+},
+{
+"k": "donmaBasl",
+"l": "Donma başlangıcı",
+"anim": "step",
+"kind": "choice",
+"min": 0,
+"max": 3,
+"step": 1,
+"jog": 1,
+"opts": [
+"Kenarlar",
+"Merkez",
+"Rastgele",
+"Maske"
+],
+"def": 0
+},
+{
+"k": "donmaAnim",
+"l": "Donma animasyonu",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 0
+},
+{
+"k": "donmaIler",
+"l": "Donma ilerlemesi",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 65.0
+},
+{
+"k": "tohum",
+"l": "Tohum",
+"anim": "yes",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"reseed": true,
+"def": 1.0
+}
+],
+"presets": [
+{
+"code": "HK",
+"name": "Hafif kırağı",
+"vals": {
+"donmaMikt": 35
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "DP",
+"name": "Donmuş pencere",
+"vals": {
+"donmaMikt": 80,
+"bulanikl": 25
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "BK",
+"name": "Buz kristalleri",
+"vals": {
+"kristalBuyu": 60,
+"dallanma": 85
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 451,
+"ready": true,
+"hidden": false
+},
+{
+"type": "wetsurface",
+"name": "Islak Yüzey",
+"en": "",
+"cat": 0,
+"kind": "pixel",
+"desc": "Islak Yüzey",
+"tags": [
+"Su",
+"Yansıma",
+"Islak"
+],
+"params": [
+{
+"k": "islaklik",
+"l": "Islaklık",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 65.0
+},
+{
+"k": "yuzeyKara",
+"l": "Yüzey kararması",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 15.0
+},
+{
+"k": "yansimaGucu",
+"l": "Yansıma gücü",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 40.0
+},
+{
+"k": "puruzlul",
+"l": "Pürüzlülük",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 25.0
+},
+{
+"k": "suKali",
+"l": "Su kalınlığı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 20.0
+},
+{
+"k": "yansimaBula",
+"l": "Yansıma bulanıklığı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 8.0
+},
+{
+"k": "yansimaKayn",
+"l": "Yansıma kaynağı",
+"anim": "step",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Yapay ışık",
+"Arka plan",
+"Katman"
+],
+"def": 0
+},
+{
+"k": "yansimaKatm",
+"l": "Yansıma katmanı",
+"anim": "no",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"hint": "Katman",
+"def": ""
+},
+{
+"k": "suBiri",
+"l": "Su birikintileri",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 0
+},
+{
+"k": "birikintYogu",
+"l": "Birikinti yoğunluğu",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 25.0
+},
+{
+"k": "suAkis",
+"l": "Su akışı",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 0
+},
+{
+"k": "akisHizi",
+"l": "Akış hızı",
+"anim": "yes",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 15.0
+},
+{
+"k": "alfaSiniKoru",
+"l": "Alfa sınırını koru",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+}
+],
+"presets": [
+{
+"code": "IA",
+"name": "Islak asfalt",
+"vals": {
+"yuzeyKara": 30,
+"puruzlul": 40
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "TS",
+"name": "Taş",
+"vals": {
+"islaklik": 50
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "MT",
+"name": "Metal",
+"vals": {
+"yansimaGucu": 70,
+"puruzlul": 10
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "PS",
+"name": "Parlak su",
+"vals": {
+"suBiri": 1,
+"birikintYogu": 45,
+"yansimaGucu": 75
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 452,
+"ready": true,
+"hidden": false
+},
+{
+"type": "perspgrid",
+"name": "Perspektif Izgarası",
+"en": "",
+"cat": 4,
+"kind": "gen",
+"desc": "Perspektif Izgarası",
+"tags": [
+"Izgara",
+"Retro",
+"Zemin"
+],
+"params": [
+{
+"k": "ufukNokt",
+"l": "Ufuk noktası",
+"anim": "yes",
+"kind": "jog",
+"two": true,
+"three": false,
+"min": -100,
+"max": 200,
+"defY": 40.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "box%",
+"def": 50.0
+},
+{
+"k": "izgaraGeni",
+"l": "Izgara genişliği",
+"anim": "yes",
+"kind": "jog",
+"min": 10.0,
+"max": 10000.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 2000.0
+},
+{
+"k": "izgaraDeri",
+"l": "Izgara derinliği",
+"anim": "yes",
+"kind": "jog",
+"min": 10.0,
+"max": 10000.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 3000.0
+},
+{
+"k": "hucreBuyu",
+"l": "Hücre büyüklüğü",
+"anim": "yes",
+"kind": "jog",
+"min": 2.0,
+"max": 1000.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 80.0
+},
+{
+"k": "cizgiKali",
+"l": "Çizgi kalınlığı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.5,
+"max": 30.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 2.0
+},
+{
+"k": "cizgiReng",
+"l": "Çizgi rengi",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#2F7BFF"
+},
+{
+"k": "cizgiOpak",
+"l": "Çizgi opaklığı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 80.0
+},
+{
+"k": "hucreDolg",
+"l": "Hücre dolgusu",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 0
+},
+{
+"k": "uzakliktSolm",
+"l": "Uzaklıkta solma",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 70.0
+},
+{
+"k": "perspektGucu",
+"l": "Perspektif gücü",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 65.0
+},
+{
+"k": "izgaraDonu",
+"l": "Izgara dönüşü",
+"anim": "yes",
+"kind": "jog",
+"two": false,
+"three": true,
+"min": -4000,
+"max": 4000,
+"defY": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"defZ": 0.0,
+"def": 65.0
+},
+{
+"k": "hareketHizi",
+"l": "Hareket hızı",
+"anim": "yes",
+"kind": "jog",
+"two": true,
+"three": false,
+"min": -4000,
+"max": 4000,
+"defY": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 0.0
+},
+{
+"k": "parlama",
+"l": "Parlama",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+},
+{
+"k": "parlamaGucu",
+"l": "Parlama gücü",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 40.0
+}
+],
+"presets": [
+{
+"code": "RN",
+"name": "Retro neon zemin",
+"vals": {
+"parlama": 1,
+"hareketHizi": 120
+},
+"keys": {},
+"cols": {
+"cizgiReng": "#FF6FAE"
+},
+"at": "start"
+},
+{
+"code": "TC",
+"name": "Teknik çizim",
+"vals": {
+"parlama": 0
+},
+"keys": {},
+"cols": {
+"cizgiReng": "#1B2A55"
+},
+"at": "start"
+},
+{
+"code": "DO",
+"name": "Dijital ortam",
+"vals": {
+"hareketHizi": 60
+},
+"keys": {},
+"cols": {
+"cizgiReng": "#22D3E6"
+},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 453,
+"ready": true,
+"hidden": false
+},
+{
+"type": "infmirror",
+"name": "Sonsuz Ayna",
+"en": "",
+"cat": 7,
+"kind": "repeat",
+"desc": "Sonsuz Ayna",
+"tags": [
+"Ayna",
+"Tünel",
+"Sonsuz"
+],
+"params": [
+{
+"k": "merkez",
+"l": "Merkez",
+"anim": "yes",
+"kind": "jog",
+"two": true,
+"three": false,
+"min": -100,
+"max": 200,
+"defY": 50.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "box%",
+"def": 50.0
+},
+{
+"k": "yansimaSayi",
+"l": "Yansıma sayısı",
+"anim": "yes",
+"kind": "jog",
+"min": 1.0,
+"max": 100.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 12.0
+},
+{
+"k": "kuculmeOran",
+"l": "Küçülme oranı",
+"anim": "yes",
+"kind": "jog",
+"min": 5.0,
+"max": 99.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 75.0
+},
+{
+"k": "derinlikAral",
+"l": "Derinlik aralığı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 500.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 20.0
+},
+{
+"k": "kopyaDonu",
+"l": "Kopya dönüşü",
+"anim": "yes",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"def": 5.0
+},
+{
+"k": "opaklikKayb",
+"l": "Opaklık kaybı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 10.0
+},
+{
+"k": "kopyaKonuFark",
+"l": "Kopya konum farkı",
+"anim": "yes",
+"kind": "jog",
+"two": true,
+"three": false,
+"min": -4000,
+"max": 4000,
+"defY": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 0.0
+},
+{
+"k": "yatayAyna",
+"l": "Yatay aynalama",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+},
+{
+"k": "dikeyAyna",
+"l": "Dikey aynalama",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 0
+},
+{
+"k": "renkGeci",
+"l": "Renk geçişi",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 0
+},
+{
+"k": "uzakKopyReng",
+"l": "Uzak kopya rengi",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#2F7BFF"
+},
+{
+"k": "uzakKopyBula",
+"l": "Uzak kopya bulanıklığı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 5.0
+},
+{
+"k": "derinlikHare",
+"l": "Derinlik hareketi",
+"anim": "yes",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 0.0
+}
+],
+"presets": [
+{
+"code": "ST",
+"name": "Sonsuz tünel",
+"vals": {},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "NP",
+"name": "Neon portal",
+"vals": {
+"renkGeci": 1
+},
+"keys": {},
+"cols": {
+"uzakKopyReng": "#FF6FAE"
+},
+"at": "start"
+},
+{
+"code": "DA",
+"name": "Dönen ayna",
+"vals": {
+"kopyaDonu": 15
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 454,
+"ready": true,
+"hidden": false
+},
+{
+"type": "depthparallax",
+"name": "Derinlik Paralaksı",
+"en": "",
+"cat": 3,
+"kind": "pixel",
+"desc": "Derinlik Paralaksı",
+"tags": [
+"Derinlik",
+"Paralaks",
+"Kamera"
+],
+"params": [
+{
+"k": "derinlikKayn",
+"l": "Derinlik kaynağı",
+"anim": "step",
+"kind": "choice",
+"min": 0,
+"max": 3,
+"step": 1,
+"jog": 1,
+"opts": [
+"Dosya",
+"Katman",
+"Elle tanımlama",
+"Parlaklık"
+],
+"def": 0
+},
+{
+"k": "derinlikHari",
+"l": "Derinlik haritası",
+"anim": "no",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"hint": "Dosya / görsel",
+"def": ""
+},
+{
+"k": "derinlikKatm",
+"l": "Derinlik katmanı",
+"anim": "no",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"hint": "Katman",
+"def": ""
+},
+{
+"k": "derinligTersCevi",
+"l": "Derinliği ters çevir",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 0
+},
+{
+"k": "derinlikGucu",
+"l": "Derinlik gücü",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 1000.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 100.0
+},
+{
+"k": "derinlikYumu",
+"l": "Derinlik yumuşatma",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 5.0
+},
+{
+"k": "derinlikKatmSayi",
+"l": "Derinlik katmanı sayısı",
+"anim": "yes",
+"kind": "jog",
+"min": 2.0,
+"max": 32.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 8.0
+},
+{
+"k": "kameraKaym",
+"l": "Kamera kayması",
+"anim": "yes",
+"kind": "jog",
+"two": true,
+"three": false,
+"min": -4000,
+"max": 4000,
+"defY": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 0.0
+},
+{
+"k": "yakinlas",
+"l": "Yakınlaştırma",
+"anim": "yes",
+"kind": "jog",
+"min": 10.0,
+"max": 1000.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 100.0
+},
+{
+"k": "kameraDonu",
+"l": "Kamera dönüşü",
+"anim": "yes",
+"kind": "jog",
+"two": false,
+"three": true,
+"min": -4000,
+"max": 4000,
+"defY": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"defZ": 0.0,
+"def": 0.0
+},
+{
+"k": "paralaksGucu",
+"l": "Paralaks gücü",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 50.0
+},
+{
+"k": "bosluklaDold",
+"l": "Boşlukları doldur",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+},
+{
+"k": "boslukDold",
+"l": "Boşluk doldurma",
+"anim": "step",
+"kind": "choice",
+"min": 0,
+"max": 3,
+"step": 1,
+"jog": 1,
+"opts": [
+"Kenar uzatma",
+"Ayna",
+"Saydam",
+"Özel arka plan"
+],
+"def": 0
+},
+{
+"k": "kenarlarKoru",
+"l": "Kenarları koru",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+}
+],
+"presets": [
+{
+"code": "FC",
+"name": "Fotoğraf canlandırma",
+"vals": {
+"derinlikKayn": 3
+},
+"keys": {
+"kameraKaym": [
+[
+0,
+-20
+],
+[
+3,
+20
+]
+]
+},
+"cols": {},
+"at": "start"
+},
+{
+"code": "MN",
+"name": "Manzara",
+"vals": {
+"derinlikKayn": 3,
+"paralaksGucu": 70
+},
+"keys": {
+"yakinlas": [
+[
+0,
+100
+],
+[
+3,
+115
+]
+]
+},
+"cols": {},
+"at": "start"
+},
+{
+"code": "CS",
+"name": "Countryballs sahne derinliği",
+"vals": {
+"derinlikKayn": 3,
+"paralaksGucu": 40
+},
+"keys": {
+"kameraKaym": [
+[
+0,
+0
+],
+[
+2,
+25
+]
+]
+},
+"cols": {},
+"at": "start"
+}
+],
+"pad": {
+"k": "kameraKaym",
+"mul": 0.5,
+"add": 10
+},
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 455,
+"ready": true,
+"hidden": false
+},
+{
+"type": "ambientocc",
+"name": "Ortam Gölgelendirmesi",
+"en": "",
+"cat": 0,
+"kind": "pixel",
+"desc": "Ortam Gölgelendirmesi",
+"tags": [
+"Gölge",
+"Derinlik",
+"Hacim"
+],
+"params": [
+{
+"k": "kaynak",
+"l": "Kaynak",
+"anim": "step",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Alfa",
+"Derinlik haritası",
+"Gerçek 3B geometri"
+],
+"def": 0
+},
+{
+"k": "derinlikKatm",
+"l": "Derinlik katmanı",
+"anim": "no",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"hint": "Katman",
+"def": ""
+},
+{
+"k": "golgeYari",
+"l": "Gölge yarıçapı",
+"anim": "yes",
+"kind": "jog",
+"min": 1.0,
+"max": 300.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 20.0
+},
+{
+"k": "yogunluk",
+"l": "Yoğunluk",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 40.0
+},
+{
+"k": "derinlikHass",
+"l": "Derinlik hassasiyeti",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 50.0
+},
+{
+"k": "yumusakl",
+"l": "Yumuşaklık",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 10.0
+},
+{
+"k": "golgeReng",
+"l": "Gölge rengi",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#000000"
+},
+{
+"k": "kontrast",
+"l": "Kontrast",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 20.0
+},
+{
+"k": "alfaSiniKoru",
+"l": "Alfa sınırını koru",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+},
+{
+"k": "yalnizGolgGost",
+"l": "Yalnız gölgeyi göster",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 0
+},
+{
+"k": "kalite",
+"l": "Kalite",
+"anim": "step",
+"kind": "choice",
+"min": 0,
+"max": 3,
+"step": 1,
+"jog": 1,
+"opts": [
+"Otomatik",
+"Düşük",
+"Orta",
+"Yüksek"
+],
+"def": 0
+}
+],
+"presets": [
+{
+"code": "KD",
+"name": "Karton derinliği",
+"vals": {
+"golgeYari": 15,
+"yogunluk": 35
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "TG",
+"name": "Temas gölgesi",
+"vals": {
+"golgeYari": 8,
+"yogunluk": 60
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "OY",
+"name": "Oyuncak",
+"vals": {
+"golgeYari": 25,
+"yumusakl": 20
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "G3",
+"name": "Güçlü 3B gölge",
+"vals": {
+"golgeYari": 40,
+"yogunluk": 75
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": {
+"k": "golgeYari",
+"mul": 1.0
+},
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 456,
+"ready": true,
+"hidden": false
+},
+{
+"type": "volumelight",
+"name": "Hacimsel Işık",
+"en": "",
+"cat": 0,
+"kind": "pixel",
+"desc": "Hacimsel Işık",
+"tags": [
+"Işık",
+"Sis",
+"Huzme"
+],
+"params": [
+{
+"k": "isikTuru",
+"l": "Işık türü",
+"anim": "step",
+"kind": "choice",
+"min": 0,
+"max": 3,
+"step": 1,
+"jog": 1,
+"opts": [
+"Spot",
+"Güneş",
+"Noktasal",
+"Koni"
+],
+"def": 0
+},
+{
+"k": "isikKonu",
+"l": "Işık konumu",
+"anim": "yes",
+"kind": "jog",
+"two": true,
+"three": false,
+"min": -100,
+"max": 200,
+"defY": 10.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "box%",
+"def": 50.0
+},
+{
+"k": "isikYonu",
+"l": "Işık yönü",
+"anim": "yes",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"def": 90.0
+},
+{
+"k": "isinUzun",
+"l": "Işın uzunluğu",
+"anim": "yes",
+"kind": "jog",
+"min": 10.0,
+"max": 5000.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 600.0
+},
+{
+"k": "isinGeni",
+"l": "Işın genişliği",
+"anim": "yes",
+"kind": "jog",
+"min": 1.0,
+"max": 2000.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 180.0
+},
+{
+"k": "koniAcis",
+"l": "Koni açısı",
+"anim": "yes",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"def": 35.0
+},
+{
+"k": "isikReng",
+"l": "Işık rengi",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#FFD43B"
+},
+{
+"k": "isikGucu",
+"l": "Işık gücü",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 300.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 80.0
+},
+{
+"k": "yumusakl",
+"l": "Yumuşaklık",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 60.0
+},
+{
+"k": "sisYogu",
+"l": "Sis yoğunluğu",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 35.0
+},
+{
+"k": "isikSaci",
+"l": "Işık saçılması",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 50.0
+},
+{
+"k": "havadakiTozl",
+"l": "Havadaki tozlar",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+},
+{
+"k": "tozYogu",
+"l": "Toz yoğunluğu",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 20.0
+},
+{
+"k": "katmanlaIsigEnge",
+"l": "Katmanlar ışığı engellesin",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 0
+},
+{
+"k": "engelleyKatm",
+"l": "Engelleyici katman",
+"anim": "no",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"hint": "Katman",
+"def": ""
+}
+],
+"presets": [
+{
+"code": "PI",
+"name": "Pencere ışığı",
+"vals": {
+"isikTuru": 1,
+"sisYogu": 30
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "SI",
+"name": "Sahne ışığı",
+"vals": {
+"isikTuru": 0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "SS",
+"name": "Sinematik sis",
+"vals": {
+"sisYogu": 70,
+"havadakiTozl": 1
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 457,
+"ready": true,
+"hidden": false
+},
+{
+"type": "inkdraw",
+"name": "Mürekkep Çizimi",
+"en": "",
+"cat": 1,
+"kind": "pixel",
+"desc": "Mürekkep Çizimi",
+"tags": [
+"Mürekkep",
+"Çizim",
+"Eskiz"
+],
+"params": [
+{
+"k": "cizgiKali",
+"l": "Çizgi kalınlığı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.5,
+"max": 30.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 2.0
+},
+{
+"k": "kenarHass",
+"l": "Kenar hassasiyeti",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 65.0
+},
+{
+"k": "ayrinti",
+"l": "Ayrıntı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 70.0
+},
+{
+"k": "cizgiDuze",
+"l": "Çizgi düzensizliği",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 20.0
+},
+{
+"k": "murekkepYayi",
+"l": "Mürekkep yayılması",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 20.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 1.0
+},
+{
+"k": "murekkepYogu",
+"l": "Mürekkep yoğunluğu",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 90.0
+},
+{
+"k": "murekkepReng",
+"l": "Mürekkep rengi",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#000000"
+},
+{
+"k": "orijinalRenkKoru",
+"l": "Orijinal renk koruması",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 0.0
+},
+{
+"k": "kagitDoku",
+"l": "Kâğıt dokusu",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+},
+{
+"k": "kagitTuru",
+"l": "Kâğıt türü",
+"anim": "step",
+"kind": "choice",
+"min": 0,
+"max": 3,
+"step": 1,
+"jog": 1,
+"opts": [
+"Beyaz",
+"Kraft",
+"Parşömen",
+"Karton"
+],
+"def": 0
+},
+{
+"k": "dokuGucu",
+"l": "Doku gücü",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 25.0
+},
+{
+"k": "taramaYogu",
+"l": "Tarama yoğunluğu",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 40.0
+},
+{
+"k": "dinamikCizg",
+"l": "Dinamik çizgiler",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 0
+},
+{
+"k": "yenilenmAral",
+"l": "Yenilenme aralığı",
+"anim": "yes",
+"kind": "jog",
+"min": 1.0,
+"max": 60.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 3.0
+}
+],
+"presets": [
+{
+"code": "ME",
+"name": "Mürekkep eskizi",
+"vals": {},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "CR",
+"name": "Çizgi roman",
+"vals": {
+"cizgiKali": 3,
+"orijinalRenkKoru": 80,
+"taramaYogu": 10
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "GR",
+"name": "Gravür",
+"vals": {
+"taramaYogu": 85,
+"cizgiKali": 1
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 458,
+"ready": true,
+"hidden": false
+},
+{
+"type": "embroidery",
+"name": "Nakış",
+"en": "",
+"cat": 1,
+"kind": "pixel",
+"desc": "Nakış",
+"tags": [
+"Nakış",
+"İplik",
+"Kumaş"
+],
+"params": [
+{
+"k": "dikisTuru",
+"l": "Dikiş türü",
+"anim": "step",
+"kind": "choice",
+"min": 0,
+"max": 4,
+"step": 1,
+"jog": 1,
+"opts": [
+"Düz",
+"Zincir",
+"Çapraz",
+"Saten",
+"Zikzak"
+],
+"def": 0
+},
+{
+"k": "dikisUzun",
+"l": "Dikiş uzunluğu",
+"anim": "yes",
+"kind": "jog",
+"min": 1.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 8.0
+},
+{
+"k": "iplikKali",
+"l": "İplik kalınlığı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.5,
+"max": 30.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 3.0
+},
+{
+"k": "dikisAral",
+"l": "Dikiş aralığı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 50.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 2.0
+},
+{
+"k": "dikisYonu",
+"l": "Dikiş yönü",
+"anim": "yes",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"def": 45.0
+},
+{
+"k": "dikisYonl",
+"l": "Dikiş yönlendirmesi",
+"anim": "step",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Sabit",
+"Kontura göre",
+"Renk bölgelerine göre"
+],
+"def": 0
+},
+{
+"k": "dikisDuze",
+"l": "Dikiş düzensizliği",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 10.0
+},
+{
+"k": "iplikKaba",
+"l": "İplik kabartması",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 30.0
+},
+{
+"k": "orijinalRenkKull",
+"l": "Orijinal renkleri kullan",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+},
+{
+"k": "ozelIpliReng",
+"l": "Özel iplik rengi",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#FFFFFF"
+},
+{
+"k": "renkSayi",
+"l": "Renk sayısı",
+"anim": "yes",
+"kind": "jog",
+"min": 2.0,
+"max": 128.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 16.0
+},
+{
+"k": "kumasAltl",
+"l": "Kumaş altlığı",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 0
+},
+{
+"k": "kumasTuru",
+"l": "Kumaş türü",
+"anim": "step",
+"kind": "choice",
+"min": 0,
+"max": 4,
+"step": 1,
+"jog": 1,
+"opts": [
+"Keçe",
+"Pamuk",
+"Keten",
+"Kot",
+"Özel"
+],
+"def": 0
+},
+{
+"k": "kenarDiki",
+"l": "Kenar dikişi",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+},
+{
+"k": "islenmeIler",
+"l": "İşlenme ilerlemesi",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 100.0
+},
+{
+"k": "sekilDegiTaki",
+"l": "Şekil değişimini takip et",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+}
+],
+"presets": [
+{
+"code": "NB",
+"name": "Nakışlı bayrak",
+"vals": {
+"dikisTuru": 3
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "AR",
+"name": "Arma",
+"vals": {
+"dikisTuru": 3,
+"kenarDiki": 1,
+"renkSayi": 8
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "KK",
+"name": "Keçe karakter",
+"vals": {
+"kumasAltl": 1,
+"dikisTuru": 0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "IR",
+"name": "İşlenmiş rozet",
+"vals": {
+"dikisTuru": 4,
+"kumasAltl": 1
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": {
+"add": 6
+},
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 459,
+"ready": true,
+"hidden": false
+},
+{
+"type": "pencilhatch",
+"name": "Kurşun Kalem Tarama",
+"en": "",
+"cat": 1,
+"kind": "pixel",
+"desc": "Mevcut Karakalem efektine yeni bir gelişmiş tarama modu olarak da eklenebilir.",
+"tags": [
+"Kalem",
+"Tarama",
+"Eskiz"
+],
+"params": [
+{
+"k": "tarama",
+"l": "Tarama",
+"anim": "step",
+"kind": "choice",
+"min": 0,
+"max": 3,
+"step": 1,
+"jog": 1,
+"opts": [
+"Paralel",
+"Çapraz",
+"Çok yönlü",
+"Kontura uyumlu"
+],
+"def": 0
+},
+{
+"k": "cizgiKali",
+"l": "Çizgi kalınlığı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.5,
+"max": 10.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 1.0
+},
+{
+"k": "cizgiAral",
+"l": "Çizgi aralığı",
+"anim": "yes",
+"kind": "jog",
+"min": 1.0,
+"max": 50.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 5.0
+},
+{
+"k": "cizgiUzun",
+"l": "Çizgi uzunluğu",
+"anim": "yes",
+"kind": "jog",
+"min": 2.0,
+"max": 300.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 30.0
+},
+{
+"k": "birinciAci",
+"l": "Birinci açı",
+"anim": "yes",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"def": 45.0
+},
+{
+"k": "ikinciAci",
+"l": "İkinci açı",
+"anim": "yes",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"def": 135.0
+},
+{
+"k": "taramaKatm",
+"l": "Tarama katmanı",
+"anim": "yes",
+"kind": "jog",
+"min": 1.0,
+"max": 8.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 3.0
+},
+{
+"k": "kalemBasi",
+"l": "Kalem basıncı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 60.0
+},
+{
+"k": "tonHass",
+"l": "Ton hassasiyeti",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 70.0
+},
+{
+"k": "cizgiDuze",
+"l": "Çizgi düzensizliği",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 15.0
+},
+{
+"k": "ucYumu",
+"l": "Uç yumuşaklığı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 30.0
+},
+{
+"k": "kalemReng",
+"l": "Kalem rengi",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#8A8F98"
+},
+{
+"k": "kagitDoku",
+"l": "Kâğıt dokusu",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+},
+{
+"k": "cizgilerCanl",
+"l": "Çizgileri canlandır",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 0
+},
+{
+"k": "yenilenmAral",
+"l": "Yenilenme aralığı",
+"anim": "yes",
+"kind": "jog",
+"min": 1.0,
+"max": 60.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 3.0
+}
+],
+"presets": [
+{
+"code": "TC",
+"name": "Teknik çizim",
+"vals": {
+"tarama": 0,
+"cizgiAral": 4
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "KE",
+"name": "Klasik eskiz",
+"vals": {
+"tarama": 1
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "YT",
+"name": "Yoğun tarama",
+"vals": {
+"tarama": 2,
+"taramaKatm": 5,
+"cizgiAral": 3
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 460,
+"ready": true,
+"hidden": false
+},
+{
+"type": "photocopy",
+"name": "Fotokopi",
+"en": "",
+"cat": 0,
+"kind": "pixel",
+"desc": "Kopya nesli arttıkça görüntünün baskı kalitesi kademeli olarak düşmelidir.",
+"tags": [
+"Fotokopi",
+"Baskı",
+"Eski"
+],
+"params": [
+{
+"k": "kontrast",
+"l": "Kontrast",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 60.0
+},
+{
+"k": "parlakli",
+"l": "Parlaklık",
+"anim": "yes",
+"kind": "jog",
+"min": -100.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 0.0
+},
+{
+"k": "tonerYogu",
+"l": "Toner yoğunluğu",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 70.0
+},
+{
+"k": "siyahEsig",
+"l": "Siyah eşiği",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 45.0
+},
+{
+"k": "renkKayb",
+"l": "Renk kaybı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 100.0
+},
+{
+"k": "baskiCozu",
+"l": "Baskı çözünürlüğü",
+"anim": "yes",
+"kind": "jog",
+"min": 5.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 60.0
+},
+{
+"k": "kenarAsin",
+"l": "Kenar aşınması",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 15.0
+},
+{
+"k": "tonerTasm",
+"l": "Toner taşması",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 20.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 1.0
+},
+{
+"k": "gurultu",
+"l": "Gürültü",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 25.0
+},
+{
+"k": "tonerReng",
+"l": "Toner rengi",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#000000"
+},
+{
+"k": "kagitReng",
+"l": "Kâğıt rengi",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#FFFFFF"
+},
+{
+"k": "kagitDoku",
+"l": "Kâğıt dokusu",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 35.0
+},
+{
+"k": "lekeYogu",
+"l": "Leke yoğunluğu",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 10.0
+},
+{
+"k": "baskiCizg",
+"l": "Baskı çizgileri",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+},
+{
+"k": "kopyaNesl",
+"l": "Kopya nesli",
+"anim": "yes",
+"kind": "jog",
+"min": 1.0,
+"max": 20.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 1.0
+},
+{
+"k": "saydamliKoru",
+"l": "Saydamlığı koru",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+}
+],
+"presets": [
+{
+"code": "TF",
+"name": "Temiz fotokopi",
+"vals": {
+"gurultu": 10,
+"lekeYogu": 0,
+"baskiCizg": 0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "EB",
+"name": "Eski belge",
+"vals": {
+"kopyaNesl": 4
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "BY",
+"name": "Bozuk yazıcı",
+"vals": {
+"baskiCizg": 1,
+"tonerTasm": 3,
+"gurultu": 50
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "YK",
+"name": "Yirminci kopya",
+"vals": {
+"kopyaNesl": 20
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 461,
+"ready": true,
+"hidden": false
+},
+{
+"type": "datacorrupt",
+"name": "Veri Bozulması",
+"en": "",
+"cat": 3,
+"kind": "pixel",
+"desc": "Video sıkıştırma hatalarına benzeyen görsel sonuçlar üretir. Kaynak dosyaya zarar vermez.",
+"tags": [
+"Bozulma",
+"Dijital",
+"Glitch"
+],
+"params": [
+{
+"k": "bozulmaMikt",
+"l": "Bozulma miktarı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 40.0
+},
+{
+"k": "blokBuyu",
+"l": "Blok büyüklüğü",
+"anim": "yes",
+"kind": "jog",
+"min": 2.0,
+"max": 256.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 16.0
+},
+{
+"k": "blokYogu",
+"l": "Blok yoğunluğu",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 35.0
+},
+{
+"k": "blokKaym",
+"l": "Blok kayması",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 500.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 30.0
+},
+{
+"k": "hareketYayi",
+"l": "Hareket yayılması",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 65.0
+},
+{
+"k": "renkBozu",
+"l": "Renk bozulması",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 25.0
+},
+{
+"k": "cozunurl",
+"l": "Çözünürlük",
+"anim": "yes",
+"kind": "jog",
+"min": 5.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 70.0
+},
+{
+"k": "oncekiKareTasi",
+"l": "Önceki kareyi taşıma",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 60.0
+},
+{
+"k": "kareHafi",
+"l": "Kare hafızası",
+"anim": "yes",
+"kind": "jog",
+"min": 1.0,
+"max": 120.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 8.0
+},
+{
+"k": "donmusBlokSure",
+"l": "Donmuş blok süresi",
+"anim": "yes",
+"kind": "jog",
+"min": 1.0,
+"max": 60.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 4.0
+},
+{
+"k": "yenilenmAral",
+"l": "Yenilenme aralığı",
+"anim": "yes",
+"kind": "jog",
+"min": 1.0,
+"max": 60.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 3.0
+},
+{
+"k": "otomatikTeti",
+"l": "Otomatik tetikleme",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+},
+{
+"k": "elleTeti",
+"l": "Elle tetikleme",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 0.0
+},
+{
+"k": "hareketYonuTaki",
+"l": "Hareket yönünü takip et",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+},
+{
+"k": "sahneDegiHafi",
+"l": "Sahne değişiminde hafızayı temizle",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+},
+{
+"k": "aniParlDegi",
+"l": "Ani parlaklık değişimlerini sınırla",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+},
+{
+"k": "tohum",
+"l": "Tohum",
+"anim": "yes",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"reseed": true,
+"def": 1.0
+}
+],
+"presets": [
+{
+"code": "DE",
+"name": "Dijital erime",
+"vals": {
+"hareketYayi": 90,
+"bozulmaMikt": 60
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "DG",
+"name": "Donmuş görüntü",
+"vals": {
+"blokYogu": 60,
+"blokKaym": 5
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "SH",
+"name": "Sıkıştırma hatası",
+"vals": {
+"blokBuyu": 8,
+"renkBozu": 50
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "HB",
+"name": "Hareketli bloklar",
+"vals": {
+"blokKaym": 70,
+"yenilenmAral": 2
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 462,
+"ready": true,
+"hidden": false
 }
 ],
 "featured": [

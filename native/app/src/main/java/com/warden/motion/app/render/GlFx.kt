@@ -91,7 +91,18 @@ void main(){ v_uv = a_pos; vec3 p = u_m * vec3(a_pos, 1.0); gl_Position = vec4(p
         GLES30.glBindAttribLocation(p, 0, "a_pos"); GLES30.glLinkProgram(p)
         val ok = IntArray(1); GLES30.glGetProgramiv(p, GLES30.GL_LINK_STATUS, ok, 0)
         if (ok[0] == 0) { Log.w("GlFx", "$name: " + GLES30.glGetProgramInfoLog(p)); bad += name; return 0 }
-        progs[name] = p; return p
+        progs[name] = p; progTex[name] = Regex("uniform\\s+sampler2D\\s+(t_\\w+)").findAll(full).map { it.groupValues[1] }.toList(); return p
+    }
+    /** Hazır dokular (assets/fx/tex/<ad>.png): shader'da "uniform sampler2D t_<ad>;" yazmak yeterli; bir kez yüklenir */
+    private val progTex = HashMap<String, List<String>>()
+    private val assetTex = HashMap<String, Tex>()
+    private fun assetTexture(n: String): Tex? {
+        assetTex[n]?.let { return it }
+        val b = runCatching { ctx!!.assets.open("fx/tex/${n.removePrefix("t_")}.png").use { android.graphics.BitmapFactory.decodeStream(it) } }.getOrNull() ?: return null
+        val t = tex(b.width, b.height, b); b.recycle()
+        GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, t.t)
+        GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_WRAP_S, GLES30.GL_REPEAT)
+        assetTex[n] = t; return t
     }
 
     /** "GRADIENT(k)" satırı → renk geçişi uniform'ları ve grad_k / paln_k / palc_k (GLSL ES'te ## yok) */
@@ -129,7 +140,8 @@ vec3 palc_$k(int i) { vec3 c[32] = vec3[32]($c); return c[clamp(i, 0, 31)]; }"""
         GLES30.glBindFramebuffer(GLES30.GL_FRAMEBUFFER, out.fb); GLES30.glViewport(0, 0, out.w, out.h)
         GLES30.glDisable(GLES30.GL_BLEND)
         var unit = 0
-        for ((k, T) in inputs) {
+        val all = if (progTex[name].isNullOrEmpty()) inputs else inputs + progTex[name]!!.mapNotNull { n -> assetTexture(n)?.let { n to it } }
+        for ((k, T) in all) {
             val loc = GLES30.glGetUniformLocation(p, k); if (loc < 0) continue
             GLES30.glActiveTexture(GLES30.GL_TEXTURE0 + unit); GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, T.t); GLES30.glUniform1i(loc, unit); unit++
         }

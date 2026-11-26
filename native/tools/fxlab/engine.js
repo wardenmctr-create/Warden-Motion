@@ -56,12 +56,20 @@ class Engine {
     gl.bindTexture(gl.TEXTURE_2D, T.t); gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA8, gl.RGBA, gl.UNSIGNED_BYTE, canvas2d); return T;
   }
+  async assetTex(n) {
+    this.atex = this.atex || {}; if (this.atex[n]) return this.atex[n];
+    const img = new Image(); img.src = FX + 'tex/' + n.slice(2) + '.png'; await img.decode();
+    const c = document.createElement('canvas'); c.width = img.width; c.height = img.height; c.getContext('2d').drawImage(img, 0, 0);
+    const T = this.upload(c); const gl = this.gl; gl.bindTexture(gl.TEXTURE_2D, T.t); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT); this.atex[n] = T; return T;
+  }
   free(T) { const gl = this.gl; gl.deleteTexture(T.t); gl.deleteFramebuffer(T.fb); }
   // Bir geçiş: program, girişler, çıktı hedefi
   async pass(name, out, inputs, uni, m) {
     const gl = this.gl; const p = await this.prog(name); gl.useProgram(p);
     gl.bindFramebuffer(gl.FRAMEBUFFER, out ? out.fb : null); gl.viewport(0, 0, out ? out.w : this.c.width, out ? out.h : this.c.height);
     let unit = 0;
+    const tn = [...(await this.shaderSrc(name)).matchAll(/uniform\s+sampler2D\s+(t_\w+)/g)].map(m => m[1]);
+    if (tn.length) { inputs = { ...inputs }; for (const n of tn) inputs[n] = await this.assetTex(n); }
     for (const [k, T] of Object.entries(inputs)) { gl.activeTexture(gl.TEXTURE0 + unit); gl.bindTexture(gl.TEXTURE_2D, T.t); gl.uniform1i(gl.getUniformLocation(p, k), unit); unit++; }
     for (const [k, v] of Object.entries(uni)) {
       const loc = gl.getUniformLocation(p, k); if (!loc) continue;
