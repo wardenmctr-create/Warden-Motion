@@ -292,6 +292,18 @@ fun applyMotionFx(l: Layer, t: Double, tr0: TR): TR {
                 }
             }
             // ---- Opaklık ----
+            "elastic" -> { // anahtar kareye varınca, varış hızıyla orantılı sönümlü yay salınımı
+                val f = max(0.1, v("frekans")); val d = max(0.05, v("sure")); val damp = 1.0 + v("sonum") / 100 * 7; val amp = v("tasma") / 20
+                fun el(a: com.warden.motion.app.model.Anim): Double {
+                    val ks = a.k ?: return 0.0; if (ks.size < 2) return 0.0
+                    val k = ks.drop(1).lastOrNull { it.t <= t } ?: return 0.0; val dt = t - k.t; if (dt < 0 || dt > d * 3) return 0.0
+                    val h = 1.0 / 60; val vel = (a.at(k.t) - a.at(k.t - h)) / h
+                    if (on("yalnizDuru") && kotlin.math.abs(a.at(k.t + h) - a.at(k.t)) / h > kotlin.math.abs(vel) * 0.2 + 1e-6) return 0.0
+                    val w = 2 * PI * f; return vel * amp * sin(w * dt) / w * exp(-damp * dt / d) }
+                if (on("konum")) tr = move(tr, el(l.x), el(l.y))
+                if (on("olcek")) tr = tr.copy(scale = tr.scale + el(l.scale))
+                if (on("donus")) tr = tr.copy(rot = tr.rot + el(l.rotation))
+            }
             "flicker" -> { val x = lt * v("frekans") * 10; val sm = v("yumusatm") / 100; val n = (noise1(if (sm < .1) floor(x) else x, v("tohum")) * 0.5 + 0.5); tr = tr.copy(opacity = tr.opacity * (v("enDusuOpak") + (v("enYuksOpak") - v("enDusuOpak")) * n) / 100) }
             "blink" -> {
                 val ph = ((lt * v("frekans") + v("faz") / 360) % 1 + 1) % 1; val duty = v("acikKalmOran") / 100

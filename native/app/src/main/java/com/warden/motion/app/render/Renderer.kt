@@ -87,6 +87,7 @@ fun parseCol(hex: String?, def: Int = 0xFF8F7CF0.toInt()): Int = runCatching { a
  * Görseller önbellekte tutulur; önizlemede küçültülmüş (maxSide), dışa aktarmada asıl hâliyle.
  */
 class Renderer(private val ctx: Context, maxSide: Int = 2048, private val sync: Boolean = false, cacheMb: Int = 64) {
+    init { GlFx.init(ctx) }
     private val store = Store.get(ctx)
     private val pcmCache = android.util.LruCache<String, Pcm>(3)
     init { AudioVis.pcmOf = { l -> l.src?.takeIf { it.startsWith("media:") }?.let { src -> pcmCache.get(src) ?: runCatching { AudioDecode.decode(store.mediaFile(src.removePrefix("media:")), 600.0) }.getOrNull()?.also { pcmCache.put(src, it) } } } }
@@ -340,8 +341,8 @@ class Renderer(private val ctx: Context, maxSide: Int = 2048, private val sync: 
         val alpha = (tr.opacity.coerceIn(0.0, 1.0) * 255).toInt()
         if (alpha <= 0) return
         val blend = echoBlend ?: blendOf(l.blend)
-        val gpu = if (lim("warp") > 0 && !GlFx.failed) l.effects.filter { e -> e.on != false && fxMeta(e.type).kind in GlFx.GPU_KINDS }.map { linkPoints(p, l, it, t, tr) } else emptyList()
-        val mb = if (lim("blur") > 0) l.effects.find { (it.type == "motionblur" || it.type == "pixelmb") && it.on != false } else null
+        val gpu = if (!GlFx.failed) l.effects.filter { e -> e.on != false && fxMeta(e.type).kind in GlFx.GPU_KINDS }.map { linkPoints(p, l, it, t, tr) } else emptyList()
+        val mb = l.effects.find { (it.type == "motionblur" || it.type == "pixelmb") && it.on != false }
         if (gpu.isEmpty() && mb == null) {
             val needLayer = alpha < 255 || blend != null
             if (needLayer) {
@@ -374,6 +375,7 @@ class Renderer(private val ctx: Context, maxSide: Int = 2048, private val sync: 
         var q = curQ.toDouble() * max(0.05, world)
         if (!exporting && playing) q *= 0.7
         if (!exporting && lite) q *= 0.6
+        if (lim("warp") <= 0) q *= 0.5 else if (lim("warp") < 2) q *= 0.75 // düşük performans ayarı: efekt kapanmaz, önizleme çözünürlüğü düşer
         var pad = 2.0
         for (e in gpu) pad += padOf(e, fxMeta(e.type), t, l)
         val maxSide = if (exporting) 4096.0 else 1600.0
@@ -410,7 +412,7 @@ class Renderer(private val ctx: Context, maxSide: Int = 2048, private val sync: 
             val dist = (hypot(a1.x - a0.x, a1.y - a0.y) + kotlin.math.abs(a1.scale - a0.scale) * rr + kotlin.math.abs(a1.rot - a0.rot) * PI / 180 * rr * tr.scale) * curQ
             val want = mb.value("ornekSayi", t).roundToInt().coerceIn(2, 256)
             val n = if (dist < 1 || span <= 0) 1 else if (exporting) max(6, min(want, kotlin.math.ceil(dist / (1.6 - fxQuality)).toInt()))
-                else min(if (playing) 6 else 16, max(4, min(want, (dist / 4).toInt())))
+                else min(if (lim("blur") <= 0) 3 else if (playing) 6 else 16, max(4, min(want, (dist / 4).toInt())))
             if (n <= 1) samples += tr else for (i in 0 until n) samples += trAt(i / (n - 1.0))
         } else samples += tr
         val pt = Paint().apply { this.alpha = alpha; if (blend != null && Build.VERSION.SDK_INT >= 29) blendMode = blend }

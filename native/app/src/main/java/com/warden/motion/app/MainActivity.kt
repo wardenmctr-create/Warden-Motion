@@ -25,6 +25,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         com.warden.motion.app.model.FxCatalog.init(this)
+        com.warden.motion.app.render.GlFx.init(this)
         val store = Store.get(this)
         val renderer = Renderer(this)
         setContent {

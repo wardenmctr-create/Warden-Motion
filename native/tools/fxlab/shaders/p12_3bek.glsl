@@ -10,9 +10,9 @@ vec4 surf(vec3 p, vec3 n) { return cardSurf(p, n); }
 void main() { o = render3d(vec3(0.0)); }
 //== sweeppath
 INCLUDE(_3d)
-uniform float p_kesit, p_kesitBoyu, p_burgu, p_ucOlce, p_ilerleme, p_dvN; uniform float p_dv[128];
+uniform float p_kesit, p_kesitBoyu, p_burgu, p_ucOlce, p_ilerleme, p_dvN; uniform vec4 p_dv4[32]; float dvAt(int i) { return i < 0 || i >= 128 ? 0.0 : p_dv4[i >> 2][i & 3]; }
 float sdf(vec3 p) { int N = int(p_dvN / 2.0); float best = 1e9; float tot = float(max(N - 1, 1)); float lim = p_ilerleme / 100.0 * tot;
-  for (int i = 0; i < 63; i++) { if (i >= N - 1) break; if (float(i) > lim) break; vec3 a = vec3(p_dv[i * 2], -p_dv[i * 2 + 1], 0.0), b = vec3(p_dv[i * 2 + 2], -p_dv[i * 2 + 3], 0.0); vec3 ab = b - a; float u = clamp(dot(p - a, ab) / max(dot(ab, ab), 1e-4), 0.0, min(1.0, lim - float(i)));
+  for (int i = 0; i < 63; i++) { if (i >= N - 1) break; if (float(i) > lim) break; vec3 a = vec3(dvAt(i * 2), -dvAt(i * 2 + 1), 0.0), b = vec3(dvAt(i * 2 + 2), -dvAt(i * 2 + 3), 0.0); vec3 ab = b - a; float u = clamp(dot(p - a, ab) / max(dot(ab, ab), 1e-4), 0.0, min(1.0, lim - float(i)));
     vec3 c = p - a - ab * u; float t = (float(i) + u) / tot; float r = p_kesitBoyu * 0.5 * mix(1.0, p_ucOlce / 100.0, t); float ang = radians(p_burgu) * t; vec3 nrm = normalize(cross(ab, vec3(0.0, 0.0, 1.0)) + 1e-5);
     vec2 cs = vec2(dot(c, nrm), c.z); cs = rot2(degrees(ang)) * cs; float d = p_kesit < 0.5 ? length(cs) - r : p_kesit < 1.5 ? max(abs(cs.x), abs(cs.y)) - r : max(abs(cs.x) - r, abs(cs.y) - r * 0.15); best = min(best, d); }
   if (N < 2) { vec3 q = p; return length(vec2(length(q.xy) - boxU().x * 0.3, q.z)) - p_kesitBoyu * 0.5; } return best; }
@@ -82,10 +82,10 @@ vec4 surf(vec3 p, vec3 n) { vec4 c = cardSurf(p, n); vec2 g = p.xy / 18.0; vec2 
 void main() { o = render3d(vec3(0.0)); }
 //== skelvolume
 INCLUDE(_3d)
-uniform float p_yaricap, p_birlesimYumu, p_dvN; uniform float p_dv[64];
+uniform float p_yaricap, p_birlesimYumu, p_dvN; uniform vec4 p_dv4[16]; float dvAt(int i) { return i < 0 || i >= 64 ? 0.0 : p_dv4[i >> 2][i & 3]; }
 float smin(float a, float b, float k) { float h = clamp(0.5 + 0.5 * (b - a) / max(k, 1e-3), 0.0, 1.0); return mix(b, a, h) - k * h * (1.0 - h); }
 float sdf(vec3 p) { int N = int(p_dvN / 2.0); float k = p_birlesimYumu * 0.6; float d = 1e9; if (N < 1) { for (int i = 0; i < 4; i++) { vec3 c = vec3(cos(float(i) * 1.57), sin(float(i) * 1.57), 0.0) * boxU().x * 0.2; d = smin(d, length(p - c) - p_yaricap * 3.0, k); } return d; }
-  vec3 prev = vec3(p_dv[0], -p_dv[1], 0.0); d = length(p - prev) - p_yaricap; for (int i = 1; i < 32; i++) { if (i >= N) break; vec3 c = vec3(p_dv[i * 2], -p_dv[i * 2 + 1], 0.0); vec3 ab = c - prev; float u = clamp(dot(p - prev, ab) / max(dot(ab, ab), 1e-4), 0.0, 1.0); d = smin(d, length(p - prev - ab * u) - p_yaricap, k); prev = c; } return d; }
+  vec3 prev = vec3(dvAt(0), -dvAt(1), 0.0); d = length(p - prev) - p_yaricap; for (int i = 1; i < 32; i++) { if (i >= N) break; vec3 c = vec3(dvAt(i * 2), -dvAt(i * 2 + 1), 0.0); vec3 ab = c - prev; float u = clamp(dot(p - prev, ab) / max(dot(ab, ab), 1e-4), 0.0, 1.0); d = smin(d, length(p - prev - ab * u) - p_yaricap, k); prev = c; } return d; }
 vec4 surf(vec3 p, vec3 n) { return vec4(c_tabanRenk, 1.0); }
 void main() { o = render3d(vec3(0.0)); }
 //== vol2surf
@@ -99,8 +99,8 @@ void main() { o = render3d(vec3(0.0)); }
 //== painttrail
 INCLUDE(_3d)
 INCLUDE(_card)
-uniform float p_izGeni, p_solma, p_dvN; uniform float p_dv[64];
+uniform float p_izGeni, p_solma, p_dvN; uniform vec4 p_dv4[16]; float dvAt(int i) { return i < 0 || i >= 64 ? 0.0 : p_dv4[i >> 2][i & 3]; }
 float sdf(vec3 p) { return cardD(p, 16.0); }
-vec4 surf(vec3 p, vec3 n) { vec4 c = cardSurf(p, n); int N = int(p_dvN / 2.0); float best = 1e9; float bk = 0.0; for (int i = 0; i < 31; i++) { if (i >= N - 1) break; vec2 a = vec2(p_dv[i * 2], -p_dv[i * 2 + 1]), b = vec2(p_dv[i * 2 + 2], -p_dv[i * 2 + 3]); vec2 ab = b - a; float u = clamp(dot(p.xy - a, ab) / max(dot(ab, ab), 1e-4), 0.0, 1.0); float d = length(p.xy - a - ab * u); if (d < best) { best = d; bk = float(i) / max(float(N - 1), 1.0); } }
+vec4 surf(vec3 p, vec3 n) { vec4 c = cardSurf(p, n); int N = int(p_dvN / 2.0); float best = 1e9; float bk = 0.0; for (int i = 0; i < 31; i++) { if (i >= N - 1) break; vec2 a = vec2(dvAt(i * 2), -dvAt(i * 2 + 1)), b = vec2(dvAt(i * 2 + 2), -dvAt(i * 2 + 3)); vec2 ab = b - a; float u = clamp(dot(p.xy - a, ab) / max(dot(ab, ab), 1e-4), 0.0, 1.0); float d = length(p.xy - a - ab * u); if (d < best) { best = d; bk = float(i) / max(float(N - 1), 1.0); } }
   float m = (1.0 - smoothstep(p_izGeni * 0.4, p_izGeni * 0.5, best)) * mix(1.0, bk, p_solma / 100.0) * step(0.6, abs(n.z)); return vec4(mix(c.rgb, vec3(0.9, 0.2, 0.25), m), 1.0); }
 void main() { o = render3d(vec3(0.0)); }

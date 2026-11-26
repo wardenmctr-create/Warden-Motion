@@ -402,7 +402,7 @@ fun EffectsPanel(s: EditorState, layer: Layer, onClose: () -> Unit) {
                     }
                     if (e.closed != true) {
                         m.info?.let { Row(Modifier.padding(8.dp), horizontalArrangement = Arrangement.spacedBy(6.dp)) { Ico("info", C.dText2, 14.dp); Text(it, fontSize = 11.5.sp, color = C.dText2) } }
-                        if (m.kind !in GlFx.GPU_KINDS && !m.ready && m.kind !in MOTION_KINDS) Text("Bu efektin telefon motoru sonraki sürümde tamamlanacak; ayarları şimdiden kaydedilir.", fontSize = 11.sp, color = Color(0xFFF2C230), modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp))
+                        if (m.type in NO_ENGINE) Text("Bu efektin telefon motoru henüz yok: şimdilik görüntüyü değiştirmez; ayarları kaydedilir.", fontSize = 11.sp, color = Color(0xFFF2C230), modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp))
                         // Hazır ayarlar
                         if (m.presets.isNotEmpty()) Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(horizontal = 6.dp, vertical = 6.dp), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                             Text("Standart", fontSize = 11.5.sp, color = C.dText, modifier = Modifier.clip(RoundedCornerShape(12.dp)).background(Color(0xFF34417A)).tap { upd(e) { makeEffect(e.type).copy(id = e.id) } }.padding(horizontal = 10.dp, vertical = 5.dp))
@@ -482,6 +482,8 @@ fun EffectsPanel(s: EditorState, layer: Layer, onClose: () -> Unit) {
 }
 
 val MIX_P = FxParam("_mix", "Karışım", 0.0, 100.0, 100.0, 0.1, 0.1, unit = "%")
+/** Motoru henüz yazılmamış efektler (panelde açıkça uyarı gösterilir) */
+val NO_ENGINE = setOf("drawpath", "stroketaper", "audiospec", "audiowave", "morphpath", "diffmatte", "flash", "matchgrain", "timedisplace", "timediff", "cbshadow", "cbcam", "cbborder", "cbtrail", "cbbadge", "cbbeat")
 val MOTION_KINDS = setOf("xform", "opacity", "time", "special")
 
 fun stopsOf(e: Effect, pr: FxParam): List<Pair<String, Double>> = runCatching {

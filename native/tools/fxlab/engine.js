@@ -99,8 +99,11 @@ function fxUniforms(meta, vals, box, s) {
     } else if (pr.kind === 'text') { const nums = String(vals[pr.k] ?? pr.def ?? '').match(/-?\d+(?:[.,]\d+)?/g) || []; nums.slice(0, 256).forEach((x, i) => { u['p_' + pr.k + '[' + i + ']'] = parseFloat(x.replace(',', '.')); }); u['p_' + pr.k + 'N'] = Math.min(nums.length, 256); }
     else if (typeof (vals[pr.k] ?? pr.def) === 'number') u['p_' + pr.k] = vals[pr.k] ?? pr.def;
   }
-  return u;
+  return packU(u);
 }
+// Uzun diziler shader'da vec4 paketlidir (p_<ad>4[j]); Android GlFx.pack ile aynı
+function packU(u) { for (const k of Object.keys(u)) { const m = /^(p_\w+)\[(\d+)\]$/.exec(k); if (!m || typeof u[k] !== 'number') continue; const i = +m[2], key = m[1] + '4[' + (i >> 2) + ']'; const a = u[key] || (u[key] = [0, 0, 0, 0]); a[i & 3] = u[k]; } return u; }
+window.packU = packU;
 function linearOf(spec, vals, meta, L) { if (!spec) return 0; if (spec.box) return spec.box * Math.max(L ? L.w : 0, L ? L.h : 0) + (spec.add || 0); if (spec.sum) return Math.max(0, spec.sum.reduce((a, k) => a + Math.max(0, vals[k] ?? (meta.params || []).find((p) => p.k === k)?.def ?? 0), 0) * (spec.mul ?? 1) + (spec.add || 0)); if (spec.max) return Math.max(0, ...spec.max.map((k) => vals[k] ?? (meta.params || []).find((p) => p.k === k)?.def ?? 0)); let v = spec.add || 0; if (spec.k) { const pr = (meta.params || []).find((p) => p.k === spec.k); v += (vals[spec.k] ?? pr?.def ?? 0) * (spec.mul ?? 1); } return Math.max(0, v); }
 
 // Katmana efekt zincirini uygula: base (önceden çarpılmış doku, kutu + pad), sonuç doku

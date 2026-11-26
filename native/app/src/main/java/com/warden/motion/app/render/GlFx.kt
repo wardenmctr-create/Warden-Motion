@@ -50,6 +50,7 @@ void main(){ v_uv = a_pos; vec3 p = u_m * vec3(a_pos, 1.0); gl_Position = vec4(p
     private fun setup(): Boolean {
         if (eglCtx != null && eglCtx != EGL14.EGL_NO_CONTEXT) return true
         if (failed) return false
+        if (ctx == null) { Log.w("GlFx", "GlFx.init çağrılmadı: Context yok"); return false } // kalıcı hata sayma; init sonrası yeniden dener
         try {
             dpy = EGL14.eglGetDisplay(EGL14.EGL_DEFAULT_DISPLAY)
             val ver = IntArray(2); check(EGL14.eglInitialize(dpy, ver, 0, ver, 1))
@@ -72,10 +73,14 @@ void main(){ v_uv = a_pos; vec3 p = u_m * vec3(a_pos, 1.0); gl_Position = vec4(p
 
     private fun asset(p: String) = runCatching { ctx!!.assets.open(p).bufferedReader().use { it.readText() } }.getOrNull()
 
-    private fun shader(type: Int, src: String): Int {
-        val s = GLES30.glCreateShader(type); GLES30.glShaderSource(s, src); GLES30.glCompileShader(s)
+    /** Yorumlar ve ASCII dışı karakterler atılır: bazı telefon sürücüleri (GLSL ES karakter kümesi) Türkçe harfli yorumda derlemeyi reddeder */
+    private fun clean(src: String): String = src.replace(Regex("/\\*[\\s\\S]*?\\*/"), " ").replace(Regex("//[^\n]*"), "").filter { it.code < 128 }
+
+    private fun shader(type: Int, src: String, name: String = ""): Int {
+        val s = GLES30.glCreateShader(type); if (s == 0) { Log.w("GlFx", "$name: glCreateShader 0 döndü"); return 0 }
+        GLES30.glShaderSource(s, clean(src)); GLES30.glCompileShader(s)
         val ok = IntArray(1); GLES30.glGetShaderiv(s, GLES30.GL_COMPILE_STATUS, ok, 0)
-        if (ok[0] == 0) { Log.w("GlFx", GLES30.glGetShaderInfoLog(s)); GLES30.glDeleteShader(s); return 0 }
+        if (ok[0] == 0) { Log.w("GlFx", "$name derlenemedi: " + GLES30.glGetShaderInfoLog(s)); GLES30.glDeleteShader(s); return 0 }
         return s
     }
 
@@ -83,14 +88,15 @@ void main(){ v_uv = a_pos; vec3 p = u_m * vec3(a_pos, 1.0); gl_Position = vec4(p
         progs[name]?.let { return it }
         if (name in bad) return 0
         val src = asset("fx/$name.glsl") ?: run { bad += name; return 0 }
-        val vs = shader(GLES30.GL_VERTEX_SHADER, VS); var full = src; val inc = Regex("^INCLUDE\\((\\w+)\\)\\s*$", RegexOption.MULTILINE)
+        val vs = shader(GLES30.GL_VERTEX_SHADER, VS, "VS"); var full = src; val inc = Regex("^INCLUDE\\((\\w+)\\)\\s*$", RegexOption.MULTILINE)
         repeat(4) { if (inc.containsMatchIn(full)) full = inc.replace(full) { m -> asset("fx/${m.groupValues[1]}.glsl") ?: "" } }
-        val fs = shader(GLES30.GL_FRAGMENT_SHADER, "#version 300 es\n$common\n${gradientExpand(full)}")
-        if (vs == 0 || fs == 0) { bad += name; return 0 }
+        val fs = shader(GLES30.GL_FRAGMENT_SHADER, "#version 300 es\n$common\n${gradientExpand(full)}", name)
+        if (vs == 0 || fs == 0) { if (vs != 0) GLES30.glDeleteShader(vs); if (fs != 0) GLES30.glDeleteShader(fs); bad += name; return 0 }
         val p = GLES30.glCreateProgram(); GLES30.glAttachShader(p, vs); GLES30.glAttachShader(p, fs)
         GLES30.glBindAttribLocation(p, 0, "a_pos"); GLES30.glLinkProgram(p)
         val ok = IntArray(1); GLES30.glGetProgramiv(p, GLES30.GL_LINK_STATUS, ok, 0)
-        if (ok[0] == 0) { Log.w("GlFx", "$name: " + GLES30.glGetProgramInfoLog(p)); bad += name; return 0 }
+        GLES30.glDeleteShader(vs); GLES30.glDeleteShader(fs)
+        if (ok[0] == 0) { Log.w("GlFx", "$name bağlanamadı: " + GLES30.glGetProgramInfoLog(p)); GLES30.glDeleteProgram(p); bad += name; return 0 }
         progs[name] = p; progTex[name] = Regex("uniform\\s+sampler2D\\s+(t_\\w+)").findAll(full).map { it.groupValues[1] }.toList(); return p
     }
     /** Hazır dokular (assets/fx/tex/<ad>.png): shader'da "uniform sampler2D t_<ad>;" yazmak yeterli; bir kez yüklenir */
@@ -245,6 +251,15 @@ vec3 palc_$k(int i) { vec3 c[32] = vec3[32]($c); return c[clamp(i, 0, 31)]; }"""
         }
         // Motorun yazdığı veri dizisi (grafik/ölçer verisi): v["dv0".."dvN"] → p_dv[i], dvN sayısı p_dvN
         e.v?.let { vv -> var n = 0; for ((k, a) in vv) if (k.startsWith("dv") && k.length > 2 && k[2].isDigit()) { u["p_dv[" + k.substring(2) + "]"] = a.v.toFloat(); n++ } else if (k == "dvR" || k == "dvC") u["p_$k"] = a.v.toFloat(); if (n > 0) u["p_dvN"] = n.toFloat() }
+        pack(u)
+    }
+
+    /** Uzun diziler shader'da vec4 paketlidir (p_<ad>4[j]): telefonların uniform sınırına (en az 224 vektör) sığsın diye */
+    private fun pack(u: MutableMap<String, Any>) {
+        val re = Regex("^(p_\\w+)\\[(\\d+)]$"); val packs = HashMap<String, FloatArray>()
+        for ((k, v) in u) { val m = re.matchEntire(k) ?: continue; val i = m.groupValues[2].toInt(); val f = v as? Float ?: continue
+            packs.getOrPut(m.groupValues[1] + "4[" + (i shr 2) + "]") { FloatArray(4) }[i and 3] = f }
+        u.putAll(packs)
     }
 
     /** Geçiş durakları: "[[\"#RRGGBB\",konum%],...]" → p_kN, c_k0..7, p_kP0..7 */
