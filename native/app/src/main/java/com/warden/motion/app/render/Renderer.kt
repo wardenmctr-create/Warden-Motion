@@ -239,7 +239,7 @@ class Renderer(private val ctx: Context, maxSide: Int = 2048, private val sync: 
             var v = e.v ?: emptyMap(); pts.forEachIndexed { i, (x, y) -> v = v + ("dv${i * 2}" to com.warden.motion.app.model.Anim(x)) + ("dv${i * 2 + 1}" to com.warden.motion.app.model.Anim(y)) }; return e.copy(v = v) }
         if (e.type == "puppetpin") { val x0 = e.value("pimKonuX", l.start); val y0 = e.value("pimKonuY", l.start)
             return e.copy(v = (e.v ?: emptyMap()) + ("dv0" to com.warden.motion.app.model.Anim((x0 / 100 - 0.5) * l.w)) + ("dv1" to com.warden.motion.app.model.Anim((y0 / 100 - 0.5) * l.h))) }
-        val dataKey = listOf("veri", "zamanSeri", "baglanti", "noktaVeri", "veriDosy", "olayDosy", "akisTabl").firstOrNull { k -> fxMeta(e.type).params.any { it.key == k } }
+        val dataKey = listOf("veri", "zamanSeri", "baglanti", "noktaVeri", "veriDosy", "olayDosy", "akisTabl", "bolgeDege").firstOrNull { k -> fxMeta(e.type).params.any { it.key == k } }
         if (dataKey != null) { val src = e.c?.get(dataKey)?.let { id -> p.layers.find { it.id == id } }; val txt = src?.text ?: return e
             val rows = txt.lines().map { ln -> Regex("-?\\d+(?:[.,]\\d+)?").findAll(ln).map { it.value.replace(',', '.').toDouble() }.toList() }.filter { it.isNotEmpty() }.take(64)
             val cols = rows.maxOfOrNull { it.size }?.coerceAtMost(16) ?: 0; if (rows.isEmpty() || cols == 0) return e; var v = e.v ?: emptyMap(); var i = 0
@@ -298,7 +298,24 @@ class Renderer(private val ctx: Context, maxSide: Int = 2048, private val sync: 
         return list
     }
     private var flockXf: DoubleArray? = null
+    /** Takip efektleri: katmanın içeriği küçük boyutta kare kare çizilip Tracker'a verilir */
+    private fun runTracking(p: Project, l: Layer, t: Double) {
+        for (e in l.effects) { if (e.on == false) continue
+            val (src, starts) = when (e.type) {
+                "pointtrack" -> l to listOf(doubleArrayOf(e.value("baslangiNoktX", l.start) / 100, e.value("baslangiNoktY", l.start) / 100))
+                "surfacetrack" -> l to listOf(doubleArrayOf(0.35, 0.5), doubleArrayOf(0.65, 0.5))
+                "pathmasktrack" -> (e.c?.get("video")?.let { id -> p.layers.find { it.id == id } } ?: continue) to listOf(doubleArrayOf(0.5, 0.5))
+                else -> continue }
+            val fps = p.fps.toDouble(); val upto = ((t - src.start) * fps).toInt().coerceAtLeast(0); val side = 160.0; val k = side / max(src.w, src.h)
+            val tmpl = if (e.type == "pointtrack") e.value("ornekAlan", t) / max(src.w, src.h) else 0.12; val search = if (e.type == "pointtrack") e.value("aramaAlan", t) / max(src.w, src.h) * 0.25 else 0.06
+            val keepT = curT; historyDepth++
+            try { Tracker.ensure(l.id + e.id + "|" + starts.joinToString { it.joinToString() } + src.id, fps, upto, starts, tmpl, search) { i ->
+                    val tt = src.start + i / fps; if (tt > src.end) null else { val b = Bitmap.createBitmap(max(8, (src.w * k).toInt()), max(8, (src.h * k).toInt()), Bitmap.Config.ARGB_8888)
+                        val cc = Canvas(b); cc.translate(b.width / 2f, b.height / 2f); cc.scale(k.toFloat(), k.toFloat()); curT = tt; drawLayer(cc, src); b } } } finally { curT = keepT; historyDepth-- }
+        }
+    }
     private fun paintLayer(c: Canvas, p: Project, l: Layer, t: Double) {
+        if (l.effects.any { it.type == "pointtrack" || it.type == "surfacetrack" || it.type == "pathmasktrack" }) runTracking(p, l, t)
         // 506 Sürü Hareketi: katman, sürüdeki her birey için kopyalanır
         l.effects.find { it.type == "flock" && it.on != false }?.let { fe ->
             val rest = l.copy(effects = l.effects.filter { it.type != "flock" })
@@ -373,7 +390,11 @@ class Renderer(private val ctx: Context, maxSide: Int = 2048, private val sync: 
             // 468 Kamera Sabitleme: bu kare ile referans kare arasındaki kayma (küçültülmüş gri görüntüde blok eşleme) → dv0, dv1
             val gpu2 = gpu.map { e -> if (e.type != "stabilize") e else hs["hist"]?.let { ref -> val (sx, sy) = Stabilize.shift(buf, ref); val k = e.value("sabitlemGucu", t) / 100
                 e.copy(v = (e.v ?: emptyMap()) + ("dv0" to com.warden.motion.app.model.Anim(sx / q * k)) + ("dv1" to com.warden.motion.app.model.Anim(sy / q * k))) } ?: e }
-            val job = GlFx.Job(gpu2.map { it to fxMeta(it.type) }, t, t - l.start, l.end - l.start, box, q.toFloat(), sourcesFor(p, l, gpu, t, q) + Analysis.sources(gpu, buf, t) + AudioVis.sources(p, gpu, t) + hs, tr.rot.toFloat(), exporting)
+            val srcs = sourcesFor(p, l, gpu, t, q)
+            val gpu3 = gpu2.map { e -> if (e.type != "areacompare") e else { var v = e.v ?: emptyMap(); var i = 0
+                for (k in listOf("bolgeler", "bolgeler_1", "bolgeler_2", "bolgeler_3")) { val b = srcs[k] ?: continue; val n = b.width * b.height; val px = IntArray(n); b.getPixels(px, 0, b.width, 0, 0, b.width, b.height)
+                    var a = 0.0; for (c in px) a += ((c ushr 24) and 255) / 255.0; v = v + ("dv$i" to com.warden.motion.app.model.Anim(a / (q * q))); i++ }; e.copy(v = v) } }
+            val job = GlFx.Job(gpu3.map { it to fxMeta(it.type) }, t, t - l.start, l.end - l.start, box, q.toFloat(), srcs + Analysis.sources(gpu, buf, t) + AudioVis.sources(p, gpu, t) + hs, tr.rot.toFloat(), exporting)
             GlFx.apply(buf, job)?.let { buf.recycle(); buf = it }
         }
         val rect = RectF((-bw / q / 2).toFloat(), (-bh / q / 2).toFloat(), (bw / q / 2).toFloat(), (bh / q / 2).toFloat())
@@ -437,14 +458,21 @@ class Renderer(private val ctx: Context, maxSide: Int = 2048, private val sync: 
             out["bgsrc"] = b
         }
         for (e in fx) for (pr in fxMeta(e.type).params) if (pr.kind == "source") {
-            val id = e.c?.get(pr.key) ?: continue
-            val src = p.layers.find { it.id == id } ?: continue
-            if (src.id == l.id) continue
-            val w = kotlin.math.ceil(src.w * q).toInt().coerceIn(1, 2048); val h = kotlin.math.ceil(src.h * q).toInt().coerceIn(1, 2048)
-            val b = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
-            val cc = Canvas(b); cc.translate(w / 2f, h / 2f); cc.scale(q.toFloat(), q.toFloat()); drawLayer(cc, src)
-            out[pr.key] = b
+            // çoklu seçimde ilk katman anahtarın kendisi, sonrakiler anahtar_1, anahtar_2, anahtar_3
+            val ids = e.c?.get(pr.key)?.split(',')?.filter { it.isNotBlank() } ?: continue
+            ids.take(4).forEachIndexed { i, id ->
+                val src = p.layers.find { it.id == id } ?: return@forEachIndexed
+                if (src.id == l.id) return@forEachIndexed
+                val w = kotlin.math.ceil(src.w * q).toInt().coerceIn(1, 2048); val h = kotlin.math.ceil(src.h * q).toInt().coerceIn(1, 2048)
+                val b = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
+                val cc = Canvas(b); cc.translate(w / 2f, h / 2f); cc.scale(q.toFloat(), q.toFloat()); drawLayer(cc, src)
+                out[if (i == 0) pr.key else pr.key + "_" + i] = b
+            }
         }
+        // 749 Model Üzerinde 3B Yazı: metin ayarı görüntüye çizilir (s_metinBmp)
+        fx.firstOrNull { it.type == "text3d" }?.let { e -> val txt = e.c?.get("metin")?.takeIf { it.isNotBlank() } ?: "Warden"; val W = 1024; val H = 256
+            val b = Bitmap.createBitmap(W, H, Bitmap.Config.ARGB_8888); val cc = Canvas(b); val tp = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = android.graphics.Color.WHITE; textSize = 180f; typeface = bold; textAlign = Paint.Align.CENTER }
+            val sc = min(1f, W * 0.92f / max(1f, tp.measureText(txt))); tp.textSize *= sc; cc.drawText(txt, W / 2f, H / 2f - (tp.ascent() + tp.descent()) / 2, tp); out["metinBmp"] = b }
         return out
     }
 

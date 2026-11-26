@@ -65,10 +65,10 @@ TRIM.update({("fractalpath", "yolTuru"): 1, ("mapproject", "kaynakProj"): 2, ("r
 NEW.update({
  540: ("compressor", "Ses", "audio-fx", ["Ses", "Dinamik"], None), 541: ("limiter", "Ses", "audio-fx", ["Ses", "Dinamik"], None), 542: ("noisegate", "Ses", "audio-fx", ["Ses", "Gürültü"], None),
  543: ("deesser", "Ses", "audio-fx", ["Ses", "Konuşma"], None), 544: ("pitchshift", "Ses", "audio-fx", ["Ses", "Perde"], None), 545: ("voicechar", "Ses", "audio-fx", ["Ses", "Formant", "Karakter"], None),
- 546: ("denoise", "Ses", "audio-fx", ["Ses", "Gürültü", "Temizlik"], None), 547: ("ducking", "Ses", "audio-fx", ["Ses", "Müzik", "Konuşma"], None), 548: ("stereowide", "Ses", "audio-fx", ["Ses", "Stereo"], None),
+ 546: ("audiodenoise", "Ses", "audio-fx", ["Ses", "Gürültü", "Temizlik"], None), 547: ("ducking", "Ses", "audio-fx", ["Ses", "Müzik", "Konuşma"], None), 548: ("stereowide", "Ses", "audio-fx", ["Ses", "Stereo"], None),
  549: ("robotvoice", "Ses", "audio-fx", ["Ses", "Robot", "Vocoder"], None), 550: ("audiodistort", "Ses", "audio-fx", ["Ses", "Bozulma"], None),
 })
-HIDE.update({"limiter": ["gercekTepe", "stereoBagl", "otomatikGeciTela"], "denoise": ["profilYont"], "ducking": ["otomatikGeciTela"], "pitchshift": ["sesKaraKoru", "kaynakTuru"], "voicechar": ["kalite"]})
+HIDE.update({"limiter": ["gercekTepe", "stereoBagl", "otomatikGeciTela"], "audiodenoise": ["profilYont"], "ducking": ["otomatikGeciTela"], "pitchshift": ["sesKaraKoru", "kaynakTuru"], "voicechar": ["kalite"]})
 NEW.update({
  498: ("springchain", "Taşı ve Dönüştür", "xform", ["Fizik", "Yay", "Takip"], None), 501: ("collide", "Taşı ve Dönüştür", "xform", ["Fizik", "Sekme", "Yerçekimi"], None),
  504: ("softbody", "Taşı ve Dönüştür", "xform", ["Fizik", "Jöle", "Esneme"], None), 505: ("motionpath", "Diğer", "special", ["Yol", "İz", "Hareket"], None),
@@ -97,6 +97,9 @@ HIDE.update({"loftprofiles": ["profilEkle", "cevreOrne", "araDili"], "sweeppath"
 TRIM.update({("sweeppath", "kesit"): 3})
 NEW.update({468: ("stabilize", "Diğer", "pixel", ["Video", "Sabitleme", "Kamera"], {"box": 0.1})})
 HIDE.update({"stabilize": ["hareketMode", "izlemeMask", "hareketiAnalEt", "sahneKesiSifi"]})
+NEW.update({499: ("pointtrack", "Taşı ve Dönüştür", "rig", ["Takip", "Nokta", "Video"], None), 500: ("surfacetrack", "Taşı ve Dönüştür", "rig", ["Takip", "Yüzey", "Video"], None)})
+HIDE.update({"pointtrack": ["yon", "guvenEsig", "analizEt", "anahtarKareDonu", "yumusatm"], "surfacetrack": ["yuzeyKoseSec", "guvenEsig", "ortulenBolgYok", "analizEt", "yuzeySiniKirp", "koseleriDuze"]})
+TRIM.update({("surfacetrack", "donusumMode"): 2})
 READY2 = set(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "ready2.txt")).read().split()) if os.path.exists(os.path.join(os.path.dirname(os.path.abspath(__file__)), "ready2.txt")) else set()
 _POS = _re.compile(r"(merkez|konum|ufuk|nokta|kök|başlangıç$|bitiş$|bağlantı|hedef)", _re.I)
 MATS = ["Beyaz kâğıt", "Renkli kâğıt", "Kraft kâğıt", "Karton", "Parşömen", "Keçe"]

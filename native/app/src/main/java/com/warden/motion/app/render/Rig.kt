@@ -6,6 +6,7 @@ import com.warden.motion.app.model.Project
 import com.warden.motion.app.model.value
 import kotlin.math.PI
 import kotlin.math.abs
+import kotlin.math.atan2
 import kotlin.math.roundToInt
 import kotlin.math.pow
 import kotlin.math.cos
@@ -30,7 +31,7 @@ object AudioLevels {
  * Countryball rig efektleri (403 Göz Takibi, 404 Göz Kırpma, 405 Kaş, 406 Konuşma, 426 İfade, 427 Parçalı Rig, 429 Harita Sabitleme).
  * Efekt bir "ana" katmanda durur ve seçilen diğer katmanların yerel dönüşümünü değiştirir.
  */
-private val RIG = setOf("cbeyes", "cbblink", "cbbrow", "cbexpr", "cbrig", "cbmaplock", "lipsync", "paramseq", "dragchain", "ikchain", "explodegroup")
+private val RIG = setOf("cbeyes", "cbblink", "cbbrow", "cbexpr", "cbrig", "cbmaplock", "lipsync", "paramseq", "dragchain", "ikchain", "explodegroup", "pointtrack", "surfacetrack")
 private var rigDepth = 0
 
 private fun ids(e: Effect, k: String) = e.c?.get(k)?.split(',')?.filter { it.isNotBlank() } ?: emptyList()
@@ -123,6 +124,15 @@ fun rigLocal(p: Project, l: Layer, t: Double, loc0: TR, parent: TR?): TR {
                     val (dx, dy) = when (v("yon").roundToInt()) { 1 -> (if (me.x >= cx) 1.0 else -1.0) to 0.0; 2 -> 0.0 to (if (me.y >= cy) 1.0 else -1.0); 3 -> 0.0 to 0.0; else -> { val ax = me.x - cx; val ay = me.y - cy; val d = hypot(ax, ay); if (d > 1e-6) ax / d to ay / d else cos(i * 2.4) to sin(i * 2.4) } }
                     val sc = if (v("yon").roundToInt() == 3) 1 + k * (i - n / 2.0) / max(1.0, n.toDouble()) * 0.4 else 1.0
                     val (lx, ly) = worldOffset(dx * dist, dy * dist); loc = loc.copy(x = loc.x + lx, y = loc.y + ly, rot = loc.rot + v("donusFark") * k * (if (i % 2 == 0) 1 else -1), scale = loc.scale * sc) }
+                "pointtrack", "surfacetrack" -> { val fol = e.c?.get(if (e.type == "pointtrack") "takipEdenKatm" else "kaplamaKatm"); if (fol != l.id) continue
+                    val tr0 = Tracker.get(h.id + e.id + "|" + (if (e.type == "pointtrack") "${e.value("baslangiNoktX", h.start) / 100}, ${e.value("baslangiNoktY", h.start) / 100}" else "0.35, 0.5, 0.65, 0.5") + h.id) ?: continue
+                    val i = ((t - h.start) * tr0.fps).toInt(); val pos = Tracker.at(tr0.key, i) ?: continue; val p0 = Tracker.at(tr0.key, 0) ?: continue; val hw = worldTransform(p, h, t); val a = hw.rot * PI / 180
+                    fun world(u: Double, v2: Double): Pair<Double, Double> { val ox = (u - 0.5) * h.w * hw.scale; val oy = (v2 - 0.5) * h.h * hw.scale; return hw.x + ox * cos(a) - oy * sin(a) to hw.y + ox * sin(a) + oy * cos(a) }
+                    val sm = (v("yumusatm") / 100).coerceIn(0.0, 0.95)
+                    if (e.type == "pointtrack") { val (wx, wy) = world(pos[0], pos[1]); val (sx, sy) = world(p0[0], p0[1]); val (lx, ly) = worldOffset(wx - sx + v("konumFarkX"), wy - sy + v("konumFarkY")); loc = loc.copy(x = loc.x + lx * (1 - sm * 0.5), y = loc.y + ly * (1 - sm * 0.5)) }
+                    else { val (ax, ay) = world(pos[0], pos[1]); val (bx, by) = world(pos[2], pos[3]); val (a0x, a0y) = world(p0[0], p0[1]); val (b0x, b0y) = world(p0[2], p0[3])
+                        val sc = hypot(bx - ax, by - ay) / max(1e-6, hypot(b0x - a0x, b0y - a0y)); val rot = Math.toDegrees(atan2(by - ay, bx - ax) - atan2(b0y - a0y, b0x - a0x)); val mode = v("donusumMode").roundToInt()
+                        val (lx, ly) = worldOffset((ax + bx) / 2 - (a0x + b0x) / 2, (ay + by) / 2 - (a0y + b0y) / 2); loc = loc.copy(x = loc.x + lx, y = loc.y + ly, rot = loc.rot + if (mode >= 1) rot else 0.0, scale = loc.scale * if (mode >= 1) sc else 1.0) } }
                 "lipsync" -> {
                     val mouths = listOf("kapaliAgiz", "yariAcikAgiz", "acikAgiz").map { e.c?.get(it) }; val mi = mouths.indexOf(l.id); if (mi < 0) continue
                     val src = e.c?.get("sesKatm")?.let { id -> p.layers.find { it.id == id } }

@@ -116,7 +116,7 @@ uniform sampler2D s_kaynak; uniform float p_kaynakOn, p_yakinlas; uniform vec2 p
 void main() { vec4 s = texture(u_tex, v_uv); vec2 q = toUnit(here()); vec2 W = p_pencereBoyu * 0.5; vec2 l = (q - p_pencere) / W; if (any(greaterThan(abs(l), vec2(1.0)))) { o = s; return; }
   vec2 src = p_ornekMerk / 100.0 + l * W / boxU() / (p_yakinlas / 100.0); vec4 c = p_kaynakOn > 0.5 ? texture(s_kaynak, clamp(src, 0.0, 1.0)) : texPx(boxPx(src)); float edge = step(1.0 - 4.0 / max(W.x, 1.0), max(abs(l.x), abs(l.y)));
   o = overPre(vec4(1.0) * edge, overPre(c, vec4(0.0, 0.0, 0.0, 1.0))); }
-//== popout
+//== frameoverflow
 uniform sampler2D s_cerceve, s_nesneMask; uniform float p_cerceveOn, p_nesneMaskOn, p_tasma, p_disParcGolg;
 void main() { vec4 s = texture(u_tex, v_uv); vec2 b = clamp(boxUV(here()), 0.0, 1.0); float fr = p_cerceveOn > 0.5 ? texture(s_cerceve, b).a : step(0.15, b.x) * step(b.x, 0.85) * step(0.2, b.y) * step(b.y, 0.85); float obj = p_nesneMaskOn > 0.5 ? texture(s_nesneMask, b).a : step(0.4, luma(unpre(s))) * s.a;
   float vis = max(fr, obj * p_tasma / 100.0); float sh = 0.0; if (p_nesneMaskOn > 0.5) { sh = texture(s_nesneMask, clamp(b - vec2(0.01, -0.015), 0.0, 1.0)).a * (1.0 - fr) * (1.0 - obj) * p_disParcGolg / 100.0; }

@@ -147,7 +147,7 @@ N8A([
  (794, "multicam", "Diğer", "pixel", ["Kamera", "Pencere"], None), (795, "smartframe", "Diğer", "pixel", ["Kadraj", "Takip"], None),
  (796, "twotargetzoom", "Diğer", "pixel", ["Yakınlaşma", "Takip"], None), (797, "dollyzoom", "Bükme ve Bozulma", "pixel", ["Kamera", "Perspektif"], None),
  (798, "comparesplit", "Diğer", "pixel", ["Karşılaştırma", "Bölme"], None), (799, "magnifier", "Diğer", "pixel", ["Büyüteç", "Pencere"], None),
- (800, "popout", "Maske ve Anahtar", "pixel", ["Çerçeve", "Taşma"], {"box": 0.2}),
+ (800, "frameoverflow", "Maske ve Anahtar", "pixel", ["Çerçeve", "Taşma"], {"box": 0.2}),
 ])
 HIDE8.update({"shapematchtrans": ["noktaCiftEkle"], "multicam": ["senkronOfse"], "smartframe": ["yumusatm"]})
 TRANS8.update({"swishpan", "filmroll", "focuspull", "parallaxstrips", "cubeface", "doorwings", "foldpanels", "curtain", "ringcross", "plateseparate", "pageturn2", "irisblades", "colormatchtrans", "shapematchtrans", "liquidmerge", "timeslice"})
@@ -180,3 +180,14 @@ N8A([(581, "brushmask", "Maske ve Anahtar", "pixel", ["Maske", "Fırça", "Yol"]
      (703, "textinshape", "Metin", "text", ["Metin", "Şekil"], None), (704, "textaround", "Metin", "text", ["Metin", "Akış", "Engel"], None)])
 PFIX.update({"brushmask": lambda ps: [dict(k="fircaYolu", l="Fırça yolu (çizgi/yol katmanı)", kind="source", min=0, max=0, def_="", step=1, jog=1, anim="no")] + ps})
 HIDE8.update({"brushmask": ["cizSil"], "perspfix": ["kilavuzCiz"]})
+N8A([(615, "panorama", "Diğer", "pixel", ["Panorama", "Birleştirme"], None), (724, "areacompare", "Countryball", "gen", ["Harita", "Alan", "Karşılaştırma"], None),
+     (728, "remesh", "3B", "3d", ["3B", "Ağ"], {"box": 0.45}), (737, "weldedges", "3B", "3d", ["3B", "Kenar"], {"box": 0.45}), (749, "text3d", "3B", "3d", ["3B", "Yazı", "Kabartma"], {"box": 0.45})])
+HIDE8.update({"panorama": ["hizala", "donusumlDuze"], "areacompare": ["projeksi"], "weldedges": ["malzemeSiniKoru", "uvKoru"], "text3d": ["model", "egriAral"]})
+N8A([(717, "regiondata", "Countryball", "pixel", ["Harita", "Veri", "Ülke"], None)])
+N8A([(587, "markedsep", "Maske ve Anahtar", "pixel", ["Ayırma", "İşaret", "Maske"], None), (730, "conformsurface", "3B", "3d", ["3B", "Oturtma"], {"box": 0.45}), (731, "envelopewarp", "Bükme ve Bozulma", "pixel", ["Zarf", "Uydurma"], None)])
+_SRC8 = lambda k, l: dict(k=k, l=l, kind="source", min=0, max=0, def_="", step=1, jog=1, anim="no")
+PFIX.update({"markedsep": lambda ps: [_SRC8("onIsaret", "Ön plan işaret katmanı"), _SRC8("arkaIsaret", "Arka plan işaret katmanı")] + ps,
+  "conformsurface": lambda ps: _rep(ps, "projeksiYonu", [_ch8("projeksiYonu", "Projeksiyon yönü", ["+Z (öne)", "−Z (arkaya)"])])})
+HIDE8.update({"markedsep": ["onArkaIsar", "maskeyiYeniHesa"], "envelopewarp": ["bagla"]})
+N8A([(582, "pathmasktrack", "Maske ve Anahtar", "xform", ["Maske", "Takip", "Video"], None)])
+HIDE8.update({"pathmasktrack": ["takibiHesa", "elleDuze", "takipGuveSini"]})

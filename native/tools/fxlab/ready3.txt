@@ -214,7 +214,7 @@ twotargetzoom
 dollyzoom
 comparesplit
 magnifier
-popout
+frameoverflow
 temporaldenoise
 movingmatte
 motiondirmatte
@@ -238,3 +238,13 @@ brushmask
 perspfix
 textinshape
 textaround
+panorama
+areacompare
+remesh
+weldedges
+text3d
+regiondata
+markedsep
+conformsurface
+envelopewarp
+pathmasktrack

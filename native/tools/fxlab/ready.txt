@@ -9,6 +9,7 @@ animchart
 anisodiff
 apollonian
 applique
+areacompare
 arithmetic
 ascii
 aurora
@@ -120,6 +121,7 @@ compoundblur
 condblend
 cone
 confetti
+conformsurface
 connector
 contourgrad
 contourlines
@@ -191,6 +193,7 @@ ellipsefx
 ellipsoid
 emboss
 embroidery
+envelopewarp
 equalize
 explodefaces
 exposure
@@ -229,6 +232,7 @@ fractalnoise
 fractalpath
 fractalset
 frame
+frameoverflow
 framerepair
 frameshuffle
 freelens
@@ -351,6 +355,7 @@ magnify
 magnifybg
 mapproject
 marbling
+markedsep
 markerpen
 maskblur
 maskcombine
@@ -407,6 +412,7 @@ paintbynumber
 paintdrip
 painttrail
 palettemap
+panorama
 paperhole
 paperrelief
 papiermache
@@ -452,9 +458,11 @@ rain
 rays
 reactdiff
 reflect
+regiondata
 reliefmap
 relight
 remaphsv
+remesh
 reorient360
 repeatpath
 repetile
@@ -564,6 +572,7 @@ temporalmedian
 tetra
 texsegment
 texsimilar
+text3d
 texturize
 thicken3d
 threads
@@ -622,6 +631,7 @@ waveform
 waveworld
 waxcrayon
 waxseal
+weldedges
 wetsurface
 wireframe3d
 wireremove

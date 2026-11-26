@@ -85,7 +85,7 @@ noisegate
 deesser
 pitchshift
 voicechar
-denoise
+audiodenoise
 ducking
 stereowide
 robotvoice
@@ -114,3 +114,5 @@ sectionview
 csgcards
 decal3d
 stabilize
+pointtrack
+surfacetrack

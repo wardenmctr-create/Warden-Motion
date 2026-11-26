@@ -83,6 +83,8 @@ object Motion2 {
                     if (beat < 0) continue; val age = t - beat; if (age > 0.4) continue; val k = sin(age / 0.4 * PI) * exp(-age * 4)
                     val ev = when (v("olaySira").roundToInt()) { 1 -> 0; 2 -> ((sin(idx * 12.9898) * 43758.5453).let { it - floor(it) } * 4).toInt(); else -> idx % 4 }
                     tr = when (ev) { 0 -> tr.copy(scale = tr.scale * (1 + 0.15 * k)); 1 -> tr.copy(y = tr.y - 30 * k); 2 -> tr.copy(rot = tr.rot + 15 * k); else -> tr.copy(x = tr.x + 12 * k * sin(age * 60)) } }
+                "pathmasktrack" -> { val vid = tgt(p, e, "video") ?: continue; val key = l.id + e.id + "|0.5, 0.5" + vid.id; val tr0 = Tracker.get(key) ?: continue; val i = ((t - vid.start) * tr0.fps).toInt(); val pos = Tracker.at(key, i) ?: continue; val p0 = Tracker.at(key, 0) ?: continue
+                    val w = worldTransform(p, vid, t); val k = v("deformas") / 100 * 0.5 + 0.5; tr = tr.copy(x = tr.x + (pos[0] - p0[0]) * vid.w * w.scale * k * 2, y = tr.y + (pos[1] - p0[1]) * vid.h * w.scale * k * 2) }
                 "ikchain" -> { val ang = ik(p, l, e, t, tr) ?: continue; tr = tr.copy(rot = ang[0]) }
                 "paramlink" -> { val src = tgt(p, e, "kaynakPara") ?: continue; val w = worldTransform(p, src, t); val k = v("kaynakOzellik").roundToInt()
                     val sv = when (k) { 0 -> w.x; 1 -> w.y; 2 -> w.rot; 3 -> w.scale * 100; else -> w.opacity * 100 }; val out = sv * v("carpan") + v("ofset")

@@ -11,7 +11,7 @@ import kotlin.math.*
  */
 object AudioFx {
     val TYPES = setOf("reverse", "basstreble", "delay", "flanger", "filter", "modulator", "parameq", "reverb", "stereo", "tone",
-        "compressor", "limiter", "noisegate", "deesser", "pitchshift", "voicechar", "denoise", "ducking", "stereowide", "robotvoice", "audiodistort",
+        "compressor", "limiter", "noisegate", "deesser", "pitchshift", "voicechar", "audiodenoise", "ducking", "stereowide", "robotvoice", "audiodistort",
         "loudnorm", "peaknorm", "dcremove", "declick", "declip", "dropoutfix", "notchfilter", "dynamiceq", "multibandcomp", "expander", "transient", "phaseinvert", "chandelay",
         "phaser", "rotary", "convreverb", "specfreeze", "granular", "speechrate", "autocrossfade", "autopan", "distancefx")
     fun has(l: Layer) = l.effects.any { it.on != false && it.type in TYPES }
@@ -106,7 +106,7 @@ object AudioFx {
                     if (v("perdeyiKoru", 0) >= 0.5) shiftPitch(buf, rate, { 1.0 / k0 }, 0.04 * rate, { 1.0 }, { 1.0 }, true) }
                 val f = Array(2) { Array(3) { Biquad() } }; for (c in 0..1) { f[c][0].set(4, 3000.0, 0.707, v("parlakli", 0) / 100 * 9, rate); f[c][1].set(3, 220.0, 0.707, v("govde", 0) / 100 * 9, rate); f[c][2].set(2, 1100.0, 1.4, v("burunsul", 0) / 100 * 9, rate) }
                 val mix = v("karisim", 0) / 100; val g = db(v("kazanc", 0)); for (i in 0 until n) for (c in 0..1) { var y = buf[i * 2 + c].toDouble(); for (k in 0..2) y = f[c][k].run(y); buf[i * 2 + c] = ((src[i * 2 + c] * (1 - mix) + y * mix) * g).toFloat() } }
-            "denoise" -> denoise(e, l, buf, rate)
+            "audiodenoise" -> denoise(e, l, buf, rate)
             "ducking" -> { val sc = e.c?.get("konusmaKatm")?.let(side) ?: return; var env = 0.0; var hold = 0; var gain = 1.0; val la = (v("ileriBaki", 0) / 1000 * rate).toInt()
                 for (i in 0 until n) { val j = i + la; val s = if (j < sc.size / 2) max(abs(sc[j * 2]), abs(sc[j * 2 + 1])).toDouble() else 0.0; env = max(s, env * exp(-1.0 / (0.01 * rate)))
                     val on = 20 * log10(max(env, 1e-9)) > v("esik", i); if (on) hold = (v("bekleme", i) / 1000 * rate).toInt() else if (hold > 0) hold--
