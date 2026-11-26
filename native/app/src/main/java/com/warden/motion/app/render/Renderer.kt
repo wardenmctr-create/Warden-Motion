@@ -293,7 +293,7 @@ class Renderer(private val ctx: Context, maxSide: Int = 2048, private val sync: 
     /** Efektlerin "Kaynak seçici" ayarlarındaki katmanlar (harita, doku…): kendi düzleminde, aynı boyutta çizilir */
     private fun sourcesFor(p: Project, l: Layer, fx: List<Effect>, t: Double, q: Double): Map<String, Bitmap> {
         val out = HashMap<String, Bitmap>()
-        if (fx.any { it.type == "copybg" || it.type == "magnifybg" } && bgDepth < 2) {
+        if (fx.any { it.type == "copybg" || it.type == "magnifybg" || it.type == "blackhole" || (it.type == "dispmap" && it.value("etkiAlan", t).roundToInt() == 1) } && bgDepth < 2) {
             // Katmanın arkasındaki görüntü, katmanın kendi düzleminde (kutusu boyunda)
             val w = kotlin.math.ceil(l.w * q).toInt().coerceIn(1, 2048); val h = kotlin.math.ceil(l.h * q).toInt().coerceIn(1, 2048)
             val b = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888); val cc = Canvas(b)

@@ -57,7 +57,8 @@ object FxCatalog {
             kind = kind, two = o.b("two"), defY = o.d("defY"), three = o.b("three"), defZ = o.d("defZ"), unit = o.s("unit") ?: "",
             opts = o["opts"]?.jsonArray?.map { it.jsonPrimitive.content }, anim = o.s("anim") ?: "yes", defStr = defStr, int = o.b("int"),
             reseed = o.b("reseed"), hint = o.s("hint"), multi = o.b("multi"), group = o.s("g"),
-            visKey = (o["vis"] as? JsonObject)?.s("k"), visIn = (o["vis"] as? JsonObject)?.get("in")?.jsonArray?.map { it.jsonPrimitive.int })
+            visKey = (o["vis"] as? JsonObject)?.s("k"), visIn = (o["vis"] as? JsonObject)?.get("in")?.jsonArray?.map { it.jsonPrimitive.int },
+            hk = o.s("hk"), sk = o.s("sk"), reset = (o["reset"] as? JsonArray)?.map { it.jsonPrimitive.content }, link = o.b("link"), hideUi = o.b("hideUi"))
     }
 
     private fun pass(o: JsonObject): FxPass {

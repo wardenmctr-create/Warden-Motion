@@ -7,12 +7,12 @@ void main(){ v_uv = a_pos; vec3 p = u_m * vec3(a_pos, 1.0); gl_Position = vec4(p
 
 function gradientExpand(src) {
   return src.replace(/^GRADIENT\((\w+)\)\s*$/mg, (m, k) => {
-    const c = [0, 1, 2, 3, 4, 5, 6, 7].map((i) => `c_${k}${i}`).join(', '), q = [0, 1, 2, 3, 4, 5, 6, 7].map((i) => `p_${k}P${i}`).join(', ');
+    const N = [...Array(32).keys()]; const c = N.map((i) => `c_${k}${i}`).join(', '), q = N.map((i) => `p_${k}P${i}`).join(', ');
     return `uniform float p_${k}N; uniform vec3 ${c}; uniform float ${q};
-vec3 grad_${k}(float x) { vec3 c[8] = vec3[8](${c}); float q[8] = float[8](${q}); int n = int(max(1.0, p_${k}N));
-  vec3 r = c[0]; if (x <= q[0]) return c[0]; for (int i = 1; i < 8; i++) { if (i >= n) break; if (x <= q[i]) return mix(c[i - 1], c[i], clamp((x - q[i - 1]) / max(1e-4, q[i] - q[i - 1]), 0.0, 1.0)); r = c[i]; } return r; }
-int paln_${k}() { return int(clamp(p_${k}N, 1.0, 8.0)); }
-vec3 palc_${k}(int i) { vec3 c[8] = vec3[8](${c}); return c[clamp(i, 0, 7)]; }`;
+vec3 grad_${k}(float x) { vec3 c[32] = vec3[32](${c}); float q[32] = float[32](${q}); int n = int(max(1.0, p_${k}N));
+  vec3 r = c[0]; if (x <= q[0]) return c[0]; for (int i = 1; i < 32; i++) { if (i >= n) break; if (x <= q[i]) return mix(c[i - 1], c[i], clamp((x - q[i - 1]) / max(1e-4, q[i] - q[i - 1]), 0.0, 1.0)); r = c[i]; } return r; }
+int paln_${k}() { return int(clamp(p_${k}N, 1.0, 32.0)); }
+vec3 palc_${k}(int i) { vec3 c[32] = vec3[32](${c}); return c[clamp(i, 0, 31)]; }`;
   });
 }
 class Engine {
@@ -85,8 +85,8 @@ function fxUniforms(meta, vals, box, s) {
       u['p_' + pr.k] = v;
     } else if (pr.three) u['p_' + pr.k] = [vals[pr.k + 'X'] ?? pr.def, vals[pr.k + 'Y'] ?? pr.defY, vals[pr.k + 'Z'] ?? pr.defZ];
     else if (pr.kind === 'gradient' || pr.kind === 'palette') {
-      const st = vals[pr.k] ?? pr.def; const n = Math.min(8, st.length); u['p_' + pr.k + 'N'] = n;
-      for (let i = 0; i < 8; i++) { const q = st[Math.min(i, n - 1)]; u['c_' + pr.k + i] = hexToRgb(q[0]); u['p_' + pr.k + 'P' + i] = (q[1] ?? 0) / 100; }
+      let st = vals[pr.k] ?? pr.def; if (typeof st === 'string') st = JSON.parse(st); const n = Math.min(32, st.length); u['p_' + pr.k + 'N'] = n;
+      for (let i = 0; i < 32; i++) { const q = st[Math.min(i, n - 1)]; u['c_' + pr.k + i] = hexToRgb(q[0]); u['p_' + pr.k + 'P' + i] = (q[1] ?? 0) / 100; }
     } else if (typeof (vals[pr.k] ?? pr.def) === 'number') u['p_' + pr.k] = vals[pr.k] ?? pr.def;
   }
   return u;

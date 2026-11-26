@@ -107,5 +107,6 @@ for e in E:
 
 # Sonradan eklenen tanımlar (Karton Kukla, Kesim Altlığı, güncel Dokulandır)
 exec(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "catalog_extra.py")).read())
+exec(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "catalog_upd.py")).read())
 for _e in E:
     if _e["type"] in ("cutback", "cardpuppet", "texturize"): _e["ready"] = _e["type"] in READY

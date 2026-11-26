@@ -780,9 +780,540 @@
 "jog": 1,
 "src": "Anahtar",
 "def": 0
+},
+{
+"k": "duzenMod",
+"l": "Düzenleme modu",
+"kind": "choice",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"opts": [
+"Basit",
+"Gelişmiş"
+],
+"unit": "",
+"anim": "step",
+"g": "Gelişmiş Renk Düzenleme",
+"def": 0
+},
+{
+"k": "golgeCark",
+"l": "Gölgeler renk çarkı",
+"kind": "wheel",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"anim": "no",
+"g": "Gelişmiş Renk Düzenleme",
+"hk": "golgeYon",
+"sk": "golgeGuc",
+"vis": {
+"k": "duzenMod",
+"in": [
+1
+]
+},
+"def": 0
+},
+{
+"k": "golgeYon",
+"l": "Gölgeler · renk yönü",
+"kind": "jog",
+"min": 0,
+"max": 360,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"anim": "yes",
+"g": "Gelişmiş Renk Düzenleme",
+"vis": {
+"k": "duzenMod",
+"in": [
+1
+]
+},
+"def": 0
+},
+{
+"k": "golgeGuc",
+"l": "Gölgeler · renk gücü",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Gelişmiş Renk Düzenleme",
+"vis": {
+"k": "duzenMod",
+"in": [
+1
+]
+},
+"def": 0
+},
+{
+"k": "golgeParlak",
+"l": "Gölgeler · parlaklık",
+"kind": "jog",
+"min": -100,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Gelişmiş Renk Düzenleme",
+"vis": {
+"k": "duzenMod",
+"in": [
+1
+]
+},
+"def": 0
+},
+{
+"k": "golgeSifirla",
+"l": "Gölgeler çarkını sıfırla",
+"kind": "button",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"anim": "no",
+"g": "Gelişmiş Renk Düzenleme",
+"reset": [
+"golgeYon",
+"golgeGuc",
+"golgeParlak"
+],
+"vis": {
+"k": "duzenMod",
+"in": [
+1
+]
+},
+"def": 0
+},
+{
+"k": "ortaCark",
+"l": "Orta tonlar renk çarkı",
+"kind": "wheel",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"anim": "no",
+"g": "Gelişmiş Renk Düzenleme",
+"hk": "ortaYon",
+"sk": "ortaGuc",
+"vis": {
+"k": "duzenMod",
+"in": [
+1
+]
+},
+"def": 0
+},
+{
+"k": "ortaYon",
+"l": "Orta tonlar · renk yönü",
+"kind": "jog",
+"min": 0,
+"max": 360,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"anim": "yes",
+"g": "Gelişmiş Renk Düzenleme",
+"vis": {
+"k": "duzenMod",
+"in": [
+1
+]
+},
+"def": 0
+},
+{
+"k": "ortaGuc",
+"l": "Orta tonlar · renk gücü",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Gelişmiş Renk Düzenleme",
+"vis": {
+"k": "duzenMod",
+"in": [
+1
+]
+},
+"def": 0
+},
+{
+"k": "ortaParlak",
+"l": "Orta tonlar · parlaklık",
+"kind": "jog",
+"min": -100,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Gelişmiş Renk Düzenleme",
+"vis": {
+"k": "duzenMod",
+"in": [
+1
+]
+},
+"def": 0
+},
+{
+"k": "ortaSifirla",
+"l": "Orta tonlar çarkını sıfırla",
+"kind": "button",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"anim": "no",
+"g": "Gelişmiş Renk Düzenleme",
+"reset": [
+"ortaYon",
+"ortaGuc",
+"ortaParlak"
+],
+"vis": {
+"k": "duzenMod",
+"in": [
+1
+]
+},
+"def": 0
+},
+{
+"k": "acikCark",
+"l": "Açık tonlar renk çarkı",
+"kind": "wheel",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"anim": "no",
+"g": "Gelişmiş Renk Düzenleme",
+"hk": "acikYon",
+"sk": "acikGuc",
+"vis": {
+"k": "duzenMod",
+"in": [
+1
+]
+},
+"def": 0
+},
+{
+"k": "acikYon",
+"l": "Açık tonlar · renk yönü",
+"kind": "jog",
+"min": 0,
+"max": 360,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"anim": "yes",
+"g": "Gelişmiş Renk Düzenleme",
+"vis": {
+"k": "duzenMod",
+"in": [
+1
+]
+},
+"def": 0
+},
+{
+"k": "acikGuc",
+"l": "Açık tonlar · renk gücü",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Gelişmiş Renk Düzenleme",
+"vis": {
+"k": "duzenMod",
+"in": [
+1
+]
+},
+"def": 0
+},
+{
+"k": "acikParlak",
+"l": "Açık tonlar · parlaklık",
+"kind": "jog",
+"min": -100,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Gelişmiş Renk Düzenleme",
+"vis": {
+"k": "duzenMod",
+"in": [
+1
+]
+},
+"def": 0
+},
+{
+"k": "acikSifirla",
+"l": "Açık tonlar çarkını sıfırla",
+"kind": "button",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"anim": "no",
+"g": "Gelişmiş Renk Düzenleme",
+"reset": [
+"acikYon",
+"acikGuc",
+"acikParlak"
+],
+"vis": {
+"k": "duzenMod",
+"in": [
+1
+]
+},
+"def": 0
+},
+{
+"k": "genelCark",
+"l": "Genel renk çarkı",
+"kind": "wheel",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"anim": "no",
+"g": "Gelişmiş Renk Düzenleme",
+"hk": "genelYon",
+"sk": "genelGuc",
+"vis": {
+"k": "duzenMod",
+"in": [
+1
+]
+},
+"def": 0
+},
+{
+"k": "genelYon",
+"l": "Genel · renk yönü",
+"kind": "jog",
+"min": 0,
+"max": 360,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"anim": "yes",
+"g": "Gelişmiş Renk Düzenleme",
+"vis": {
+"k": "duzenMod",
+"in": [
+1
+]
+},
+"def": 0
+},
+{
+"k": "genelGuc",
+"l": "Genel · renk gücü",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Gelişmiş Renk Düzenleme",
+"vis": {
+"k": "duzenMod",
+"in": [
+1
+]
+},
+"def": 0
+},
+{
+"k": "genelParlak",
+"l": "Genel · parlaklık",
+"kind": "jog",
+"min": -100,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Gelişmiş Renk Düzenleme",
+"vis": {
+"k": "duzenMod",
+"in": [
+1
+]
+},
+"def": 0
+},
+{
+"k": "genelSifirla",
+"l": "Genel çarkını sıfırla",
+"kind": "button",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"anim": "no",
+"g": "Gelişmiş Renk Düzenleme",
+"reset": [
+"genelYon",
+"genelGuc",
+"genelParlak"
+],
+"vis": {
+"k": "duzenMod",
+"in": [
+1
+]
+},
+"def": 0
+},
+{
+"k": "parlakKoruG",
+"l": "Orijinal parlaklığı koru",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Gelişmiş Renk Düzenleme",
+"vis": {
+"k": "duzenMod",
+"in": [
+1
+]
+},
+"def": 0
+},
+{
+"k": "tasmaSinir",
+"l": "Renk taşmalarını sınırla",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Gelişmiş Renk Düzenleme",
+"vis": {
+"k": "duzenMod",
+"in": [
+1
+]
+},
+"def": 1
 }
 ],
 "presets": [
+{
+"code": "SN",
+"name": "Sinematik",
+"vals": {
+"duzenMod": 1,
+"golgeYon": 190,
+"golgeGuc": 35,
+"acikYon": 30,
+"acikGuc": 30
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "SC",
+"name": "Sıcak atmosfer",
+"vals": {
+"duzenMod": 1,
+"genelYon": 30,
+"genelGuc": 30
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "SG",
+"name": "Soğuk atmosfer",
+"vals": {
+"duzenMod": 1,
+"genelYon": 210,
+"genelGuc": 30
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "PS",
+"name": "Pastel",
+"vals": {
+"duzenMod": 1,
+"golgeParlak": 30,
+"genelGuc": 15,
+"genelYon": 300
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "TR",
+"name": "Tarihi görüntü",
+"vals": {
+"duzenMod": 1,
+"golgeYon": 30,
+"golgeGuc": 40,
+"acikYon": 45,
+"acikGuc": 25,
+"genelParlak": -5
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "DG",
+"name": "Doğal renk",
+"vals": {
+"duzenMod": 1
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
 {
 "code": "HF",
 "name": "Hafif",
@@ -1967,9 +2498,146 @@
 "jog": 1,
 "src": "Anahtar",
 "def": 0
+},
+{
+"k": "gecisBicim",
+"l": "Geçiş biçimi",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Doğrusal",
+"Yumuşak",
+"Keskin"
+],
+"unit": "",
+"anim": "step",
+"g": "Gelişmiş",
+"def": 0
+},
+{
+"k": "haritaKayn",
+"l": "Harita kaynağı",
+"kind": "choice",
+"min": 0,
+"max": 4,
+"step": 1,
+"jog": 1,
+"opts": [
+"Parlaklık",
+"Kırmızı",
+"Yeşil",
+"Mavi",
+"Alfa"
+],
+"unit": "",
+"anim": "step",
+"g": "Gelişmiş",
+"def": 0
+},
+{
+"k": "gecisKontrast",
+"l": "Geçiş kontrastı",
+"kind": "jog",
+"min": 0,
+"max": 300,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Gelişmiş",
+"def": 100
+},
+{
+"k": "parlakKoru",
+"l": "Orijinal parlaklığı koru",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Gelişmiş",
+"def": 0
+},
+{
+"k": "alfaKoru",
+"l": "Alfa kanalını koru",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Gelişmiş",
+"def": 1
 }
 ],
 "presets": [
+{
+"code": "IR",
+"name": "İki renk",
+"vals": {},
+"keys": {},
+"cols": {
+"renkGeci": "[[\"#1B2A55\",0],[\"#F2C230\",100]]"
+},
+"at": "start"
+},
+{
+"code": "UR",
+"name": "Üç renk",
+"vals": {},
+"keys": {},
+"cols": {
+"renkGeci": "[[\"#0B1430\",0],[\"#E84393\",50],[\"#F7F8FA\",100]]"
+},
+"at": "start"
+},
+{
+"code": "TK",
+"name": "Termal kamera",
+"vals": {},
+"keys": {},
+"cols": {
+"renkGeci": "[[\"#000010\",0],[\"#3B0A7A\",25],[\"#C2185B\",50],[\"#FF8F00\",75],[\"#FFFDE7\",100]]"
+},
+"at": "start"
+},
+{
+"code": "GK",
+"name": "Gökkuşağı",
+"vals": {},
+"keys": {},
+"cols": {
+"renkGeci": "[[\"#E30A17\",0],[\"#FF9800\",20],[\"#FFEB3B\",40],[\"#4CAF50\",60],[\"#2196F3\",80],[\"#8E24AA\",100]]"
+},
+"at": "start"
+},
+{
+"code": "GG",
+"name": "Gece görüşü",
+"vals": {},
+"keys": {},
+"cols": {
+"renkGeci": "[[\"#001500\",0],[\"#1B8F1B\",55],[\"#C8FFC8\",100]]"
+},
+"at": "start"
+},
+{
+"code": "SP",
+"name": "Sepya",
+"vals": {},
+"keys": {},
+"cols": {
+"renkGeci": "[[\"#2B1A0E\",0],[\"#9B6B43\",55],[\"#F3E3C3\",100]]"
+},
+"at": "start"
+},
 {
 "code": "HF",
 "name": "Hafif",
@@ -4073,9 +4741,270 @@
 "jog": 1,
 "src": "Anahtar",
 "def": 0
+},
+{
+"k": "kaynakTur",
+"l": "Parlama kaynağı",
+"kind": "choice",
+"min": 0,
+"max": 3,
+"step": 1,
+"jog": 1,
+"opts": [
+"Alfa",
+"Parlaklık",
+"Renk",
+"Özel maske"
+],
+"unit": "",
+"anim": "step",
+"g": "Kaynak ve Hale",
+"def": 0
+},
+{
+"k": "ozelMaske",
+"l": "Özel maske",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"anim": "no",
+"g": "Kaynak ve Hale",
+"hint": "Görsel / katman",
+"vis": {
+"k": "kaynakTur",
+"in": [
+3
+]
+},
+"def": ""
+},
+{
+"k": "esik",
+"l": "Parlaklık eşiği",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Kaynak ve Hale",
+"vis": {
+"k": "kaynakTur",
+"in": [
+1,
+2
+]
+},
+"def": 50
+},
+{
+"k": "esikYumu",
+"l": "Eşik yumuşaklığı",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Kaynak ve Hale",
+"vis": {
+"k": "kaynakTur",
+"in": [
+1,
+2
+]
+},
+"def": 20
+},
+{
+"k": "icRenk",
+"l": "İç hale rengi",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "yes",
+"g": "Kaynak ve Hale",
+"def": "#FFFFFF"
+},
+{
+"k": "disRenk",
+"l": "Dış hale rengi",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "yes",
+"g": "Kaynak ve Hale",
+"def": "#53A8FF"
+},
+{
+"k": "icBuyu",
+"l": "İç hale büyüklüğü",
+"kind": "jog",
+"min": 0,
+"max": 200,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "Kaynak ve Hale",
+"def": 0
+},
+{
+"k": "disBuyu",
+"l": "Dış hale büyüklüğü",
+"kind": "jog",
+"min": 0,
+"max": 500,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "Kaynak ve Hale",
+"def": 0
+},
+{
+"k": "icGuc",
+"l": "İç hale gücü",
+"kind": "jog",
+"min": 0,
+"max": 200,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Kaynak ve Hale",
+"def": 80
+},
+{
+"k": "disGuc",
+"l": "Dış hale gücü",
+"kind": "jog",
+"min": 0,
+"max": 200,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Kaynak ve Hale",
+"def": 40
+},
+{
+"k": "kaynakRenk",
+"l": "Kaynak renklerinden parlama üret",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Kaynak ve Hale",
+"def": 0
 }
 ],
 "presets": [
+{
+"code": "NE",
+"name": "Neon",
+"vals": {
+"yaricap": 30,
+"icBuyu": 4,
+"disBuyu": 30,
+"icGuc": 120,
+"disGuc": 70
+},
+"keys": {},
+"cols": {
+"icRenk": "#FFFFFF",
+"disRenk": "#22D3C5",
+"renk": "#22D3C5"
+},
+"at": "start"
+},
+{
+"code": "YI",
+"name": "Yumuşak ışık",
+"vals": {
+"yaricap": 50,
+"yogunluk": 45
+},
+"keys": {},
+"cols": {
+"renk": "#FFF3D0"
+},
+"at": "start"
+},
+{
+"code": "EN",
+"name": "Enerji",
+"vals": {
+"yaricap": 25,
+"icBuyu": 6,
+"disBuyu": 45,
+"disGuc": 90
+},
+"keys": {},
+"cols": {
+"disRenk": "#8F7CF0",
+"icRenk": "#E0D8FF"
+},
+"at": "start"
+},
+{
+"code": "AT",
+"name": "Ateş",
+"vals": {
+"yaricap": 35,
+"icBuyu": 5,
+"disBuyu": 40,
+"disGuc": 80
+},
+"keys": {},
+"cols": {
+"icRenk": "#FFE08A",
+"disRenk": "#FF4400",
+"renk": "#FF6A00"
+},
+"at": "start"
+},
+{
+"code": "BZ",
+"name": "Buz",
+"vals": {
+"yaricap": 30,
+"icBuyu": 3,
+"disBuyu": 35
+},
+"keys": {},
+"cols": {
+"icRenk": "#FFFFFF",
+"disRenk": "#9AD8FF",
+"renk": "#BFE9FF"
+},
+"at": "start"
+},
+{
+"code": "RK",
+"name": "Renkli kontur",
+"vals": {
+"yaricap": 12,
+"kaynakRenk": 1,
+"yogunluk": 90
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
 {
 "code": "HF",
 "name": "Hafif",
@@ -4431,9 +5360,280 @@
 "jog": 1,
 "src": "Anahtar",
 "def": 0
+},
+{
+"k": "dolgu",
+"l": "Kontur dolgusu",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Düz renk",
+"Renk geçişi",
+"Doku"
+],
+"unit": "",
+"anim": "step",
+"g": "Gelişmiş Kontur",
+"def": 0
+},
+{
+"k": "renk2g",
+"l": "Geçiş ikinci rengi",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "yes",
+"g": "Gelişmiş Kontur",
+"vis": {
+"k": "dolgu",
+"in": [
+1
+]
+},
+"def": "#2F7BF6"
+},
+{
+"k": "ikinciKalin",
+"l": "İkinci kontur kalınlığı",
+"kind": "jog",
+"min": 0,
+"max": 300,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "Gelişmiş Kontur",
+"def": 0
+},
+{
+"k": "ikinciRenk",
+"l": "İkinci kontur rengi",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "yes",
+"g": "Gelişmiş Kontur",
+"def": "#FFFFFF"
+},
+{
+"k": "cizgiBicim",
+"l": "Çizgi biçimi",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Sürekli",
+"Kesikli",
+"Noktalı"
+],
+"unit": "",
+"anim": "step",
+"g": "Gelişmiş Kontur",
+"def": 0
+},
+{
+"k": "kesikUzun",
+"l": "Kesik uzunluğu",
+"kind": "jog",
+"min": 1,
+"max": 300,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "Gelişmiş Kontur",
+"vis": {
+"k": "cizgiBicim",
+"in": [
+1,
+2
+]
+},
+"def": 10
+},
+{
+"k": "kesikBosluk",
+"l": "Kesik boşluğu",
+"kind": "jog",
+"min": 0,
+"max": 300,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "Gelişmiş Kontur",
+"vis": {
+"k": "cizgiBicim",
+"in": [
+1,
+2
+]
+},
+"def": 5
+},
+{
+"k": "cizgiFaz",
+"l": "Çizgi fazı",
+"kind": "jog",
+"min": -1000,
+"max": 1000,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "Gelişmiş Kontur",
+"vis": {
+"k": "cizgiBicim",
+"in": [
+1,
+2
+]
+},
+"def": 0
+},
+{
+"k": "alfaYorum",
+"l": "Alfa yorumu",
+"kind": "choice",
+"min": 0,
+"max": 3,
+"step": 1,
+"jog": 1,
+"opts": [
+"Sert",
+"Yumuşak",
+"Ağırlıklı",
+"Eşiğe göre"
+],
+"unit": "",
+"anim": "step",
+"g": "Gelişmiş Kontur",
+"def": 2
+},
+{
+"k": "alfaEsik",
+"l": "Alfa eşiği",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Gelişmiş Kontur",
+"vis": {
+"k": "alfaYorum",
+"in": [
+3
+]
+},
+"def": 35
+},
+{
+"k": "delikKontur",
+"l": "İç deliklerin çevresine kontur uygula",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Gelişmiş Kontur",
+"def": 1
+},
+{
+"k": "ekranSabit",
+"l": "Kontur kalınlığını ekranda sabit tut",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Gelişmiş Kontur",
+"def": 0
 }
 ],
 "presets": [
+{
+"code": "CK",
+"name": "Çift kontur",
+"vals": {
+"kalinlik": 6,
+"ikinciKalin": 6
+},
+"keys": {},
+"cols": {
+"renk": "#111111",
+"ikinciRenk": "#FFFFFF"
+},
+"at": "start"
+},
+{
+"code": "NC",
+"name": "Neon çizgi",
+"vals": {
+"kalinlik": 4
+},
+"keys": {},
+"cols": {
+"renk": "#22D3C5"
+},
+"at": "start"
+},
+{
+"code": "CF",
+"name": "Çizgi film",
+"vals": {
+"kalinlik": 8
+},
+"keys": {},
+"cols": {
+"renk": "#111111"
+},
+"at": "start"
+},
+{
+"code": "HS",
+"name": "Harita sınırı",
+"vals": {
+"kalinlik": 3,
+"konum": 2
+},
+"keys": {},
+"cols": {
+"renk": "#F7F8FA"
+},
+"at": "start"
+},
+{
+"code": "KS",
+"name": "Kesikli sınır",
+"vals": {
+"kalinlik": 3,
+"cizgiBicim": 1,
+"kesikUzun": 12,
+"kesikBosluk": 6
+},
+"keys": {},
+"cols": {
+"renk": "#F7F8FA"
+},
+"at": "start"
+},
 {
 "code": "HF",
 "name": "Hafif",
@@ -5799,6 +6999,144 @@
 "unit": "px",
 "src": "Cetvel",
 "def": 1.0
+},
+{
+"k": "kenarBicim",
+"l": "Kenar biçimi",
+"kind": "choice",
+"min": 0,
+"max": 5,
+"step": 1,
+"jog": 1,
+"opts": [
+"Yırtık",
+"Makas kesimi",
+"Çokgen",
+"Dalgalı",
+"Pürüzlü",
+"El çizimi"
+],
+"unit": "",
+"anim": "step",
+"g": "Kenar Biçimi ve Dinamik",
+"def": 4
+},
+{
+"k": "cokgen",
+"l": "Çokgenleşme",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Kenar Biçimi ve Dinamik",
+"def": 20
+},
+{
+"k": "koseYumu",
+"l": "Köşe yumuşaklığı",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Kenar Biçimi ve Dinamik",
+"def": 20
+},
+{
+"k": "kenarSert",
+"l": "Kenar sertliği",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Kenar Biçimi ve Dinamik",
+"def": 70
+},
+{
+"k": "dinamik",
+"l": "Dinamik kenarlar",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Kenar Biçimi ve Dinamik",
+"def": 0
+},
+{
+"k": "yenilenme",
+"l": "Yenilenme aralığı",
+"kind": "jog",
+"min": 1,
+"max": 120,
+"step": 1,
+"jog": 1,
+"unit": " kare",
+"anim": "yes",
+"g": "Kenar Biçimi ve Dinamik",
+"int": true,
+"def": 3
+},
+{
+"k": "degisim",
+"l": "Değişim gücü",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Kenar Biçimi ve Dinamik",
+"vis": {
+"k": "dinamik",
+"in": [
+1
+]
+},
+"def": 15
+},
+{
+"k": "hafiza",
+"l": "Biçim hafızası",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Kenar Biçimi ve Dinamik",
+"vis": {
+"k": "dinamik",
+"in": [
+1
+]
+},
+"def": 80
+},
+{
+"k": "anaSiluet",
+"l": "Ana silueti koru",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Kenar Biçimi ve Dinamik",
+"def": 1
 }
 ],
 "presets": [
@@ -6252,6 +7590,118 @@
 "step": 1,
 "jog": 1,
 "src": "Anahtar",
+"def": 1
+},
+{
+"k": "xyYari",
+"l": "Yatay ve dikey bulanıklık",
+"kind": "jog",
+"min": 0,
+"max": 500,
+"defY": 0,
+"step": 0.1,
+"jog": 0.1,
+"two": true,
+"unit": "px",
+"anim": "yes",
+"g": "Eksenler ve Alan",
+"link": true,
+"def": 0
+},
+{
+"k": "eksenBagla",
+"l": "Eksenleri birbirine bağla",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Eksenler ve Alan",
+"def": 1
+},
+{
+"k": "alan",
+"l": "Bulanıklık alanı",
+"kind": "choice",
+"min": 0,
+"max": 3,
+"step": 1,
+"jog": 1,
+"opts": [
+"Tüm katman",
+"Alfa",
+"Özel maske",
+"Parlaklık"
+],
+"unit": "",
+"anim": "step",
+"g": "Eksenler ve Alan",
+"def": 0
+},
+{
+"k": "maske",
+"l": "Maske katmanı",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"anim": "no",
+"g": "Eksenler ve Alan",
+"hint": "Görsel / katman",
+"vis": {
+"k": "alan",
+"in": [
+2
+]
+},
+"def": ""
+},
+{
+"k": "maskeTers",
+"l": "Maskeyi ters çevir",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Eksenler ve Alan",
+"def": 0
+},
+{
+"k": "kalite",
+"l": "Kalite",
+"kind": "choice",
+"min": 0,
+"max": 3,
+"step": 1,
+"jog": 1,
+"opts": [
+"Otomatik",
+"Düşük",
+"Orta",
+"Yüksek"
+],
+"unit": "",
+"anim": "step",
+"g": "Eksenler ve Alan",
+"def": 0
+},
+{
+"k": "koyuKenarOnle",
+"l": "Saydam kenarlarda koyu renk oluşmasını önle",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Eksenler ve Alan",
 "def": 1
 }
 ],
@@ -8028,8 +9478,8 @@
 "l": "Dalga boyu",
 "anim": "yes",
 "kind": "jog",
-"min": 0.0,
-"max": 500.0,
+"min": 1,
+"max": 1000,
 "step": 0.1,
 "jog": 0.1,
 "unit": "px",
@@ -8081,13 +9531,16 @@
 "anim": "step",
 "kind": "choice",
 "min": 0,
-"max": 2,
+"max": 5,
 "step": 1,
 "jog": 1,
 "opts": [
 "Sinüs",
 "Üçgen",
-"Kare"
+"Kare",
+"Testere dişi",
+"Düzensiz",
+"Özel eğri"
 ],
 "src": "Seçim",
 "def": 0
@@ -8129,6 +9582,170 @@
 ],
 "src": "Seçim",
 "def": 0
+},
+{
+"k": "ozelEgri",
+"l": "Özel dalga eğrisi",
+"kind": "curve",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"anim": "no",
+"g": "İkinci Dalga ve Döngü",
+"vis": {
+"k": "dalgaTipi",
+"in": [
+5
+]
+},
+"def": [
+[
+0,
+0
+],
+[
+1,
+1
+]
+]
+},
+{
+"k": "yayilim",
+"l": "Dalga yayılımı",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "İkinci Dalga ve Döngü",
+"def": 100
+},
+{
+"k": "konumaGore",
+"l": "Dalga yüksekliğini konuma göre değiştir",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "İkinci Dalga ve Döngü",
+"def": 0
+},
+{
+"k": "yukDagilim",
+"l": "Dalga yüksekliği dağılımı",
+"kind": "curve",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"anim": "no",
+"g": "İkinci Dalga ve Döngü",
+"vis": {
+"k": "konumaGore",
+"in": [
+1
+]
+},
+"def": [
+[
+0,
+0
+],
+[
+1,
+1
+]
+]
+},
+{
+"k": "ikinciGuc",
+"l": "İkinci dalga gücü",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "İkinci Dalga ve Döngü",
+"def": 0
+},
+{
+"k": "ikinciBoy",
+"l": "İkinci dalga boyu",
+"kind": "jog",
+"min": 1,
+"max": 1000,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "İkinci Dalga ve Döngü",
+"def": 60
+},
+{
+"k": "ikinciHiz",
+"l": "İkinci dalga hızı",
+"kind": "jog",
+"min": 0,
+"max": 30,
+"step": 0.01,
+"jog": 0.01,
+"unit": "Hz",
+"anim": "yes",
+"g": "İkinci Dalga ve Döngü",
+"def": 0.5
+},
+{
+"k": "sonum",
+"l": "Sönümlenme",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "İkinci Dalga ve Döngü",
+"def": 0
+},
+{
+"k": "dongu",
+"l": "Kusursuz döngü",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "İkinci Dalga ve Döngü",
+"def": 0
+},
+{
+"k": "donguSure",
+"l": "Döngü süresi",
+"kind": "jog",
+"min": 0.1,
+"max": 60,
+"step": 0.01,
+"jog": 0.01,
+"unit": "s",
+"anim": "yes",
+"g": "İkinci Dalga ve Döngü",
+"vis": {
+"k": "dongu",
+"in": [
+1
+]
+},
+"def": 2
 }
 ],
 "presets": [
@@ -9213,6 +10830,137 @@
 "unit": "%v",
 "src": "X/Y nokta + tuval",
 "def": 0.0
+},
+{
+"k": "bicim",
+"l": "Döşeme biçimi",
+"kind": "choice",
+"min": 0,
+"max": 3,
+"step": 1,
+"jog": 1,
+"opts": [
+"Kare",
+"Dikdörtgen",
+"Tuğla",
+"Baklava"
+],
+"unit": "",
+"anim": "step",
+"g": "Izgara",
+"def": 0
+},
+{
+"k": "karoOran",
+"l": "Karo oranı",
+"kind": "jog",
+"min": 1,
+"max": 1000,
+"defY": 100,
+"step": 0.1,
+"jog": 0.1,
+"two": true,
+"unit": "%",
+"anim": "yes",
+"g": "Izgara",
+"link": true,
+"def": 100
+},
+{
+"k": "izgaraAci",
+"l": "Izgaranın genel açısı",
+"kind": "jog",
+"min": -360,
+"max": 360,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"anim": "yes",
+"g": "Izgara",
+"def": 0
+},
+{
+"k": "alanT",
+"l": "Tekrar alanı",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Katman sınırı",
+"Proje sınırı",
+"Özel alan"
+],
+"unit": "",
+"anim": "step",
+"g": "Izgara",
+"def": 1
+},
+{
+"k": "yAyna",
+"l": "Yatay aynalama",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Izgara",
+"def": 0
+},
+{
+"k": "dAyna",
+"l": "Dikey aynalama",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Izgara",
+"def": 0
+},
+{
+"k": "disPiksel",
+"l": "Ekran dışındaki kaynak pikselleri kullan",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Izgara",
+"def": 1
+},
+{
+"k": "dikisGizle",
+"l": "Dikişleri gizle",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Izgara",
+"def": 1
+},
+{
+"k": "dikisYumu",
+"l": "Dikiş yumuşaklığı",
+"kind": "jog",
+"min": 0,
+"max": 30,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "Izgara",
+"def": 0
 }
 ],
 "presets": [
@@ -10727,6 +12475,118 @@
 "jog": 1,
 "src": "Anahtar",
 "def": 1
+},
+{
+"k": "ayrBicim",
+"l": "Ayrışma biçimi",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Doğrusal",
+"Radyal",
+"Dönel"
+],
+"unit": "",
+"anim": "step",
+"g": "Ayrışma",
+"def": 0
+},
+{
+"k": "radMerkez",
+"l": "Radyal merkez",
+"kind": "jog",
+"min": -100,
+"max": 200,
+"defY": 50,
+"step": 0.1,
+"jog": 0.1,
+"two": true,
+"unit": "box%",
+"anim": "yes",
+"g": "Ayrışma",
+"vis": {
+"k": "ayrBicim",
+"in": [
+1,
+2
+]
+},
+"def": 50
+},
+{
+"k": "uzakAyr",
+"l": "Merkezden uzaklaştıkça ayrışma",
+"kind": "jog",
+"min": 0,
+"max": 200,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Ayrışma",
+"vis": {
+"k": "ayrBicim",
+"in": [
+1,
+2
+]
+},
+"def": 100
+},
+{
+"k": "rOpak",
+"l": "Kırmızı kanal opaklığı",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Ayrışma",
+"def": 100
+},
+{
+"k": "gOpak",
+"l": "Yeşil kanal opaklığı",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Ayrışma",
+"def": 100
+},
+{
+"k": "bOpak",
+"l": "Mavi kanal opaklığı",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Ayrışma",
+"def": 100
+},
+{
+"k": "alfaSinir",
+"l": "Orijinal alfa sınırını koru",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Ayrışma",
+"def": 0
 }
 ],
 "presets": [
@@ -10902,6 +12762,136 @@
 "step": 1,
 "jog": 1,
 "src": "Anahtar",
+"def": 1
+},
+{
+"k": "tur",
+"l": "Bozulma türü",
+"kind": "choice",
+"min": 0,
+"max": 4,
+"step": 1,
+"jog": 1,
+"opts": [
+"Dijital",
+"Analog",
+"Blok",
+"Çizgi",
+"Veri bozulması"
+],
+"unit": "",
+"anim": "step",
+"g": "Bozulma Türü ve Tetikleme",
+"def": 0
+},
+{
+"k": "yatayOran",
+"l": "Yatay blok oranı",
+"kind": "jog",
+"min": 1,
+"max": 1000,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Bozulma Türü ve Tetikleme",
+"def": 100
+},
+{
+"k": "dikeyOran",
+"l": "Dikey blok oranı",
+"kind": "jog",
+"min": 1,
+"max": 1000,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Bozulma Türü ve Tetikleme",
+"def": 100
+},
+{
+"k": "siklik",
+"l": "Bozulma sıklığı",
+"kind": "jog",
+"min": 0,
+"max": 20,
+"step": 0.01,
+"jog": 0.01,
+"unit": "Hz",
+"anim": "yes",
+"g": "Bozulma Türü ve Tetikleme",
+"def": 0
+},
+{
+"k": "sure",
+"l": "Bozulma süresi",
+"kind": "jog",
+"min": 0,
+"max": 5,
+"step": 0.01,
+"jog": 0.01,
+"unit": "s",
+"anim": "yes",
+"g": "Bozulma Türü ve Tetikleme",
+"def": 0.1
+},
+{
+"k": "renkKayip",
+"l": "Renk örnekleme kaybı",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Bozulma Türü ve Tetikleme",
+"def": 0
+},
+{
+"k": "elle",
+"l": "Bozulmaları elle tetikle",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Bozulma Türü ve Tetikleme",
+"def": 0
+},
+{
+"k": "tetikGuc",
+"l": "Tetikleme gücü",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Bozulma Türü ve Tetikleme",
+"vis": {
+"k": "elle",
+"in": [
+1
+]
+},
+"def": 0
+},
+{
+"k": "parlakSinir",
+"l": "Ani parlaklık değişimlerini sınırla",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Bozulma Türü ve Tetikleme",
 "def": 1
 }
 ],
@@ -11098,6 +13088,122 @@
 "int": true,
 "src": "Tam sayı / yeniden üret",
 "def": 1.0
+},
+{
+"k": "turbOlcek",
+"l": "Türbülans ölçeği",
+"kind": "jog",
+"min": 1,
+"max": 1000,
+"defY": 100,
+"step": 0.1,
+"jog": 0.1,
+"two": true,
+"unit": "%",
+"anim": "yes",
+"g": "Türbülans",
+"link": true,
+"def": 100
+},
+{
+"k": "eksenBagla",
+"l": "Eksenleri bağla",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Türbülans",
+"def": 1
+},
+{
+"k": "turbYon",
+"l": "Türbülans yönü",
+"kind": "jog",
+"min": 0,
+"max": 360,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"anim": "yes",
+"g": "Türbülans",
+"def": 0
+},
+{
+"k": "paralaks",
+"l": "Paralaks kayması",
+"kind": "jog",
+"min": -4000,
+"max": 4000,
+"defY": 0,
+"step": 0.1,
+"jog": 0.1,
+"two": true,
+"unit": "px",
+"anim": "yes",
+"g": "Türbülans",
+"link": false,
+"def": 0
+},
+{
+"k": "kenarKoru",
+"l": "Kenar koruma gücü",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Türbülans",
+"def": 0
+},
+{
+"k": "evrimHiz",
+"l": "Evrim hızı",
+"kind": "jog",
+"min": -3600,
+"max": 3600,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°/sn",
+"anim": "yes",
+"g": "Türbülans",
+"def": 0
+},
+{
+"k": "dongu",
+"l": "Kusursuz evrim döngüsü",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Türbülans",
+"def": 0
+},
+{
+"k": "donguSure",
+"l": "Döngü süresi",
+"kind": "jog",
+"min": 0.1,
+"max": 60,
+"step": 0.01,
+"jog": 0.01,
+"unit": "s",
+"anim": "yes",
+"g": "Türbülans",
+"vis": {
+"k": "dongu",
+"in": [
+1
+]
+},
+"def": 3
 }
 ],
 "presets": [
@@ -12315,13 +14421,15 @@
 "anim": "step",
 "kind": "choice",
 "min": 0,
-"max": 2,
+"max": 4,
 "step": 1,
 "jog": 1,
 "opts": [
 "Renkli",
 "Tek renk",
-"Film"
+"Film",
+"Yumuşak",
+"Blok"
 ],
 "src": "Seçim",
 "def": 0
@@ -12364,6 +14472,7 @@
 "step": 1,
 "jog": 1,
 "src": "Anahtar",
+"hideUi": true,
 "def": 1
 },
 {
@@ -12377,6 +14486,88 @@
 "jog": 1,
 "src": "Anahtar",
 "def": 0
+},
+{
+"k": "dondur",
+"l": "Deseni dondur",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Gelişmiş Gürültü",
+"def": 0
+},
+{
+"k": "yenilenme",
+"l": "Yenilenme aralığı",
+"kind": "jog",
+"min": 1,
+"max": 120,
+"step": 1,
+"jog": 1,
+"unit": " kare",
+"anim": "yes",
+"g": "Gelişmiş Gürültü",
+"int": true,
+"def": 1
+},
+{
+"k": "grenOran",
+"l": "Gren oranı",
+"kind": "jog",
+"min": 1,
+"max": 1000,
+"defY": 100,
+"step": 0.1,
+"jog": 0.1,
+"two": true,
+"unit": "%",
+"anim": "yes",
+"g": "Gelişmiş Gürültü",
+"link": true,
+"def": 100
+},
+{
+"k": "golgeYog",
+"l": "Gölgelerdeki yoğunluk",
+"kind": "jog",
+"min": 0,
+"max": 200,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Gelişmiş Gürültü",
+"def": 100
+},
+{
+"k": "ortaYog",
+"l": "Orta tonlardaki yoğunluk",
+"kind": "jog",
+"min": 0,
+"max": 200,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Gelişmiş Gürültü",
+"def": 100
+},
+{
+"k": "acikYog",
+"l": "Açık tonlardaki yoğunluk",
+"kind": "jog",
+"min": 0,
+"max": 200,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Gelişmiş Gürültü",
+"def": 100
 }
 ],
 "presets": [
@@ -12728,6 +14919,122 @@
 "step": 1,
 "jog": 1,
 "src": "Anahtar",
+"def": 0
+},
+{
+"k": "esnet",
+"l": "Blok esnetme",
+"kind": "jog",
+"min": 1,
+"max": 1000,
+"defY": 100,
+"step": 0.1,
+"jog": 0.1,
+"two": true,
+"unit": "%",
+"anim": "yes",
+"g": "Gelişmiş",
+"link": true,
+"def": 100
+},
+{
+"k": "guc",
+"l": "Efekt gücü",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Gelişmiş",
+"def": 100
+},
+{
+"k": "kaydir",
+"l": "Desen kaydırma",
+"kind": "jog",
+"min": -4000,
+"max": 4000,
+"defY": 0,
+"step": 0.1,
+"jog": 0.1,
+"two": true,
+"unit": "px",
+"anim": "yes",
+"g": "Gelişmiş",
+"link": false,
+"def": 0
+},
+{
+"k": "dondur",
+"l": "Deseni dondur",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Gelişmiş",
+"def": 0
+},
+{
+"k": "ucDeger",
+"l": "Yalnız uç değerler",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Gelişmiş",
+"def": 0
+},
+{
+"k": "parlakUst",
+"l": "Parlaklık üst sınırı",
+"kind": "jog",
+"min": 50,
+"max": 200,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Gelişmiş",
+"def": 100
+},
+{
+"k": "karistir",
+"l": "Karıştırma",
+"kind": "choice",
+"min": 0,
+"max": 3,
+"step": 1,
+"jog": 1,
+"opts": [
+"Normal",
+"Çarp",
+"Ekran",
+"Ekle"
+],
+"unit": "",
+"anim": "step",
+"g": "Gelişmiş",
+"def": 0
+},
+{
+"k": "tohumAK",
+"l": "Tohumu anahtar kareyle değiştir",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Gelişmiş",
 "def": 0
 }
 ],
@@ -24373,6 +26680,178 @@
 "jog": 1,
 "src": "Anahtar",
 "def": 0
+},
+{
+"k": "yontem",
+"l": "Renk karşılaştırma yöntemi",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Renk farkı",
+"RGB",
+"HSV"
+],
+"unit": "",
+"anim": "step",
+"g": "Gelişmiş Anahtar",
+"def": 0
+},
+{
+"k": "siyahAlfa",
+"l": "Siyah alfa noktası",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Gelişmiş Anahtar",
+"def": 0
+},
+{
+"k": "beyazAlfa",
+"l": "Beyaz alfa noktası",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Gelişmiş Anahtar",
+"def": 100
+},
+{
+"k": "yariSaydam",
+"l": "Yarı saydamlık koruması",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Gelişmiş Anahtar",
+"def": 50
+},
+{
+"k": "kenarTemiz",
+"l": "Kenar temizleme",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Gelişmiş Anahtar",
+"def": 0
+},
+{
+"k": "ayrintiKoru",
+"l": "İnce ayrıntıları koru",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Gelişmiş Anahtar",
+"def": 1
+},
+{
+"k": "cokluAnahtar",
+"l": "Birden fazla anahtar rengi",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Gelişmiş Anahtar",
+"def": 0
+},
+{
+"k": "anahtar2",
+"l": "İkinci anahtar rengi",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "yes",
+"g": "Gelişmiş Anahtar",
+"vis": {
+"k": "cokluAnahtar",
+"in": [
+1
+]
+},
+"def": "#0047FF"
+},
+{
+"k": "anahtar3",
+"l": "Üçüncü anahtar rengi",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "yes",
+"g": "Gelişmiş Anahtar",
+"vis": {
+"k": "cokluAnahtar",
+"in": [
+1
+]
+},
+"def": "#00FF00"
+},
+{
+"k": "anahtar3Acik",
+"l": "Üçüncü anahtar rengini kullan",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Gelişmiş Anahtar",
+"vis": {
+"k": "cokluAnahtar",
+"in": [
+1
+]
+},
+"def": 0
+},
+{
+"k": "onizleme",
+"l": "Önizleme",
+"kind": "choice",
+"min": 0,
+"max": 3,
+"step": 1,
+"jog": 1,
+"opts": [
+"Sonuç",
+"Alfa",
+"Siyah arka plan",
+"Beyaz arka plan"
+],
+"unit": "",
+"anim": "step",
+"g": "Gelişmiş Anahtar",
+"def": 0
 }
 ],
 "presets": [
@@ -24641,6 +27120,343 @@
 "jog": 1,
 "src": "Anahtar",
 "def": 0
+},
+{
+"k": "dolguMod",
+"l": "Dolgu modu",
+"kind": "choice",
+"min": 0,
+"max": 3,
+"step": 1,
+"jog": 1,
+"opts": [
+"Düz renk",
+"Renk geçişi",
+"Bulanık kaynak kopyası",
+"Özel görsel"
+],
+"unit": "",
+"anim": "step",
+"g": "Arka Plan Doldurma",
+"def": 0
+},
+{
+"k": "renk2",
+"l": "Geçiş ikinci rengi",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "yes",
+"g": "Arka Plan Doldurma",
+"vis": {
+"k": "dolguMod",
+"in": [
+1
+]
+},
+"def": "#1B2A55"
+},
+{
+"k": "ozelGorsel",
+"l": "Özel arka plan görseli",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"anim": "no",
+"g": "Arka Plan Doldurma",
+"hint": "Görsel / katman",
+"vis": {
+"k": "dolguMod",
+"in": [
+3
+]
+},
+"def": ""
+},
+{
+"k": "bgBulanik",
+"l": "Arka plan bulanıklığı",
+"kind": "jog",
+"min": 0,
+"max": 500,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "Arka Plan Doldurma",
+"vis": {
+"k": "dolguMod",
+"in": [
+2,
+3
+]
+},
+"def": 30
+},
+{
+"k": "bgDoyg",
+"l": "Arka plan doygunluğu",
+"kind": "jog",
+"min": -100,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Arka Plan Doldurma",
+"vis": {
+"k": "dolguMod",
+"in": [
+2,
+3
+]
+},
+"def": 0
+},
+{
+"k": "bgParlak",
+"l": "Arka plan parlaklığı",
+"kind": "jog",
+"min": -100,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Arka Plan Doldurma",
+"vis": {
+"k": "dolguMod",
+"in": [
+2,
+3
+]
+},
+"def": 0
+},
+{
+"k": "bgGama",
+"l": "Arka plan gama",
+"kind": "jog",
+"min": 0.01,
+"max": 10,
+"step": 0.01,
+"jog": 0.01,
+"unit": "",
+"anim": "yes",
+"g": "Arka Plan Doldurma",
+"vis": {
+"k": "dolguMod",
+"in": [
+2,
+3
+]
+},
+"def": 1
+},
+{
+"k": "bgRenklendir",
+"l": "Arka plan renklendirme",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Arka Plan Doldurma",
+"vis": {
+"k": "dolguMod",
+"in": [
+2,
+3
+]
+},
+"def": 0
+},
+{
+"k": "renklendirRenk",
+"l": "Renklendirme rengi",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "yes",
+"g": "Arka Plan Doldurma",
+"vis": {
+"k": "dolguMod",
+"in": [
+2,
+3
+]
+},
+"def": "#FFFFFF"
+},
+{
+"k": "onYumu",
+"l": "Ön plan kenar yumuşaklığı",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "Arka Plan Doldurma",
+"vis": {
+"k": "dolguMod",
+"in": [
+2,
+3
+]
+},
+"def": 0
+},
+{
+"k": "onOpak",
+"l": "Ön plan opaklığı",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Arka Plan Doldurma",
+"vis": {
+"k": "dolguMod",
+"in": [
+2,
+3
+]
+},
+"def": 100
+},
+{
+"k": "onKay",
+"l": "Ön plan kayması",
+"kind": "jog",
+"min": -4000,
+"max": 4000,
+"defY": 0,
+"step": 0.1,
+"jog": 0.1,
+"two": true,
+"unit": "px",
+"anim": "yes",
+"g": "Arka Plan Doldurma",
+"vis": {
+"k": "dolguMod",
+"in": [
+2,
+3
+]
+},
+"link": false,
+"def": 0
+},
+{
+"k": "bgKay",
+"l": "Arka plan kayması",
+"kind": "jog",
+"min": -4000,
+"max": 4000,
+"defY": 0,
+"step": 0.1,
+"jog": 0.1,
+"two": true,
+"unit": "px",
+"anim": "yes",
+"g": "Arka Plan Doldurma",
+"vis": {
+"k": "dolguMod",
+"in": [
+2,
+3
+]
+},
+"link": false,
+"def": 0
+},
+{
+"k": "onOlcek",
+"l": "Ön plan ölçeği",
+"kind": "jog",
+"min": 1,
+"max": 1000,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Arka Plan Doldurma",
+"vis": {
+"k": "dolguMod",
+"in": [
+2,
+3
+]
+},
+"def": 100
+},
+{
+"k": "bgOlcek",
+"l": "Arka plan ölçeği",
+"kind": "jog",
+"min": 1,
+"max": 1000,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Arka Plan Doldurma",
+"vis": {
+"k": "dolguMod",
+"in": [
+2,
+3
+]
+},
+"def": 100
+},
+{
+"k": "taramaGuc",
+"l": "Arka plan tarama çizgisi gücü",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Arka Plan Doldurma",
+"vis": {
+"k": "dolguMod",
+"in": [
+2,
+3
+]
+},
+"def": 0
+},
+{
+"k": "taramaSayi",
+"l": "Tarama çizgisi sayısı",
+"kind": "jog",
+"min": 100,
+"max": 2160,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "yes",
+"g": "Arka Plan Doldurma",
+"int": true,
+"def": 720
 }
 ],
 "presets": [
@@ -25168,6 +27984,146 @@
 "jog": 1,
 "src": "Anahtar",
 "def": 0
+},
+{
+"k": "mod",
+"l": "Silme modu",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Tek taraftan",
+"Çift taraftan",
+"Merkezden"
+],
+"unit": "",
+"anim": "step",
+"g": "Silme Modu ve Kenar",
+"def": 0
+},
+{
+"k": "basSinir",
+"l": "Başlangıç sınırı",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Silme Modu ve Kenar",
+"def": 0
+},
+{
+"k": "bitSinir",
+"l": "Bitiş sınırı",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Silme Modu ve Kenar",
+"def": 100
+},
+{
+"k": "sinirBagla",
+"l": "Başlangıç ve bitişi bağla",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Silme Modu ve Kenar",
+"def": 0
+},
+{
+"k": "kenarCizgi",
+"l": "Kenar çizgisi",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Silme Modu ve Kenar",
+"def": 0
+},
+{
+"k": "kenarRenk",
+"l": "Kenar çizgisi rengi",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "yes",
+"g": "Silme Modu ve Kenar",
+"vis": {
+"k": "kenarCizgi",
+"in": [
+1
+]
+},
+"def": "#FFFFFF"
+},
+{
+"k": "kenarKalin",
+"l": "Kenar çizgisi kalınlığı",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "Silme Modu ve Kenar",
+"vis": {
+"k": "kenarCizgi",
+"in": [
+1
+]
+},
+"def": 2
+},
+{
+"k": "kenarParla",
+"l": "Kenar parlaması",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Silme Modu ve Kenar",
+"def": 0
+},
+{
+"k": "parlaBuyu",
+"l": "Parlama büyüklüğü",
+"kind": "jog",
+"min": 0,
+"max": 300,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "Silme Modu ve Kenar",
+"vis": {
+"k": "kenarParla",
+"in": [
+1
+]
+},
+"def": 10
 }
 ],
 "presets": [
@@ -33379,7 +36335,7 @@
 "l": "Doku türü",
 "kind": "choice",
 "min": 0,
-"max": 13,
+"max": 23,
 "step": 1,
 "jog": 1,
 "opts": [
@@ -33396,7 +36352,17 @@
 "Keçe",
 "İnce Bez",
 "Geri Dönüşüm Kağıdı",
-"Özel Doku"
+"Özel Doku",
+"Beyaz kâğıt",
+"Renkli kâğıt",
+"Yırtılmış kâğıt",
+"Parşömen",
+"Kumaş",
+"Taş",
+"Metal",
+"Plastik",
+"Deri görünümü",
+"Kum"
 ],
 "unit": "",
 "anim": "step",
@@ -33594,7 +36560,7 @@
 },
 {
 "k": "renkleBirles",
-"l": "Renkle birleştir",
+"l": "Orijinal renkleri koru",
 "kind": "toggle",
 "min": 0,
 "max": 1,
@@ -33669,6 +36635,240 @@
 "anim": "step",
 "g": "Renk ve Karışım",
 "def": 0
+},
+{
+"k": "dokuKaydir",
+"l": "Doku kaydırma",
+"kind": "jog",
+"min": -4000,
+"max": 4000,
+"defY": 0,
+"step": 0.1,
+"jog": 0.1,
+"two": true,
+"unit": "px",
+"anim": "yes",
+"g": "Doku Görünümü",
+"link": false,
+"def": 0
+},
+{
+"k": "dokuKontrast",
+"l": "Doku kontrastı",
+"kind": "jog",
+"min": -100,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Doku Görünümü",
+"def": 0
+},
+{
+"k": "dokuParlak",
+"l": "Doku parlaklığı",
+"kind": "jog",
+"min": -100,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Doku Görünümü",
+"def": 0
+},
+{
+"k": "puruzluluk",
+"l": "Yüzey pürüzlülüğü",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Yüzey Derinliği",
+"def": 50
+},
+{
+"k": "yuzeyParlak",
+"l": "Yüzey parlaklığı",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Yüzey Derinliği",
+"def": 10
+},
+{
+"k": "alfaKoru",
+"l": "Alfa sınırlarını koru",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Renk ve Karışım",
+"def": 1
+},
+{
+"k": "nesneSabit",
+"l": "Dokuyu nesneye sabitle",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Renk ve Karışım",
+"def": 1
+},
+{
+"k": "esnet",
+"l": "Şekil değişiminde dokuyu esnet",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Renk ve Karışım",
+"def": 1
+},
+{
+"k": "dogalRenk",
+"l": "Doğal malzeme rengini kullan",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Renk ve Karışım",
+"def": 0
+},
+{
+"k": "olukGeni",
+"l": "Oluk genişliği",
+"kind": "jog",
+"min": 1,
+"max": 40,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "Malzeme Ayarları",
+"vis": {
+"k": "dokuTuru",
+"in": [
+3
+]
+},
+"def": 6
+},
+{
+"k": "olukDerin",
+"l": "Oluk derinliği",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Malzeme Ayarları",
+"vis": {
+"k": "dokuTuru",
+"in": [
+3
+]
+},
+"def": 50
+},
+{
+"k": "olukYon",
+"l": "Oluk yönü",
+"kind": "jog",
+"min": -180,
+"max": 180,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"anim": "yes",
+"g": "Malzeme Ayarları",
+"vis": {
+"k": "dokuTuru",
+"in": [
+3
+]
+},
+"def": 0
+},
+{
+"k": "kirisBuyu",
+"l": "Kırışıklık büyüklüğü",
+"kind": "jog",
+"min": 5,
+"max": 200,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "Malzeme Ayarları",
+"vis": {
+"k": "dokuTuru",
+"in": [
+6
+]
+},
+"def": 40
+},
+{
+"k": "kirisYogun",
+"l": "Kırışıklık yoğunluğu",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Malzeme Ayarları",
+"vis": {
+"k": "dokuTuru",
+"in": [
+6
+]
+},
+"def": 50
+},
+{
+"k": "damarGeni",
+"l": "Damar genişliği",
+"kind": "jog",
+"min": 1,
+"max": 40,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "Malzeme Ayarları",
+"vis": {
+"k": "dokuTuru",
+"in": [
+9
+]
+},
+"def": 8
 }
 ],
 "presets": [
@@ -38673,6 +41873,157 @@
 "Uzat"
 ],
 "src": "Seçim",
+"def": 0
+},
+{
+"k": "etkiAlan",
+"l": "Etkilenen alan",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Mevcut katman",
+"Arka plan",
+"Seçilen katman"
+],
+"unit": "",
+"anim": "step",
+"g": "Hedef ve Harita",
+"def": 0
+},
+{
+"k": "hedefKatm",
+"l": "Etkilenecek katman",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"anim": "no",
+"g": "Hedef ve Harita",
+"hint": "Görsel / katman",
+"vis": {
+"k": "etkiAlan",
+"in": [
+2
+]
+},
+"def": ""
+},
+{
+"k": "haritaGorunur",
+"l": "Harita katmanını görünür tut",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Hedef ve Harita",
+"def": 0
+},
+{
+"k": "merkezden",
+"l": "Merkezden hesapla",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Hedef ve Harita",
+"def": 0
+},
+{
+"k": "notr",
+"l": "Nötr harita değeri",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Hedef ve Harita",
+"def": 50
+},
+{
+"k": "birim",
+"l": "Miktar birimi",
+"kind": "choice",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"opts": [
+"Yüzde",
+"Piksel"
+],
+"unit": "",
+"anim": "step",
+"g": "Hedef ve Harita",
+"def": 0
+},
+{
+"k": "haritaYumu",
+"l": "Harita yumuşatma",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "Hedef ve Harita",
+"def": 0
+},
+{
+"k": "haritaKontrast",
+"l": "Harita kontrastı",
+"kind": "jog",
+"min": 0,
+"max": 300,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Hedef ve Harita",
+"def": 100
+},
+{
+"k": "hedefUyar",
+"l": "Haritayı hedefe uyarla",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Hedef ve Harita",
+"def": 1
+},
+{
+"k": "yerlesim",
+"l": "Harita yerleşimi",
+"kind": "choice",
+"min": 0,
+"max": 3,
+"step": 1,
+"jog": 1,
+"opts": [
+"Kapla",
+"Sığdır",
+"Döşe",
+"Orijinal boyut"
+],
+"unit": "",
+"anim": "step",
+"g": "Hedef ve Harita",
 "def": 0
 }
 ],
@@ -51926,9 +55277,183 @@
 "jog": 1,
 "src": "Anahtar",
 "def": 1
+},
+{
+"k": "duzensiz",
+"l": "Hücre düzensizliği",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Hücre Biçimi",
+"def": 100
+},
+{
+"k": "esneklik",
+"l": "Hücre esnekliği",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Hücre Biçimi",
+"def": 0
+},
+{
+"k": "oran",
+"l": "Hücre oranı",
+"kind": "jog",
+"min": 1,
+"max": 1000,
+"defY": 100,
+"step": 0.1,
+"jog": 0.1,
+"two": true,
+"unit": "%",
+"anim": "yes",
+"g": "Hücre Biçimi",
+"link": true,
+"def": 100
+},
+{
+"k": "bosluk",
+"l": "Hücre arası boşluk",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "Hücre Biçimi",
+"def": 0
+},
+{
+"k": "kabartma",
+"l": "Hücre içi kabartma",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Hücre Biçimi",
+"def": 0
+},
+{
+"k": "renklendir",
+"l": "Hücre renklendirme",
+"kind": "choice",
+"min": 0,
+"max": 3,
+"step": 1,
+"jog": 1,
+"opts": [
+"Sabit",
+"Rastgele",
+"Kaynak görsel",
+"Renk geçişi"
+],
+"unit": "",
+"anim": "step",
+"g": "Hücre Biçimi",
+"def": 0
+},
+{
+"k": "merkezGoster",
+"l": "Hücre merkezlerini göster",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Hücre Biçimi",
+"def": 0
 }
 ],
 "presets": [
+{
+"code": "KR",
+"name": "Kristal",
+"vals": {
+"desen": 2,
+"kabartma": 40,
+"renklendir": 1
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "TS",
+"name": "Taş",
+"vals": {
+"desen": 3,
+"duzensiz": 90,
+"kabartma": 60,
+"bosluk": 2
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "BH",
+"name": "Biyolojik hücre",
+"vals": {
+"desen": 1,
+"esneklik": 60,
+"renklendir": 3
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "CY",
+"name": "Çatlak yüzey",
+"vals": {
+"desen": 0,
+"kenarKali": 2,
+"duzensiz": 100
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "BP",
+"name": "Bal peteği",
+"vals": {
+"duzensiz": 0,
+"bosluk": 3,
+"kabartma": 30
+},
+"keys": {},
+"cols": {
+"renk1": "#C88A12",
+"renk2": "#FFC940"
+},
+"at": "start"
+},
+{
+"code": "VR",
+"name": "Voronoi",
+"vals": {
+"renklendir": 1
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
 {
 "code": "HF",
 "name": "Hafif",
@@ -53302,6 +56827,181 @@
 "jog": 1,
 "src": "Anahtar",
 "def": 0
+},
+{
+"k": "olcekXY",
+"l": "Gürültü ölçeği",
+"kind": "jog",
+"min": 1,
+"max": 1000,
+"defY": 100,
+"step": 0.1,
+"jog": 0.1,
+"two": true,
+"unit": "%",
+"anim": "yes",
+"g": "Gelişmiş",
+"link": true,
+"def": 100
+},
+{
+"k": "orantili",
+"l": "Orantılı ölçek",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Gelişmiş",
+"def": 1
+},
+{
+"k": "altOlcek",
+"l": "Alt katman ölçeği",
+"kind": "jog",
+"min": 1,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Gelişmiş",
+"def": 50
+},
+{
+"k": "altEtki",
+"l": "Alt katman etkisi",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Gelişmiş",
+"def": 50
+},
+{
+"k": "altDonus",
+"l": "Alt katman dönüşü",
+"kind": "jog",
+"min": -3600,
+"max": 3600,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"anim": "yes",
+"g": "Gelişmiş",
+"def": 0
+},
+{
+"k": "altKayma",
+"l": "Alt katman kayması",
+"kind": "jog",
+"min": -4000,
+"max": 4000,
+"defY": 0,
+"step": 0.1,
+"jog": 0.1,
+"two": true,
+"unit": "px",
+"anim": "yes",
+"g": "Gelişmiş",
+"link": false,
+"def": 0
+},
+{
+"k": "evrimHiz",
+"l": "Evrim hızı",
+"kind": "jog",
+"min": -3600,
+"max": 3600,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°/sn",
+"anim": "yes",
+"g": "Gelişmiş",
+"def": 0
+},
+{
+"k": "dongu",
+"l": "Kusursuz döngü",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Gelişmiş",
+"def": 0
+},
+{
+"k": "donguSure",
+"l": "Döngü süresi",
+"kind": "jog",
+"min": 0.1,
+"max": 60,
+"step": 0.01,
+"jog": 0.01,
+"unit": "s",
+"anim": "yes",
+"g": "Gelişmiş",
+"vis": {
+"k": "dongu",
+"in": [
+1
+]
+},
+"def": 3
+},
+{
+"k": "gorunum",
+"l": "Gürültü görünümü",
+"kind": "choice",
+"min": 0,
+"max": 4,
+"step": 1,
+"jog": 1,
+"opts": [
+"Yumuşak",
+"Keskin",
+"Blok",
+"Sırtlı",
+"Hücresel"
+],
+"unit": "",
+"anim": "step",
+"g": "Gelişmiş",
+"def": 0
+},
+{
+"k": "koyuRenk",
+"l": "Koyu bölge rengi",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "yes",
+"g": "Gelişmiş",
+"def": "#000000"
+},
+{
+"k": "acikRenk",
+"l": "Açık bölge rengi",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "yes",
+"g": "Gelişmiş",
+"def": "#FFFFFF"
 }
 ],
 "presets": [
@@ -62233,9 +65933,349 @@
 "jog": 1,
 "src": "Anahtar",
 "def": 0
+},
+{
+"k": "yukKayn",
+"l": "Yükseklik kaynağı",
+"kind": "choice",
+"min": 0,
+"max": 3,
+"step": 1,
+"jog": 1,
+"opts": [
+"Omino karolar",
+"Katman parlaklığı",
+"Alfa",
+"Özel harita"
+],
+"unit": "",
+"anim": "step",
+"g": "Yüzey",
+"def": 0
+},
+{
+"k": "pah",
+"l": "Kenar pahı",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Yüzey",
+"def": 10
+},
+{
+"k": "puruz",
+"l": "Yüzey pürüzlülüğü",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Yüzey",
+"def": 0
+},
+{
+"k": "puruzOlcek",
+"l": "Pürüz ölçeği",
+"kind": "jog",
+"min": 1,
+"max": 1000,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Yüzey",
+"def": 100
+},
+{
+"k": "puruzEvrim",
+"l": "Pürüz evrimi",
+"kind": "jog",
+"min": -3600,
+"max": 3600,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"anim": "yes",
+"g": "Yüzey",
+"def": 0
+},
+{
+"k": "ornek",
+"l": "Yumuşatma örneği",
+"kind": "jog",
+"min": 1,
+"max": 32,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "yes",
+"g": "Yüzey",
+"int": true,
+"def": 4
+},
+{
+"k": "camRenk",
+"l": "Cam rengi",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "yes",
+"g": "Yüzey",
+"def": "#FFFFFF"
+},
+{
+"k": "renkGuc",
+"l": "Cam renklendirme gücü",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Yüzey",
+"def": 0
+},
+{
+"k": "isikTur",
+"l": "Işık türü",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Yok",
+"Noktasal",
+"Yönlü"
+],
+"unit": "",
+"anim": "step",
+"g": "Işık",
+"def": 0
+},
+{
+"k": "isikKonum",
+"l": "Işık konumu",
+"kind": "jog",
+"min": -100,
+"max": 200,
+"defY": 25,
+"step": 0.1,
+"jog": 0.1,
+"two": true,
+"unit": "box%",
+"anim": "yes",
+"g": "Işık",
+"vis": {
+"k": "isikTur",
+"in": [
+1,
+2
+]
+},
+"def": 75
+},
+{
+"k": "isikYuk",
+"l": "Işık yüksekliği",
+"kind": "jog",
+"min": -1000,
+"max": 2000,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "Işık",
+"vis": {
+"k": "isikTur",
+"in": [
+1,
+2
+]
+},
+"def": 100
+},
+{
+"k": "isikGuc",
+"l": "Işık gücü",
+"kind": "jog",
+"min": 0,
+"max": 200,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Işık",
+"vis": {
+"k": "isikTur",
+"in": [
+1,
+2
+]
+},
+"def": 100
+},
+{
+"k": "ortam",
+"l": "Ortam ışığı",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Işık",
+"vis": {
+"k": "isikTur",
+"in": [
+1,
+2
+]
+},
+"def": 10
+},
+{
+"k": "yParlak",
+"l": "Yüzey parlaklığı",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Işık",
+"vis": {
+"k": "isikTur",
+"in": [
+1,
+2
+]
+},
+"def": 80
+},
+{
+"k": "keskin",
+"l": "Yansıma keskinliği",
+"kind": "jog",
+"min": 1,
+"max": 250,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "yes",
+"g": "Işık",
+"int": true,
+"def": 30
+},
+{
+"k": "isikRenk",
+"l": "Işık rengi",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "yes",
+"g": "Işık",
+"vis": {
+"k": "isikTur",
+"in": [
+1,
+2
+]
+},
+"def": "#FFFFFF"
 }
 ],
 "presets": [
+{
+"code": "BC",
+"name": "Buzlu cam",
+"vals": {
+"kirilma": 8,
+"puruz": 60,
+"isikTur": 2
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "RC",
+"name": "Renkli cam",
+"vals": {
+"renkGuc": 40,
+"isikTur": 1
+},
+"keys": {},
+"cols": {
+"camRenk": "#6FC3FF"
+},
+"at": "start"
+},
+{
+"code": "SC",
+"name": "Sıvı cam",
+"vals": {
+"yukKayn": 1,
+"kirilma": 30,
+"isikTur": 1
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "PZ",
+"name": "Prizma",
+"vals": {
+"prizmaAyri": 14,
+"isikTur": 2
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "SK",
+"name": "Sabun köpüğü",
+"vals": {
+"prizmaAyri": 8,
+"renkGuc": 25,
+"isikTur": 1
+},
+"keys": {},
+"cols": {
+"camRenk": "#FFD6F5"
+},
+"at": "start"
+},
+{
+"code": "KR",
+"name": "Kristal",
+"vals": {
+"pah": 40,
+"kirilma": 25,
+"isikTur": 1,
+"keskin": 120
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
 {
 "code": "HF",
 "name": "Hafif",

@@ -9,7 +9,9 @@ data class FxParam(val key: String, val label: String, val min: Double, val max:
                    val unit: String = "", val opts: List<String>? = null, val anim: String = "yes", val defStr: String? = null, val int: Boolean = false,
                    val reseed: Boolean = false, val hint: String? = null, val multi: Boolean = false,
                    /** Panel grubu; visKey/visIn: yalnız o seçim değerlerinde görünür */
-                   val group: String? = null, val visKey: String? = null, val visIn: List<Int>? = null)
+                   val group: String? = null, val visKey: String? = null, val visIn: List<Int>? = null,
+                   /** renk çarkı: ton ve güç ayarları; düğme: sıfırlanacak ayarlar; link: eksen zinciri; hideUi: panelde gösterme */
+                   val hk: String? = null, val sk: String? = null, val reset: List<String>? = null, val link: Boolean = false, val hideUi: Boolean = false)
 data class FxMeta(val type: String, val name: String, val cat: String, val params: List<FxParam>, val color: String? = null, val info: String? = null,
                   val en: String = "", val catIndex: Int = 0, val kind: String = "pixel", val desc: String = "", val tags: List<String> = emptyList(),
                   val presets: List<FxPreset> = emptyList(), val pad: FxPad? = null, val passes: List<FxPass>? = null, val heavy: Boolean = false,

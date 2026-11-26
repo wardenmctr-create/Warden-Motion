@@ -400,7 +400,7 @@ fun EffectsPanel(s: EditorState, layer: Layer, onClose: () -> Unit) {
                                     .tap { upd(e) { applyPreset(makeEffect(e.type).copy(id = e.id), pr, layer.start, layer.end).copy(preset = pr.code) } }.padding(horizontal = 10.dp, vertical = 5.dp))
                             }
                         }
-                        val params = (if (m.kind in GlFx.GPU_KINDS) listOf(MIX_P) else emptyList()) + m.params.filter { it.kind != "info" && (it.visKey == null || (e.value(it.visKey, t).roundToInt() in (it.visIn ?: emptyList()))) }
+                        val params = (if (m.kind in GlFx.GPU_KINDS) listOf(MIX_P) else emptyList()) + m.params.filter { it.kind != "info" && !it.hideUi && (it.visKey == null || (e.value(it.visKey, t).roundToInt() in (it.visIn ?: emptyList()))) }
                         var lastG: String? = null
                         params.forEachIndexed { pi, pr ->
                             val g = pr.group
@@ -532,14 +532,36 @@ private fun ParamRow(s: EditorState, layer: Layer, e: Effect, pr: FxParam, line:
             "gradient", "palette" -> {
                 Label()
                 val st = stopsOf(e, pr)
-                Row(Modifier.weight(1f).horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(4.dp), verticalAlignment = Alignment.CenterVertically) {
-                    st.forEachIndexed { j, (c, _) -> Box(Modifier.size(26.dp).clip(RoundedCornerShape(5.dp)).background(colorOf(c)).border(1.dp, C.dLine, RoundedCornerShape(5.dp)).tap { onColor(j) }) }
-                    if (st.size < 8) Box(Modifier.size(26.dp).clip(RoundedCornerShape(5.dp)).background(Color(0xFF34417A)).tap {
-                        val n = (st + ((st.lastOrNull()?.first ?: "#FFFFFF") to 100.0)); val re = n.mapIndexed { k, x -> x.first to Math.round(100.0 * k / (n.size - 1)).toDouble() }; setC(stopsJson(re))
-                    }, contentAlignment = Alignment.Center) { Text("+", color = C.dText, fontSize = 15.sp) }
-                    if (st.size > 2) Box(Modifier.size(26.dp).clip(RoundedCornerShape(5.dp)).background(Color(0xFF34417A)).tap {
-                        val n = st.dropLast(1); val re = n.mapIndexed { k, x -> x.first to Math.round(100.0 * k / (n.size - 1)).toDouble() }; setC(stopsJson(re))
-                    }, contentAlignment = Alignment.Center) { Text("−", color = C.dText, fontSize = 15.sp) }
+                var selStop by remember(e.id, pr.key) { mutableStateOf(-1) }
+                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(5.dp)) {
+                    // Geçiş şeridi
+                    if (pr.kind == "gradient" && st.size >= 2) androidx.compose.foundation.Canvas(Modifier.fillMaxWidth().height(12.dp).clip(RoundedCornerShape(4.dp))) {
+                        val sorted = st.sortedBy { it.second }
+                        drawRect(Brush.horizontalGradient(*sorted.map { (it.second / 100).toFloat().coerceIn(0f, 1f) to colorOf(it.first) }.toTypedArray()))
+                        sorted.forEach { (_, p0) -> val x = (p0 / 100 * size.width).toFloat(); drawLine(Color.White, Offset(x, 0f), Offset(x, size.height), 2f) }
+                    }
+                    Row(Modifier.horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(4.dp), verticalAlignment = Alignment.CenterVertically) {
+                        st.forEachIndexed { j, (c, _) -> Box(Modifier.size(26.dp).clip(RoundedCornerShape(5.dp)).background(colorOf(c)).border(if (selStop == j) 2.dp else 1.dp, if (selStop == j) C.turq else C.dLine, RoundedCornerShape(5.dp))
+                            .combinedClickableCompat(onClick = { if (selStop == j) onColor(j) else selStop = j }, onLong = { onColor(j) })) }
+                        if (st.size < 32) Box(Modifier.size(26.dp).clip(RoundedCornerShape(5.dp)).background(Color(0xFF34417A)).tap {
+                            // yeni nokta: en geniş aralığın ortasına
+                            val sorted = st.sortedBy { it.second }; var gi = 0; var gw = -1.0
+                            for (i in 0 until sorted.size - 1) { val w = sorted[i + 1].second - sorted[i].second; if (w > gw) { gw = w; gi = i } }
+                            val pos = if (sorted.size >= 2) (sorted[gi].second + sorted[gi + 1].second) / 2 else 50.0
+                            setC(stopsJson(st + ((sorted.getOrNull(gi)?.first ?: "#FFFFFF") to Math.round(pos * 10) / 10.0))); selStop = st.size
+                        }, contentAlignment = Alignment.Center) { Text("+", color = C.dText, fontSize = 15.sp) }
+                        if (st.size > 2) Box(Modifier.size(26.dp).clip(RoundedCornerShape(5.dp)).background(Color(0xFF34417A)).tap {
+                            val j = if (selStop in st.indices) selStop else st.size - 1; setC(stopsJson(st.filterIndexed { k, _ -> k != j })); selStop = -1
+                        }, contentAlignment = Alignment.Center) { Text("−", color = C.dText, fontSize = 15.sp) }
+                    }
+                    if (selStop in st.indices && pr.kind == "gradient") Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text("Nokta ${selStop + 1} konumu", fontSize = 10.5.sp, color = C.dText2, modifier = Modifier.width(92.dp))
+                        val posPr = FxParam("_stop", "Konum", 0.0, 100.0, 50.0, 0.1, 0.1, unit = "%")
+                        Jog2(st[selStop].second, posPr, Modifier.weight(1f).height(26.dp), init = { listOf(stopsOf(e, pr).getOrNull(selStop)?.second ?: 50.0, 0.0) }, onStart = { s.checkpoint() }) { v0, dx, _ ->
+                            val cur0 = stopsOf(e, pr).toMutableList(); if (selStop in cur0.indices) { cur0[selStop] = cur0[selStop].first to (Math.round((v0[0] + dx * 0.15).coerceIn(0.0, 100.0) * 10) / 10.0); s.updateLayer(layer.id, false) { l -> l.copy(effects = l.effects.map { if (it.id == e.id) it.copy(c = (it.c ?: emptyMap()) + (pr.key to stopsJson(cur0))) else it }) } }
+                        }
+                        Text(fmtV(st[selStop].second, FxParam("_stop", "", 0.0, 100.0, 0.0, 0.1, unit = "%")), fontSize = 11.5.sp, color = C.dText, modifier = Modifier.width(50.dp), textAlign = TextAlign.End)
+                    }
                 }
             }
             "source" -> {
@@ -564,7 +586,11 @@ private fun ParamRow(s: EditorState, layer: Layer, e: Effect, pr: FxParam, line:
                     singleLine = true, textStyle = TextStyle(color = C.dText, fontSize = 14.sp, fontFamily = Inter), cursorBrush = androidx.compose.ui.graphics.SolidColor(C.turq),
                     modifier = Modifier.weight(1f).height(34.dp).clip(RoundedCornerShape(6.dp)).background(C.dDeep).padding(horizontal = 10.dp, vertical = 8.dp))
             }
-            "button" -> { Spacer(Modifier.weight(1f)); Text(pr.label, fontSize = 12.5.sp, color = C.dText, modifier = Modifier.clip(RoundedCornerShape(6.dp)).background(Color(0xFF34417A)).tap { s.updateLayer(layer.id) { l -> l.copy(effects = l.effects.map { if (it.id == e.id) makeEffect(e.type).copy(id = e.id) else it }) } }.padding(horizontal = 14.dp, vertical = 8.dp)) }
+            "button" -> { Spacer(Modifier.weight(1f)); Text(pr.label, fontSize = 12.5.sp, color = C.dText, modifier = Modifier.clip(RoundedCornerShape(6.dp)).background(Color(0xFF34417A)).tap {
+                val m0 = fxMeta(e.type)
+                if (pr.reset != null) { val defs = m0.params.filter { it.key in pr.reset }.flatMap { p -> paramKeys(p).mapIndexed { i, k -> k to (if (i == 0) p.def else if (i == 1) (p.defY ?: p.def) else (p.defZ ?: 0.0)) } }.toMap(); s.updateLayer(layer.id) { l -> l.copy(effects = l.effects.map { if (it.id == e.id) it.copy(v = (it.v ?: emptyMap()) + defs.mapValues { (_, d) -> Anim(d) }) else it }) } }
+                else s.updateLayer(layer.id) { l -> l.copy(effects = l.effects.map { if (it.id == e.id) makeEffect(e.type).copy(id = e.id) else it }) } }.padding(horizontal = 14.dp, vertical = 8.dp)) }
+            "wheel" -> { Label(); Spacer(Modifier.weight(1f)); ColorWheel(cur(pr.hk ?: ""), cur(pr.sk ?: ""), onStart = { s.checkpoint() }) { yon, guc -> set(mapOf((pr.hk ?: "") to yon, (pr.sk ?: "") to guc), false) } }
             "curve", "editor" -> { Label(); Text(if (pr.kind == "curve") "Yumuşak eğri (varsayılan)" else "Katmanın kendi şekli kullanılır", fontSize = 11.5.sp, color = C.dText2, modifier = Modifier.weight(1f)) }
             else -> {
                 // Sayısal: cetvel (2B: yatay X, dikey Y)
@@ -579,16 +605,26 @@ private fun ParamRow(s: EditorState, layer: Layer, e: Effect, pr: FxParam, line:
                             Text(fmtV(cur(k), pr), fontSize = 11.5.sp, color = if (on) C.turq else C.dText, modifier = Modifier.width(58.dp).tap { onNum(ai) }, textAlign = TextAlign.End)
                         }
                     } else Row(verticalAlignment = Alignment.CenterVertically) {
-                        Jog2(cur(keys[0]), pr, Modifier.weight(1f).height(38.dp), init = { keys.map { cur(it) } }, onStart = { onSel(); s.checkpoint() }) { v0, dx, dy ->
+                        // X/Y: eksen kutusu seçiliyse cetvel yalnız o ekseni oynatır; zincir açıksa iki eksen birlikte (orantılı) değişir
+                        var axis by remember(e.id, pr.key) { mutableStateOf(-1) }
+                        val chained = pr.two && pr.link && (e.c?.get(pr.key + "_zincir") ?: "1") == "1"
+                        Jog2(cur(keys[if (axis >= 0) axis else 0]), pr, Modifier.weight(1f).height(38.dp), init = { keys.map { cur(it) } }, onStart = { onSel(); s.checkpoint() }) { v0, dx, dy ->
                             val sens = jogSens(pr)
-                            val vals = if (pr.two) mapOf(keys[0] to clampP(v0[0] + dx * sens, pr), keys[1] to clampP(v0[1] + dy * sens, pr)) else mapOf(keys[0] to clampP(v0[0] + dx * sens, pr))
+                            val vals = when {
+                                !pr.two -> mapOf(keys[0] to clampP(v0[0] + dx * sens, pr))
+                                chained -> { val r = if (v0[0] != 0.0) v0[1] / v0[0] else 1.0; val nx = clampP(v0[0] + dx * sens, pr); mapOf(keys[0] to nx, keys[1] to clampP(nx * r, pr)) }
+                                axis >= 0 -> mapOf(keys[axis] to clampP(v0[axis] + dx * sens, pr))
+                                else -> mapOf(keys[0] to clampP(v0[0] + dx * sens, pr), keys[1] to clampP(v0[1] + dy * sens, pr))
+                            }
                             set(vals, false)
                         }
+                        if (pr.two && pr.link) Box(Modifier.size(30.dp).tap { s.updateLayer(layer.id) { l -> l.copy(effects = l.effects.map { if (it.id == e.id) it.copy(c = (it.c ?: emptyMap()) + (pr.key + "_zincir" to if (chained) "0" else "1")) else it }) } }, contentAlignment = Alignment.Center) { Ico("link", if (chained) C.turq else C.dDim, 18.dp) }
                         Column(Modifier.width(62.dp), horizontalAlignment = Alignment.End) {
                             keys.forEachIndexed { i, k ->
-                                Row(verticalAlignment = Alignment.Bottom, modifier = Modifier.tap { onNum(i) }) {
-                                    if (pr.two) Text(if (i == 1) "y " else "x ", fontSize = 10.sp, color = C.dDim)
-                                    Text(fmtV(cur(k), pr), fontSize = 12.sp, color = if (on) C.turq else C.dText)
+                                Row(verticalAlignment = Alignment.Bottom, modifier = Modifier.clip(RoundedCornerShape(4.dp)).background(if (axis == i) Color(0xFF16203F) else Color.Transparent)
+                                    .combinedClickableCompat(onClick = { axis = if (axis == i || !pr.two) -1 else i }, onLong = { onNum(i) })) {
+                                    if (pr.two) Text(if (i == 1) "y " else "x ", fontSize = 10.sp, color = if (axis == i) C.turq else C.dDim)
+                                    Text(fmtV(cur(k), pr), fontSize = 12.sp, color = if (on || axis == i) C.turq else C.dText)
                                 }
                             }
                         }
@@ -645,5 +681,35 @@ private fun NumberDialog(title: String, v: Double, pr: FxParam, onDismiss: () ->
                 }
             }
         }
+    }
+}
+
+
+@OptIn(ExperimentalFoundationApi::class)
+private fun Modifier.combinedClickableCompat(onClick: () -> Unit, onLong: () -> Unit): Modifier = this.combinedClickable(onClick = onClick, onLongClick = onLong)
+
+/** Renk çarkı: merkez nötr; açı = renk yönü (°), uzaklık = renk gücü (%) */
+@Composable
+fun ColorWheel(yon: Double, guc: Double, onStart: () -> Unit, onChange: (Double, Double) -> Unit) {
+    val dens = androidx.compose.ui.platform.LocalDensity.current.density
+    androidx.compose.foundation.Canvas(Modifier.size(96.dp).pointerInput(Unit) {
+        awaitEachGesture {
+            val d = awaitFirstDown(); d.consume(); onStart()
+            fun upd(p: Offset) { val c = Offset(size.width / 2f, size.height / 2f); val v = p - c; val r = size.width / 2f
+                val ang = (Math.toDegrees(kotlin.math.atan2(v.y.toDouble(), v.x.toDouble())) + 360) % 360; val g = (v.getDistance() / r * 100).toDouble().coerceIn(0.0, 100.0)
+                onChange(Math.round(ang * 10) / 10.0, Math.round(g * 10) / 10.0) }
+            upd(d.position)
+            while (true) { val ev = awaitPointerEvent(); val c = ev.changes.first(); c.consume(); if (!c.pressed) break; upd(c.position) }
+        }
+    }) {
+        val r = size.minDimension / 2
+        drawCircle(Brush.sweepGradient(listOf(Color.Red, Color.Yellow, Color.Green, Color.Cyan, Color.Blue, Color.Magenta, Color.Red)), r)
+        drawCircle(Brush.radialGradient(listOf(Color(0xFF808080), Color(0x00808080)), radius = r), r)
+        drawCircle(Color(0x66000000), r, style = androidx.compose.ui.graphics.drawscope.Stroke(1.5f * dens))
+        val a = Math.toRadians(yon); val g = (guc / 100).coerceIn(0.0, 1.0) * r
+        val p = Offset((size.width / 2 + kotlin.math.cos(a) * g).toFloat(), (size.height / 2 + kotlin.math.sin(a) * g).toFloat())
+        drawCircle(Color.White, 6f * dens, p); drawCircle(Color.Black, 6f * dens, p, style = androidx.compose.ui.graphics.drawscope.Stroke(1.5f * dens))
+        drawLine(Color(0x88FFFFFF), Offset(size.width / 2 - 4 * dens, size.height / 2), Offset(size.width / 2 + 4 * dens, size.height / 2), 1.5f * dens)
+        drawLine(Color(0x88FFFFFF), Offset(size.width / 2, size.height / 2 - 4 * dens), Offset(size.width / 2, size.height / 2 + 4 * dens), 1.5f * dens)
     }
 }
