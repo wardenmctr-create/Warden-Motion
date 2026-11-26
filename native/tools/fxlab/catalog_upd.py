@@ -240,9 +240,9 @@ ADD("extrude", [CS("kalinYon", "Kalınlaştırma yönü", ["İki tarafa", "Öne"
 
 # 401 Bayrak Dalgalanması
 GF = "Kumaş ve Rüzgâr"
-ADD("flagwave", [PC("sertlik", "Kumaş sertliği", 50, g=GF), PC("agirlik", "Kumaş ağırlığı", 20, g=GF), PX("sarkma", "Sarkma miktarı", 0, 0, 500, GF), TG("degisken", "Değişken rüzgâr", 0, GF),
+ADD("flagwave", [PC("sertlik", "Kumaş sertliği", 40, g=GF), PC("agirlik", "Kumaş ağırlığı", 0, g=GF), PX("sarkma", "Sarkma miktarı", 0, 0, 500, GF), TG("degisken", "Değişken rüzgâr", 0, GF),
     PC("degisGuc", "Rüzgâr değişim gücü", 20, g=GF, vis={"k": "degisken", "in": [1]}), _u(J("degisSik", "Rüzgâr değişim sıklığı", 0, 10, 0.5, 0.01, 0.01), "Hz", GF, vis={"k": "degisken", "in": [1]}),
-    PC("ucTitre", "Uç bölgesi titreşimi", 15, g=GF), PC("kumasParlak", "Kumaş parlaklığı", 10, g=GF), PC("kumasDoku", "Kumaş doku gücü", 0, g=GF),
+    PC("ucTitre", "Uç bölgesi titreşimi", 0, g=GF), PC("kumasParlak", "Kumaş parlaklığı", 0, g=GF), PC("kumasDoku", "Kumaş doku gücü", 0, g=GF),
     TG("arkaGoster", "Arka yüzü göster", 1, GF), CS("arkaYuz", "Arka yüz", ["Aynalanmış ön yüz", "Özel görsel", "Düz renk"], 0, GF, {"k": "arkaGoster", "in": [1]}),
     LAY("arkaGorsel", "Özel arka yüz görseli", GF, {"k": "arkaYuz", "in": [1]}), CL("arkaRenk", "Arka yüz rengi", "#DDDDDD", GF, {"k": "arkaYuz", "in": [2]})],
     [P("HR", "Hafif rüzgâr", {"dalgaYuks": 8, "dalgaBoyu": 150, "ruzgarHizi": 0.5}), P("GR", "Güçlü rüzgâr", {"dalgaYuks": 40, "dalgaBoyu": 75, "ruzgarHizi": 2, "ucTitre": 40}),
@@ -274,3 +274,48 @@ ADD("cbsticker", [CS("altlikBicim", "Altlık biçimi", ["Düz kontur", "Çift ko
     PC("alfaEsik", "Alfa eşiği", 35, g=GC, vis={"k": "alfaYorum", "in": [3]}), XYP("disKayma", "Dış kontur kayması", 0, 0, -1000, 1000, "px", GC), TG("malzDoku", "Malzeme dokusu", 0, GC),
     CS("malz", "Malzeme", ["Kâğıt", "Karton", "Mukavva", "Plastik", "Özel"], 0, GC, {"k": "malzDoku", "in": [1]}), LAY("malzOzel", "Özel malzeme", GC, {"k": "malz", "in": [4]}),
     PC("dokuGucuS", "Doku gücü", 30, g=GC, vis={"k": "malzDoku", "in": [1]})])
+
+# ---- Hareket efektleri (249–273) ----
+def SEC(k, l, d, mn=0, mx=10, g=None, vis=None): return _u(J(k, l, mn, mx, d, 0.01, 0.01), "sn", g, vis=vis)
+GM = "Gelişmiş Hareket"
+# 249 Oto-Sallanma
+ADD("sway", [TG("asimetrik", "Asimetrik sallanma", 0, GM), DG("minAci", "En küçük açı", -15, -360, 360, GM, {"k": "asimetrik", "in": [1]}), DG("maxAci", "En büyük açı", 15, -360, 360, GM, {"k": "asimetrik", "in": [1]}),
+    DG("merkezAci", "Merkez açı", 0, -360, 360, GM), TG("aciSinir", "Açıyı sınırla", 0, GM), DG("sinirAlt", "Alt sınır", -45, -360, 360, GM, {"k": "aciSinir", "in": [1]}), DG("sinirUst", "Üst sınır", 45, -360, 360, GM, {"k": "aciSinir", "in": [1]}),
+    SEC("gecikme", "Başlangıç gecikmesi", 0, 0, 30, GM), IN("donguSayi", "Salınım sayısı (0 = sürekli)", 0, 0, 200, "", GM), PC("sonumS", "Sönümlenme", 0, g=GM)],
+    [P("HS", "Hafif sallanma", {"salinimAcis": 5, "frekans": 0.6}), P("SL", "Sarkaç", {"salinimAcis": 25, "frekans": 0.5, "sonumS": 20}), P("TM", "Tabela", {"salinimAcis": 8, "frekans": 1.2, "donguSayi": 4, "sonumS": 60}),
+     P("AS", "Tek yöne eğilme", {"asimetrik": 1, "minAci": 0, "maxAci": 12, "frekans": 0.8})])
+# 250 Titreşim
+ADD("shake", [TG("xyAyri", "X ve Y şiddetini ayrı ayarla", 0, GM), PX("siddetX", "X şiddeti", 10, 0, 500, GM, {"k": "xyAyri", "in": [1]}), PX("siddetY", "Y şiddeti", 10, 0, 500, GM, {"k": "xyAyri", "in": [1]}),
+    PC("olcekSidd", "Ölçek titreşimi", 0, 0, 50, GM), CS("stil", "Titreşim biçimi", ["Rastgele", "Deprem", "Kamera sarsıntısı", "Darbe"], 0, GM),
+    PC("basGuc", "Başlangıç gücü", 100, 0, 200, GM), PC("bitGuc", "Bitiş gücü", 100, 0, 200, GM), PX("sinirS", "En fazla kayma (0 = sınırsız)", 0, 0, 1000, GM)],
+    [P("DP", "Deprem", {"stil": 1, "konumSidd": 18, "frekans": 9}), P("KS", "Kamera sarsıntısı", {"stil": 2, "konumSidd": 8, "donusSidd": 1.5, "frekans": 4}),
+     P("DR", "Darbe", {"stil": 3, "konumSidd": 30, "donusSidd": 4, "frekans": 20}), P("SN", "Sönen titreşim", {"konumSidd": 20, "basGuc": 100, "bitGuc": 0})])
+# 252 Nabız
+ADD("pulse", [CS("tetikP", "Tetikleme", ["Sürekli", "Belirli anda (tek nabız)"], 0, GM), SEC("tetikZamanP", "Tetikleme zamanı", 0, 0, 600, GM, {"k": "tetikP", "in": [1]}),
+    IN("nabizSayi", "Nabız sayısı", 1, 1, 50, "", GM, {"k": "tetikP", "in": [1]}), _u(XY("merkezP", "Nabız merkezi", 50, 50, -100, 200, 0.1), "box%", GM)])
+# 253 Zıpla
+ADD("bounce", [CS("tetikB", "Tetikleme", ["Sürekli", "Belirli anda"], 0, GM), SEC("tetikZamanB", "Tetikleme zamanı", 0, 0, 600, GM, {"k": "tetikB", "in": [1]}),
+    IN("ziplamaSayi", "Zıplama sayısı (0 = sürekli)", 0, 0, 100, "", GM), PC("yercekimi", "Yerçekimi", 100, 20, 300, GM), PC("askida", "Tepede asılı kalma", 0, 0, 90, GM),
+    PX("yatayB", "Her zıplamada yatay ilerleme", 0, -500, 500, GM), TG("tabanSabit", "Tabanı sabit tut (yalnız esnet)", 0, GM)],
+    [P("TT", "Top", {"yuksekli": 120, "frekans": 1.5, "sonum": 25, "ezilme": 25}), P("TK", "Tek zıplama", {"tetikB": 1, "ziplamaSayi": 1, "yuksekli": 80}),
+     P("YR", "Yürüyerek zıplama", {"yuksekli": 40, "frekans": 2, "yatayB": 60}), P("AY", "Ay'da zıplama", {"yuksekli": 150, "frekans": 0.5, "yercekimi": 40, "askida": 30})])
+# 259 Ez ve Esnet
+ADD("squash", [CS("modSq", "Çalışma biçimi", ["Sürekli dalga", "Harekete göre (hız)", "Belirli anda"], 0, GM),
+    PC("hizHass", "Hız hassasiyeti", 50, 0, 300, GM, {"k": "modSq", "in": [1]}), PC("hizSinir", "En fazla esneme", 40, 0, 200, GM, {"k": "modSq", "in": [1]}),
+    TG("yonTakip", "Hareket yönünde esnet", 1, GM, {"k": "modSq", "in": [1]}),
+    SEC("tetikZamanS", "Tetikleme zamanı", 0, 0, 600, GM, {"k": "modSq", "in": [2]}), SEC("sureS", "Etki süresi", 0.4, 0.05, 10, GM, {"k": "modSq", "in": [2]})])
+# 273 Salınım (birikimli faz)
+ADD("oscillate", [PC("ekDalgaGuc", "Ek dalga gücü", 0, 0, 100, GM), _u(J("ekDalgaOran", "Ek dalga frekans oranı", 0.1, 10, 2, 0.01, 0.01), "×", GM, vis=None),
+    PC("sonumO", "Sönümlenme", 0, g=GM), CS("zamanKayn", "Zaman kaynağı", ["Katman zamanı", "Proje zamanı"], 0, GM), SEC("gecikmeO", "Başlangıç gecikmesi", 0, 0, 30, GM),
+    dict(k="fazBilgi", l="Frekans keyframe'lense bile faz birikerek ilerler; hareket sıçramaz.", kind="info", min=0, max=0, def_=0, step=1, jog=1, anim="no", g=GM)])
+
+# ---- Zaman efektleri ----
+GZ = "Gelişmiş Zaman"
+_pt = next(p for p in _BY["posterizetime"]["params"] if p["k"] == "kareHizi"); _pt.update(unit="FPS", min=1, max=60, l="Kare hızı (saniyedeki kare)")
+ADD("posterizetime", [TG("hareketAtla", "Hareketi de kare kare oynat", 0, GZ)],
+    [P("SM", "Stop-motion 12 FPS", {"kareHizi": 12, "hareketAtla": 1}), P("AN", "Animasyon 8 FPS", {"kareHizi": 8, "hareketAtla": 1}), P("SN", "Sinema 24 FPS", {"kareHizi": 24}), P("GZ", "Güvenlik kamerası 5 FPS", {"kareHizi": 5})])
+ADD("speed", [TG("dondur", "Kareyi dondur", 0, GZ), SEC("dondurZaman", "Dondurma anı", 1, 0, 600, GZ, {"k": "dondur", "in": [1]}), SEC("dondurSure", "Dondurma süresi", 1, 0, 60, GZ, {"k": "dondur", "in": [1]}),
+    dict(k="hizBilgi", l="Hız eğrisi: Hız ayarına keyframe ekleyin; zaman kesintisiz birikir, görüntü sıçramaz.", kind="info", min=0, max=0, def_=0, step=1, jog=1, anim="no", g=GZ)],
+    [P("YC", "Yavaş çekim", {"hiz": 40}), P("HZ", "Hızlı", {"hiz": 200}), P("TR", "Ters oynat", {"hiz": -100}),
+     P("RP", "Rampa (yavaşla-hızlan)", keys={"hiz": [[0, 100], [0.4, 25], [0.6, 25], [1, 100]]}), P("DN", "Dondur ve devam et", {"dondur": 1, "dondurZaman": 1, "dondurSure": 1})])
+_sp = next(p for p in _BY["speed"]["params"] if p["k"] == "kareYont"); _sp["hideUi"] = True

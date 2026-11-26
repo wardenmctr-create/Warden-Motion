@@ -11,7 +11,7 @@ def DG(k, l, d, mn=-180, mx=180, g=None, vis=None): return _u(J(k, l, mn, mx, d,
 def TG(k, l, d, g=None, vis=None): return _u(T(k, l, d), "", g, anim="step", vis=vis)
 def CS(k, l, opts, d=0, g=None, vis=None): return _u(CH(k, l, opts, d), "", g, anim="step", vis=vis)
 def CL(k, l, d, g=None, vis=None): return _u(C(k, l, d), "", g, vis=vis)
-def IN(k, l, d, mn, mx, unit="", g=None, vis=None): return _u(J(k, l, mn, mx, d, 1, 1), unit, g, int=True)
+def IN(k, l, d, mn, mx, unit="", g=None, vis=None): return _u(J(k, l, mn, mx, d, 1, 1), unit, g, vis=vis, int=True)
 def SRC(k, l, g=None, vis=None): return dict(k=k, l=l, kind="source", min=0, max=0, def_="", step=1, jog=1, anim="no", g=g, hint="Görsel / katman", **({"vis": vis} if vis else {}))
 
 # Malzeme şablonları (Kesim Altlığı dolgusu: tam liste)

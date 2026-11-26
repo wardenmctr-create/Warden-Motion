@@ -27663,9 +27663,213 @@
 "jog": 1,
 "src": "Anahtar",
 "def": 0
+},
+{
+"k": "asimetrik",
+"l": "Asimetrik sallanma",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Gelişmiş Hareket",
+"def": 0
+},
+{
+"k": "minAci",
+"l": "En küçük açı",
+"kind": "jog",
+"min": -360,
+"max": 360,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"anim": "yes",
+"g": "Gelişmiş Hareket",
+"vis": {
+"k": "asimetrik",
+"in": [
+1
+]
+},
+"def": -15
+},
+{
+"k": "maxAci",
+"l": "En büyük açı",
+"kind": "jog",
+"min": -360,
+"max": 360,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"anim": "yes",
+"g": "Gelişmiş Hareket",
+"vis": {
+"k": "asimetrik",
+"in": [
+1
+]
+},
+"def": 15
+},
+{
+"k": "merkezAci",
+"l": "Merkez açı",
+"kind": "jog",
+"min": -360,
+"max": 360,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"anim": "yes",
+"g": "Gelişmiş Hareket",
+"def": 0
+},
+{
+"k": "aciSinir",
+"l": "Açıyı sınırla",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Gelişmiş Hareket",
+"def": 0
+},
+{
+"k": "sinirAlt",
+"l": "Alt sınır",
+"kind": "jog",
+"min": -360,
+"max": 360,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"anim": "yes",
+"g": "Gelişmiş Hareket",
+"vis": {
+"k": "aciSinir",
+"in": [
+1
+]
+},
+"def": -45
+},
+{
+"k": "sinirUst",
+"l": "Üst sınır",
+"kind": "jog",
+"min": -360,
+"max": 360,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"anim": "yes",
+"g": "Gelişmiş Hareket",
+"vis": {
+"k": "aciSinir",
+"in": [
+1
+]
+},
+"def": 45
+},
+{
+"k": "gecikme",
+"l": "Başlangıç gecikmesi",
+"kind": "jog",
+"min": 0,
+"max": 30,
+"step": 0.01,
+"jog": 0.01,
+"unit": "sn",
+"anim": "yes",
+"g": "Gelişmiş Hareket",
+"def": 0
+},
+{
+"k": "donguSayi",
+"l": "Salınım sayısı (0 = sürekli)",
+"kind": "jog",
+"min": 0,
+"max": 200,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "yes",
+"g": "Gelişmiş Hareket",
+"int": true,
+"def": 0
+},
+{
+"k": "sonumS",
+"l": "Sönümlenme",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Gelişmiş Hareket",
+"def": 0
 }
 ],
 "presets": [
+{
+"code": "HS",
+"name": "Hafif sallanma",
+"vals": {
+"salinimAcis": 5,
+"frekans": 0.6
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "SL",
+"name": "Sarkaç",
+"vals": {
+"salinimAcis": 25,
+"frekans": 0.5,
+"sonumS": 20
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "TM",
+"name": "Tabela",
+"vals": {
+"salinimAcis": 8,
+"frekans": 1.2,
+"donguSayi": 4,
+"sonumS": 60
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "AS",
+"name": "Tek yöne eğilme",
+"vals": {
+"asimetrik": 1,
+"minAci": 0,
+"maxAci": 12,
+"frekans": 0.8
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
 {
 "code": "HF",
 "name": "Hafif",
@@ -27846,9 +28050,181 @@
 "jog": 1,
 "src": "Anahtar",
 "def": 1
+},
+{
+"k": "xyAyri",
+"l": "X ve Y şiddetini ayrı ayarla",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Gelişmiş Hareket",
+"def": 0
+},
+{
+"k": "siddetX",
+"l": "X şiddeti",
+"kind": "jog",
+"min": 0,
+"max": 500,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "Gelişmiş Hareket",
+"vis": {
+"k": "xyAyri",
+"in": [
+1
+]
+},
+"def": 10
+},
+{
+"k": "siddetY",
+"l": "Y şiddeti",
+"kind": "jog",
+"min": 0,
+"max": 500,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "Gelişmiş Hareket",
+"vis": {
+"k": "xyAyri",
+"in": [
+1
+]
+},
+"def": 10
+},
+{
+"k": "olcekSidd",
+"l": "Ölçek titreşimi",
+"kind": "jog",
+"min": 0,
+"max": 50,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Gelişmiş Hareket",
+"def": 0
+},
+{
+"k": "stil",
+"l": "Titreşim biçimi",
+"kind": "choice",
+"min": 0,
+"max": 3,
+"step": 1,
+"jog": 1,
+"opts": [
+"Rastgele",
+"Deprem",
+"Kamera sarsıntısı",
+"Darbe"
+],
+"unit": "",
+"anim": "step",
+"g": "Gelişmiş Hareket",
+"def": 0
+},
+{
+"k": "basGuc",
+"l": "Başlangıç gücü",
+"kind": "jog",
+"min": 0,
+"max": 200,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Gelişmiş Hareket",
+"def": 100
+},
+{
+"k": "bitGuc",
+"l": "Bitiş gücü",
+"kind": "jog",
+"min": 0,
+"max": 200,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Gelişmiş Hareket",
+"def": 100
+},
+{
+"k": "sinirS",
+"l": "En fazla kayma (0 = sınırsız)",
+"kind": "jog",
+"min": 0,
+"max": 1000,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "Gelişmiş Hareket",
+"def": 0
 }
 ],
 "presets": [
+{
+"code": "DP",
+"name": "Deprem",
+"vals": {
+"stil": 1,
+"konumSidd": 18,
+"frekans": 9
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "KS",
+"name": "Kamera sarsıntısı",
+"vals": {
+"stil": 2,
+"konumSidd": 8,
+"donusSidd": 1.5,
+"frekans": 4
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "DR",
+"name": "Darbe",
+"vals": {
+"stil": 3,
+"konumSidd": 30,
+"donusSidd": 4,
+"frekans": 20
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "SN",
+"name": "Sönen titreşim",
+"vals": {
+"konumSidd": 20,
+"basGuc": 100,
+"bitGuc": 0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
 {
 "code": "HF",
 "name": "Hafif",
@@ -28144,6 +28520,77 @@
 "jog": 1,
 "src": "Anahtar",
 "def": 1
+},
+{
+"k": "tetikP",
+"l": "Tetikleme",
+"kind": "choice",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"opts": [
+"Sürekli",
+"Belirli anda (tek nabız)"
+],
+"unit": "",
+"anim": "step",
+"g": "Gelişmiş Hareket",
+"def": 0
+},
+{
+"k": "tetikZamanP",
+"l": "Tetikleme zamanı",
+"kind": "jog",
+"min": 0,
+"max": 600,
+"step": 0.01,
+"jog": 0.01,
+"unit": "sn",
+"anim": "yes",
+"g": "Gelişmiş Hareket",
+"vis": {
+"k": "tetikP",
+"in": [
+1
+]
+},
+"def": 0
+},
+{
+"k": "nabizSayi",
+"l": "Nabız sayısı",
+"kind": "jog",
+"min": 1,
+"max": 50,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "yes",
+"g": "Gelişmiş Hareket",
+"vis": {
+"k": "tetikP",
+"in": [
+1
+]
+},
+"int": true,
+"def": 1
+},
+{
+"k": "merkezP",
+"l": "Nabız merkezi",
+"kind": "jog",
+"min": -100,
+"max": 200,
+"defY": 50,
+"step": 0.1,
+"jog": 0.1,
+"two": true,
+"unit": "box%",
+"anim": "yes",
+"g": "Gelişmiş Hareket",
+"def": 50
 }
 ],
 "presets": [
@@ -28304,9 +28751,161 @@
 "unit": "%",
 "src": "Cetvel",
 "def": 15.0
+},
+{
+"k": "tetikB",
+"l": "Tetikleme",
+"kind": "choice",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"opts": [
+"Sürekli",
+"Belirli anda"
+],
+"unit": "",
+"anim": "step",
+"g": "Gelişmiş Hareket",
+"def": 0
+},
+{
+"k": "tetikZamanB",
+"l": "Tetikleme zamanı",
+"kind": "jog",
+"min": 0,
+"max": 600,
+"step": 0.01,
+"jog": 0.01,
+"unit": "sn",
+"anim": "yes",
+"g": "Gelişmiş Hareket",
+"vis": {
+"k": "tetikB",
+"in": [
+1
+]
+},
+"def": 0
+},
+{
+"k": "ziplamaSayi",
+"l": "Zıplama sayısı (0 = sürekli)",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "yes",
+"g": "Gelişmiş Hareket",
+"int": true,
+"def": 0
+},
+{
+"k": "yercekimi",
+"l": "Yerçekimi",
+"kind": "jog",
+"min": 20,
+"max": 300,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Gelişmiş Hareket",
+"def": 100
+},
+{
+"k": "askida",
+"l": "Tepede asılı kalma",
+"kind": "jog",
+"min": 0,
+"max": 90,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Gelişmiş Hareket",
+"def": 0
+},
+{
+"k": "yatayB",
+"l": "Her zıplamada yatay ilerleme",
+"kind": "jog",
+"min": -500,
+"max": 500,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "Gelişmiş Hareket",
+"def": 0
+},
+{
+"k": "tabanSabit",
+"l": "Tabanı sabit tut (yalnız esnet)",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Gelişmiş Hareket",
+"def": 0
 }
 ],
 "presets": [
+{
+"code": "TT",
+"name": "Top",
+"vals": {
+"yuksekli": 120,
+"frekans": 1.5,
+"sonum": 25,
+"ezilme": 25
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "TK",
+"name": "Tek zıplama",
+"vals": {
+"tetikB": 1,
+"ziplamaSayi": 1,
+"yuksekli": 80
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "YR",
+"name": "Yürüyerek zıplama",
+"vals": {
+"yuksekli": 40,
+"frekans": 2,
+"yatayB": 60
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "AY",
+"name": "Ay'da zıplama",
+"vals": {
+"yuksekli": 150,
+"frekans": 0.5,
+"yercekimi": 40,
+"askida": 30
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
 {
 "code": "HF",
 "name": "Hafif",
@@ -29221,6 +29820,119 @@
 "unit": "box%",
 "src": "X/Y nokta + tuval",
 "def": 50.0
+},
+{
+"k": "modSq",
+"l": "Çalışma biçimi",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Sürekli dalga",
+"Harekete göre (hız)",
+"Belirli anda"
+],
+"unit": "",
+"anim": "step",
+"g": "Gelişmiş Hareket",
+"def": 0
+},
+{
+"k": "hizHass",
+"l": "Hız hassasiyeti",
+"kind": "jog",
+"min": 0,
+"max": 300,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Gelişmiş Hareket",
+"vis": {
+"k": "modSq",
+"in": [
+1
+]
+},
+"def": 50
+},
+{
+"k": "hizSinir",
+"l": "En fazla esneme",
+"kind": "jog",
+"min": 0,
+"max": 200,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Gelişmiş Hareket",
+"vis": {
+"k": "modSq",
+"in": [
+1
+]
+},
+"def": 40
+},
+{
+"k": "yonTakip",
+"l": "Hareket yönünde esnet",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Gelişmiş Hareket",
+"vis": {
+"k": "modSq",
+"in": [
+1
+]
+},
+"def": 1
+},
+{
+"k": "tetikZamanS",
+"l": "Tetikleme zamanı",
+"kind": "jog",
+"min": 0,
+"max": 600,
+"step": 0.01,
+"jog": 0.01,
+"unit": "sn",
+"anim": "yes",
+"g": "Gelişmiş Hareket",
+"vis": {
+"k": "modSq",
+"in": [
+2
+]
+},
+"def": 0
+},
+{
+"k": "sureS",
+"l": "Etki süresi",
+"kind": "jog",
+"min": 0.05,
+"max": 10,
+"step": 0.01,
+"jog": 0.01,
+"unit": "sn",
+"anim": "yes",
+"g": "Gelişmiş Hareket",
+"vis": {
+"k": "modSq",
+"in": [
+2
+]
+},
+"def": 0.4
 }
 ],
 "presets": [
@@ -32286,6 +32998,13 @@
 "unit": "",
 "anim": "yes",
 "g": "Arka Plan Doldurma",
+"vis": {
+"k": "dolguMod",
+"in": [
+2,
+3
+]
+},
 "int": true,
 "def": 720
 }
@@ -37002,14 +37721,14 @@
 "params": [
 {
 "k": "kareHizi",
-"l": "Kare hızı",
+"l": "Kare hızı (saniyedeki kare)",
 "anim": "yes",
 "kind": "jog",
-"min": 0.1,
-"max": 120.0,
+"min": 1,
+"max": 60,
 "step": 0.01,
 "jog": 0.01,
-"unit": "",
+"unit": "FPS",
 "src": "Cetvel",
 "def": 12.0
 },
@@ -37053,9 +37772,64 @@
 "jog": 1,
 "src": "Anahtar",
 "def": 1
+},
+{
+"k": "hareketAtla",
+"l": "Hareketi de kare kare oynat",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Gelişmiş Zaman",
+"def": 0
 }
 ],
 "presets": [
+{
+"code": "SM",
+"name": "Stop-motion 12 FPS",
+"vals": {
+"kareHizi": 12,
+"hareketAtla": 1
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "AN",
+"name": "Animasyon 8 FPS",
+"vals": {
+"kareHizi": 8,
+"hareketAtla": 1
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "SN",
+"name": "Sinema 24 FPS",
+"vals": {
+"kareHizi": 24
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "GZ",
+"name": "Güvenlik kamerası 5 FPS",
+"vals": {
+"kareHizi": 5
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
 {
 "code": "HF",
 "name": "Hafif",
@@ -62515,6 +63289,7 @@
 "Optik akış"
 ],
 "src": "Seçim",
+"hideUi": true,
 "def": 0
 },
 {
@@ -62540,9 +63315,141 @@
 "jog": 1,
 "src": "Anahtar",
 "def": 0
+},
+{
+"k": "dondur",
+"l": "Kareyi dondur",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Gelişmiş Zaman",
+"def": 0
+},
+{
+"k": "dondurZaman",
+"l": "Dondurma anı",
+"kind": "jog",
+"min": 0,
+"max": 600,
+"step": 0.01,
+"jog": 0.01,
+"unit": "sn",
+"anim": "yes",
+"g": "Gelişmiş Zaman",
+"vis": {
+"k": "dondur",
+"in": [
+1
+]
+},
+"def": 1
+},
+{
+"k": "dondurSure",
+"l": "Dondurma süresi",
+"kind": "jog",
+"min": 0,
+"max": 60,
+"step": 0.01,
+"jog": 0.01,
+"unit": "sn",
+"anim": "yes",
+"g": "Gelişmiş Zaman",
+"vis": {
+"k": "dondur",
+"in": [
+1
+]
+},
+"def": 1
+},
+{
+"k": "hizBilgi",
+"l": "Hız eğrisi: Hız ayarına keyframe ekleyin; zaman kesintisiz birikir, görüntü sıçramaz.",
+"kind": "info",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"anim": "no",
+"g": "Gelişmiş Zaman",
+"def": 0
 }
 ],
 "presets": [
+{
+"code": "YC",
+"name": "Yavaş çekim",
+"vals": {
+"hiz": 40
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "HZ",
+"name": "Hızlı",
+"vals": {
+"hiz": 200
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "TR",
+"name": "Ters oynat",
+"vals": {
+"hiz": -100
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "RP",
+"name": "Rampa (yavaşla-hızlan)",
+"vals": {},
+"keys": {
+"hiz": [
+[
+0,
+100
+],
+[
+0.4,
+25
+],
+[
+0.6,
+25
+],
+[
+1,
+100
+]
+]
+},
+"cols": {},
+"at": "start"
+},
+{
+"code": "DN",
+"name": "Dondur ve devam et",
+"vals": {
+"dondur": 1,
+"dondurZaman": 1,
+"dondurSure": 1
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
 {
 "code": "HF",
 "name": "Hafif",
@@ -79560,6 +80467,87 @@
 "jog": 1,
 "src": "Anahtar",
 "def": 0
+},
+{
+"k": "ekDalgaGuc",
+"l": "Ek dalga gücü",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Gelişmiş Hareket",
+"def": 0
+},
+{
+"k": "ekDalgaOran",
+"l": "Ek dalga frekans oranı",
+"kind": "jog",
+"min": 0.1,
+"max": 10,
+"step": 0.01,
+"jog": 0.01,
+"unit": "×",
+"anim": "yes",
+"g": "Gelişmiş Hareket",
+"def": 2
+},
+{
+"k": "sonumO",
+"l": "Sönümlenme",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Gelişmiş Hareket",
+"def": 0
+},
+{
+"k": "zamanKayn",
+"l": "Zaman kaynağı",
+"kind": "choice",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"opts": [
+"Katman zamanı",
+"Proje zamanı"
+],
+"unit": "",
+"anim": "step",
+"g": "Gelişmiş Hareket",
+"def": 0
+},
+{
+"k": "gecikmeO",
+"l": "Başlangıç gecikmesi",
+"kind": "jog",
+"min": 0,
+"max": 30,
+"step": 0.01,
+"jog": 0.01,
+"unit": "sn",
+"anim": "yes",
+"g": "Gelişmiş Hareket",
+"def": 0
+},
+{
+"k": "fazBilgi",
+"l": "Frekans keyframe'lense bile faz birikerek ilerler; hareket sıçramaz.",
+"kind": "info",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"anim": "no",
+"g": "Gelişmiş Hareket",
+"def": 0
 }
 ],
 "presets": [
@@ -82359,7 +83347,7 @@
 "unit": "%",
 "anim": "yes",
 "g": "Kumaş ve Rüzgâr",
-"def": 50
+"def": 40
 },
 {
 "k": "agirlik",
@@ -82372,7 +83360,7 @@
 "unit": "%",
 "anim": "yes",
 "g": "Kumaş ve Rüzgâr",
-"def": 20
+"def": 0
 },
 {
 "k": "sarkma",
@@ -82449,7 +83437,7 @@
 "unit": "%",
 "anim": "yes",
 "g": "Kumaş ve Rüzgâr",
-"def": 15
+"def": 0
 },
 {
 "k": "kumasParlak",
@@ -82462,7 +83450,7 @@
 "unit": "%",
 "anim": "yes",
 "g": "Kumaş ve Rüzgâr",
-"def": 10
+"def": 0
 },
 {
 "k": "kumasDoku",

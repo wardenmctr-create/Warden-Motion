@@ -3,6 +3,7 @@ package com.warden.motion.app.render
 import com.warden.motion.app.model.Effect
 import com.warden.motion.app.model.Layer
 import com.warden.motion.app.model.value
+import com.warden.motion.app.model.at
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.cos
@@ -66,8 +67,12 @@ fun fxLocalTime(l: Layer, t: Double): Double {
         if (e.on == false) continue
         when (e.type) {
             "speed" -> {
-                val sp = e.value("hiz", t) / 100
-                lt = if (e.value("mod", t) >= 0.5) e.value("kaynakZama", t) else lt * sp
+                // Hız eğrisi: hız keyframe'lenirse zaman, hızın integrali olarak birikir (sıçrama olmaz)
+                val hk = e.v?.get("hiz")?.k
+                if (e.value("dondur", t) >= .5) { val fz = e.value("dondurZaman", t); val fd = e.value("dondurSure", t); if (lt > fz) lt = if (lt < fz + fd) fz else lt - fd }
+                lt = if (e.value("mod", t) >= 0.5) e.value("kaynakZama", t)
+                    else if (hk.isNullOrEmpty()) lt * e.value("hiz", t) / 100
+                    else { val n = min(3000, max(16, (lt * 60).toInt())); val dt = lt / n; var acc = 0.0; for (i in 0 until n) acc += e.value("hiz", l.start + (i + 0.5) * dt) / 100 * dt; acc }
                 if (e.value("dongu", t) >= .5 && l.srcDur != null && l.srcDur > 0) lt = ((lt % l.srcDur) + l.srcDur) % l.srcDur
                 if (lt < 0) lt = max(0.0, (l.srcDur ?: (l.end - l.start)) + lt)
             }
@@ -90,35 +95,63 @@ fun applyMotionFx(l: Layer, t: Double, tr0: TR): TR {
         fun v(k: String) = e.value(k, t)
         fun on(k: String) = e.value(k, t) >= 0.5
         when (e.type) {
-            "sway" -> { val (px, py) = pivot(e, "donusMerk", l, t); val a = wave(v("dalga").toInt(), lt * v("frekans") * 2 * PI + v("faz") * PI / 180) * v("salinimAcis") * (if (on("tersYon")) -1 else 1); tr = rotAbout(tr, px, py, a) }
+            "sway" -> {
+                val (px, py) = pivot(e, "donusMerk", l, t); val f = v("frekans")
+                var tt = max(0.0, lt - v("gecikme")); val n = v("donguSayi")
+                if (n >= 1 && f > 0 && tt * f > n) tt = n / f
+                val w = wave(v("dalga").toInt(), tt * f * 2 * PI + v("faz") * PI / 180) * (if (on("tersYon")) -1 else 1) * exp(-v("sonumS") / 100 * tt * 2)
+                var a = if (on("asimetrik")) v("minAci") + (v("maxAci") - v("minAci")) * (w * 0.5 + 0.5) else w * v("salinimAcis")
+                a += v("merkezAci")
+                if (on("aciSinir")) a = a.coerceIn(min(v("sinirAlt"), v("sinirUst")), max(v("sinirAlt"), v("sinirUst")))
+                tr = rotAbout(tr, px, py, a)
+            }
             "shake" -> {
-                val f = max(0.0, v("frekans")); val seed = v("tohum"); val sm = v("yumusatm") / 100
+                val st = v("stil").toInt(); val f = max(0.0, v("frekans")) * (if (st == 1) 0.6 else 1.0); val seed = v("tohum"); val sm = if (st == 2) 1.0 else v("yumusatm") / 100
                 val x = lt * f; val q = if (sm < 0.05) floor(x) else x
                 val r = v("rastgele") / 100
-                fun n(s: Double) = noise1(q, seed + s) * r + sin(x * 2 * PI + s) * (1 - r)
-                if (on("xEkse")) tr = move(tr, n(1.0) * v("konumSidd"), 0.0)
-                if (on("yEkse")) tr = move(tr, 0.0, n(2.0) * v("konumSidd"))
-                if (on("donus")) tr = tr.copy(rot = tr.rot + n(3.0) * v("donusSidd"))
+                fun n(s: Double) = (noise1(q, seed + s) * r + sin(x * 2 * PI + s) * (1 - r)) + (if (st == 1) noise1(x * 0.25, seed + s + 7) * 0.8 else 0.0)
+                val p = if (dur > 0) (lt / dur).coerceIn(0.0, 1.0) else 0.0
+                var env = (v("basGuc") + (v("bitGuc") - v("basGuc")) * p) / 100
+                if (st == 3) env *= exp(-lt * 5)
+                val sx = (if (on("xyAyri")) v("siddetX") else v("konumSidd")) * env; val sy = (if (on("xyAyri")) v("siddetY") else v("konumSidd")) * env
+                var dx = if (on("xEkse")) n(1.0) * sx else 0.0; var dy = if (on("yEkse")) n(2.0) * sy else 0.0
+                val lim = v("sinirS"); if (lim > 0) { dx = dx.coerceIn(-lim, lim); dy = dy.coerceIn(-lim, lim) }
+                tr = move(tr, dx, dy)
+                if (on("donus")) tr = tr.copy(rot = tr.rot + n(3.0) * v("donusSidd") * env)
+                val ss = v("olcekSidd") / 100 * env; if (ss > 0) { val k = 1 + n(4.0) * ss; tr = sclAbout(tr, 0.0, 0.0, k, k) }
             }
             "spin" -> {
                 val (px, py) = pivot(e, "merkez", l, t); val tt = if (v("zamanaGore") >= .5) t else lt
                 tr = rotAbout(tr, px, py, (v("baslangiAcis") + tt * v("hiz")) * (if (on("saatYonu")) 1 else -1))
             }
             "pulse" -> {
-                val a = lt * v("frekans") * 2 * PI + v("faz") * PI / 180
-                val w = when (v("dalga").toInt()) { 1 -> tri(a); 2 -> spring(((lt * v("frekans")) % 1)) * 2 - 1; else -> sin(a) }
-                val s = (v("enDusuOlce") + (v("enYuksOlce") - v("enDusuOlce")) * (w * 0.5 + 0.5)) / 100
-                tr = sclAbout(tr, 0.0, 0.0, if (on("xEkse")) s else 1.0, if (on("yEkse")) s else 1.0)
+                val fr = v("frekans"); var tt = lt; var active = true
+                if (v("tetikP") >= 0.5) { tt = lt - v("tetikZamanP"); active = tt >= 0 && fr > 0 && tt * fr <= max(1.0, v("nabizSayi")) }
+                if (active) {
+                    val a = tt * fr * 2 * PI + v("faz") * PI / 180
+                    var w = when (v("dalga").toInt()) { 1 -> tri(a); 2 -> spring(((tt * fr) % 1)) * 2 - 1; else -> sin(a) }
+                    if (v("tetikP") >= 0.5) w = -cos(tt * fr * 2 * PI) // tek nabız en küçükten başlar ve en küçüğe döner
+                    val s = (v("enDusuOlce") + (v("enYuksOlce") - v("enDusuOlce")) * (w * 0.5 + 0.5)) / 100
+                    val (px, py) = pivot(e, "merkezP", l, t)
+                    tr = sclAbout(tr, px, py, if (on("xEkse")) s else 1.0, if (on("yEkse")) s else 1.0)
+                } else { val s = v("enDusuOlce") / 100; val (px, py) = pivot(e, "merkezP", l, t); tr = sclAbout(tr, px, py, if (on("xEkse")) s else 1.0, if (on("yEkse")) s else 1.0) }
             }
             "bounce" -> {
-                val f = max(0.01, v("frekans")); val ph = (lt * f) % 1; val ground = v("yereBasmSure") / 100
-                val air = if (ph < 1 - ground) ph / (1 - ground) else -1.0
-                val damp = (1 - v("sonum") / 100).pow(lt * f)
-                val hgt = if (air >= 0) 4 * air * (1 - air) * v("yuksekli") * damp else 0.0
-                val ang = (v("yon") - 90) * PI / 180
-                tr = move(tr, cos(ang) * hgt * 0 + sin(-ang) * 0, 0.0)
-                tr = move(tr, sin(v("yon") * PI / 180) * hgt, -cos(v("yon") * PI / 180) * hgt)
-                if (air < 0) { val sq = v("ezilme") / 100 * sin((ph - (1 - ground)) / ground * PI); val (px, py) = pivot(e, "yerNokt", l, t); tr = sclAbout(tr, px, py, 1 + sq, 1 - sq) }
+                val f = max(0.01, v("frekans")); var tt = lt
+                if (v("tetikB") >= 0.5) tt = lt - v("tetikZamanB")
+                val cnt = v("ziplamaSayi"); val done = tt < 0 || (cnt >= 1 && tt * f >= cnt)
+                if (!done) {
+                    val cyc = floor(tt * f); val ph = tt * f - cyc; val ground = v("yereBasmSure") / 100
+                    var air = if (ph < 1 - ground) ph / (1 - ground) else -1.0
+                    val damp = (1 - v("sonum") / 100).pow(tt * f)
+                    var hgt = 0.0
+                    if (air >= 0) { var c = abs(2 * air - 1); val hang = v("askida") / 100; c = max(0.0, (c - hang) / max(0.01, 1 - hang)); hgt = (1 - c.pow(2 * v("yercekimi") / 100)) * v("yuksekli") * damp }
+                    if (v("tabanSabit") < 0.5) {
+                        tr = move(tr, sin(v("yon") * PI / 180) * hgt, -cos(v("yon") * PI / 180) * hgt)
+                        tr = move(tr, v("yatayB") * (cyc + if (air >= 0) air else 1.0), 0.0)
+                    } else { val (px, py) = pivot(e, "yerNokt", l, t); val st = 1 + hgt / max(1.0, l.h); tr = sclAbout(tr, px, py, 1 / sqrt(st), st) }
+                    if (air < 0) { val sq = v("ezilme") / 100 * sin((ph - (1 - ground)) / ground * PI); val (px, py) = pivot(e, "yerNokt", l, t); tr = sclAbout(tr, px, py, 1 + sq, 1 - sq) }
+                } else if (v("yatayB") != 0.0 && tt >= 0) tr = move(tr, v("yatayB") * cnt, 0.0)
             }
             "wiggle" -> {
                 val x = lt * v("frekans"); val seed = v("tohum"); val sm = v("yumusatm") / 100
@@ -150,12 +183,17 @@ fun applyMotionFx(l: Layer, t: Double, tr0: TR): TR {
                 tr = sclAbout(tr, 0.0, 0.0, s, s)
             }
             "squash" -> {
-                val w = sin(lt * v("frekans") * 2 * PI + v("faz") * PI / 180)
-                val amt = if (w >= 0) w * v("esneme") / 100 else w * v("ezilme") / 100
+                val (px, py) = pivot(e, "sabitNokt", l, t); val mode = v("modSq").toInt()
+                var amt: Double; var ax = v("eksen") % 180
+                when (mode) {
+                    1 -> { val dt = 1.0 / 30; val vx = (l.x.at(t) - l.x.at(t - dt)) / dt; val vy = (l.y.at(t) - l.y.at(t - dt)) / dt; val sp = sqrt(vx * vx + vy * vy)
+                        amt = min(v("hizSinir") / 100, sp / 1000 * v("hizHass") / 100); if (on("yonTakip") && sp > 1) ax = Math.toDegrees(kotlin.math.atan2(vy, vx)) + 90 }
+                    2 -> { val p = (lt - v("tetikZamanS")) / max(0.05, v("sureS")); amt = if (p in 0.0..1.0) { val w = sin(p * 2 * PI) * exp(-p * 2.5); if (w >= 0) w * v("esneme") / 100 else w * v("ezilme") / 100 } else 0.0 }
+                    else -> { val w = sin(lt * v("frekans") * 2 * PI + v("faz") * PI / 180); amt = if (w >= 0) w * v("esneme") / 100 else w * v("ezilme") / 100 }
+                }
                 val a = 1 + amt; val b = if (on("hacmiKoru")) 1 / max(0.05, a) else 1.0
-                val (px, py) = pivot(e, "sabitNokt", l, t)
-                val ax = v("eksen") % 180
-                tr = if (abs(ax - 90) < 45) sclAbout(tr, px, py, b, a) else sclAbout(tr, px, py, a, b)
+                if (mode == 1 && on("yonTakip")) ax -= tr.rot // katmanın kendi eksenine göre en yakın yönde esnetilir
+                tr = if (abs(((ax % 180) + 180) % 180 - 90) < 45) sclAbout(tr, px, py, b, a) else sclAbout(tr, px, py, a, b)
             }
             "coinflip" -> {
                 var p = lt * v("hiz") + v("faz") / 360
@@ -223,7 +261,14 @@ fun applyMotionFx(l: Layer, t: Double, tr0: TR): TR {
                     tr = tr.copy(rot = tr.rot + Math.toDegrees(kotlin.math.atan2(ny - y2, nx - x2))) }
             }
             "oscillate" -> {
-                val d = wave(v("dalga").toInt(), lt * v("frekans") * 2 * PI + v("faz") * PI / 180) * v("genlik")
+                val base = if (v("zamanKayn") >= 0.5) t else lt; val tt = max(0.0, base - v("gecikmeO"))
+                // birikimli faz: frekans zamanla değişse bile hareket sıçramaz
+                val fk = e.v?.get("frekans")?.k
+                val ph = if (fk.isNullOrEmpty()) tt * v("frekans") else { val n = min(2000, max(16, (tt * 60).toInt())); val dt = tt / n; var acc = 0.0
+                    val t0 = t - tt; for (i in 0 until n) acc += e.value("frekans", t0 + (i + 0.5) * dt) * dt; acc }
+                val k = v("dalga").toInt(); val a0 = ph * 2 * PI + v("faz") * PI / 180
+                var d = wave(k, a0) + v("ekDalgaGuc") / 100 * wave(k, a0 * v("ekDalgaOran"))
+                d *= v("genlik") * exp(-v("sonumO") / 100 * tt * 2)
                 val a = (v("aci") + if (on("goreliAci")) tr.rot else 0.0) * PI / 180
                 tr = move(tr, cos(a) * d, sin(a) * d)
             }

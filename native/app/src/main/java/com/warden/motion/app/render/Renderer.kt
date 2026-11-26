@@ -30,6 +30,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlin.math.PI
+import kotlin.math.pow
 import kotlin.math.cos
 import kotlin.math.floor
 import kotlin.math.hypot
@@ -48,6 +49,9 @@ fun layerTransform(l: Layer, t0: Double): TR {
     // Karton Kukla: stop-motion hissi (düşük kare hızı, eklemlerde sertlik, mikro sallanma)
     val cp = l.effects.find { it.type == "cardpuppet" && it.on != false && it.value("stopMotion", t0) >= 0.5 }
     if (cp != null) { val fps = cp.value("kuklaFps", t0).coerceIn(1.0, 60.0); val q = kotlin.math.floor((t0 - l.start) * fps) / fps + l.start; t = q + (t0 - q) * (1 - cp.value("eklemSert", t0) / 100) * 0.3 }
+    // Kare Atla: "Hareketi de kare kare oynat" açıksa katmanın dönüşümü de seçilen kare hızında ilerler
+    l.effects.find { it.type == "posterizetime" && it.on != false && it.value("hareketAtla", t0) >= 0.5 }?.let { e ->
+        val f = kotlin.math.max(0.1, e.value("kareHizi", t0)); t = kotlin.math.floor((t - l.start + e.value("zamanKaym", t0)) * f) / f + l.start }
     var tr = TR(l.x.at(t), l.y.at(t), l.rotation.at(t), l.scale.at(t), l.opacity.at(t))
     if (cp != null) { val tick = kotlin.math.floor((t0 - l.start) * cp.value("kuklaFps", t0)); val m = cp.value("mikroSallan", t0) / 100
         tr = tr.copy(x = tr.x + (noise1(tick, 1.0) * 3 * m), y = tr.y + noise1(tick, 2.0) * 3 * m, rot = tr.rot + noise1(tick, 3.0) * 2.5 * m) }
@@ -192,13 +196,27 @@ class Renderer(private val ctx: Context, maxSide: Int = 2048, private val sync: 
         c.restore()
     }
 
+    private var echoMul = 1.0; private var echoBlend: BlendMode? = null; private var inEcho = false
     private fun paintLayer(c: Canvas, p: Project, l: Layer, t: Double) {
-        val tr = worldTransform(p, l, t)
+        val ec = if (!inEcho) l.effects.find { it.type == "echo" && it.on != false } else null
+        if (ec != null) {
+            // Yankı: katmanın önceki/sonraki anları azalan opaklıkla
+            val n = ec.value("yankiSayi", t).roundToInt().coerceIn(1, if (playing && !exporting) 16 else 64); val gap = ec.value("yankiAral", t)
+            val a0 = ec.value("baslangiOpak", t) / 100; val dec = 1 - ec.value("sonum", t) / 100; val mode = ec.value("birlesti", t).roundToInt()
+            fun echoes() { inEcho = true; echoBlend = if (Build.VERSION.SDK_INT >= 29) when (mode) { 2 -> BlendMode.PLUS; 3 -> BlendMode.LIGHTEN; else -> null } else null
+                for (i in n downTo 1) { val tt = t + gap * i; if (tt < l.start || tt > l.end) continue; echoMul = a0 * dec.pow(i - 1); if (echoMul > 0.004) paintLayer(c, p, l.copy(effects = l.effects.filter { it.type != "echo" }), tt) }
+                inEcho = false; echoMul = 1.0; echoBlend = null }
+            if (mode != 1) echoes()
+            inEcho = true; paintLayer(c, p, l, t); inEcho = false
+            if (mode == 1) echoes()
+            return
+        }
+        val tr = worldTransform(p, l, t).let { if (echoMul != 1.0) it.copy(opacity = it.opacity * echoMul) else it }
         val alpha = (tr.opacity.coerceIn(0.0, 1.0) * 255).toInt()
         if (alpha <= 0) return
-        val blend = blendOf(l.blend)
+        val blend = echoBlend ?: blendOf(l.blend)
         val gpu = if (lim("warp") > 0 && !GlFx.failed) l.effects.filter { e -> e.on != false && fxMeta(e.type).kind in GlFx.GPU_KINDS } else emptyList()
-        val mb = if (lim("blur") > 0) l.effects.find { it.type == "motionblur" && it.on != false } else null
+        val mb = if (lim("blur") > 0) l.effects.find { (it.type == "motionblur" || it.type == "pixelmb") && it.on != false } else null
         if (gpu.isEmpty() && mb == null) {
             val needLayer = alpha < 255 || blend != null
             if (needLayer) {
@@ -249,9 +267,10 @@ class Renderer(private val ctx: Context, maxSide: Int = 2048, private val sync: 
         val lf = l.copy(flipX = null, flipY = null)
         val samples = ArrayList<TR>()
         if (mb != null) {
-            val span = max(0.0, mb.value("deklansoAcis", t)) / 360.0 / p.fps * 2
-            val phase = mb.value("deklansoFazi", t) / 360.0
-            val usePos = mb.value("konumuIzle", t) >= .5; val useScl = mb.value("olcegiIzle", t) >= .5; val useAng = mb.value("donmeyiIzle", t) >= .5
+            val pix = mb.type == "pixelmb"
+            val span = max(0.0, mb.value(if (pix) "obturatoAcis" else "deklansoAcis", t)) / 360.0 / p.fps * 2 * (if (pix) mb.value("hareketHass", t) / 50 else 1.0)
+            val phase = if (pix) 0.0 else mb.value("deklansoFazi", t) / 360.0
+            val usePos = pix || mb.value("konumuIzle", t) >= .5; val useScl = pix || mb.value("olcegiIzle", t) >= .5; val useAng = pix || mb.value("donmeyiIzle", t) >= .5
             fun trAt(u: Double): TR { val tt = (t + span * (u - 0.5 + phase)).coerceIn(l.start, l.end - 1e-4); val w = worldTransform(p, l, tt); return tr.copy(x = if (usePos) w.x else tr.x, y = if (usePos) w.y else tr.y, scale = if (useScl) w.scale else tr.scale, rot = if (useAng) w.rot else tr.rot) }
             val a0 = trAt(0.0); val a1 = trAt(1.0); val rr = hypot(l.w, l.h) / 2
             val dist = (hypot(a1.x - a0.x, a1.y - a0.y) + kotlin.math.abs(a1.scale - a0.scale) * rr + kotlin.math.abs(a1.rot - a0.rot) * PI / 180 * rr * tr.scale) * curQ
