@@ -55,3 +55,17 @@ N10A([
  (889, "capillary", "Prosedürel", "gen", ["Desen", "Dairesel"], None), (890, "edgecrystal", "Simülasyon", "pixel", ["Kristal", "Büyüme"], {"k": "fasetBoyu", "mul": 6}),
 ])
 HIDE10.update({"lightvoronoi": ["cozunurl"], "offsetfamily": ["kesisimiTemi"]})
+N10A([
+ (891, "multicentroid", "Taşı ve Dönüştür", "xform", ["Takip", "Grup"], None), (892, "axisparent", "Taşı ve Dönüştür", "xform", ["Ebeveyn", "Eksen"], None),
+ (893, "dynpivot", "Taşı ve Dönüştür", "xform", ["Pivot", "Takip"], None), (894, "wheelroll", "Taşı ve Dönüştür", "xform", ["Tekerlek", "Dönüş"], None),
+ (895, "twopointstretch", "Taşı ve Dönüştür", "xform", ["Esnetme", "Takip"], None), (896, "contactsquash", "Taşı ve Dönüştür", "xform", ["Temas", "Ezilme"], None),
+ (897, "weightshift", "Countryball", "xform", ["Rig", "Ağırlık"], None), (898, "footlock", "Countryball", "rig", ["Rig", "Ayak"], None),
+ (899, "stepcycle", "Countryball", "rig", ["Rig", "Yürüyüş"], None), (900, "eyesaccade", "Countryball", "xform", ["Göz", "Bakış"], None),
+ (901, "irislock", "Countryball", "rig", ["Göz", "İris"], None), (902, "exprweights", "Countryball", "rig", ["İfade", "Karışım"], None),
+ (903, "facecoords", "Countryball", "rig", ["Yüz", "Küre"], None), (904, "jointlimit", "Countryball", "rig", ["Rig", "Eklem"], None),
+ (905, "overshootstop", "Taşı ve Dönüştür", "xform", ["Duruş", "Yaylanma"], None), (906, "anticipation", "Taşı ve Dönüştür", "xform", ["Hazırlık", "Animasyon"], None),
+ (907, "phasespread", "Tekrar", "rig", ["Faz", "Grup"], None), (908, "speedpose", "Countryball", "rig", ["Poz", "Hız"], None),
+ (909, "rhythmquant", "Zaman", "xform", ["Ritim", "Keyframe"], None), (910, "motionmirror", "Countryball", "rig", ["Simetri", "Rig"], None),
+ (911, "pathmatch", "Diğer", "special", ["Yol", "Eşleme"], None), (912, "looplock", "Zaman", "xform", ["Döngü", "Keyframe"], None),
+])
+HIDE10.update({"multicentroid": ["hedefAgir"], "footlock": ["basisAral"], "anticipation": ["egri", "yalnizSeciKeyf"], "exprweights": ["agirlikl"], "irislock": ["irisiMask"]})

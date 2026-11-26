@@ -31,7 +31,7 @@ object AudioLevels {
  * Countryball rig efektleri (403 Göz Takibi, 404 Göz Kırpma, 405 Kaş, 406 Konuşma, 426 İfade, 427 Parçalı Rig, 429 Harita Sabitleme).
  * Efekt bir "ana" katmanda durur ve seçilen diğer katmanların yerel dönüşümünü değiştirir.
  */
-private val RIG = setOf("cbeyes", "cbblink", "cbbrow", "cbexpr", "cbrig", "cbmaplock", "lipsync", "paramseq", "dragchain", "ikchain", "explodegroup", "pointtrack", "surfacetrack")
+private val RIG = Anim1000.RIG + setOf("cbeyes", "cbblink", "cbbrow", "cbexpr", "cbrig", "cbmaplock", "lipsync", "paramseq", "dragchain", "ikchain", "explodegroup", "pointtrack", "surfacetrack")
 private var rigDepth = 0
 
 private fun ids(e: Effect, k: String) = e.c?.get(k)?.split(',')?.filter { it.isNotBlank() } ?: emptyList()
@@ -58,7 +58,7 @@ fun rigLocal(p: Project, l: Layer, t: Double, loc0: TR, parent: TR?): TR {
             return (dx * cos(a) - dy * sin(a)) / s to (dx * sin(a) + dy * cos(a)) / s
         }
         for (h in hosts) for (e in h.effects) {
-            if (e.on == false || e.type !in RIG || h.id == l.id && e.type != "cbmaplock") continue
+            if (e.on == false || e.type !in RIG || h.id == l.id && e.type != "cbmaplock" && e.type != "jointlimit") continue
             fun v(k: String) = e.value(k, t)
             when (e.type) {
                 "cbeyes" -> {
@@ -177,6 +177,7 @@ fun rigLocal(p: Project, l: Layer, t: Double, loc0: TR, parent: TR?): TR {
                     if (v("sinirdaGizl") >= 0.5) { val w = if (parent != null) parent.x + loc.x else loc.x; val hh = if (parent != null) parent.y + loc.y else loc.y
                         if (w < 0 || hh < 0 || w > p.width || hh > p.height) loc = loc.copy(opacity = 0.0) }
                 }
+                else -> if (e.type in Anim1000.RIG) loc = Anim1000.rig(p, h, e, l, t, loc, ::worldOffset)
             }
         }
     } finally { rigDepth-- }

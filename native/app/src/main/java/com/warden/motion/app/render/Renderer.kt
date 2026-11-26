@@ -74,7 +74,7 @@ fun worldTransform(p: Project, l: Layer, t: Double, depth: Int = 0): TR {
     val par = if (l.parent != null && depth < 8) p.layers.find { it.id == l.parent } else null
     val pw = if (par != null) worldTransform(p, par, t, depth + 1) else null
     loc = rigLocal(p, l, t, loc, pw)
-    if (l.effects.isNotEmpty()) { loc = Physics.local(p, l, t, loc); loc = Motion2.local(p, l, t, loc) }
+    if (l.effects.isNotEmpty()) { loc = Physics.local(p, l, t, loc); loc = Motion2.local(p, l, t, loc); loc = Anim1000.local(p, l, t, loc) }
     if (pw == null) return loc
     val a = pw.rot * PI / 180
     return TR(
@@ -251,6 +251,14 @@ class Renderer(private val ctx: Context, maxSide: Int = 2048, private val sync: 
             when (e.type) {
                 "cbborder" -> { val src = e.c?.get("yolKatm")?.let { id -> p.layers.find { it.id == id } } ?: l
                     val w = worldTransform(p, src, t); ShapeFx.border(c, src, e, t) { cv -> cv.translate(w.x.toFloat(), w.y.toFloat()); cv.rotate(w.rot.toFloat()); cv.scale((w.scale * w.sx).toFloat(), (w.scale * w.sy).toFloat()) } }
+                "pathmatch" -> { // 911: iki şekil yolunun düğüm eşlemesi önizlemesi (yay uzunluğu ya da işaret; yön ters çevrilebilir)
+                    val tg = e.c?.get("hedefYol")?.let { id -> p.layers.find { it.id == id } } ?: continue; if (l.type != "shape" || tg.type != "shape") continue
+                    val n = e.value("dugum", t).roundToInt().coerceIn(4, 128); val a = ShapeFx.sample(ShapeFx.path(l, t), n); var b = ShapeFx.sample(ShapeFx.path(tg, t), n); if (e.value("yonuTers", t) >= 0.5) b = b.reversed()
+                    if (e.value("esleme", t).roundToInt() == 1) { val off0 = (0 until n).minByOrNull { j -> val q = b[j]; (q[0] - a[0][0]) * (q[0] - a[0][0]) + (q[1] - a[0][1]) * (q[1] - a[0][1]) } ?: 0; b = List(n) { b[(it + off0) % n] } }
+                    val wa = worldTransform(p, l, t); val wb = worldTransform(p, tg, t)
+                    fun w(tr: TR, q: FloatArray): Pair<Float, Float> { val r = tr.rot * PI / 180; val x = q[0] * tr.scale * tr.sx; val y = q[1] * tr.scale * tr.sy; return (tr.x + x * cos(r) - y * sin(r)).toFloat() to (tr.y + x * sin(r) + y * cos(r)).toFloat() }
+                    val ln = Paint(Paint.ANTI_ALIAS_FLAG).apply { strokeWidth = 1.2f; color = 0x99FFC857.toInt() }; val dot = Paint(Paint.ANTI_ALIAS_FLAG)
+                    for (i in 0 until n) { val (x1, y1) = w(wa, a[i]); val (x2, y2) = w(wb, b[i]); c.drawLine(x1, y1, x2, y2, ln); dot.color = if (i == 0) 0xFF3BE07A.toInt() else 0xFFFFFFFF.toInt(); c.drawCircle(x1, y1, 3f, dot); c.drawCircle(x2, y2, 3f, dot) } }
                 "cbtrail" -> { val ic = e.c?.get("simgeKatm")?.let { id -> p.layers.find { it.id == id } } ?: continue
                     if (l.type != "shape") continue
                     val w = worldTransform(p, l, t); val (px, py, ang) = ShapeFx.routePoint(l, t, e.value("ilerleme", t) / 100)

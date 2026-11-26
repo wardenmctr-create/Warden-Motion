@@ -10,7 +10,7 @@ def _c10(p):
     q = {k: v for k, v in p.items() if k not in ("code", "extra")}
     if q.get("two") and q.get("unit") in ("%", "") and (_POS.search(q["l"]) or _re.search(r"^(ışık|ışık kaynağı|kaynak|giriş|çıkış)$", q["l"], _re.I)) and max(q.get("def_", 0), q.get("defY") or 0) >= 10: q["unit"] = "box%"; q["min"], q["max"] = -100, 200
     if q["kind"] in ("button", "curve"): q["hideUi"] = True
-    if q["kind"] == "source" and q["k"] in ("uclar", "kopyaGrub", "katmanla", "parcalar", "iskelet", "bolgeler", "kaynakla", "kamerala", "bolgeler", "seriler"): q["multi"] = True  # işlemi motorda otomatik yapılan düğmeler ve sabit eğri gösterilmez
+    if q["kind"] == "source" and q["k"] in ("uclar", "kopyaGrub", "katmanla", "parcalar", "iskelet", "bolgeler", "kaynakla", "kamerala", "seriler", "hedefler", "destekNokt", "rig", "ifadeSeki", "yuzParc", "grup", "pozlar", "sekiller", "balonlar", "etiketle", "islemKoll", "odakKatm", "haritaSuru"): q["multi"] = True  # işlemi motorda otomatik yapılan düğmeler ve sabit eğri gösterilmez
     return q
 TRANS10 = set()
 PFIX10 = {}  # tür: ayar listesini düzelten işlev (birleşik kontrolleri ayırma, aralık düzeltme)

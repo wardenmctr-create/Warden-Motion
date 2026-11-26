@@ -55,4 +55,33 @@ class KotlinFxTest {
         println("ETKİSİZ (" + neutral.size + "): " + neutral.joinToString(" "))
         assertTrue(types.size > 50)
     }
+
+    /** Rig efektleri: her biri için uygun parça katmanları kurulur; parça katmanın görüntüsü değişmeli */
+    @Test fun rigEffectsMoveTheirParts() {
+        val ctx = ApplicationProvider.getApplicationContext<android.content.Context>()
+        FxCatalog.init(ctx); GlFx.init(ctx); val r = Renderer(ctx, sync = true)
+        fun L(id: String, x: Double, y: Double, w: Double = 60.0, h: Double = 60.0, xs: List<Key>? = null, rot: Anim = Anim(0.0), fill: String = "#E2342D") =
+            Layer(id, id, "shape", 0.0, 3.0, x = Anim(x, xs), y = Anim(y), w = w, h = h, fill = fill, shape = "rect", rotation = rot)
+        val moving = listOf(Key(0.0, 120.0), Key(2.0, 280.0))
+        data class Case(val type: String, val c: Map<String, String>, val layers: List<Layer>, val v: Map<String, Double> = emptyMap())
+        val cases = listOf(
+            Case("footlock", mapOf("ayak" to "F", "zemin" to "G"), listOf(L("F", 0.0, 330.0, xs = moving), L("G", 200.0, 390.0, 400.0, 60.0, fill = "#555555")), mapOf("gecis" to 30.0)),
+            Case("irislock", mapOf("gozMask" to "E", "iris" to "I"), listOf(L("E", 200.0, 200.0, 120.0, 80.0, fill = "#FFFFFF"), L("I", 0.0, 200.0, 30.0, 30.0, xs = listOf(Key(0.0, 200.0), Key(1.0, 320.0)), fill = "#111111"))),
+            Case("exprweights", mapOf("ifadeSeki" to "A1,A2"), listOf(L("A1", 150.0, 200.0, fill = "#22AA44"), L("A2", 250.0, 200.0, fill = "#2244AA"))),
+            Case("facecoords", mapOf("govde" to "B", "yuzParc" to "P"), listOf(L("B", 200.0, 200.0, 160.0, 160.0, fill = "#DDDDDD"), L("P", 230.0, 190.0, 20.0, 20.0, fill = "#111111")), mapOf("yatayAci" to 50.0)),
+            Case("jointlimit", mapOf("eklem" to "J"), listOf(L("J", 200.0, 200.0, 140.0, 30.0, rot = Anim(0.0, listOf(Key(0.0, 0.0), Key(2.0, 170.0)))))),
+            Case("motionmirror", mapOf("kaynakRig" to "S", "hedefRig" to "T"), listOf(L("S", 100.0, 200.0, xs = moving, rot = Anim(0.0, listOf(Key(0.0, 0.0), Key(2.0, 60.0)))), L("T", 300.0, 200.0, fill = "#2244AA"))),
+            Case("phasespread", mapOf("grup" to "P1,P2"), listOf(L("P1", 0.0, 150.0, xs = moving), L("P2", 0.0, 250.0, xs = moving, fill = "#2244AA")), mapOf("fazFark" to 180.0)),
+            Case("stepcycle", mapOf("rig" to "K1,K2"), listOf(L("K1", 150.0, 300.0), L("K2", 250.0, 300.0, fill = "#2244AA"))),
+        )
+        val fails = ArrayList<String>()
+        for (cs in cases) {
+            var e = makeEffect(cs.type); e = e.copy(c = (e.c ?: emptyMap()) + cs.c, v = (e.v ?: emptyMap()) + cs.v.mapValues { Anim(it.value) })
+            val host = Layer("H", "Ana", "shape", 0.0, 3.0, x = Anim(30.0), y = Anim(30.0), w = 10.0, h = 10.0, fill = "#FFFFFF", shape = "rect")
+            val base = Project("p", "p", 400, 400, 30, "#FFFFFF", cs.layers + host); val withFx = base.copy(layers = cs.layers + host.copy(effects = listOf(e)))
+            var best = 0; for (t in listOf(0.3, 0.9, 1.5, 2.2)) best = maxOf(best, diff(render(r, base, t), render(r, withFx, t)))
+            println("RIG ${cs.type} $best"); if (best < 20) fails += cs.type
+        }
+        assertTrue("etkisiz rig efektleri: $fails", fails.isEmpty())
+    }
 }
