@@ -299,13 +299,15 @@ class Renderer(private val ctx: Context, maxSide: Int = 2048, private val sync: 
     /** Canlı Bağlantı Çizgisi / Ölçü Oku: uçlara seçilen katmanların o anki konumu yazılır (katmanın kutusuna göre %) */
     private fun linkPoints(p: Project, l: Layer, e: Effect, t: Double, tr: TR): Effect {
         // Grafik/harita verisi: seçilen metin katmanındaki satırlar (virgül/boşlukla ayrılmış sayılar) → dv dizisi, dvR satır, dvC sütun
-        if (e.type == "sweeppath" || e.type == "skelvolume" || e.type == "painttrail" || e.type == "bendtocurve" || e.type == "brushmask") { // nokta listesi → dv (bu katmanın yerel birimi)
+        if (e.type == "sweeppath" || e.type == "skelvolume" || e.type == "painttrail" || e.type == "bendtocurve" || e.type == "brushmask" || e.type == "tailribbon") { // nokta listesi → dv (bu katmanın yerel birimi)
             fun loc(wx: Double, wy: Double): Pair<Double, Double> { val a = -tr.rot * PI / 180; val dx = wx - tr.x; val dy = wy - tr.y; val sc = if (kotlin.math.abs(tr.scale) > 1e-6) tr.scale else 1.0; return (dx * cos(a) - dy * sin(a)) / sc / tr.sx to (dx * sin(a) + dy * cos(a)) / sc / tr.sy }
             val pts = ArrayList<Pair<Double, Double>>()
             when (e.type) {
                 "sweeppath", "bendtocurve", "brushmask" -> { val o = e.c?.get(when (e.type) { "sweeppath" -> "yolKatm"; "brushmask" -> "fircaYolu"; else -> "egri" })?.let { id -> p.layers.find { it.id == id } } ?: return e; val w = worldTransform(p, o, t); val ra = w.rot * PI / 180
                     val src = o.pts?.takeIf { it.size >= 2 }?.map { (it[0] - 0.5) * o.w to (it[1] - 0.5) * o.h } ?: (0..32).map { i -> val a = i / 32.0 * 2 * PI; cos(a) * o.w / 2 to sin(a) * o.h / 2 }
                     src.take(64).forEach { (x, y) -> pts += loc(w.x + (x * cos(ra) - y * sin(ra)) * w.scale, w.y + (x * sin(ra) + y * cos(ra)) * w.scale) } }
+                "tailribbon" -> { val o = e.c?.get("nesne")?.let { id -> p.layers.find { it.id == id } } ?: l; val span = kotlin.math.max(0.02, e.value("kuyrukSure", t))
+                    for (i in 0 until 32) { val tt = t - span * i / 31; if (tt < o.start) break; val w = worldTransform(p, o, tt); pts += loc(w.x, w.y) } }
                 "skelvolume" -> e.c?.get("iskelet")?.split(',')?.filter { it.isNotBlank() }?.take(32)?.forEach { id -> p.layers.find { it.id == id }?.let { o -> val w = worldTransform(p, o, t); pts += loc(w.x, w.y) } }
                 else -> { val o = e.c?.get("temasNesn")?.let { id -> p.layers.find { it.id == id } } ?: return e; for (i in 31 downTo 0) { val tt = t - i * 0.08; if (tt < o.start) continue; val w = worldTransform(p, o, tt); pts += loc(w.x, w.y) } }
             }

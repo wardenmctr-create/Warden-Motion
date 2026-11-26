@@ -27,6 +27,9 @@ object History {
             "motiondirmatte", "motionmagnify", "framerepair" -> listOf(t, t - dt, t + dt)
             "cinemagraph" -> listOf(l.start + v("sabitKareZama"))
             "timediff" -> listOf(t - max(dt, v("zamanFark")))
+            "medianbg" -> { val k = min(cap, v("ornek").roundToInt().coerceAtLeast(3)); val span = max(dt, v("analizSure")); (0 until k).map { l.start + span * it / (k - 1) } }
+            "flowconfidence" -> listOf(t, t - dt, t + dt)
+            "fluidtrail" -> { val k = min(cap, 12); val span = max(dt, v("sonme")); (0 until k).map { t - span * it / (k - 1) } }
             "diffmatte" -> if (e.c?.get("temizKareKatm").isNullOrBlank()) listOf(l.start + v("referansZama")) else null
             "timedisplace" -> { val k = min(cap, v("ornekSayi").roundToInt().coerceAtLeast(2)); val m = v("maksimumZama"); val d = max(dt, l.end - l.start); val mode = v("zamanSini").roundToInt()
                 (0 until k).map { i -> val tt = t - m * i / (k - 1); val r = tt - l.start
