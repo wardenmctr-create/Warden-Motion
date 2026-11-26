@@ -90,3 +90,9 @@ ducking
 stereowide
 robotvoice
 audiodistort
+springchain
+collide
+softbody
+motionpath
+flock
+lipsync

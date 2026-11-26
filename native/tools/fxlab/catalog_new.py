@@ -69,6 +69,12 @@ NEW.update({
  549: ("robotvoice", "Ses", "audio-fx", ["Ses", "Robot", "Vocoder"], None), 550: ("audiodistort", "Ses", "audio-fx", ["Ses", "Bozulma"], None),
 })
 HIDE.update({"limiter": ["gercekTepe", "stereoBagl", "otomatikGeciTela"], "denoise": ["profilYont"], "ducking": ["otomatikGeciTela"], "pitchshift": ["sesKaraKoru", "kaynakTuru"], "voicechar": ["kalite"]})
+NEW.update({
+ 498: ("springchain", "Taşı ve Dönüştür", "xform", ["Fizik", "Yay", "Takip"], None), 501: ("collide", "Taşı ve Dönüştür", "xform", ["Fizik", "Sekme", "Yerçekimi"], None),
+ 504: ("softbody", "Taşı ve Dönüştür", "xform", ["Fizik", "Jöle", "Esneme"], None), 505: ("motionpath", "Diğer", "special", ["Yol", "İz", "Hareket"], None),
+ 506: ("flock", "Tekrar", "special", ["Sürü", "Kopya", "Fizik"], None), 518: ("lipsync", "Countryball", "rig", ["Ağız", "Ses", "Konuşma"], None),
+})
+HIDE.update({"softbody": ["agAyri"], "lipsync": ["eslemeModu"], "motionpath": ["koordina"]})
 READY2 = set(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "ready2.txt")).read().split()) if os.path.exists(os.path.join(os.path.dirname(os.path.abspath(__file__)), "ready2.txt")) else set()
 _POS = _re.compile(r"(merkez|konum|ufuk|nokta|kök|başlangıç$|bitiş$|bağlantı|hedef)", _re.I)
 MATS = ["Beyaz kâğıt", "Renkli kâğıt", "Kraft kâğıt", "Karton", "Parşömen", "Keçe"]

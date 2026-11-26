@@ -28,7 +28,7 @@ object AudioLevels {
  * Countryball rig efektleri (403 Göz Takibi, 404 Göz Kırpma, 405 Kaş, 406 Konuşma, 426 İfade, 427 Parçalı Rig, 429 Harita Sabitleme).
  * Efekt bir "ana" katmanda durur ve seçilen diğer katmanların yerel dönüşümünü değiştirir.
  */
-private val RIG = setOf("cbeyes", "cbblink", "cbbrow", "cbexpr", "cbrig", "cbmaplock")
+private val RIG = setOf("cbeyes", "cbblink", "cbbrow", "cbexpr", "cbrig", "cbmaplock", "lipsync")
 private var rigDepth = 0
 
 private fun ids(e: Effect, k: String) = e.c?.get(k)?.split(',')?.filter { it.isNotBlank() } ?: emptyList()
@@ -106,6 +106,16 @@ fun rigLocal(p: Project, l: Layer, t: Double, loc0: TR, parent: TR?): TR {
                     val fi = faces.indexOf(l.id); if (fi < 0) continue
                     val wv = if (v("gecisTuru") >= 0.5) choiceWeights(e, "ifade", t, v("gecisSure"), 5) else choiceWeights(e, "ifade", t, 0.0, 5)
                     loc = loc.copy(opacity = loc.opacity * wv[fi])
+                }
+                "lipsync" -> {
+                    val mouths = listOf("kapaliAgiz", "yariAcikAgiz", "acikAgiz").map { e.c?.get(it) }; val mi = mouths.indexOf(l.id); if (mi < 0) continue
+                    val src = e.c?.get("sesKatm")?.let { id -> p.layers.find { it.id == id } }
+                    // Enerji: tepki süresi boyunca en yüksek seviye; kapanma süresi kadar açık tutar
+                    var lvl = 0.0; if (src != null) { val sh = v("zamanFark") / 1000; val win = max(0.01, v("tepki") / 1000); val hold = v("kapanma") / 1000
+                        for (i in 0..8) { val tt = t - sh - (win + hold) * i / 8.0; lvl = max(lvl, AudioLevels.level(src, tt) * (if (i * (win + hold) / 8.0 > win) 0.8 else 1.0)) } }
+                    val dbv = 20 * kotlin.math.log10(max(lvl, 1e-6)); val th = v("sesEsig"); val state = if (dbv < th) 0 else if (dbv < th + 12) 1 else 2
+                    val show = if (mouths[state] != null) state else if (state == 2 && mouths[1] != null) 1 else if (state == 1 && mouths[2] != null) 2 else 0
+                    loc = loc.copy(opacity = if (mi == show) loc.opacity else 0.0)
                 }
                 "cbrig" -> {
                     val body = e.c?.get("govde")?.let { id -> p.layers.find { it.id == id } } ?: continue

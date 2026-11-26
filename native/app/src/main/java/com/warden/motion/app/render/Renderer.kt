@@ -70,6 +70,7 @@ fun worldTransform(p: Project, l: Layer, t: Double, depth: Int = 0): TR {
     val par = if (l.parent != null && depth < 8) p.layers.find { it.id == l.parent } else null
     val pw = if (par != null) worldTransform(p, par, t, depth + 1) else null
     loc = rigLocal(p, l, t, loc, pw)
+    if (l.effects.isNotEmpty()) loc = Physics.local(p, l, t, loc)
     if (pw == null) return loc
     val a = pw.rot * PI / 180
     return TR(
@@ -204,8 +205,38 @@ class Renderer(private val ctx: Context, maxSide: Int = 2048, private val sync: 
         c.restore()
     }
 
+    private fun drawMotionPath(c: Canvas, p: Project, l: Layer, e: Effect, t: Double) {
+        val tgt = e.c?.get("izlenenKatm")?.let { id -> p.layers.find { it.id == id } } ?: l
+        val from = if (e.value("tumGecmGost", t) >= 0.5) tgt.start else max(tgt.start, t - e.value("izSure", t)); if (t <= from) return
+        val step = max(1.0, e.value("ornekAral", t)) / p.fps; val pts = ArrayList<TR>(); var tt = from
+        while (tt <= t && pts.size < 4000) { pts += worldTransform(p, tgt, tt); tt += step }; pts += worldTransform(p, tgt, t); if (pts.size < 2) return
+        val col = parseCol(e.c?.get("renk") ?: "#43A8FF"); val w = e.value("kalinlik", t).toFloat(); val fade = e.value("ucSolm", t) / 100; val st = e.value("bicim", t).roundToInt()
+        val pt = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = col; strokeWidth = w; style = Paint.Style.STROKE; strokeCap = Paint.Cap.ROUND
+            if (st == 1) pathEffect = android.graphics.DashPathEffect(floatArrayOf(w * 3, w * 2), 0f) else if (st == 2) pathEffect = android.graphics.DashPathEffect(floatArrayOf(0.1f, w * 2.2f), 0f) }
+        for (i in 1 until pts.size) { val k = i.toDouble() / (pts.size - 1); pt.alpha = ((1 - fade * (1 - k)) * 255).toInt().coerceIn(0, 255)
+            c.drawLine(pts[i - 1].x.toFloat(), pts[i - 1].y.toFloat(), pts[i].x.toFloat(), pts[i].y.toFloat(), pt) }
+        if (e.value("uctaIsar", t) >= 0.5) { val h = pts.last(); c.drawCircle(h.x.toFloat(), h.y.toFloat(), w * 1.8f, Paint(Paint.ANTI_ALIAS_FLAG).apply { color = col }) }
+    }
     private var echoMul = 1.0; private var echoBlend: BlendMode? = null; private var inEcho = false
+    /** Canlı Bağlantı Çizgisi / Ölçü Oku: uçlara seçilen katmanların o anki konumu yazılır (katmanın kutusuna göre %) */
+    private fun linkPoints(p: Project, l: Layer, e: Effect, t: Double, tr: TR): Effect {
+        val pairs = when (e.type) { "connector" -> listOf("baslangiKatm" to "baslangiBagl", "bitisKatm" to "bitisBagl"); else -> return e }
+        var v = e.v ?: emptyMap()
+        for ((src, key) in pairs) { val o = e.c?.get(src)?.let { id -> p.layers.find { it.id == id } } ?: continue; val w = worldTransform(p, o, t)
+            val a = -tr.rot * PI / 180; val dx = w.x - tr.x; val dy = w.y - tr.y; val sc = tr.scale.takeIf { kotlin.math.abs(it) > 1e-6 } ?: 1.0
+            val lx = (dx * cos(a) - dy * sin(a)) / sc / tr.sx; val ly = (dx * sin(a) + dy * cos(a)) / sc / tr.sy
+            v = v + (key + "X" to com.warden.motion.app.model.Anim(lx / l.w * 100 + 50)) + (key + "Y" to com.warden.motion.app.model.Anim(ly / l.h * 100 + 50)) }
+        return e.copy(v = v)
+    }
+    private var flockXf: DoubleArray? = null
     private fun paintLayer(c: Canvas, p: Project, l: Layer, t: Double) {
+        // 506 Sürü Hareketi: katman, sürüdeki her birey için kopyalanır
+        l.effects.find { it.type == "flock" && it.on != false }?.let { fe ->
+            val rest = l.copy(effects = l.effects.filter { it.type != "flock" })
+            for (b in Physics.flock(l, fe, t, p.width.toDouble(), p.height.toDouble())) { flockXf = doubleArrayOf(b[0], b[1], if (fe.value("hareketYonuDon", t) >= 0.5) b[2] else 0.0, b[3]); paintLayer(c, p, rest, t) }
+            flockXf = null; return }
+        // 505 Hareket Yolu Çizimi: katman çizildikten sonra izlenen katmanın yolu
+        l.effects.find { it.type == "motionpath" && it.on != false }?.let { me -> paintLayer(c, p, l.copy(effects = l.effects.filter { it !== me }), t); drawMotionPath(c, p, l, me, t); return }
         val ec = if (!inEcho) l.effects.find { it.type == "echo" && it.on != false } else null
         if (ec != null) {
             // Yankı: katmanın önceki/sonraki anları azalan opaklıkla
@@ -219,11 +250,11 @@ class Renderer(private val ctx: Context, maxSide: Int = 2048, private val sync: 
             if (mode == 1) echoes()
             return
         }
-        val tr = worldTransform(p, l, t).let { if (echoMul != 1.0) it.copy(opacity = it.opacity * echoMul) else it }
+        val tr = worldTransform(p, l, t).let { if (echoMul != 1.0) it.copy(opacity = it.opacity * echoMul) else it }.let { w -> flockXf?.let { f -> w.copy(x = w.x + f[0], y = w.y + f[1], rot = w.rot + f[2], scale = w.scale * f[3]) } ?: w }
         val alpha = (tr.opacity.coerceIn(0.0, 1.0) * 255).toInt()
         if (alpha <= 0) return
         val blend = echoBlend ?: blendOf(l.blend)
-        val gpu = if (lim("warp") > 0 && !GlFx.failed) l.effects.filter { e -> e.on != false && fxMeta(e.type).kind in GlFx.GPU_KINDS } else emptyList()
+        val gpu = if (lim("warp") > 0 && !GlFx.failed) l.effects.filter { e -> e.on != false && fxMeta(e.type).kind in GlFx.GPU_KINDS }.map { linkPoints(p, l, it, t, tr) } else emptyList()
         val mb = if (lim("blur") > 0) l.effects.find { (it.type == "motionblur" || it.type == "pixelmb") && it.on != false } else null
         if (gpu.isEmpty() && mb == null) {
             val needLayer = alpha < 255 || blend != null
