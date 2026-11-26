@@ -34,7 +34,7 @@ const HIST_T = { // History.kt ile aynı sıra (lab için 1/12 sn kare)
   timemosaic: (v, t) => [...Array(9).keys()].map((k) => t - k * 0.2), timemap: (v, t) => [...Array(9).keys()].map((k) => t + (k - 4) / 4),
   motioncomposite: (v, t, d) => [...Array(8).keys()].map((k) => d * k / 7), temporalfreq: (v, t) => [...Array(10).keys()].map((k) => t - k * 0.1),
   colortrail: (v, t) => [...Array(10).keys()].map((k) => t - k * 0.1), movingmatte: (v, t) => [t, ...[...Array(8).keys()].map((k) => t - (k + 1) * 0.15)],
-  motiondirmatte: (v, t) => [t, t - 1 / 12, t + 1 / 12], motionmagnify: (v, t) => [t, t - 1 / 12, t + 1 / 12], cinemagraph: (v, t) => [0],
+  motiondirmatte: (v, t) => [t, t - 1 / 12, t + 1 / 12], motionmagnify: (v, t) => [t, t - 1 / 12, t + 1 / 12], framerepair: (v, t) => [t, t - 1 / 12, t + 1 / 12], cinemagraph: (v, t) => [0],
 };
 async function frame(scene, p) {
   const gl = E.gl, S = scene.size, s = 480 / S, t = p * scene.dur; window.PHASE = p;

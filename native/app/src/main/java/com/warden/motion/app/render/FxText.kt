@@ -29,6 +29,8 @@ object FxText {
         var dx = 0f; var dy = 0f; var rot = 0f; var sc = 1f; var a = 1f; var col: Int? = null; var sx = 1f
     }
 
+    /** Canlı Metin Değişkeni başka katmanı okur: Renderer çizimden önce projeyi verir */
+    @Volatile var project: com.warden.motion.app.model.Project? = null
     fun has(l: Layer) = l.effects.any { it.on != false && fxMeta(it.type).kind == "text" }
 
     private fun ease(k: Int, p: Double): Double = when (k) { 1 -> p; 2 -> { val c = 1.70158; 1 + (c + 1) * (p - 1).pow(3) + c * (p - 1).pow(2) }; else -> 1 - (1 - p).pow(3) }
@@ -66,6 +68,11 @@ object FxText {
                 }
             }
         }
+        // 705 Canlı Metin Değişkeni: seçilen katmanın özelliği, biçimlenmiş sayı olarak
+        fx.find { it.type == "livetext" }?.let { e -> val pr = project; val src = e.c?.get("parametr")?.let { id -> pr?.layers?.find { it.id == id } }
+            if (pr != null && src != null) { val w = worldTransform(pr, src, t); val k = e.value("ozellik", t).roundToInt(); var x = when (k) { 0 -> w.x; 1 -> w.y; 2 -> w.rot; 3 -> w.scale * 100; else -> w.opacity * 100 }
+                val dec = e.value("ondalik", t).roundToInt().coerceIn(0, 6); val num = when (e.value("bicim", t).roundToInt()) { 1 -> String.format(java.util.Locale("tr"), "%.${dec}f%%", x); 2 -> "%02d:%02d".format((x / 60).toInt(), (x % 60).toInt()); 3 -> String.format(java.util.Locale.US, "%.${dec}e", x); else -> String.format(java.util.Locale("tr"), "%.${dec}f", x) }
+                text = (e.c?.get("onek") ?: "") + num + (e.c?.get("birim") ?: "") } }
         var roll: Pair<Double, Int>? = null
         fx.find { it.type == "rollcounter" }?.let { e -> val num = Regex("-?\\d+(?:[.,]\\d+)?").find(text)?.value?.replace(',', '.')?.toDoubleOrNull()
             if (num != null) { val dec = e.value("ondalik", t).roundToInt().coerceIn(0, 6); val dur = max(0.1, abs(num).toString().length / max(0.1, e.value("hiz", t)) * 2); val p = (lt / dur).coerceIn(0.0, 1.0)
@@ -134,6 +141,13 @@ object FxText {
                         if (v("vurguArkaKutu") >= 0.5) { val fm2 = fp.fontMetrics; val r = RectF(gs.minOf { it.x } - 6f, gs.minOf { it.y } + fm2.ascent - 3f, gs.maxOf { it.x + it.w } + 6f, gs.maxOf { it.y } + fm2.descent + 3f)
                             c.drawRoundRect(r, 8f, 8f, Paint(Paint.ANTI_ALIAS_FLAG).apply { color = parseCol(e.c?.get("kutuReng") ?: "#173B69") }) }
                         gs.forEach { it.col = col; it.sc *= sc } } }
+                "karaoke" -> { val unit = v("birim").roundToInt(); val keys = gl.map { when (unit) { 2 -> it.line; 1 -> it.idx / 3; else -> it.word } }.distinct(); val nU = max(1, keys.size)
+                    val tt = lt + v("zamanFark") / 1000; val per = dur / nU; val trans = v("gecisSure") / 1000; val hi = parseCol(e.c?.get("vurguReng") ?: "#43A8FF"); val nor = parseCol(e.c?.get("normalRenk") ?: "#FFFFFF"); val past = parseCol(e.c?.get("gecmisRenk") ?: "#A5B7D2")
+                    val style = v("vurgu").roundToInt(); val fm2 = fp.fontMetrics
+                    gl.forEach { g -> val key = when (unit) { 2 -> g.line; 1 -> g.idx / 3; else -> g.word }; val ui = keys.indexOf(key); val st = ui * per; val k = ((tt - st) / max(1e-3, trans)).coerceIn(0.0, 1.0); val done = tt > st + per
+                        val col = if (done && v("gecmisiVurgTut") < 0.5) past else mixCol(nor, hi, k)
+                        when (style) { 0 -> g.col = col; 1 -> { g.col = nor; if (k > 0 && !(done && v("gecmisiVurgTut") < 0.5)) c.drawRect(g.x, g.y + fm2.descent * 0.6f, g.x + g.w * k.toFloat(), g.y + fm2.descent * 0.6f + 4f, Paint(Paint.ANTI_ALIAS_FLAG).apply { color = hi }) }
+                            else -> { g.col = nor; if (k > 0 && !(done && v("gecmisiVurgTut") < 0.5)) c.drawRect(g.x - 2f, g.y + fm2.ascent, g.x + g.w + 2f, g.y + fm2.descent, Paint(Paint.ANTI_ALIAS_FLAG).apply { color = hi; alpha = (k * 200).toInt() }) } } } }
                 "linereveal" -> { val dir = v("yon").roundToInt(); gl.forEach { g -> val st = g.line * v("satirGeci"); val k = ((lt - st) / max(0.01, v("acilisSure"))).coerceIn(0.0, 1.0); val e2 = (1 - (1 - k).pow(3)).toFloat()
                     when (dir) { 0 -> g.dx -= (1 - e2) * fp.textSize; 1 -> g.dx += (1 - e2) * fp.textSize; 2 -> g.dy -= (1 - e2) * fp.textSize * 0.8f; else -> g.dy += (1 - e2) * fp.textSize * 0.8f }; g.a *= e2 } }
                 "textreveal" -> {

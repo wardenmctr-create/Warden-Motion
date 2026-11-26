@@ -97,3 +97,13 @@ motionpath
 flock
 lipsync
 reactdiff
+framerepair
+cinemagraph
+motionmagnify
+puppetpin
+animchart
+timeline
+ikchain
+organicgrow
+karaoke
+explodegroup

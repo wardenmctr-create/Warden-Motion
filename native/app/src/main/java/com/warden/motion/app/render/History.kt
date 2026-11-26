@@ -24,7 +24,7 @@ object History {
             "temporalfreq" -> { val k = min(cap, 16); val win = v("pencere") * dt; (0 until k).map { t - win * it / k } }
             "colortrail" -> { val k = min(cap, v("ornek").roundToInt().coerceAtLeast(1)); (0 until k).map { t - it * v("zamanAral") * 0.1 } }
             "movingmatte" -> { val g = v("gecmis").coerceAtLeast(1.0); val k = min(cap, 9); listOf(t) + (1 until k).map { t - it * g / (k - 1) * dt } }
-            "motiondirmatte", "motionmagnify" -> listOf(t, t - dt, t + dt)
+            "motiondirmatte", "motionmagnify", "framerepair" -> listOf(t, t - dt, t + dt)
             "cinemagraph" -> listOf(l.start + v("sabitKareZama"))
             else -> null
         }

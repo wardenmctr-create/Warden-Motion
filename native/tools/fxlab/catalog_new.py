@@ -76,6 +76,17 @@ NEW.update({
 })
 HIDE.update({"softbody": ["agAyri"], "lipsync": ["eslemeModu"], "motionpath": ["koordina"]})
 NEW.update({507: ("reactdiff", "Prosedürel", "pixel", ["Desen", "Benzetim", "Turing"], None)})
+NEW.update({
+ 473: ("framerepair", "Zaman", "pixel", ["Onarım", "Kare", "Video"], None), 526: ("cinemagraph", "Zaman", "pixel", ["Hareketli fotoğraf", "Maske"], None),
+ 527: ("motionmagnify", "Zaman", "pixel", ["Hareket", "Büyütme"], None), 496: ("puppetpin", "Bükme ve Bozulma", "pixel", ["Kukla", "Pim"], {"box": 0.2}),
+ 522: ("animchart", "Diğer", "gen", ["Grafik", "Sütun", "Pasta"], None), 523: ("timeline", "Diğer", "gen", ["Tarih", "Zaman çizelgesi"], None),
+ 497: ("ikchain", "Taşı ve Dönüştür", "rig", ["Kemik", "Ters kinematik"], None), 514: ("organicgrow", "Prosedürel", "gen", ["Büyüme", "Organik"], None),
+ 519: ("karaoke", "Metin", "text", ["Metin", "Karaoke", "Altyazı"], None), 536: ("explodegroup", "Taşı ve Dönüştür", "rig", ["Parça", "Ayrıştırma"], None),
+})
+HIDE.update({"framerepair": ["gecerliKareIsar", "isaretiKald", "kareSeci", "enUzunBosl"], "cinemagraph": ["maskeyiCiz", "dongu", "donguSure", "donguKari"], "motionmagnify": ["altFrek", "ustFrek", "yontem", "sahneKesiSifi", "kalite", "etkiMask"],
+  "puppetpin": ["agAyri", "agGeni", "pimEkle", "pimiKald"], "animchart": ["veriDuze"], "timeline": ["olayEkle"], "ikchain": ["eklemEkle"], "karaoke": ["altyaziDosy", "zamanIsarEkle"], "explodegroup": ["parcaSeci"], "organicgrow": ["baslangi"]})
+for _n in (496,):
+    pass
 READY2 = set(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "ready2.txt")).read().split()) if os.path.exists(os.path.join(os.path.dirname(os.path.abspath(__file__)), "ready2.txt")) else set()
 _POS = _re.compile(r"(merkez|konum|ufuk|nokta|kök|başlangıç$|bitiş$|bağlantı|hedef)", _re.I)
 MATS = ["Beyaz kâğıt", "Renkli kâğıt", "Kraft kâğıt", "Karton", "Parşömen", "Keçe"]
@@ -86,6 +97,7 @@ def _conv(p):
     if q["kind"] in ("toggle", "choice"): q["anim"] = "step"
     if q["kind"] in ("source", "button", "text", "info"): q["anim"] = "no"
     if q["kind"] == "button" and not q.get("reset"): q["hideUi"] = True
+    if q["kind"] == "source" and q["k"] in ("modelGrub",): q["multi"] = True
     if q["kind"] == "info" and p.get("code") == "Ş": q.update(kind="choice", min=0, max=len(MATS) - 1, def_=0, opts=list(MATS), anim="step")  # işlevi tanımlı olmayan eylem düğmeleri gösterilmez
     return q
 for _t in ("reverse", "basstreble", "delay", "flanger", "filter", "modulator", "parameq", "reverb", "stereo", "tone"):

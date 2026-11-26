@@ -172,6 +172,7 @@ class Renderer(private val ctx: Context, maxSide: Int = 2048, private val sync: 
         paint.color = parseCol(p.background, android.graphics.Color.WHITE)
         c.drawRect(0f, 0f, p.width.toFloat(), p.height.toFloat(), paint)
         c.clipRect(0f, 0f, p.width.toFloat(), p.height.toFloat())
+        FxText.project = p
         for (l in drawOrder(p, t)) {
             if (l.type == "audio" || l.hidden == true || t < l.start || t >= l.end) continue
             val m = l.mask?.let { id -> p.layers.find { it.id == id } }
@@ -225,7 +226,9 @@ class Renderer(private val ctx: Context, maxSide: Int = 2048, private val sync: 
     /** Canlı Bağlantı Çizgisi / Ölçü Oku: uçlara seçilen katmanların o anki konumu yazılır (katmanın kutusuna göre %) */
     private fun linkPoints(p: Project, l: Layer, e: Effect, t: Double, tr: TR): Effect {
         // Grafik/harita verisi: seçilen metin katmanındaki satırlar (virgül/boşlukla ayrılmış sayılar) → dv dizisi, dvR satır, dvC sütun
-        val dataKey = listOf("veri", "zamanSeri", "baglanti", "noktaVeri").firstOrNull { k -> fxMeta(e.type).params.any { it.key == k } }
+        if (e.type == "puppetpin") { val x0 = e.value("pimKonuX", l.start); val y0 = e.value("pimKonuY", l.start)
+            return e.copy(v = (e.v ?: emptyMap()) + ("dv0" to com.warden.motion.app.model.Anim((x0 / 100 - 0.5) * l.w)) + ("dv1" to com.warden.motion.app.model.Anim((y0 / 100 - 0.5) * l.h))) }
+        val dataKey = listOf("veri", "zamanSeri", "baglanti", "noktaVeri", "veriDosy", "olayDosy", "akisTabl").firstOrNull { k -> fxMeta(e.type).params.any { it.key == k } }
         if (dataKey != null) { val src = e.c?.get(dataKey)?.let { id -> p.layers.find { it.id == id } }; val txt = src?.text ?: return e
             val rows = txt.lines().map { ln -> Regex("-?\\d+(?:[.,]\\d+)?").findAll(ln).map { it.value.replace(',', '.').toDouble() }.toList() }.filter { it.isNotEmpty() }.take(64)
             val cols = rows.maxOfOrNull { it.size }?.coerceAtMost(16) ?: 0; if (rows.isEmpty() || cols == 0) return e; var v = e.v ?: emptyMap(); var i = 0

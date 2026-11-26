@@ -7,6 +7,7 @@ import com.warden.motion.app.model.value
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.roundToInt
+import kotlin.math.pow
 import kotlin.math.cos
 import kotlin.math.floor
 import kotlin.math.hypot
@@ -29,7 +30,7 @@ object AudioLevels {
  * Countryball rig efektleri (403 Göz Takibi, 404 Göz Kırpma, 405 Kaş, 406 Konuşma, 426 İfade, 427 Parçalı Rig, 429 Harita Sabitleme).
  * Efekt bir "ana" katmanda durur ve seçilen diğer katmanların yerel dönüşümünü değiştirir.
  */
-private val RIG = setOf("cbeyes", "cbblink", "cbbrow", "cbexpr", "cbrig", "cbmaplock", "lipsync", "paramseq", "dragchain")
+private val RIG = setOf("cbeyes", "cbblink", "cbbrow", "cbexpr", "cbrig", "cbmaplock", "lipsync", "paramseq", "dragchain", "ikchain", "explodegroup")
 private var rigDepth = 0
 
 private fun ids(e: Effect, k: String) = e.c?.get(k)?.split(',')?.filter { it.isNotBlank() } ?: emptyList()
@@ -114,6 +115,14 @@ fun rigLocal(p: Project, l: Layer, t: Double, loc0: TR, parent: TR?): TR {
                     val prm = if (e.type == "paramseq") v("parametr").roundToInt() else 0
                     loc = when (prm) { 0 -> loc.copy(x = loc.x + a.x - b.x, y = loc.y + a.y - b.y); 1 -> loc.copy(scale = loc.scale * a.scale / (if (abs(b.scale) > 1e-6) b.scale else 1.0)); 2 -> loc.copy(rot = loc.rot + a.rot - b.rot); 3 -> loc.copy(opacity = loc.opacity * a.opacity); else -> loc }
                 }
+                "ikchain" -> { if (e.c?.get("bagliParc") != l.id) continue; val hb = worldTransform(p, h, t); val ang = Motion2.ik(p, h, e, t, layerTransform(h, t)) ?: continue
+                    val (lx, ly) = worldOffset(ang[2] - (parent?.x ?: 0.0) - loc.x, ang[3] - (parent?.y ?: 0.0) - loc.y); loc = loc.copy(x = loc.x + lx, y = loc.y + ly, rot = ang[1] - (parent?.rot ?: 0.0)) }
+                "explodegroup" -> { val ids = ids(e, "modelGrub"); val i = ids.indexOf(l.id); if (i < 0) continue; val n = ids.size
+                    val k = ((v("ilerleme") / 100) - i * v("parcaGeci") / 100).coerceIn(0.0, 1.0).let { 1 - (1 - it).pow(3) }; val parts = ids.mapNotNull { id -> p.layers.find { it.id == id } }
+                    val cx = parts.map { layerTransform(it, t).x }.average(); val cy = parts.map { layerTransform(it, t).y }.average(); val me = layerTransform(l, t); val dist = v("uzaklik") * k
+                    val (dx, dy) = when (v("yon").roundToInt()) { 1 -> (if (me.x >= cx) 1.0 else -1.0) to 0.0; 2 -> 0.0 to (if (me.y >= cy) 1.0 else -1.0); 3 -> 0.0 to 0.0; else -> { val ax = me.x - cx; val ay = me.y - cy; val d = hypot(ax, ay); if (d > 1e-6) ax / d to ay / d else cos(i * 2.4) to sin(i * 2.4) } }
+                    val sc = if (v("yon").roundToInt() == 3) 1 + k * (i - n / 2.0) / max(1.0, n.toDouble()) * 0.4 else 1.0
+                    val (lx, ly) = worldOffset(dx * dist, dy * dist); loc = loc.copy(x = loc.x + lx, y = loc.y + ly, rot = loc.rot + v("donusFark") * k * (if (i % 2 == 0) 1 else -1), scale = loc.scale * sc) }
                 "lipsync" -> {
                     val mouths = listOf("kapaliAgiz", "yariAcikAgiz", "acikAgiz").map { e.c?.get(it) }; val mi = mouths.indexOf(l.id); if (mi < 0) continue
                     val src = e.c?.get("sesKatm")?.let { id -> p.layers.find { it.id == id } }

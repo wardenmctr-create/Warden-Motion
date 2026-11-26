@@ -5,6 +5,7 @@ alphathr
 ambientocc
 anaglyph
 anamorphic
+animchart
 anisodiff
 apollonian
 applique
@@ -48,6 +49,7 @@ brushstrokes
 bubbles
 buildorder
 bulge
+bumpcard
 burnfilm
 bwmix
 capsule
@@ -86,6 +88,7 @@ chrome
 chromolitho
 chromvortex
 chromzoom
+cinemagraph
 cinematic
 circlefx
 clahe
@@ -99,6 +102,7 @@ colorbounce
 coloremboss
 colorize
 colormatch
+colormatchtrans
 colorprofile
 colorrange
 colorselect
@@ -106,6 +110,7 @@ colorstab
 colortrail
 colortune
 comic
+comparesplit
 compass
 compisolate
 complexmap
@@ -126,8 +131,10 @@ crossblur
 crossprocess
 crt
 cube
+cubeface
 cubism
 curl
+curtain
 curves
 cutback
 cyanotype
@@ -161,6 +168,8 @@ displace
 dispmap
 dissolve
 dla
+dollyzoom
+doorwings
 dots
 drizzle
 droplets
@@ -189,6 +198,7 @@ facethick
 feather
 feedbackloop
 fftnotch
+filmroll
 fire
 fireworks
 flagpole3d
@@ -204,14 +214,17 @@ flowwarp
 foam
 foamcells
 focusmap
+focuspull
 fog
 fold3d
+foldpanels
 fourcolor
 fractal
 fractalnoise
 fractalpath
 fractalset
 frame
+framerepair
 frameshuffle
 freelens
 freqsep
@@ -283,6 +296,7 @@ interference
 invert
 iridescence
 iris
+irisblades
 jaws
 kaleido
 kernelfilter
@@ -312,6 +326,7 @@ linocut
 linrepeat
 linstreaks
 linwipe
+liquidmerge
 liquify
 lissajous
 localcontrast
@@ -325,6 +340,7 @@ lumakey
 lumastamp
 lumetri
 lut
+magnifier
 magnify
 magnifybg
 mapproject
@@ -349,7 +365,11 @@ mosaic
 mosaicgrout
 mossgrow
 motioncomposite
+motiondirmatte
+motionmagnify
+movingmatte
 mudcrack
+multicam
 multiscale
 nebula
 neonedge
@@ -370,17 +390,22 @@ oldfilm
 ominodiff
 ominoglass
 opticscomp
+organicgrow
 origami
 ornament
 pageturn
+pageturn2
 paintbucket
 paintbynumber
 paintdrip
 palettemap
+paperhole
 paperrelief
 papiermache
+parallaxstrips
 particles
 particleworld
+peel
 pencilhatch
 penrose
 perspgrid
@@ -395,14 +420,17 @@ planet3d
 plantgrow
 plasma
 plastic
+plateseparate
 pointcloud
 poissondots
 polar
 polardisp
+popout
 poseblend
 posterize
 powervoronoi
 prismfx
+puppetpin
 pyramid
 quilling
 radarchart
@@ -427,6 +455,7 @@ ribbon
 ribbonflow
 ridges
 ring3d
+ringcross
 ringplanet
 ripple
 ripplepulse
@@ -439,6 +468,7 @@ roundcorners
 sandart
 sandcarve
 sandstorm
+sankey
 satlimit
 scalebar
 scalewipe
@@ -459,6 +489,7 @@ shadow
 shadowtheater
 shakeparts
 shapemask
+shapematchtrans
 sharpen
 shatter
 shear
@@ -467,6 +498,7 @@ slant
 slices
 slopemap
 smartfill
+smartframe
 smear
 smoke
 smoothedges
@@ -508,6 +540,7 @@ stroke
 sunsurface
 swirl
 swirlblur
+swishpan
 taper3d
 temperature
 temporaldenoise
@@ -525,8 +558,10 @@ tilerotate
 tiles
 tileshift
 tiltshift
+timeline
 timemap
 timemosaic
+timeslice
 tinyplanet
 tornado
 tornpaper
@@ -540,6 +575,7 @@ tunnel
 turingmaze
 twist3d
 twister
+twotargetzoom
 underwater
 unsharp
 upscale

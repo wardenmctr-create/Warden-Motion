@@ -11,7 +11,7 @@ import kotlin.math.*
  * kendini kaçınan yol (666), dallanarak birikme (667). Sonuç gri tonlu küçük görüntü; aynı ayarlar için önbellekten gelir.
  */
 object Sims {
-    val TYPES = setOf("reactdiff", "turingmaze", "cellauto", "selfavoid", "dla")
+    val TYPES = setOf("reactdiff", "turingmaze", "cellauto", "selfavoid", "dla", "organicgrow")
     private val cache = object : LinkedHashMap<String, Bitmap>(16, 0.75f, true) { override fun removeEldestEntry(e: MutableMap.MutableEntry<String, Bitmap>?) = size > 12 }
     fun source(e: Effect, t: Double): Bitmap? {
         fun v(k: String) = e.value(k, t)
@@ -23,6 +23,7 @@ object Sims {
             "cellauto" -> cellAuto(v("izgara").roundToInt().coerceIn(8, 256), v("kural").roundToInt(), v("nesil").roundToInt().coerceIn(0, 2000), v("tohum").toInt())
             "selfavoid" -> selfAvoid(200, v("uzunluk").roundToInt().coerceIn(1, 10000), max(1, (v("adim") / 4).roundToInt()), v("enAzMesa"))
             "dla" -> dla(180, (v("parcacik") * v("buyumeIler") / 100).roundToInt().coerceIn(0, 5000), v("tohum").toInt())
+            "organicgrow" -> organic((v("yineleme") * v("buyumeHizi") / 50).roundToInt().coerceIn(0, 1000), v("baslangiBoyu"), v("noktaUzak"), v("itmeGucu") / 100, v("yumusatm") / 100, v("tohum").toInt())
             else -> null
         } ?: return null
         cache[key] = bmp; return bmp
@@ -51,6 +52,19 @@ object Sims {
             val opts = listOf(1 to 0, -1 to 0, 0 to 1, 0 to -1).filter { (dx, dy) -> (1..step * gap).all { k -> val nx = x + dx * k; val ny = y + dy * k; nx in 0 until n && ny in 0 until n && !grid[ny * n + nx] } }
             if (opts.isEmpty()) break; val (dx, dy) = opts[r.nextInt(opts.size)]; repeat(step) { x += dx; y += dy; grid[y * n + x] = true; out[y * n + x] = 1.0 } }
         return toBmp(n) { out[it] }
+    }
+    /** Farksal büyüme: kapalı çizgi, komşu itmesi + düzleştirme; uzayan kenarlara nokta eklenir */
+    private fun organic(iters: Int, start: Double, gap: Double, push: Double, smooth: Double, seed: Int): Bitmap {
+        val n = 256; val r = java.util.Random(seed.toLong()); var xs = ArrayList<Double>(); var ys = ArrayList<Double>(); val r0 = (start / 1000 * n).coerceIn(5.0, n * 0.3); val g = (gap / 100 * n * 0.2).coerceIn(1.5, 12.0)
+        val m = max(12, (2 * PI * r0 / g).toInt()); for (i in 0 until m) { val a = 2 * PI * i / m; xs += n / 2 + cos(a) * r0 + r.nextDouble() * 0.3; ys += n / 2 + sin(a) * r0 + r.nextDouble() * 0.3 }
+        repeat(iters) { val N = xs.size; val fx = DoubleArray(N); val fy = DoubleArray(N); val R = g * 2.2
+            for (i in 0 until N) { for (j in i + 1 until N) { val dx = xs[i] - xs[j]; val dy = ys[i] - ys[j]; val d2 = dx * dx + dy * dy; if (d2 < R * R && d2 > 1e-6) { val d = sqrt(d2); val f = (R - d) / R * push; fx[i] += dx / d * f; fy[i] += dy / d * f; fx[j] -= dx / d * f; fy[j] -= dy / d * f } }
+                val p = (i + N - 1) % N; val q = (i + 1) % N; fx[i] += ((xs[p] + xs[q]) / 2 - xs[i]) * smooth; fy[i] += ((ys[p] + ys[q]) / 2 - ys[i]) * smooth }
+            for (i in 0 until N) { xs[i] = (xs[i] + fx[i]).coerceIn(2.0, n - 3.0); ys[i] = (ys[i] + fy[i]).coerceIn(2.0, n - 3.0) }
+            if (N < 900) { val nx = ArrayList<Double>(); val ny = ArrayList<Double>(); for (i in 0 until N) { nx += xs[i]; ny += ys[i]; val q = (i + 1) % N; if (hypot(xs[q] - xs[i], ys[q] - ys[i]) > g * 1.6) { nx += (xs[i] + xs[q]) / 2; ny += (ys[i] + ys[q]) / 2 } }; xs = nx; ys = ny } }
+        val bmp = Bitmap.createBitmap(n, n, Bitmap.Config.ARGB_8888); val c = android.graphics.Canvas(bmp); val pt = android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG).apply { color = android.graphics.Color.WHITE; strokeWidth = 1.6f; style = android.graphics.Paint.Style.STROKE }
+        c.drawColor(android.graphics.Color.BLACK); val path = android.graphics.Path(); for (i in xs.indices) { if (i == 0) path.moveTo(xs[i].toFloat(), ys[i].toFloat()) else path.lineTo(xs[i].toFloat(), ys[i].toFloat()) }; path.close(); c.drawPath(path, pt)
+        return bmp
     }
     private fun dla(n: Int, count: Int, seed: Int): Bitmap {
         val g = BooleanArray(n * n); val c = n / 2; g[c * n + c] = true; val r = java.util.Random(seed.toLong()); var rad = 4.0; val age = DoubleArray(n * n); age[c * n + c] = 1.0

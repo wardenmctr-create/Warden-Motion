@@ -13,6 +13,17 @@ object Motion2 {
     private fun pos(l: Layer, t: Double) = doubleArrayOf(l.x.at(t), l.y.at(t))
     private fun angDiff(a: Double, b: Double): Double { var d = (a - b) % 360; if (d > 180) d -= 360; if (d < -180) d += 360; return d }
 
+    /** 497 Ters Kinematik: iki kemikli zincir; [üst kemik açısı, alt kemik açısı (dünya), dirsek x, dirsek y] */
+    fun ik(p: Project, l: Layer, e: Effect, t: Double, base: TR): DoubleArray? {
+        val L1 = max(1.0, e.value("kemikUzun", t)); val L2 = L1; val g = tgt(p, e, "hedefKatm")
+        val (tx, ty) = if (g != null) worldTransform(p, g, t).let { it.x to it.y } else (base.x + (e.value("ucHedeX", t) / 100 - 0.5) * l.w * base.scale) to (base.y + (e.value("ucHedeY", t) / 100 - 0.5) * l.h * base.scale)
+        var dx = tx - base.x; var dy = ty - base.y; var d = hypot(dx, dy); if (d < 1e-6) return null
+        if (e.value("uzunlukKoru", t) >= 0.5 && d > L1 + L2) { dx *= (L1 + L2) / d * 0.9999; dy *= (L1 + L2) / d * 0.9999; d = L1 + L2 - 1e-3 }
+        val c2 = ((d * d - L1 * L1 - L2 * L2) / (2 * L1 * L2)).coerceIn(-1.0, 1.0); var a2 = acos(c2); val lim = Math.toRadians(e.value("eklemAciSini", t)); a2 = a2.coerceAtMost(lim)
+        val dir = when (e.value("bukulmeYonu", t).roundToInt()) { 1 -> -1.0; 2 -> if (dx >= 0) 1.0 else -1.0; else -> 1.0 }; a2 *= dir
+        val a1 = atan2(dy, dx) - atan2(L2 * sin(a2), L1 + L2 * cos(a2)); val ex = base.x + cos(a1) * L1; val ey = base.y + sin(a1) * L1
+        return doubleArrayOf(Math.toDegrees(a1), Math.toDegrees(a1 + a2), ex, ey) }
+
     fun local(p: Project, l: Layer, t: Double, tr0: TR): TR {
         var tr = tr0
         for (e in l.effects) { if (e.on == false) continue; fun v(k: String) = e.value(k, t)
@@ -66,6 +77,12 @@ object Motion2 {
                         val k = 5.0 + e.value("sertlik", tt) / 100 * 200; val d = e.value("sonum", tt) / 100 * 2 * sqrt(k); s[1] += (-k * s[0] - d * s[1] - ax * 0.05) * Physics.DT; s[0] += s[1] * Physics.DT }
                     val w = worldTransform(p, par, t); val ra = w.rot * PI / 180; val ox = v("bagNoktX"); val oy = v("bagNoktY"); val jx = w.x + (ox * cos(ra) - oy * sin(ra)) * w.scale; val jy = w.y + (ox * sin(ra) + oy * cos(ra)) * w.scale
                     val ang = st[0].coerceIn(-80.0, 80.0); val rr = ang * PI / 180; val dx = tr.x - jx; val dy = tr.y - jy; tr = tr.copy(x = jx + dx * cos(rr) - dy * sin(rr), y = jy + dx * sin(rr) + dy * cos(rr), rot = tr.rot + ang) }
+                "ikchain" -> { val ang = ik(p, l, e, t, tr) ?: continue; tr = tr.copy(rot = ang[0]) }
+                "paramlink" -> { val src = tgt(p, e, "kaynakPara") ?: continue; val w = worldTransform(p, src, t); val k = v("kaynakOzellik").roundToInt()
+                    val sv = when (k) { 0 -> w.x; 1 -> w.y; 2 -> w.rot; 3 -> w.scale * 100; else -> w.opacity * 100 }; val out = sv * v("carpan") + v("ofset")
+                    tr = when (v("hedefPara").roundToInt()) { 0 -> tr.copy(x = out); 1 -> tr.copy(y = out); 2 -> tr.copy(rot = out); 3 -> tr.copy(scale = out / 100); else -> tr.copy(opacity = (out / 100).coerceIn(0.0, 1.0)) } }
+                "softlimit" -> { val lo = v("altSinir"); val hi = v("ustSinir"); val g = max(1e-6, v("gecis")); fun soft(x: Double): Double { if (x > hi - g) return hi - g + g * tanh((x - (hi - g)) / g); if (x < lo + g) return lo + g - g * tanh(((lo + g) - x) / g); return x }
+                    tr = when (v("hedefPara").roundToInt()) { 0 -> tr.copy(x = soft(tr.x)); 1 -> tr.copy(y = soft(tr.y)); 2 -> tr.copy(rot = soft(tr.rot)); 3 -> tr.copy(scale = soft(tr.scale * 100) / 100); else -> tr.copy(opacity = (soft(tr.opacity * 100) / 100).coerceIn(0.0, 1.0)) } }
                 "snapcurve" -> { val g = tgt(p, e, "egri") ?: continue; val w = worldTransform(p, g, t); val ra = w.rot * PI / 180
                     val pts = (g.pts?.takeIf { it.size >= 2 }?.map { doubleArrayOf((it[0] - 0.5) * g.w, (it[1] - 0.5) * g.h) } ?: listOf(doubleArrayOf(-g.w / 2, 0.0), doubleArrayOf(g.w / 2, 0.0)))
                         .map { doubleArrayOf(w.x + (it[0] * cos(ra) - it[1] * sin(ra)) * w.scale, w.y + (it[0] * sin(ra) + it[1] * cos(ra)) * w.scale) }

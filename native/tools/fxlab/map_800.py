@@ -134,3 +134,33 @@ N8A([
  (773, "spectrogram", "Ses", "gen", ["Ses", "Görselleştirici"], None), (774, "phasescope", "Ses", "gen", ["Ses", "Görselleştirici", "Stereo"], None), (775, "loudmeter", "Ses", "gen", ["Ses", "Ölçer"], None),
 ])
 HIDE8.update({"loudnorm": ["analizEt"], "peaknorm": ["analiz"], "dcremove": ["olc"], "declip": ["onizle"]})
+N8A([
+ (776, "swishpan", "Geçiş", "pixel", ["Geçiş", "Kaydırma"], {"box": 0.2}), (777, "filmroll", "Geçiş", "pixel", ["Geçiş", "Film"], {"box": 0.2}),
+ (778, "focuspull", "Geçiş", "pixel", ["Geçiş", "Odak"], {"k": "azamiBoke"}), (779, "parallaxstrips", "Geçiş", "pixel", ["Geçiş", "Şerit"], None),
+ (780, "cubeface", "Geçiş", "pixel", ["Geçiş", "Küp", "3B"], None), (781, "pageturn2", "Geçiş", "pixel", ["Geçiş", "Sayfa"], None),
+ (782, "doorwings", "Geçiş", "pixel", ["Geçiş", "Kapı"], None), (783, "irisblades", "Geçiş", "pixel", ["Geçiş", "Diyafram"], None),
+ (784, "foldpanels", "Geçiş", "pixel", ["Geçiş", "Katlama"], None), (785, "curtain", "Geçiş", "pixel", ["Geçiş", "Perde"], None),
+ (786, "ringcross", "Geçiş", "pixel", ["Geçiş", "Halka"], None), (787, "colormatchtrans", "Geçiş", "pixel", ["Geçiş", "Renk"], None),
+ (788, "shapematchtrans", "Geçiş", "pixel", ["Geçiş", "Şekil"], None), (789, "peel", "Geçiş", "pixel", ["Geçiş", "Soyma"], None),
+ (790, "liquidmerge", "Geçiş", "pixel", ["Geçiş", "Sıvı"], None), (791, "paperhole", "Geçiş", "pixel", ["Geçiş", "Kâğıt"], None),
+ (792, "plateseparate", "Geçiş", "pixel", ["Geçiş", "Renk plakası"], {"k": "kayma"}), (793, "timeslice", "Geçiş", "pixel", ["Geçiş", "Zaman"], None),
+ (794, "multicam", "Diğer", "pixel", ["Kamera", "Pencere"], None), (795, "smartframe", "Diğer", "pixel", ["Kadraj", "Takip"], None),
+ (796, "twotargetzoom", "Diğer", "pixel", ["Yakınlaşma", "Takip"], None), (797, "dollyzoom", "Bükme ve Bozulma", "pixel", ["Kamera", "Perspektif"], None),
+ (798, "comparesplit", "Diğer", "pixel", ["Karşılaştırma", "Bölme"], None), (799, "magnifier", "Diğer", "pixel", ["Büyüteç", "Pencere"], None),
+ (800, "popout", "Maske ve Anahtar", "pixel", ["Çerçeve", "Taşma"], {"box": 0.2}),
+])
+HIDE8.update({"shapematchtrans": ["noktaCiftEkle"], "multicam": ["senkronOfse"], "smartframe": ["yumusatm"]})
+TRANS8.update({"swishpan", "filmroll", "focuspull", "parallaxstrips", "cubeface", "doorwings", "foldpanels", "curtain", "ringcross", "plateseparate", "pageturn2", "irisblades", "colormatchtrans", "shapematchtrans", "liquidmerge", "timeslice"})
+N8A([
+ (571, "temporaldenoise", "Zaman", "pixel", ["Zaman", "Gürültü"], None), (583, "movingmatte", "Maske ve Anahtar", "pixel", ["Hareket", "Mat", "Zaman"], None),
+ (584, "motiondirmatte", "Maske ve Anahtar", "pixel", ["Hareket", "Yön", "Mat"], None), (686, "paramlink", "Taşı ve Dönüştür", "xform", ["Bağlantı", "Parametre"], None),
+ (688, "softlimit", "Taşı ve Dönüştür", "xform", ["Sınır", "Parametre"], None), (705, "livetext", "Metin", "text", ["Metin", "Değişken"], None),
+ (709, "sankey", "Diğer", "gen", ["Grafik", "Akış"], None), (739, "bumpcard", "3B", "3d", ["3B", "Kabartı"], {"box": 0.45}),
+])
+PROPS = ["Konum X", "Konum Y", "Dönüş", "Ölçek (%)", "Opaklık (%)"]
+def _ch8(k, l, opts, d=0): return dict(k=k, l=l, kind="choice", min=0, max=len(opts) - 1, def_=d, step=1, jog=1, opts=list(opts), anim="step")
+PFIX.update({
+ "paramlink": lambda ps: [_ch8("kaynakOzellik", "Kaynak özellik", PROPS)] + _rep(ps, "hedefPara", [_ch8("hedefPara", "Hedef özellik", PROPS)]),
+ "softlimit": lambda ps: _rep(_rep(ps, "altUstSini", [_J8("altSinir", "Alt sınır", 0, -10000, 10000), _J8("ustSinir", "Üst sınır", 1000, -10000, 10000)]), "hedefPara", [_ch8("hedefPara", "Hedef özellik", PROPS)]),
+ "livetext": lambda ps: ps[:1] + [_ch8("ozellik", "Okunan özellik", PROPS)] + ps[1:],
+})
