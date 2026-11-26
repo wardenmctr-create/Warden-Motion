@@ -11,7 +11,7 @@ data class FxPreset(val code: String, val name: String, val vals: Map<String, Do
                     val cols: Map<String, String>, val atEnd: Boolean, val alias: String?)
 data class FxPass(val fs: String?, val blur: String?, val blurK: String?, val blurMul: Double, val blurAdd: Double, val input: String?, val out: String?,
                   val aux: Map<String, String>, val set: Map<String, List<Double>>)
-data class FxPad(val k: String?, val mul: Double, val add: Double, val max: List<String>?, val box: Double = 0.0)
+data class FxPad(val k: String?, val mul: Double, val add: Double, val max: List<String>?, val box: Double = 0.0, val sum: List<String>? = null)
 
 object FxCatalog {
     var cats: List<String> = emptyList(); private set
@@ -76,7 +76,7 @@ object FxCatalog {
                 p.s("at") == "end", p.s("alias"))
         } ?: emptyList()
         val padO = o["pad"] as? JsonObject
-        val pad = padO?.let { FxPad(it.s("k"), it.d("mul") ?: 1.0, it.d("add") ?: 0.0, (it["max"] as? JsonArray)?.map { x -> x.jsonPrimitive.content }, it.d("box") ?: 0.0) }
+        val pad = padO?.let { FxPad(it.s("k"), it.d("mul") ?: 1.0, it.d("add") ?: 0.0, (it["max"] as? JsonArray)?.map { x -> x.jsonPrimitive.content }, it.d("box") ?: 0.0, (it["sum"] as? JsonArray)?.map { x -> x.jsonPrimitive.content }) }
         val cat = o["cat"]!!.jsonPrimitive.int
         return FxMeta(o.s("type")!!, o.s("name") ?: "", cats.getOrElse(cat) { "" }, (o["params"] as? JsonArray)?.map { param(it.jsonObject) } ?: emptyList(),
             info = o.s("info"), en = o.s("en") ?: "", catIndex = cat, kind = o.s("kind") ?: "pixel", desc = o.s("desc") ?: "",

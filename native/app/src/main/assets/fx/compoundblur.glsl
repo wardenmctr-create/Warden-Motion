@@ -1,5 +1,11 @@
 // compoundblur
-uniform sampler2D u_aux; uniform float p_map;
-void main() { vec4 s = texture(u_tex, v_uv), b = texture(u_aux, v_uv); vec2 q = boxUV(v_uv * u_res) - 0.5; int m = int(p_map + 0.5); float k;
-  if (m == 0) k = smoothstep(0.15, 0.6, length(q) * 1.3); else if (m == 1) k = 1.0 - smoothstep(0.0, 0.45, length(q)); else if (m == 2) k = luma(unpre(s)); else if (m == 3) k = 1.0 - luma(unpre(s)); else k = clamp(q.y + 0.5, 0.0, 1.0);
-  o = mix(s, b, k); }
+uniform sampler2D s_bulaniklHari; uniform float p_bulaniklHariOn; uniform float p_haritaKana, p_maksimumYari, p_tersHari, p_haritayiOlce, p_kenarUzat;
+void main() {
+  vec2 b = clamp(boxUV(here()), 0.0, 1.0); vec4 m = p_bulaniklHariOn > 0.5 ? texture(s_bulaniklHari, b) : texture(u_tex, v_uv);
+  vec3 mc = unpre(m); float v = p_haritaKana < 0.5 ? luma(mc) : p_haritaKana < 1.5 ? m.a : p_haritaKana < 2.5 ? mc.r : p_haritaKana < 3.5 ? mc.g : mc.b;
+  if (p_bulaniklHariOn < 0.5) v = length(b - 0.5) * 1.4; // harita yoksa: kenarlara doğru artar
+  if (p_tersHari > 0.5) v = 1.0 - v;
+  float R = p_maksimumYari * u_s * 0.5 * v; vec4 acc = vec4(0.0); float ws = 0.0;
+  for (int j = -4; j <= 4; j++) for (int i = -4; i <= 4; i++) { vec2 f = vec2(float(i), float(j)) / 4.0; float w = exp(-dot(f, f) * 2.0); acc += texEdge(here() + f * R * 1.5, p_kenarUzat > 0.5 ? 3.0 : 0.0) * w; ws += w; }
+  o = acc / ws;
+}

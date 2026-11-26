@@ -1,9 +1,9 @@
 // roughen
-uniform float p_amount; uniform float p_scale; uniform float p_speed;
+uniform float p_kenarMikt, p_dokuOlce, p_ayrinti, p_evrim, p_tohum, p_kenarYumu;
 void main() {
-  vec2 px = v_uv * u_res; float sc = p_scale * u_s; float t = u_t * p_speed;
-  float n = fbm(px / sc + vec2(t * 0.3, t * 0.2), 4.0);
-  vec2 d = vec2(fbm(px / sc + 5.2 + t * 0.2, 3.0), fbm(px / sc - 3.1 - t * 0.2, 3.0)) * p_amount * u_s;
-  vec4 s = tex(v_uv + d / u_res); float a = s.a; float edge = smoothstep(0.35, 0.65, a + n * 0.35);
-  o = a > 0.0 ? s * (edge / a) : vec4(0.0); o = vec4(unpre(s) * edge, edge);
+  vec2 q = toUnit(here()); vec2 n = q / max(p_dokuOlce, 1.0) + seedf(p_tohum);
+  vec2 d = vec2(fbm(n + vec2(p_evrim * 0.05, 0.0), p_ayrinti - 1.0), fbm(n + vec2(3.7, -p_evrim * 0.05), p_ayrinti - 1.0)) * p_kenarMikt;
+  vec4 s = texU(q); vec4 w = texU(q + d);
+  float a = smoothstep(0.5 - max(p_kenarYumu, 0.3) * 0.1, 0.5 + max(p_kenarYumu, 0.3) * 0.1, w.a);
+  o = pre(s.a > 0.01 ? unpre(s) : unpre(w), a);
 }

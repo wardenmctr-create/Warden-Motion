@@ -83,7 +83,8 @@ void main(){ v_uv = a_pos; vec3 p = u_m * vec3(a_pos, 1.0); gl_Position = vec4(p
         progs[name]?.let { return it }
         if (name in bad) return 0
         val src = asset("fx/$name.glsl") ?: run { bad += name; return 0 }
-        val vs = shader(GLES30.GL_VERTEX_SHADER, VS); val fs = shader(GLES30.GL_FRAGMENT_SHADER, "#version 300 es\n$common\n${gradientExpand(src)}")
+        val vs = shader(GLES30.GL_VERTEX_SHADER, VS); val full = Regex("^INCLUDE\\((\\w+)\\)\\s*$", RegexOption.MULTILINE).replace(src) { m -> asset("fx/${m.groupValues[1]}.glsl") ?: "" }
+        val fs = shader(GLES30.GL_FRAGMENT_SHADER, "#version 300 es\n$common\n${gradientExpand(full)}")
         if (vs == 0 || fs == 0) { bad += name; return 0 }
         val p = GLES30.glCreateProgram(); GLES30.glAttachShader(p, vs); GLES30.glAttachShader(p, fs)
         GLES30.glBindAttribLocation(p, 0, "a_pos"); GLES30.glLinkProgram(p)
@@ -158,11 +159,12 @@ vec3 palc_$k(int i) { vec3 c[8] = vec3[8]($c); return c[clamp(i, 0, 7)]; }"""
         val owned = ArrayList<Tex>(); owned += base
         val srcTex = HashMap<String, Tex>()
         for ((k, b) in job.sources) tex(b.width, b.height, b).also { srcTex["s_$k"] = it; owned += it }
+        val srcOn = job.sources.keys.associate { "p_${it}On" to 1f }
         var cur = base
         for ((e, m) in job.effects) {
             val uni = HashMap<String, Any>()
             uni["u_res"] = floatArrayOf(w.toFloat(), h.toFloat()); uni["u_box"] = job.box; uni["u_t"] = job.lt.toFloat(); uni["u_s"] = job.s; uni["u_dur"] = job.dur.toFloat()
-            uniforms(e, m, job.t, job.box, job.s, uni)
+            uniforms(e, m, job.t, job.box, job.s, uni); uni.putAll(srcOn)
             val bufs = HashMap<String, Tex>(); bufs["src"] = cur
             val passes = m.passes ?: listOf(FxPass(m.type, null, null, 1.0, 0.0, null, null, emptyMap(), emptyMap()))
             var last = cur; var ok = true
@@ -213,7 +215,7 @@ vec3 palc_$k(int i) { vec3 c[8] = vec3[8]($c); return c[clamp(i, 0, 7)]; }"""
     fun uniforms(e: Effect, m: FxMeta, t: Double, box: FloatArray, s: Float, u: MutableMap<String, Any>) {
         for (pr in m.params) {
             when {
-                pr.kind == "color" -> u["c_" + pr.key] = hex(e.c?.get(pr.key) ?: pr.defStr)
+                pr.kind == "color" -> { val h = e.c?.get(pr.key) ?: pr.defStr; u["c_" + pr.key] = hex(h); u["a_" + pr.key] = if (h != null && h.length == 9) (h.substring(7, 9).toIntOrNull(16) ?: 255) / 255f else 1f }
                 pr.kind == "gradient" || pr.kind == "palette" -> gradient(pr, e.c?.get(pr.key) ?: pr.defStr, u)
                 pr.two -> {
                     var x = e.value(pr.key + "X", t); var y = e.value(pr.key + "Y", t)

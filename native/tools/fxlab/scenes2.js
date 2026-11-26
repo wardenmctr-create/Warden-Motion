@@ -31,7 +31,7 @@ function autoScene(type) {
 window.SC2 = SC2; window.autoScene = autoScene;
 // Denetim: shader derleniyor mu, görüntüyü değiştiriyor mu?
 window.probe = async function (type) {
-  const m = E.meta[type]; const g = presetFn(m, 'GÇ');
+  const m = E.meta[type]; const g = presetFn(m, 'GÇ') || presetFn(m, 'AN') || presetFn(m, 'DN');
   const sc = autoScene(type); sc.layers[sc.layers.length - 1].fx[0].v = g || (() => ({}));
   const a = await frame(sc, 0.3);
   const sc0 = { ...sc, layers: sc.layers.map((L) => ({ ...L, fx: [] })) };

@@ -30,7 +30,11 @@ class Engine {
     // Shader'ı henüz rehbere göre yazılmamış efektler eski ayarlarıyla çalışır
     this.meta = {}; for (const e of this.cat.effects) this.meta[e.type] = (!e.ready && leg[e.type]) ? { ...e, ...leg[e.type] } : e;
   }
-  async shaderSrc(name) { if (!this.src[name]) this.src[name] = await (await fetch(FX + name + '.glsl')).text(); return this.src[name]; }
+  async shaderSrc(name) {
+    if (!this.src[name]) { let t = await (await fetch(FX + name + '.glsl')).text();
+      for (const m of [...t.matchAll(/^INCLUDE\((\w+)\)\s*$/mg)]) t = t.replace(m[0], await (await fetch(FX + m[1] + '.glsl')).text());
+      this.src[name] = t; }
+    return this.src[name]; }
   async prog(name) {
     if (this.progs[name]) return this.progs[name];
     const gl = this.gl; const fsrc = '#version 300 es\n' + this.common + '\n' + gradientExpand(await this.shaderSrc(name));
@@ -73,7 +77,7 @@ function hexToRgb(h) { const n = parseInt(h.slice(1), 16); return [(n >> 16 & 25
 function fxUniforms(meta, vals, box, s) {
   const u = {};
   for (const pr of meta.params || []) {
-    if (pr.kind === 'color') u['c_' + pr.k] = hexToRgb(vals[pr.k] ?? pr.def);
+    if (pr.kind === 'color') { const h = vals[pr.k] ?? pr.def; u['c_' + pr.k] = hexToRgb(h); u['a_' + pr.k] = h.length === 9 ? parseInt(h.slice(7, 9), 16) / 255 : 1; }
     else if (pr.two) {
       let v = [vals[pr.k + 'X'] ?? pr.def, vals[pr.k + 'Y'] ?? (pr.defY ?? pr.def)];
       // Kutu yüzdesi (0..100, 50 = merkez) → merkezden px (katman birimi)
@@ -87,7 +91,7 @@ function fxUniforms(meta, vals, box, s) {
   }
   return u;
 }
-function linearOf(spec, vals, meta, L) { if (!spec) return 0; if (spec.box) return spec.box * Math.max(L ? L.w : 0, L ? L.h : 0) + (spec.add || 0); if (spec.max) return Math.max(0, ...spec.max.map((k) => vals[k] ?? (meta.params || []).find((p) => p.k === k)?.def ?? 0)); let v = spec.add || 0; if (spec.k) { const pr = (meta.params || []).find((p) => p.k === spec.k); v += (vals[spec.k] ?? pr?.def ?? 0) * (spec.mul ?? 1); } return Math.max(0, v); }
+function linearOf(spec, vals, meta, L) { if (!spec) return 0; if (spec.box) return spec.box * Math.max(L ? L.w : 0, L ? L.h : 0) + (spec.add || 0); if (spec.sum) return Math.max(0, spec.sum.reduce((a, k) => a + Math.max(0, vals[k] ?? (meta.params || []).find((p) => p.k === k)?.def ?? 0), 0) * (spec.mul ?? 1) + (spec.add || 0)); if (spec.max) return Math.max(0, ...spec.max.map((k) => vals[k] ?? (meta.params || []).find((p) => p.k === k)?.def ?? 0)); let v = spec.add || 0; if (spec.k) { const pr = (meta.params || []).find((p) => p.k === spec.k); v += (vals[spec.k] ?? pr?.def ?? 0) * (spec.mul ?? 1); } return Math.max(0, v); }
 
 // Katmana efekt zincirini uygula: base (önceden çarpılmış doku, kutu + pad), sonuç doku
 async function applyEffects(E, base, box, s, effects, t, dur, extra = {}) {
@@ -95,7 +99,7 @@ async function applyEffects(E, base, box, s, effects, t, dur, extra = {}) {
   for (const ef of effects) {
     const meta = E.meta[ef.type]; if (!meta || !['pixel', 'gen', 'repeat', '3d'].includes(meta.kind)) continue;
     const common = { u_res: [cur.w, cur.h], u_box: box, u_t: t, u_s: s, u_dur: dur, ...fxUniforms(meta, ef.v || {}, box, s) };
-    const bufs = { src: cur };
+    const bufs = { src: cur }; const made = [];
     const passes = meta.passes || [{ fs: ef.type }];
     let last = cur;
     for (const ps of passes) {
@@ -105,16 +109,18 @@ async function applyEffects(E, base, box, s, effects, t, dur, extra = {}) {
         const a = E.tex(cur.w, cur.h), b = E.tex(cur.w, cur.h);
         await E.pass('_blur', a, { u_tex: bufs[ps.blur] || last, ...extra }, { ...common, u_dir: [1, 0], u_sigma: sig });
         await E.pass('_blur', b, { u_tex: a }, { ...common, u_dir: [0, 1], u_sigma: sig });
-        E.free(a); bufs[ps.out || '_last'] = b; last = b; continue;
+        E.free(a); made.push(b); bufs[ps.out || '_last'] = b; last = b; continue;
       }
-      const out = E.tex(cur.w, cur.h); const ins = { u_tex: inp, u_src: cur, ...extra };
+      const out = E.tex(cur.w, cur.h); made.push(out); const ins = { u_tex: inp, u_src: cur, ...extra };
       for (const [k, v] of Object.entries(ps.aux || {})) ins[k] = bufs[v];
       await E.pass(ps.fs, out, ins, { ...common, ...(ps.set || {}) });
       bufs[ps.out || '_last'] = out; bufs._last = out; last = out;
     }
     // Ortak Karışım
     const mx = (ef.v || {})._mix;
-    if (mx !== undefined && mx < 99.9) { const o = E.tex(cur.w, cur.h); await E.pass('_mix', o, { u_tex: last, u_src: cur }, { u_mix: mx / 100 }); last = o; }
+    if (mx !== undefined && mx < 99.9) { const o = E.tex(cur.w, cur.h); made.push(o); await E.pass('_mix', o, { u_tex: last, u_src: cur }, { u_mix: mx / 100 }); last = o; }
+    for (const m of made) if (m !== last) E.free(m);
+    if (cur !== base && cur !== last) E.free(cur);
     cur = last;
   }
   return cur;

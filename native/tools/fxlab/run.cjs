@@ -6,7 +6,8 @@ const MIME = { '.html': 'text/html', '.js': 'text/javascript', '.json': 'applica
 (async () => {
   const out = process.argv[2]; const types = process.argv.slice(3);
   const b = await chromium.launch({ args: ['--use-gl=angle', '--use-angle=swiftshader'] });
-  const p = await b.newPage({ viewport: { width: 480, height: 480 } });
+  let p = null;
+  async function fresh() { if (p) await p.close(); p = await b.newPage({ viewport: { width: 480, height: 480 } });
   await p.route('http://lab.local/**', (r) => {
     const rel = decodeURIComponent(new URL(r.request().url()).pathname);
     const f = path.join(ROOT, rel);
@@ -16,8 +17,10 @@ const MIME = { '.html': 'text/html', '.js': 'text/javascript', '.json': 'applica
   p.on('console', (m) => { if (m.type() === 'error') console.log('KONSOL', m.text()); });
   await p.goto('http://lab.local/native/tools/fxlab/lab.html');
   await p.waitForFunction(() => window.ready || window.bootErr, null, { timeout: 30000 });
-  const err = await p.evaluate(() => window.bootErr); if (err) { console.log('BOOT', err); process.exit(1); }
+  const err = await p.evaluate(() => window.bootErr); if (err) { console.log('BOOT', err); process.exit(1); } }
+  let n = 0;
   for (const t of types) {
+    if (n++ % 6 === 0) await fresh();
     const dir = `${out}/${t}`; fs.mkdirSync(dir, { recursive: true });
     let frames;
     try { frames = await p.evaluate((t) => render(t), t); } catch (e) { console.log('HATA', t, String(e).slice(0, 500)); continue; }

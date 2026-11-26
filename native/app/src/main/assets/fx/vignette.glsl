@@ -1,9 +1,9 @@
 // vignette
-uniform float p_amount; uniform float p_size; uniform float p_soft; uniform vec3 c_col; uniform float p_round;
+uniform vec2 p_merkez; uniform float p_yaricap, p_yumusakl, p_guc, p_bicim, p_enBoy, p_ters; uniform vec3 c_renk;
 void main() {
   vec4 s = texture(u_tex, v_uv); if (s.a <= 0.0) { o = s; return; }
-  vec2 u = boxUV(v_uv * u_res) - 0.5; if (p_round > 0.5) u.x *= u_box.z / u_box.w;
-  float d = length(u * vec2(1.0, p_round > 0.5 ? 1.0 : 1.0)) * 1.414; float r = p_size / 100.0, f = max(0.01, p_soft / 100.0);
-  float k = smoothstep(r, r + f, d) * p_amount / 100.0;
-  vec3 c = unpre(s); o = pre(mix(c, c_col, k), s.a);
+  vec2 r = (toUnit(here()) - p_merkez) / (boxU() * 0.5); float d;
+  if (p_bicim < 0.5) d = length(r); else if (p_bicim < 1.5) d = length(r * vec2(boxU().x / boxU().y, 1.0) * vec2(1.0 / max(p_enBoy, 0.1), 1.0)); else d = max(abs(r.x), abs(r.y));
+  float R = p_yaricap / 100.0 * 1.2; float k = smoothstep(R * (1.0 - p_yumusakl / 100.0), R + 0.05, d); if (p_ters > 0.5) k = 1.0 - k;
+  o = pre(mix(unpre(s), c_renk, k * p_guc / 100.0), s.a);
 }

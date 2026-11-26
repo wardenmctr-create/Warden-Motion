@@ -1,16 +1,16 @@
 // texturize
-uniform float p_tex; uniform float p_amount; uniform float p_scale;
-float texH(vec2 p, int t) {
-  if (t == 0) return 0.5 + 0.25 * (sin(p.x * 6.0) * sin(p.y * 6.0)) + 0.15 * vnoise(p * 8.0);
-  if (t == 1) return fbm(p * 3.0, 4.0) * 0.5 + 0.5;
-  if (t == 2) { vec2 q = vec2(p.x + (mod(floor(p.y * 2.0), 2.0) * 0.5), p.y * 2.0); vec2 f = fract(q); return min(smoothstep(0.0, 0.06, f.x) * smoothstep(1.0, 0.94, f.x), smoothstep(0.0, 0.1, f.y) * smoothstep(1.0, 0.9, f.y)) * 0.6 + vnoise(p * 20.0) * 0.3; }
-  if (t == 3) return 0.5 + 0.3 * (step(0.5, fract(p.x * 8.0)) == step(0.5, fract(p.y * 8.0)) ? 1.0 : -1.0) * 0.5 + vnoise(p * 40.0) * 0.15;
-  return vnoise(p * 10.0) * 0.6 + vnoise(p * 40.0) * 0.4;
+uniform sampler2D s_dokuDosy; uniform float p_dokuDosyOn; uniform float p_doku, p_olcek, p_kabartma, p_aci, p_dokuGucu, p_tersDoku;
+float tx(vec2 p) {
+  if (p_dokuDosyOn > 0.5 || p_doku > 3.5) return luma(unpre(texture(s_dokuDosy, fract(p / 120.0))));
+  if (p_doku < 0.5) { vec2 f = fract(p / 4.0); return 0.5 + 0.25 * (sin(p.x * 1.6) * 0.5 + sin(p.y * 1.6) * 0.5) * step(0.5, f.x + f.y * 0.0) + vnoise(p * 0.6) * 0.2; }
+  if (p_doku < 1.5) return 0.5 + (fbm(p / 8.0, 3.0)) * 0.35 + (hash1(floor(p)) - 0.5) * 0.08;
+  if (p_doku < 2.5) { vec2 b = p / vec2(40.0, 18.0); b.x += step(1.0, mod(floor(b.y), 2.0)) * 0.5; vec2 f = fract(b); float m = step(0.06, f.x) * step(0.1, f.y); return 0.35 + 0.4 * m + vnoise(p * 0.3) * 0.15; }
+  return 0.5 + 0.3 * sin(p.x * 0.15 + fbm(p / vec2(80.0, 10.0), 2.0) * 6.0);
 }
 void main() {
   vec4 s = texture(u_tex, v_uv); if (s.a <= 0.0) { o = s; return; }
-  vec2 p = v_uv * u_res / (p_scale * u_s); int t = int(p_tex + 0.5); float e = 0.01;
-  float hx = texH(p + vec2(e, 0), t) - texH(p - vec2(e, 0), t), hy = texH(p + vec2(0, e), t) - texH(p - vec2(0, e), t);
-  float sh = clamp(0.5 + (hx * -0.7 + hy * -0.7) * 20.0, 0.0, 1.0);
-  vec3 c = unpre(s) * mix(1.0, 0.6 + sh * 0.8, p_amount / 100.0); o = pre(clamp(c, 0.0, 1.0), s.a);
+  vec2 p = toUnit(here()) / max(p_olcek / 100.0, 0.01); float a = radians(p_aci); vec2 d = vec2(cos(a), sin(a)) * max(p_kabartma, 0.3);
+  float h = tx(p), h2 = tx(p + d); if (p_tersDoku > 0.5) { h = 1.0 - h; h2 = 1.0 - h2; }
+  float sh = (h2 - h) * p_kabartma * 0.5 + (h - 0.5) * 0.4;
+  o = pre(clamp(unpre(s) * (1.0 + sh * p_dokuGucu / 100.0 * 1.6), 0.0, 1.0), s.a);
 }

@@ -1,10 +1,11 @@
 // bevelalpha
-uniform float p_width; uniform float p_ang; uniform float p_light;
-const vec2 D16[16] = vec2[16](vec2(1,0),vec2(0.924,0.383),vec2(0.707,0.707),vec2(0.383,0.924),vec2(0,1),vec2(-0.383,0.924),vec2(-0.707,0.707),vec2(-0.924,0.383),vec2(-1,0),vec2(-0.924,-0.383),vec2(-0.707,-0.707),vec2(-0.383,-0.924),vec2(0,-1),vec2(0.383,-0.924),vec2(0.707,-0.707),vec2(0.924,-0.383));
+uniform float p_pahGeni, p_pahDeri, p_isikAcis, p_guc, p_icPah; uniform vec3 c_acikRenk, c_koyuRenk;
 void main() {
-  vec4 s = texture(u_tex, v_uv); if (s.a <= 0.0) { o = s; return; }
-  float w = max(1.0, p_width * u_s); vec2 g = vec2(0.0);
-  for (int k = 1; k <= 3; k++) { float r = w * float(k) / 3.0; g += vec2(tex(v_uv + vec2(r, 0) / u_res).a - tex(v_uv - vec2(r, 0) / u_res).a, tex(v_uv + vec2(0, r) / u_res).a - tex(v_uv - vec2(0, r) / u_res).a) / float(k); }
-  vec2 L = vec2(cos(radians(p_ang)), sin(radians(p_ang))); float v = dot(g, L) * p_light / 100.0;
-  vec3 c = unpre(s); c = v > 0.0 ? mix(c, vec3(1.0), clamp(v, 0.0, 1.0) * 0.8) : mix(c, vec3(0.0), clamp(-v, 0.0, 1.0) * 0.7); o = pre(c, s.a);
+  vec4 s = texture(u_tex, v_uv); if (s.a <= 0.0 && p_icPah > 0.5) { o = s; return; }
+  float W = max(p_pahGeni * u_s, 1.0); float st = W * 0.35;
+  vec2 g = alphaGrad(here(), st) * st; float d = innerDist(here(), W) / W;
+  float band = 1.0 - smoothstep(0.6, 1.0, d);
+  float a = radians(p_isikAcis); float lit = dot(normalize(g + 1e-5), -vec2(cos(a), sin(a))) * min(1.0, length(g) * 4.0) * band * (p_pahDeri / max(p_pahGeni, 0.1));
+  vec3 c = unpre(s); c = lit > 0.0 ? mix(c, c_acikRenk, clamp(lit, 0.0, 1.0) * p_guc / 100.0) : mix(c, c_koyuRenk, clamp(-lit, 0.0, 1.0) * p_guc / 100.0);
+  o = pre(c, s.a);
 }

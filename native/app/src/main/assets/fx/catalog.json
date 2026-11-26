@@ -3979,7 +3979,7 @@
 "info": null,
 "heavy": false,
 "n": 285,
-"ready": false
+"ready": true
 },
 {
 "type": "glow",
@@ -4124,9 +4124,9 @@
 }
 ],
 "pad": {
-"k": "amount",
-"mul": 3,
-"add": 4
+"k": "yaricap",
+"mul": 1.3,
+"add": 2
 },
 "passes": [
 {
@@ -4136,8 +4136,8 @@
 {
 "blur": "A",
 "r": {
-"k": "amount",
-"mul": 1
+"k": "yaricap",
+"mul": 0.5
 },
 "out": "B"
 },
@@ -4151,7 +4151,7 @@
 "info": null,
 "heavy": false,
 "n": 58,
-"ready": false
+"ready": true
 },
 {
 "type": "shadow",
@@ -4303,9 +4303,13 @@
 }
 ],
 "pad": {
-"k": "amount",
-"mul": 3,
-"add": 30
+"sum": [
+"mesafe",
+"bulanikl",
+"yayilma"
+],
+"mul": 1.2,
+"add": 4
 },
 "passes": [
 {
@@ -4315,7 +4319,7 @@
 {
 "blur": "A",
 "r": {
-"k": "amount",
+"k": "bulanikl",
 "mul": 0.5
 },
 "out": "B"
@@ -4330,7 +4334,7 @@
 "info": null,
 "heavy": false,
 "n": 59,
-"ready": false
+"ready": true
 },
 {
 "type": "stroke",
@@ -4478,15 +4482,15 @@
 }
 ],
 "pad": {
-"k": "width",
+"k": "kalinlik",
 "mul": 1,
-"add": 3
+"add": 2
 },
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 60,
-"ready": false
+"ready": true
 },
 {
 "type": "innerglow",
@@ -4633,30 +4637,11 @@
 }
 ],
 "pad": null,
-"passes": [
-{
-"fs": "innerglow_a",
-"out": "A"
-},
-{
-"blur": "A",
-"r": {
-"k": "amount",
-"mul": 1
-},
-"out": "B"
-},
-{
-"fs": "innerglow_c",
-"aux": {
-"u_aux": "B"
-}
-}
-],
+"passes": null,
 "info": null,
 "heavy": false,
 "n": 61,
-"ready": false
+"ready": true
 },
 {
 "type": "innershadow",
@@ -4796,30 +4781,11 @@
 }
 ],
 "pad": null,
-"passes": [
-{
-"fs": "innershadow_a",
-"out": "A"
-},
-{
-"blur": "A",
-"r": {
-"k": "amount",
-"mul": 0.5
-},
-"out": "B"
-},
-{
-"fs": "innershadow_c",
-"aux": {
-"u_aux": "B"
-}
-}
-],
+"passes": null,
 "info": null,
 "heavy": false,
 "n": 62,
-"ready": false
+"ready": true
 },
 {
 "type": "edges",
@@ -4978,7 +4944,7 @@
 "info": null,
 "heavy": false,
 "n": 63,
-"ready": false
+"ready": true
 },
 {
 "type": "emboss",
@@ -5111,7 +5077,7 @@
 "info": null,
 "heavy": false,
 "n": 64,
-"ready": false
+"ready": true
 },
 {
 "type": "halftone",
@@ -5289,7 +5255,7 @@
 "info": null,
 "heavy": false,
 "n": 65,
-"ready": false
+"ready": true
 },
 {
 "type": "sketch",
@@ -5432,7 +5398,7 @@
 "info": null,
 "heavy": false,
 "n": 66,
-"ready": false
+"ready": true
 },
 {
 "type": "neonedge",
@@ -5585,13 +5551,15 @@
 }
 ],
 "pad": {
-"add": 20
+"k": "hale",
+"mul": 1,
+"add": 2
 },
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 67,
-"ready": false
+"ready": true
 },
 {
 "type": "cartoon",
@@ -5737,7 +5705,7 @@
 "info": null,
 "heavy": false,
 "n": 68,
-"ready": false
+"ready": true
 },
 {
 "type": "roughen",
@@ -5882,7 +5850,7 @@
 }
 ],
 "pad": {
-"k": "amount",
+"k": "kenarMikt",
 "mul": 1,
 "add": 2
 },
@@ -5890,7 +5858,7 @@
 "info": null,
 "heavy": false,
 "n": 69,
-"ready": false
+"ready": true
 },
 {
 "type": "drawpath",
@@ -6208,14 +6176,18 @@
 }
 ],
 "pad": {
-"k": "width",
-"mul": 1
+"sum": [
+"cerceveKali",
+"icBosl"
+],
+"mul": 1,
+"add": 2
 },
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 71,
-"ready": false
+"ready": true
 },
 {
 "type": "blur",
@@ -6332,23 +6304,24 @@
 }
 ],
 "pad": {
-"k": "amount",
-"mul": 3,
+"k": "yaricap",
+"mul": 1.5,
 "add": 2
 },
 "passes": [
 {
-"blur": "src",
-"r": {
-"k": "amount",
-"mul": 1
-}
+"fs": "blur_h",
+"out": "A"
+},
+{
+"fs": "blur_v",
+"in": "A"
 }
 ],
 "info": null,
 "heavy": false,
 "n": 103,
-"ready": false
+"ready": true
 },
 {
 "type": "boxblur",
@@ -6467,36 +6440,15 @@
 }
 ],
 "pad": {
-"k": "amount",
-"mul": 1.5,
+"k": "yaricap",
+"mul": 1,
 "add": 2
 },
-"passes": [
-{
-"fs": "boxblur",
-"set": {
-"u_dir": [
-1,
-0
-]
-},
-"out": "A"
-},
-{
-"fs": "boxblur",
-"in": "A",
-"set": {
-"u_dir": [
-0,
-1
-]
-}
-}
-],
+"passes": null,
 "info": null,
 "heavy": false,
 "n": 104,
-"ready": false
+"ready": true
 },
 {
 "type": "dirblur",
@@ -6612,15 +6564,15 @@
 }
 ],
 "pad": {
-"k": "amount",
-"mul": 1,
+"k": "uzunluk",
+"mul": 0.5,
 "add": 2
 },
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 105,
-"ready": false
+"ready": true
 },
 {
 "type": "spinblur",
@@ -6750,12 +6702,14 @@
 "auto": true
 }
 ],
-"pad": null,
+"pad": {
+"box": 0.2
+},
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 106,
-"ready": false
+"ready": true
 },
 {
 "type": "zoomblur",
@@ -6890,13 +6844,13 @@
 }
 ],
 "pad": {
-"add": 20
+"box": 0.15
 },
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 107,
-"ready": false
+"ready": true
 },
 {
 "type": "lensblur",
@@ -7059,15 +7013,14 @@
 }
 ],
 "pad": {
-"k": "amount",
-"mul": 1,
-"add": 2
+"k": "yaricap",
+"mul": 0.6
 },
 "passes": null,
 "info": null,
 "heavy": true,
 "n": 108,
-"ready": false
+"ready": true
 },
 {
 "type": "tiltshift",
@@ -7227,13 +7180,13 @@
 {
 "blur": "src",
 "r": {
-"k": "amount",
-"mul": 1
+"k": "bulanikl",
+"mul": 0.5
 },
 "out": "B"
 },
 {
-"fs": "tiltshift",
+"fs": "tiltshift_c",
 "aux": {
 "u_aux": "B"
 }
@@ -7242,7 +7195,7 @@
 "info": null,
 "heavy": false,
 "n": 109,
-"ready": false
+"ready": true
 },
 {
 "type": "motionblur",
@@ -7553,14 +7506,14 @@
 }
 ],
 "pad": {
-"k": "len",
+"k": "uzunluk",
 "mul": 1
 },
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 111,
-"ready": false
+"ready": true
 },
 {
 "type": "sharpen",
@@ -7679,7 +7632,7 @@
 "info": null,
 "heavy": false,
 "n": 112,
-"ready": false
+"ready": true
 },
 {
 "type": "fractal",
@@ -11799,7 +11752,7 @@
 "info": null,
 "heavy": false,
 "n": 185,
-"ready": false
+"ready": true
 },
 {
 "type": "stripes",
@@ -11969,7 +11922,7 @@
 "info": null,
 "heavy": false,
 "n": 186,
-"ready": false
+"ready": true
 },
 {
 "type": "grid",
@@ -12140,7 +12093,7 @@
 "info": null,
 "heavy": false,
 "n": 187,
-"ready": false
+"ready": true
 },
 {
 "type": "dots",
@@ -12316,7 +12269,7 @@
 "info": null,
 "heavy": false,
 "n": 188,
-"ready": false
+"ready": true
 },
 {
 "type": "noise",
@@ -12496,7 +12449,7 @@
 ],
 "n": 189,
 "inner": "Film Greni",
-"ready": false
+"ready": true
 },
 {
 "type": "clouds",
@@ -12684,7 +12637,7 @@
 "info": null,
 "heavy": false,
 "n": 190,
-"ready": false
+"ready": true
 },
 {
 "type": "blocknoise",
@@ -12831,7 +12784,7 @@
 "info": null,
 "heavy": false,
 "n": 191,
-"ready": false
+"ready": true
 },
 {
 "type": "ridges",
@@ -13001,7 +12954,7 @@
 "info": null,
 "heavy": false,
 "n": 192,
-"ready": false
+"ready": true
 },
 {
 "type": "hexarray",
@@ -13173,7 +13126,7 @@
 "info": null,
 "heavy": false,
 "n": 193,
-"ready": false
+"ready": true
 },
 {
 "type": "hexcells",
@@ -13345,7 +13298,7 @@
 "info": null,
 "heavy": false,
 "n": 194,
-"ready": false
+"ready": true
 },
 {
 "type": "iridescence",
@@ -13504,7 +13457,7 @@
 "info": null,
 "heavy": false,
 "n": 195,
-"ready": false
+"ready": true
 },
 {
 "type": "lensflare",
@@ -13674,12 +13627,14 @@
 "auto": true
 }
 ],
-"pad": null,
+"pad": {
+"box": 0.1
+},
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 196,
-"ready": false
+"ready": true
 },
 {
 "type": "lightning",
@@ -13866,13 +13821,14 @@
 }
 ],
 "pad": {
-"add": 0
+"k": "hale",
+"mul": 1
 },
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 197,
-"ready": false
+"ready": true
 },
 {
 "type": "rays",
@@ -14046,7 +14002,7 @@
 "info": null,
 "heavy": false,
 "n": 198,
-"ready": false
+"ready": true
 },
 {
 "type": "ribbon",
@@ -14231,7 +14187,7 @@
 "info": null,
 "heavy": false,
 "n": 199,
-"ready": false
+"ready": true
 },
 {
 "type": "starfield",
@@ -14436,7 +14392,7 @@
 ],
 "n": 200,
 "inner": "Yıldız Patlaması",
-"ready": false
+"ready": true
 },
 {
 "type": "star",
@@ -14611,7 +14567,7 @@
 "info": null,
 "heavy": false,
 "n": 201,
-"ready": false
+"ready": true
 },
 {
 "type": "turbulence",
@@ -14868,7 +14824,7 @@
 "info": null,
 "heavy": false,
 "n": 202,
-"ready": false
+"ready": true
 },
 {
 "type": "voronoi",
@@ -15224,7 +15180,7 @@
 "info": null,
 "heavy": false,
 "n": 348,
-"ready": false
+"ready": true
 },
 {
 "type": "rain",
@@ -15409,7 +15365,7 @@
 "info": null,
 "heavy": false,
 "n": 349,
-"ready": false
+"ready": true
 },
 {
 "type": "confetti",
@@ -15612,7 +15568,7 @@
 "info": null,
 "heavy": false,
 "n": 350,
-"ready": false
+"ready": true
 },
 {
 "type": "bubbles",
@@ -15798,7 +15754,7 @@
 "info": null,
 "heavy": false,
 "n": 351,
-"ready": false
+"ready": true
 },
 {
 "type": "fire",
@@ -15992,12 +15948,14 @@
 "auto": true
 }
 ],
-"pad": null,
+"pad": {
+"box": 0.3
+},
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 352,
-"ready": false
+"ready": true
 },
 {
 "type": "flip3d",
@@ -16101,14 +16059,197 @@
 "jog": 1,
 "src": "Renk seçici",
 "def": "#FFFFFF"
+},
+{
+"k": "yonelimXY",
+"l": "Yönelim X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -180.0,
+"max": 180.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "surekliDonuX",
+"l": "Sürekli dönüş X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -3600.0,
+"max": 3600.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "konumXY",
+"l": "Konum X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -4000.0,
+"max": 4000.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "gorusAcis",
+"l": "Görüş açısı",
+"anim": "yes",
+"kind": "jog",
+"min": 10.0,
+"max": 120.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "Cetvel",
+"def": 45.0
+},
+{
+"k": "isikEtki",
+"l": "Işık etkin",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"def": 1
+},
+{
+"k": "isikKonu",
+"l": "Işık konumu",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -4000.0,
+"max": 4000.0,
+"defY": -100.0,
+"defZ": -200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"def": -100.0
+},
+{
+"k": "isikReng",
+"l": "Işık rengi",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"src": "Renk seçici",
+"def": "#FFFFFF"
+},
+{
+"k": "ortamIsig",
+"l": "Ortam ışığı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 45.0
+},
+{
+"k": "yonluIsikGucu",
+"l": "Yönlü ışık gücü",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 65.0
+},
+{
+"k": "parlakYans",
+"l": "Parlak yansıma",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 20.0
+},
+{
+"k": "puruzlul",
+"l": "Pürüzlülük",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 50.0
+},
+{
+"k": "arkaYuzlGost",
+"l": "Arka yüzleri göster",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"def": 0
+},
+{
+"k": "kenarYumu",
+"l": "Kenar yumuşatma",
+"anim": "no",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Kapalı",
+"Otomatik",
+"Yüksek"
+],
+"src": "Seçim",
+"def": 1
 }
 ],
 "presets": [
 {
-"code": "HF",
-"name": "Hafif",
+"code": "DN",
+"name": "Dönen",
 "vals": {
-"donusX": 720.0
+"yonelimXYX": 18,
+"surekliDonuXY": 90
 },
 "keys": {},
 "cols": {},
@@ -16116,10 +16257,11 @@
 "auto": true
 },
 {
-"code": "GÇ",
-"name": "Güçlü",
+"code": "EG",
+"name": "Eğik Duruş",
 "vals": {
-"donusX": 1980.0
+"yonelimXYX": 25,
+"yonelimXYY": 35
 },
 "keys": {},
 "cols": {},
@@ -16129,20 +16271,22 @@
 {
 "code": "AN",
 "name": "Animasyonlu",
-"vals": {},
+"vals": {
+"yonelimXYX": 15
+},
 "keys": {
-"donusX": [
+"yonelimXYY": [
 [
 0,
-0.0
+-40
 ],
 [
 0.5,
-1980.0
+40
 ],
 [
 1,
-720.0
+-40
 ]
 ]
 },
@@ -16152,13 +16296,13 @@
 }
 ],
 "pad": {
-"add": 0
+"box": 0.45
 },
 "passes": null,
 "info": null,
-"heavy": false,
+"heavy": true,
 "n": 225,
-"ready": false
+"ready": true
 },
 {
 "type": "cube",
@@ -16252,14 +16396,213 @@
 "jog": 1,
 "src": "Anahtar",
 "def": 0
+},
+{
+"k": "yonelimXY",
+"l": "Yönelim X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -180.0,
+"max": 180.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "surekliDonuX",
+"l": "Sürekli dönüş X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -3600.0,
+"max": 3600.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "konumXY",
+"l": "Konum X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -4000.0,
+"max": 4000.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "perspekt",
+"l": "Perspektif",
+"anim": "step",
+"kind": "choice",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"opts": [
+"Perspektif",
+"Ortografik"
+],
+"src": "Seçim",
+"def": 0
+},
+{
+"k": "gorusAcis",
+"l": "Görüş açısı",
+"anim": "yes",
+"kind": "jog",
+"min": 10.0,
+"max": 120.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "Cetvel",
+"def": 45.0
+},
+{
+"k": "isikEtki",
+"l": "Işık etkin",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"def": 1
+},
+{
+"k": "isikKonu",
+"l": "Işık konumu",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -4000.0,
+"max": 4000.0,
+"defY": -100.0,
+"defZ": -200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"def": -100.0
+},
+{
+"k": "isikReng",
+"l": "Işık rengi",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"src": "Renk seçici",
+"def": "#FFFFFF"
+},
+{
+"k": "ortamIsig",
+"l": "Ortam ışığı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 45.0
+},
+{
+"k": "yonluIsikGucu",
+"l": "Yönlü ışık gücü",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 65.0
+},
+{
+"k": "parlakYans",
+"l": "Parlak yansıma",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 20.0
+},
+{
+"k": "puruzlul",
+"l": "Pürüzlülük",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 50.0
+},
+{
+"k": "arkaYuzlGost",
+"l": "Arka yüzleri göster",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"def": 0
+},
+{
+"k": "kenarYumu",
+"l": "Kenar yumuşatma",
+"anim": "no",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Kapalı",
+"Otomatik",
+"Yüksek"
+],
+"src": "Seçim",
+"def": 1
 }
 ],
 "presets": [
 {
-"code": "HF",
-"name": "Hafif",
+"code": "DN",
+"name": "Dönen",
 "vals": {
-"boyut": 100.0
+"yonelimXYX": 18,
+"surekliDonuXY": 90
 },
 "keys": {},
 "cols": {},
@@ -16267,10 +16610,11 @@
 "auto": true
 },
 {
-"code": "GÇ",
-"name": "Güçlü",
+"code": "EG",
+"name": "Eğik Duruş",
 "vals": {
-"boyut": 360.0
+"yonelimXYX": 25,
+"yonelimXYY": 35
 },
 "keys": {},
 "cols": {},
@@ -16280,20 +16624,22 @@
 {
 "code": "AN",
 "name": "Animasyonlu",
-"vals": {},
+"vals": {
+"yonelimXYX": 15
+},
 "keys": {
-"boyut": [
+"yonelimXYY": [
 [
 0,
-0.0
+-40
 ],
 [
 0.5,
-360.0
+40
 ],
 [
 1,
-200.0
+-40
 ]
 ]
 },
@@ -16302,12 +16648,14 @@
 "auto": true
 }
 ],
-"pad": null,
+"pad": {
+"box": 0.45
+},
 "passes": null,
 "info": null,
-"heavy": false,
+"heavy": true,
 "n": 226,
-"ready": false
+"ready": true
 },
 {
 "type": "sphere",
@@ -16390,14 +16738,213 @@
 "int": true,
 "src": "Tam sayı cetveli",
 "def": 48.0
+},
+{
+"k": "yonelimXY",
+"l": "Yönelim X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -180.0,
+"max": 180.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "surekliDonuX",
+"l": "Sürekli dönüş X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -3600.0,
+"max": 3600.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "konumXY",
+"l": "Konum X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -4000.0,
+"max": 4000.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "perspekt",
+"l": "Perspektif",
+"anim": "step",
+"kind": "choice",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"opts": [
+"Perspektif",
+"Ortografik"
+],
+"src": "Seçim",
+"def": 0
+},
+{
+"k": "gorusAcis",
+"l": "Görüş açısı",
+"anim": "yes",
+"kind": "jog",
+"min": 10.0,
+"max": 120.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "Cetvel",
+"def": 45.0
+},
+{
+"k": "isikEtki",
+"l": "Işık etkin",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"def": 1
+},
+{
+"k": "isikKonu",
+"l": "Işık konumu",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -4000.0,
+"max": 4000.0,
+"defY": -100.0,
+"defZ": -200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"def": -100.0
+},
+{
+"k": "isikReng",
+"l": "Işık rengi",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"src": "Renk seçici",
+"def": "#FFFFFF"
+},
+{
+"k": "ortamIsig",
+"l": "Ortam ışığı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 45.0
+},
+{
+"k": "yonluIsikGucu",
+"l": "Yönlü ışık gücü",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 65.0
+},
+{
+"k": "parlakYans",
+"l": "Parlak yansıma",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 20.0
+},
+{
+"k": "puruzlul",
+"l": "Pürüzlülük",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 50.0
+},
+{
+"k": "arkaYuzlGost",
+"l": "Arka yüzleri göster",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"def": 0
+},
+{
+"k": "kenarYumu",
+"l": "Kenar yumuşatma",
+"anim": "no",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Kapalı",
+"Otomatik",
+"Yüksek"
+],
+"src": "Seçim",
+"def": 1
 }
 ],
 "presets": [
 {
-"code": "HF",
-"name": "Hafif",
+"code": "DN",
+"name": "Dönen",
 "vals": {
-"yaricap": 50.0
+"yonelimXYX": 18,
+"surekliDonuXY": 90
 },
 "keys": {},
 "cols": {},
@@ -16405,10 +16952,11 @@
 "auto": true
 },
 {
-"code": "GÇ",
-"name": "Güçlü",
+"code": "EG",
+"name": "Eğik Duruş",
 "vals": {
-"yaricap": 180.0
+"yonelimXYX": 25,
+"yonelimXYY": 35
 },
 "keys": {},
 "cols": {},
@@ -16418,20 +16966,22 @@
 {
 "code": "AN",
 "name": "Animasyonlu",
-"vals": {},
+"vals": {
+"yonelimXYX": 15
+},
 "keys": {
-"yaricap": [
+"yonelimXYY": [
 [
 0,
-0.0
+-40
 ],
 [
 0.5,
-180.0
+40
 ],
 [
 1,
-100.0
+-40
 ]
 ]
 },
@@ -16440,12 +16990,14 @@
 "auto": true
 }
 ],
-"pad": null,
+"pad": {
+"box": 0.45
+},
 "passes": null,
 "info": null,
-"heavy": false,
+"heavy": true,
 "n": 227,
-"ready": false
+"ready": true
 },
 {
 "type": "cylinder",
@@ -16547,14 +17099,213 @@
 "int": true,
 "src": "Tam sayı cetveli",
 "def": 48.0
+},
+{
+"k": "yonelimXY",
+"l": "Yönelim X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -180.0,
+"max": 180.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "surekliDonuX",
+"l": "Sürekli dönüş X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -3600.0,
+"max": 3600.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "konumXY",
+"l": "Konum X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -4000.0,
+"max": 4000.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "perspekt",
+"l": "Perspektif",
+"anim": "step",
+"kind": "choice",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"opts": [
+"Perspektif",
+"Ortografik"
+],
+"src": "Seçim",
+"def": 0
+},
+{
+"k": "gorusAcis",
+"l": "Görüş açısı",
+"anim": "yes",
+"kind": "jog",
+"min": 10.0,
+"max": 120.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "Cetvel",
+"def": 45.0
+},
+{
+"k": "isikEtki",
+"l": "Işık etkin",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"def": 1
+},
+{
+"k": "isikKonu",
+"l": "Işık konumu",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -4000.0,
+"max": 4000.0,
+"defY": -100.0,
+"defZ": -200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"def": -100.0
+},
+{
+"k": "isikReng",
+"l": "Işık rengi",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"src": "Renk seçici",
+"def": "#FFFFFF"
+},
+{
+"k": "ortamIsig",
+"l": "Ortam ışığı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 45.0
+},
+{
+"k": "yonluIsikGucu",
+"l": "Yönlü ışık gücü",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 65.0
+},
+{
+"k": "parlakYans",
+"l": "Parlak yansıma",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 20.0
+},
+{
+"k": "puruzlul",
+"l": "Pürüzlülük",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 50.0
+},
+{
+"k": "arkaYuzlGost",
+"l": "Arka yüzleri göster",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"def": 0
+},
+{
+"k": "kenarYumu",
+"l": "Kenar yumuşatma",
+"anim": "no",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Kapalı",
+"Otomatik",
+"Yüksek"
+],
+"src": "Seçim",
+"def": 1
 }
 ],
 "presets": [
 {
-"code": "HF",
-"name": "Hafif",
+"code": "DN",
+"name": "Dönen",
 "vals": {
-"yaricap": 37.5
+"yonelimXYX": 18,
+"surekliDonuXY": 90
 },
 "keys": {},
 "cols": {},
@@ -16562,10 +17313,11 @@
 "auto": true
 },
 {
-"code": "GÇ",
-"name": "Güçlü",
+"code": "EG",
+"name": "Eğik Duruş",
 "vals": {
-"yaricap": 135.0
+"yonelimXYX": 25,
+"yonelimXYY": 35
 },
 "keys": {},
 "cols": {},
@@ -16575,20 +17327,22 @@
 {
 "code": "AN",
 "name": "Animasyonlu",
-"vals": {},
+"vals": {
+"yonelimXYX": 15
+},
 "keys": {
-"yaricap": [
+"yonelimXYY": [
 [
 0,
-0.0
+-40
 ],
 [
 0.5,
-135.0
+40
 ],
 [
 1,
-75.0
+-40
 ]
 ]
 },
@@ -16597,12 +17351,14 @@
 "auto": true
 }
 ],
-"pad": null,
+"pad": {
+"box": 0.45
+},
 "passes": null,
 "info": null,
-"heavy": false,
+"heavy": true,
 "n": 228,
-"ready": false
+"ready": true
 },
 {
 "type": "cone",
@@ -16692,14 +17448,213 @@
 "int": true,
 "src": "Tam sayı cetveli",
 "def": 48.0
+},
+{
+"k": "yonelimXY",
+"l": "Yönelim X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -180.0,
+"max": 180.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "surekliDonuX",
+"l": "Sürekli dönüş X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -3600.0,
+"max": 3600.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "konumXY",
+"l": "Konum X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -4000.0,
+"max": 4000.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "perspekt",
+"l": "Perspektif",
+"anim": "step",
+"kind": "choice",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"opts": [
+"Perspektif",
+"Ortografik"
+],
+"src": "Seçim",
+"def": 0
+},
+{
+"k": "gorusAcis",
+"l": "Görüş açısı",
+"anim": "yes",
+"kind": "jog",
+"min": 10.0,
+"max": 120.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "Cetvel",
+"def": 45.0
+},
+{
+"k": "isikEtki",
+"l": "Işık etkin",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"def": 1
+},
+{
+"k": "isikKonu",
+"l": "Işık konumu",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -4000.0,
+"max": 4000.0,
+"defY": -100.0,
+"defZ": -200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"def": -100.0
+},
+{
+"k": "isikReng",
+"l": "Işık rengi",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"src": "Renk seçici",
+"def": "#FFFFFF"
+},
+{
+"k": "ortamIsig",
+"l": "Ortam ışığı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 45.0
+},
+{
+"k": "yonluIsikGucu",
+"l": "Yönlü ışık gücü",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 65.0
+},
+{
+"k": "parlakYans",
+"l": "Parlak yansıma",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 20.0
+},
+{
+"k": "puruzlul",
+"l": "Pürüzlülük",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 50.0
+},
+{
+"k": "arkaYuzlGost",
+"l": "Arka yüzleri göster",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"def": 0
+},
+{
+"k": "kenarYumu",
+"l": "Kenar yumuşatma",
+"anim": "no",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Kapalı",
+"Otomatik",
+"Yüksek"
+],
+"src": "Seçim",
+"def": 1
 }
 ],
 "presets": [
 {
-"code": "HF",
-"name": "Hafif",
+"code": "DN",
+"name": "Dönen",
 "vals": {
-"tabanYari": 50.0
+"yonelimXYX": 18,
+"surekliDonuXY": 90
 },
 "keys": {},
 "cols": {},
@@ -16707,10 +17662,11 @@
 "auto": true
 },
 {
-"code": "GÇ",
-"name": "Güçlü",
+"code": "EG",
+"name": "Eğik Duruş",
 "vals": {
-"tabanYari": 180.0
+"yonelimXYX": 25,
+"yonelimXYY": 35
 },
 "keys": {},
 "cols": {},
@@ -16720,20 +17676,22 @@
 {
 "code": "AN",
 "name": "Animasyonlu",
-"vals": {},
+"vals": {
+"yonelimXYX": 15
+},
 "keys": {
-"tabanYari": [
+"yonelimXYY": [
 [
 0,
-0.0
+-40
 ],
 [
 0.5,
-180.0
+40
 ],
 [
 1,
-100.0
+-40
 ]
 ]
 },
@@ -16742,12 +17700,14 @@
 "auto": true
 }
 ],
-"pad": null,
+"pad": {
+"box": 0.45
+},
 "passes": null,
 "info": null,
-"heavy": false,
+"heavy": true,
 "n": 229,
-"ready": false
+"ready": true
 },
 {
 "type": "pyramid",
@@ -16825,14 +17785,213 @@
 "unit": "°",
 "src": "Cetvel",
 "def": 0.0
+},
+{
+"k": "yonelimXY",
+"l": "Yönelim X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -180.0,
+"max": 180.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "surekliDonuX",
+"l": "Sürekli dönüş X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -3600.0,
+"max": 3600.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "konumXY",
+"l": "Konum X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -4000.0,
+"max": 4000.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "perspekt",
+"l": "Perspektif",
+"anim": "step",
+"kind": "choice",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"opts": [
+"Perspektif",
+"Ortografik"
+],
+"src": "Seçim",
+"def": 0
+},
+{
+"k": "gorusAcis",
+"l": "Görüş açısı",
+"anim": "yes",
+"kind": "jog",
+"min": 10.0,
+"max": 120.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "Cetvel",
+"def": 45.0
+},
+{
+"k": "isikEtki",
+"l": "Işık etkin",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"def": 1
+},
+{
+"k": "isikKonu",
+"l": "Işık konumu",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -4000.0,
+"max": 4000.0,
+"defY": -100.0,
+"defZ": -200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"def": -100.0
+},
+{
+"k": "isikReng",
+"l": "Işık rengi",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"src": "Renk seçici",
+"def": "#FFFFFF"
+},
+{
+"k": "ortamIsig",
+"l": "Ortam ışığı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 45.0
+},
+{
+"k": "yonluIsikGucu",
+"l": "Yönlü ışık gücü",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 65.0
+},
+{
+"k": "parlakYans",
+"l": "Parlak yansıma",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 20.0
+},
+{
+"k": "puruzlul",
+"l": "Pürüzlülük",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 50.0
+},
+{
+"k": "arkaYuzlGost",
+"l": "Arka yüzleri göster",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"def": 0
+},
+{
+"k": "kenarYumu",
+"l": "Kenar yumuşatma",
+"anim": "no",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Kapalı",
+"Otomatik",
+"Yüksek"
+],
+"src": "Seçim",
+"def": 1
 }
 ],
 "presets": [
 {
-"code": "HF",
-"name": "Hafif",
+"code": "DN",
+"name": "Dönen",
 "vals": {
-"tabanGeni": 90.0
+"yonelimXYX": 18,
+"surekliDonuXY": 90
 },
 "keys": {},
 "cols": {},
@@ -16840,10 +17999,11 @@
 "auto": true
 },
 {
-"code": "GÇ",
-"name": "Güçlü",
+"code": "EG",
+"name": "Eğik Duruş",
 "vals": {
-"tabanGeni": 324.0
+"yonelimXYX": 25,
+"yonelimXYY": 35
 },
 "keys": {},
 "cols": {},
@@ -16853,20 +18013,22 @@
 {
 "code": "AN",
 "name": "Animasyonlu",
-"vals": {},
+"vals": {
+"yonelimXYX": 15
+},
 "keys": {
-"tabanGeni": [
+"yonelimXYY": [
 [
 0,
-0.0
+-40
 ],
 [
 0.5,
-324.0
+40
 ],
 [
 1,
-180.0
+-40
 ]
 ]
 },
@@ -16875,12 +18037,14 @@
 "auto": true
 }
 ],
-"pad": null,
+"pad": {
+"box": 0.45
+},
 "passes": null,
 "info": null,
-"heavy": false,
+"heavy": true,
 "n": 230,
-"ready": false
+"ready": true
 },
 {
 "type": "octahedron",
@@ -16957,14 +18121,213 @@
 "jog": 1,
 "src": "Anahtar",
 "def": 0
+},
+{
+"k": "yonelimXY",
+"l": "Yönelim X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -180.0,
+"max": 180.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "surekliDonuX",
+"l": "Sürekli dönüş X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -3600.0,
+"max": 3600.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "konumXY",
+"l": "Konum X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -4000.0,
+"max": 4000.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "perspekt",
+"l": "Perspektif",
+"anim": "step",
+"kind": "choice",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"opts": [
+"Perspektif",
+"Ortografik"
+],
+"src": "Seçim",
+"def": 0
+},
+{
+"k": "gorusAcis",
+"l": "Görüş açısı",
+"anim": "yes",
+"kind": "jog",
+"min": 10.0,
+"max": 120.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "Cetvel",
+"def": 45.0
+},
+{
+"k": "isikEtki",
+"l": "Işık etkin",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"def": 1
+},
+{
+"k": "isikKonu",
+"l": "Işık konumu",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -4000.0,
+"max": 4000.0,
+"defY": -100.0,
+"defZ": -200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"def": -100.0
+},
+{
+"k": "isikReng",
+"l": "Işık rengi",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"src": "Renk seçici",
+"def": "#FFFFFF"
+},
+{
+"k": "ortamIsig",
+"l": "Ortam ışığı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 45.0
+},
+{
+"k": "yonluIsikGucu",
+"l": "Yönlü ışık gücü",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 65.0
+},
+{
+"k": "parlakYans",
+"l": "Parlak yansıma",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 20.0
+},
+{
+"k": "puruzlul",
+"l": "Pürüzlülük",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 50.0
+},
+{
+"k": "arkaYuzlGost",
+"l": "Arka yüzleri göster",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"def": 0
+},
+{
+"k": "kenarYumu",
+"l": "Kenar yumuşatma",
+"anim": "no",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Kapalı",
+"Otomatik",
+"Yüksek"
+],
+"src": "Seçim",
+"def": 1
 }
 ],
 "presets": [
 {
-"code": "HF",
-"name": "Hafif",
+"code": "DN",
+"name": "Dönen",
 "vals": {
-"boyut": 100.0
+"yonelimXYX": 18,
+"surekliDonuXY": 90
 },
 "keys": {},
 "cols": {},
@@ -16972,10 +18335,11 @@
 "auto": true
 },
 {
-"code": "GÇ",
-"name": "Güçlü",
+"code": "EG",
+"name": "Eğik Duruş",
 "vals": {
-"boyut": 360.0
+"yonelimXYX": 25,
+"yonelimXYY": 35
 },
 "keys": {},
 "cols": {},
@@ -16985,20 +18349,22 @@
 {
 "code": "AN",
 "name": "Animasyonlu",
-"vals": {},
+"vals": {
+"yonelimXYX": 15
+},
 "keys": {
-"boyut": [
+"yonelimXYY": [
 [
 0,
-0.0
+-40
 ],
 [
 0.5,
-360.0
+40
 ],
 [
 1,
-200.0
+-40
 ]
 ]
 },
@@ -17007,12 +18373,14 @@
 "auto": true
 }
 ],
-"pad": null,
+"pad": {
+"box": 0.45
+},
 "passes": null,
 "info": null,
-"heavy": false,
+"heavy": true,
 "n": 231,
-"ready": false
+"ready": true
 },
 {
 "type": "hexprism",
@@ -17089,14 +18457,213 @@
 "unit": "px",
 "src": "Cetvel",
 "def": 0.0
+},
+{
+"k": "yonelimXY",
+"l": "Yönelim X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -180.0,
+"max": 180.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "surekliDonuX",
+"l": "Sürekli dönüş X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -3600.0,
+"max": 3600.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "konumXY",
+"l": "Konum X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -4000.0,
+"max": 4000.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "perspekt",
+"l": "Perspektif",
+"anim": "step",
+"kind": "choice",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"opts": [
+"Perspektif",
+"Ortografik"
+],
+"src": "Seçim",
+"def": 0
+},
+{
+"k": "gorusAcis",
+"l": "Görüş açısı",
+"anim": "yes",
+"kind": "jog",
+"min": 10.0,
+"max": 120.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "Cetvel",
+"def": 45.0
+},
+{
+"k": "isikEtki",
+"l": "Işık etkin",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"def": 1
+},
+{
+"k": "isikKonu",
+"l": "Işık konumu",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -4000.0,
+"max": 4000.0,
+"defY": -100.0,
+"defZ": -200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"def": -100.0
+},
+{
+"k": "isikReng",
+"l": "Işık rengi",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"src": "Renk seçici",
+"def": "#FFFFFF"
+},
+{
+"k": "ortamIsig",
+"l": "Ortam ışığı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 45.0
+},
+{
+"k": "yonluIsikGucu",
+"l": "Yönlü ışık gücü",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 65.0
+},
+{
+"k": "parlakYans",
+"l": "Parlak yansıma",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 20.0
+},
+{
+"k": "puruzlul",
+"l": "Pürüzlülük",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 50.0
+},
+{
+"k": "arkaYuzlGost",
+"l": "Arka yüzleri göster",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"def": 0
+},
+{
+"k": "kenarYumu",
+"l": "Kenar yumuşatma",
+"anim": "no",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Kapalı",
+"Otomatik",
+"Yüksek"
+],
+"src": "Seçim",
+"def": 1
 }
 ],
 "presets": [
 {
-"code": "HF",
-"name": "Hafif",
+"code": "DN",
+"name": "Dönen",
 "vals": {
-"yaricap": 50.0
+"yonelimXYX": 18,
+"surekliDonuXY": 90
 },
 "keys": {},
 "cols": {},
@@ -17104,10 +18671,11 @@
 "auto": true
 },
 {
-"code": "GÇ",
-"name": "Güçlü",
+"code": "EG",
+"name": "Eğik Duruş",
 "vals": {
-"yaricap": 180.0
+"yonelimXYX": 25,
+"yonelimXYY": 35
 },
 "keys": {},
 "cols": {},
@@ -17117,20 +18685,22 @@
 {
 "code": "AN",
 "name": "Animasyonlu",
-"vals": {},
+"vals": {
+"yonelimXYX": 15
+},
 "keys": {
-"yaricap": [
+"yonelimXYY": [
 [
 0,
-0.0
+-40
 ],
 [
 0.5,
-180.0
+40
 ],
 [
 1,
-100.0
+-40
 ]
 ]
 },
@@ -17139,12 +18709,14 @@
 "auto": true
 }
 ],
-"pad": null,
+"pad": {
+"box": 0.45
+},
 "passes": null,
 "info": null,
-"heavy": false,
+"heavy": true,
 "n": 232,
-"ready": false
+"ready": true
 },
 {
 "type": "torus",
@@ -17224,14 +18796,213 @@
 "int": true,
 "src": "Tam sayı cetveli",
 "def": 24.0
+},
+{
+"k": "yonelimXY",
+"l": "Yönelim X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -180.0,
+"max": 180.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "surekliDonuX",
+"l": "Sürekli dönüş X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -3600.0,
+"max": 3600.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "konumXY",
+"l": "Konum X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -4000.0,
+"max": 4000.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "perspekt",
+"l": "Perspektif",
+"anim": "step",
+"kind": "choice",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"opts": [
+"Perspektif",
+"Ortografik"
+],
+"src": "Seçim",
+"def": 0
+},
+{
+"k": "gorusAcis",
+"l": "Görüş açısı",
+"anim": "yes",
+"kind": "jog",
+"min": 10.0,
+"max": 120.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "Cetvel",
+"def": 45.0
+},
+{
+"k": "isikEtki",
+"l": "Işık etkin",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"def": 1
+},
+{
+"k": "isikKonu",
+"l": "Işık konumu",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -4000.0,
+"max": 4000.0,
+"defY": -100.0,
+"defZ": -200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"def": -100.0
+},
+{
+"k": "isikReng",
+"l": "Işık rengi",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"src": "Renk seçici",
+"def": "#FFFFFF"
+},
+{
+"k": "ortamIsig",
+"l": "Ortam ışığı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 45.0
+},
+{
+"k": "yonluIsikGucu",
+"l": "Yönlü ışık gücü",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 65.0
+},
+{
+"k": "parlakYans",
+"l": "Parlak yansıma",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 20.0
+},
+{
+"k": "puruzlul",
+"l": "Pürüzlülük",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 50.0
+},
+{
+"k": "arkaYuzlGost",
+"l": "Arka yüzleri göster",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"def": 0
+},
+{
+"k": "kenarYumu",
+"l": "Kenar yumuşatma",
+"anim": "no",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Kapalı",
+"Otomatik",
+"Yüksek"
+],
+"src": "Seçim",
+"def": 1
 }
 ],
 "presets": [
 {
-"code": "HF",
-"name": "Hafif",
+"code": "DN",
+"name": "Dönen",
 "vals": {
-"anaYari": 50.0
+"yonelimXYX": 18,
+"surekliDonuXY": 90
 },
 "keys": {},
 "cols": {},
@@ -17239,10 +19010,11 @@
 "auto": true
 },
 {
-"code": "GÇ",
-"name": "Güçlü",
+"code": "EG",
+"name": "Eğik Duruş",
 "vals": {
-"anaYari": 180.0
+"yonelimXYX": 25,
+"yonelimXYY": 35
 },
 "keys": {},
 "cols": {},
@@ -17252,20 +19024,22 @@
 {
 "code": "AN",
 "name": "Animasyonlu",
-"vals": {},
+"vals": {
+"yonelimXYX": 15
+},
 "keys": {
-"anaYari": [
+"yonelimXYY": [
 [
 0,
-0.0
+-40
 ],
 [
 0.5,
-180.0
+40
 ],
 [
 1,
-100.0
+-40
 ]
 ]
 },
@@ -17274,12 +19048,14 @@
 "auto": true
 }
 ],
-"pad": null,
+"pad": {
+"box": 0.45
+},
 "passes": null,
 "info": null,
-"heavy": false,
+"heavy": true,
 "n": 233,
-"ready": false
+"ready": true
 },
 {
 "type": "heart3d",
@@ -17358,14 +19134,213 @@
 "unit": "%",
 "src": "Cetvel",
 "def": 100.0
+},
+{
+"k": "yonelimXY",
+"l": "Yönelim X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -180.0,
+"max": 180.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "surekliDonuX",
+"l": "Sürekli dönüş X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -3600.0,
+"max": 3600.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "konumXY",
+"l": "Konum X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -4000.0,
+"max": 4000.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "perspekt",
+"l": "Perspektif",
+"anim": "step",
+"kind": "choice",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"opts": [
+"Perspektif",
+"Ortografik"
+],
+"src": "Seçim",
+"def": 0
+},
+{
+"k": "gorusAcis",
+"l": "Görüş açısı",
+"anim": "yes",
+"kind": "jog",
+"min": 10.0,
+"max": 120.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "Cetvel",
+"def": 45.0
+},
+{
+"k": "isikEtki",
+"l": "Işık etkin",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"def": 1
+},
+{
+"k": "isikKonu",
+"l": "Işık konumu",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -4000.0,
+"max": 4000.0,
+"defY": -100.0,
+"defZ": -200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"def": -100.0
+},
+{
+"k": "isikReng",
+"l": "Işık rengi",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"src": "Renk seçici",
+"def": "#FFFFFF"
+},
+{
+"k": "ortamIsig",
+"l": "Ortam ışığı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 45.0
+},
+{
+"k": "yonluIsikGucu",
+"l": "Yönlü ışık gücü",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 65.0
+},
+{
+"k": "parlakYans",
+"l": "Parlak yansıma",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 20.0
+},
+{
+"k": "puruzlul",
+"l": "Pürüzlülük",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 50.0
+},
+{
+"k": "arkaYuzlGost",
+"l": "Arka yüzleri göster",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"def": 0
+},
+{
+"k": "kenarYumu",
+"l": "Kenar yumuşatma",
+"anim": "no",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Kapalı",
+"Otomatik",
+"Yüksek"
+],
+"src": "Seçim",
+"def": 1
 }
 ],
 "presets": [
 {
-"code": "HF",
-"name": "Hafif",
+"code": "DN",
+"name": "Dönen",
 "vals": {
-"genislik": 100.0
+"yonelimXYX": 18,
+"surekliDonuXY": 90
 },
 "keys": {},
 "cols": {},
@@ -17373,10 +19348,11 @@
 "auto": true
 },
 {
-"code": "GÇ",
-"name": "Güçlü",
+"code": "EG",
+"name": "Eğik Duruş",
 "vals": {
-"genislik": 360.0
+"yonelimXYX": 25,
+"yonelimXYY": 35
 },
 "keys": {},
 "cols": {},
@@ -17386,20 +19362,22 @@
 {
 "code": "AN",
 "name": "Animasyonlu",
-"vals": {},
+"vals": {
+"yonelimXYX": 15
+},
 "keys": {
-"genislik": [
+"yonelimXYY": [
 [
 0,
-0.0
+-40
 ],
 [
 0.5,
-360.0
+40
 ],
 [
 1,
-200.0
+-40
 ]
 ]
 },
@@ -17408,12 +19386,14 @@
 "auto": true
 }
 ],
-"pad": null,
+"pad": {
+"box": 0.45
+},
 "passes": null,
 "info": null,
-"heavy": false,
+"heavy": true,
 "n": 234,
-"ready": false
+"ready": true
 },
 {
 "type": "starprism",
@@ -17504,14 +19484,213 @@
 "jog": 1,
 "src": "Anahtar",
 "def": 1
+},
+{
+"k": "yonelimXY",
+"l": "Yönelim X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -180.0,
+"max": 180.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "surekliDonuX",
+"l": "Sürekli dönüş X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -3600.0,
+"max": 3600.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "konumXY",
+"l": "Konum X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -4000.0,
+"max": 4000.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "perspekt",
+"l": "Perspektif",
+"anim": "step",
+"kind": "choice",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"opts": [
+"Perspektif",
+"Ortografik"
+],
+"src": "Seçim",
+"def": 0
+},
+{
+"k": "gorusAcis",
+"l": "Görüş açısı",
+"anim": "yes",
+"kind": "jog",
+"min": 10.0,
+"max": 120.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "Cetvel",
+"def": 45.0
+},
+{
+"k": "isikEtki",
+"l": "Işık etkin",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"def": 1
+},
+{
+"k": "isikKonu",
+"l": "Işık konumu",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -4000.0,
+"max": 4000.0,
+"defY": -100.0,
+"defZ": -200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"def": -100.0
+},
+{
+"k": "isikReng",
+"l": "Işık rengi",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"src": "Renk seçici",
+"def": "#FFFFFF"
+},
+{
+"k": "ortamIsig",
+"l": "Ortam ışığı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 45.0
+},
+{
+"k": "yonluIsikGucu",
+"l": "Yönlü ışık gücü",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 65.0
+},
+{
+"k": "parlakYans",
+"l": "Parlak yansıma",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 20.0
+},
+{
+"k": "puruzlul",
+"l": "Pürüzlülük",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 50.0
+},
+{
+"k": "arkaYuzlGost",
+"l": "Arka yüzleri göster",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"def": 0
+},
+{
+"k": "kenarYumu",
+"l": "Kenar yumuşatma",
+"anim": "no",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Kapalı",
+"Otomatik",
+"Yüksek"
+],
+"src": "Seçim",
+"def": 1
 }
 ],
 "presets": [
 {
-"code": "HF",
-"name": "Hafif",
+"code": "DN",
+"name": "Dönen",
 "vals": {
-"disYari": 50.0
+"yonelimXYX": 18,
+"surekliDonuXY": 90
 },
 "keys": {},
 "cols": {},
@@ -17519,10 +19698,11 @@
 "auto": true
 },
 {
-"code": "GÇ",
-"name": "Güçlü",
+"code": "EG",
+"name": "Eğik Duruş",
 "vals": {
-"disYari": 180.0
+"yonelimXYX": 25,
+"yonelimXYY": 35
 },
 "keys": {},
 "cols": {},
@@ -17532,20 +19712,22 @@
 {
 "code": "AN",
 "name": "Animasyonlu",
-"vals": {},
+"vals": {
+"yonelimXYX": 15
+},
 "keys": {
-"disYari": [
+"yonelimXYY": [
 [
 0,
-0.0
+-40
 ],
 [
 0.5,
-180.0
+40
 ],
 [
 1,
-100.0
+-40
 ]
 ]
 },
@@ -17554,12 +19736,14 @@
 "auto": true
 }
 ],
-"pad": null,
+"pad": {
+"box": 0.45
+},
 "passes": null,
 "info": null,
-"heavy": false,
+"heavy": true,
 "n": 235,
-"ready": false
+"ready": true
 },
 {
 "type": "capsule",
@@ -17641,14 +19825,213 @@
 ],
 "src": "Seçim",
 "def": 0
+},
+{
+"k": "yonelimXY",
+"l": "Yönelim X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -180.0,
+"max": 180.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "surekliDonuX",
+"l": "Sürekli dönüş X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -3600.0,
+"max": 3600.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "konumXY",
+"l": "Konum X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -4000.0,
+"max": 4000.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "perspekt",
+"l": "Perspektif",
+"anim": "step",
+"kind": "choice",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"opts": [
+"Perspektif",
+"Ortografik"
+],
+"src": "Seçim",
+"def": 0
+},
+{
+"k": "gorusAcis",
+"l": "Görüş açısı",
+"anim": "yes",
+"kind": "jog",
+"min": 10.0,
+"max": 120.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "Cetvel",
+"def": 45.0
+},
+{
+"k": "isikEtki",
+"l": "Işık etkin",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"def": 1
+},
+{
+"k": "isikKonu",
+"l": "Işık konumu",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -4000.0,
+"max": 4000.0,
+"defY": -100.0,
+"defZ": -200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"def": -100.0
+},
+{
+"k": "isikReng",
+"l": "Işık rengi",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"src": "Renk seçici",
+"def": "#FFFFFF"
+},
+{
+"k": "ortamIsig",
+"l": "Ortam ışığı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 45.0
+},
+{
+"k": "yonluIsikGucu",
+"l": "Yönlü ışık gücü",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 65.0
+},
+{
+"k": "parlakYans",
+"l": "Parlak yansıma",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 20.0
+},
+{
+"k": "puruzlul",
+"l": "Pürüzlülük",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 50.0
+},
+{
+"k": "arkaYuzlGost",
+"l": "Arka yüzleri göster",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"def": 0
+},
+{
+"k": "kenarYumu",
+"l": "Kenar yumuşatma",
+"anim": "no",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Kapalı",
+"Otomatik",
+"Yüksek"
+],
+"src": "Seçim",
+"def": 1
 }
 ],
 "presets": [
 {
-"code": "HF",
-"name": "Hafif",
+"code": "DN",
+"name": "Dönen",
 "vals": {
-"yaricap": 30.0
+"yonelimXYX": 18,
+"surekliDonuXY": 90
 },
 "keys": {},
 "cols": {},
@@ -17656,10 +20039,11 @@
 "auto": true
 },
 {
-"code": "GÇ",
-"name": "Güçlü",
+"code": "EG",
+"name": "Eğik Duruş",
 "vals": {
-"yaricap": 108.0
+"yonelimXYX": 25,
+"yonelimXYY": 35
 },
 "keys": {},
 "cols": {},
@@ -17669,20 +20053,22 @@
 {
 "code": "AN",
 "name": "Animasyonlu",
-"vals": {},
+"vals": {
+"yonelimXYX": 15
+},
 "keys": {
-"yaricap": [
+"yonelimXYY": [
 [
 0,
-0.0
+-40
 ],
 [
 0.5,
-108.0
+40
 ],
 [
 1,
-60.0
+-40
 ]
 ]
 },
@@ -17691,12 +20077,14 @@
 "auto": true
 }
 ],
-"pad": null,
+"pad": {
+"box": 0.45
+},
 "passes": null,
 "info": null,
-"heavy": false,
+"heavy": true,
 "n": 236,
-"ready": false
+"ready": true
 },
 {
 "type": "extrude",
@@ -17783,14 +20171,213 @@
 "jog": 1,
 "src": "Anahtar",
 "def": 1
+},
+{
+"k": "yonelimXY",
+"l": "Yönelim X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -180.0,
+"max": 180.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "surekliDonuX",
+"l": "Sürekli dönüş X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -3600.0,
+"max": 3600.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "konumXY",
+"l": "Konum X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -4000.0,
+"max": 4000.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "perspekt",
+"l": "Perspektif",
+"anim": "step",
+"kind": "choice",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"opts": [
+"Perspektif",
+"Ortografik"
+],
+"src": "Seçim",
+"def": 0
+},
+{
+"k": "gorusAcis",
+"l": "Görüş açısı",
+"anim": "yes",
+"kind": "jog",
+"min": 10.0,
+"max": 120.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "Cetvel",
+"def": 45.0
+},
+{
+"k": "isikEtki",
+"l": "Işık etkin",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"def": 1
+},
+{
+"k": "isikKonu",
+"l": "Işık konumu",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -4000.0,
+"max": 4000.0,
+"defY": -100.0,
+"defZ": -200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"def": -100.0
+},
+{
+"k": "isikReng",
+"l": "Işık rengi",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"src": "Renk seçici",
+"def": "#FFFFFF"
+},
+{
+"k": "ortamIsig",
+"l": "Ortam ışığı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 45.0
+},
+{
+"k": "yonluIsikGucu",
+"l": "Yönlü ışık gücü",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 65.0
+},
+{
+"k": "parlakYans",
+"l": "Parlak yansıma",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 20.0
+},
+{
+"k": "puruzlul",
+"l": "Pürüzlülük",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 50.0
+},
+{
+"k": "arkaYuzlGost",
+"l": "Arka yüzleri göster",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"def": 0
+},
+{
+"k": "kenarYumu",
+"l": "Kenar yumuşatma",
+"anim": "no",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Kapalı",
+"Otomatik",
+"Yüksek"
+],
+"src": "Seçim",
+"def": 1
 }
 ],
 "presets": [
 {
-"code": "HF",
-"name": "Hafif",
+"code": "DN",
+"name": "Dönen",
 "vals": {
-"derinlik": 20.0
+"yonelimXYX": 18,
+"surekliDonuXY": 90
 },
 "keys": {},
 "cols": {},
@@ -17798,10 +20385,11 @@
 "auto": true
 },
 {
-"code": "GÇ",
-"name": "Güçlü",
+"code": "EG",
+"name": "Eğik Duruş",
 "vals": {
-"derinlik": 72.0
+"yonelimXYX": 25,
+"yonelimXYY": 35
 },
 "keys": {},
 "cols": {},
@@ -17811,20 +20399,22 @@
 {
 "code": "AN",
 "name": "Animasyonlu",
-"vals": {},
+"vals": {
+"yonelimXYX": 15
+},
 "keys": {
-"derinlik": [
+"yonelimXYY": [
 [
 0,
-0.0
+-40
 ],
 [
 0.5,
-72.0
+40
 ],
 [
 1,
-40.0
+-40
 ]
 ]
 },
@@ -17834,15 +20424,13 @@
 }
 ],
 "pad": {
-"k": "depth",
-"mul": 1.5,
-"add": 20
+"box": 0.45
 },
 "passes": null,
 "info": null,
-"heavy": false,
+"heavy": true,
 "n": 237,
-"ready": false
+"ready": true
 },
 {
 "type": "sway",
@@ -20671,13 +23259,13 @@
 }
 ],
 "pad": {
-"add": 0
+"box": 1.5
 },
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 277,
-"ready": false
+"ready": true
 },
 {
 "type": "linrepeat",
@@ -20831,13 +23419,13 @@
 }
 ],
 "pad": {
-"add": 0
+"box": 1.5
 },
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 278,
-"ready": false
+"ready": true
 },
 {
 "type": "radrepeat",
@@ -21006,13 +23594,13 @@
 }
 ],
 "pad": {
-"add": 0
+"box": 1.2
 },
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 279,
-"ready": false
+"ready": true
 },
 {
 "type": "scatter",
@@ -21183,13 +23771,16 @@
 }
 ],
 "pad": {
-"add": 0
+"max": [
+"alanX",
+"alanY"
+]
 },
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 280,
-"ready": false
+"ready": true
 },
 {
 "type": "spiral",
@@ -21346,13 +23937,14 @@
 }
 ],
 "pad": {
-"add": 0
+"k": "disYari",
+"mul": 1
 },
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 281,
-"ready": false
+"ready": true
 },
 {
 "type": "echo",
@@ -21673,13 +24265,13 @@
 }
 ],
 "pad": {
-"add": 0
+"box": 1.0
 },
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 282,
-"ready": false
+"ready": true
 },
 {
 "type": "chromakey",
@@ -21836,7 +24428,7 @@
 "info": null,
 "heavy": false,
 "n": 286,
-"ready": false
+"ready": true
 },
 {
 "type": "lumakey",
@@ -21987,7 +24579,7 @@
 ],
 "n": 287,
 "inner": "Ayıkla",
-"ready": false
+"ready": true
 },
 {
 "type": "solidmatte",
@@ -22104,7 +24696,7 @@
 "info": null,
 "heavy": false,
 "n": 288,
-"ready": false
+"ready": true
 },
 {
 "type": "choke",
@@ -22236,15 +24828,15 @@
 }
 ],
 "pad": {
-"k": "amount",
-"mul": 1,
+"k": "kenarDegi",
+"mul": 2,
 "add": 2
 },
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 289,
-"ready": false
+"ready": true
 },
 {
 "type": "feather",
@@ -22386,12 +24978,16 @@
 "auto": true
 }
 ],
-"pad": null,
+"pad": {
+"k": "yaricap",
+"mul": 0.5,
+"add": 1
+},
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 290,
-"ready": false
+"ready": true
 },
 {
 "type": "alphathr",
@@ -22508,7 +25104,7 @@
 "info": null,
 "heavy": false,
 "n": 291,
-"ready": false
+"ready": true
 },
 {
 "type": "linwipe",
@@ -22576,25 +25172,43 @@
 ],
 "presets": [
 {
-"code": "HF",
-"name": "Hafif",
-"vals": {
-"ilerleme": 20.0
+"code": "GR",
+"name": "Giriş",
+"vals": {},
+"keys": {
+"ilerleme": [
+[
+0,
+100
+],
+[
+0.7,
+0
+]
+]
 },
-"keys": {},
 "cols": {},
 "at": "start",
 "auto": true
 },
 {
-"code": "GÇ",
-"name": "Güçlü",
-"vals": {
-"ilerleme": 55.0
+"code": "CK",
+"name": "Çıkış",
+"vals": {},
+"keys": {
+"ilerleme": [
+[
+-0.7,
+0
+],
+[
+0,
+100
+]
+]
 },
-"keys": {},
 "cols": {},
-"at": "start",
+"at": "end",
 "auto": true
 },
 {
@@ -22605,15 +25219,15 @@
 "ilerleme": [
 [
 0,
-0.0
+0
 ],
 [
 0.5,
-55.0
+100
 ],
 [
 1,
-20.0
+0
 ]
 ]
 },
@@ -22627,7 +25241,7 @@
 "info": null,
 "heavy": false,
 "n": 367,
-"ready": false
+"ready": true
 },
 {
 "type": "radwipe",
@@ -22715,25 +25329,43 @@
 ],
 "presets": [
 {
-"code": "HF",
-"name": "Hafif",
-"vals": {
-"ilerleme": 20.0
+"code": "GR",
+"name": "Giriş",
+"vals": {},
+"keys": {
+"ilerleme": [
+[
+0,
+100
+],
+[
+0.7,
+0
+]
+]
 },
-"keys": {},
 "cols": {},
 "at": "start",
 "auto": true
 },
 {
-"code": "GÇ",
-"name": "Güçlü",
-"vals": {
-"ilerleme": 55.0
+"code": "CK",
+"name": "Çıkış",
+"vals": {},
+"keys": {
+"ilerleme": [
+[
+-0.7,
+0
+],
+[
+0,
+100
+]
+]
 },
-"keys": {},
 "cols": {},
-"at": "start",
+"at": "end",
 "auto": true
 },
 {
@@ -22744,15 +25376,15 @@
 "ilerleme": [
 [
 0,
-0.0
+0
 ],
 [
 0.5,
-55.0
+100
 ],
 [
 1,
-20.0
+0
 ]
 ]
 },
@@ -22766,7 +25398,7 @@
 "info": null,
 "heavy": false,
 "n": 368,
-"ready": false
+"ready": true
 },
 {
 "type": "iris",
@@ -22880,25 +25512,43 @@
 ],
 "presets": [
 {
-"code": "HF",
-"name": "Hafif",
-"vals": {
-"ilerleme": 20.0
+"code": "GR",
+"name": "Giriş",
+"vals": {},
+"keys": {
+"ilerleme": [
+[
+0,
+0
+],
+[
+0.7,
+100
+]
+]
 },
-"keys": {},
 "cols": {},
 "at": "start",
 "auto": true
 },
 {
-"code": "GÇ",
-"name": "Güçlü",
-"vals": {
-"ilerleme": 55.0
+"code": "CK",
+"name": "Çıkış",
+"vals": {},
+"keys": {
+"ilerleme": [
+[
+-0.7,
+100
+],
+[
+0,
+0
+]
+]
 },
-"keys": {},
 "cols": {},
-"at": "start",
+"at": "end",
 "auto": true
 },
 {
@@ -22909,15 +25559,15 @@
 "ilerleme": [
 [
 0,
-0.0
+0
 ],
 [
 0.5,
-55.0
+100
 ],
 [
 1,
-20.0
+0
 ]
 ]
 },
@@ -22931,7 +25581,7 @@
 "info": null,
 "heavy": false,
 "n": 369,
-"ready": false
+"ready": true
 },
 {
 "type": "gradfade",
@@ -23083,7 +25733,7 @@
 "info": null,
 "heavy": false,
 "n": 292,
-"ready": false
+"ready": true
 },
 {
 "type": "roundcorners",
@@ -23241,7 +25891,7 @@
 "info": null,
 "heavy": false,
 "n": 293,
-"ready": false
+"ready": true
 },
 {
 "type": "shapemask",
@@ -23424,7 +26074,7 @@
 "info": null,
 "heavy": false,
 "n": 294,
-"ready": false
+"ready": true
 },
 {
 "type": "flicker",
@@ -24377,25 +27027,43 @@
 ],
 "presets": [
 {
-"code": "HF",
-"name": "Hafif",
-"vals": {
-"ilerleme": 20.0
+"code": "GR",
+"name": "Giriş",
+"vals": {},
+"keys": {
+"ilerleme": [
+[
+0,
+100
+],
+[
+0.7,
+0
+]
+]
 },
-"keys": {},
 "cols": {},
 "at": "start",
 "auto": true
 },
 {
-"code": "GÇ",
-"name": "Güçlü",
-"vals": {
-"ilerleme": 55.0
+"code": "CK",
+"name": "Çıkış",
+"vals": {},
+"keys": {
+"ilerleme": [
+[
+-0.7,
+0
+],
+[
+0,
+100
+]
+]
 },
-"keys": {},
 "cols": {},
-"at": "start",
+"at": "end",
 "auto": true
 },
 {
@@ -24406,15 +27074,15 @@
 "ilerleme": [
 [
 0,
-0.0
+0
 ],
 [
 0.5,
-55.0
+100
 ],
 [
 1,
-20.0
+0
 ]
 ]
 },
@@ -24428,7 +27096,7 @@
 "info": null,
 "heavy": false,
 "n": 370,
-"ready": false
+"ready": true
 },
 {
 "type": "blockdissolve",
@@ -24535,25 +27203,43 @@
 ],
 "presets": [
 {
-"code": "HF",
-"name": "Hafif",
-"vals": {
-"ilerleme": 20.0
+"code": "GR",
+"name": "Giriş",
+"vals": {},
+"keys": {
+"ilerleme": [
+[
+0,
+100
+],
+[
+0.7,
+0
+]
+]
 },
-"keys": {},
 "cols": {},
 "at": "start",
 "auto": true
 },
 {
-"code": "GÇ",
-"name": "Güçlü",
-"vals": {
-"ilerleme": 55.0
+"code": "CK",
+"name": "Çıkış",
+"vals": {},
+"keys": {
+"ilerleme": [
+[
+-0.7,
+0
+],
+[
+0,
+100
+]
+]
 },
-"keys": {},
 "cols": {},
-"at": "start",
+"at": "end",
 "auto": true
 },
 {
@@ -24564,15 +27250,15 @@
 "ilerleme": [
 [
 0,
-0.0
+0
 ],
 [
 0.5,
-55.0
+100
 ],
 [
 1,
-20.0
+0
 ]
 ]
 },
@@ -24586,7 +27272,7 @@
 "info": null,
 "heavy": false,
 "n": 371,
-"ready": false
+"ready": true
 },
 {
 "type": "blinds",
@@ -24683,25 +27369,43 @@
 ],
 "presets": [
 {
-"code": "HF",
-"name": "Hafif",
-"vals": {
-"ilerleme": 20.0
+"code": "GR",
+"name": "Giriş",
+"vals": {},
+"keys": {
+"ilerleme": [
+[
+0,
+100
+],
+[
+0.7,
+0
+]
+]
 },
-"keys": {},
 "cols": {},
 "at": "start",
 "auto": true
 },
 {
-"code": "GÇ",
-"name": "Güçlü",
-"vals": {
-"ilerleme": 55.0
+"code": "CK",
+"name": "Çıkış",
+"vals": {},
+"keys": {
+"ilerleme": [
+[
+-0.7,
+0
+],
+[
+0,
+100
+]
+]
 },
-"keys": {},
 "cols": {},
-"at": "start",
+"at": "end",
 "auto": true
 },
 {
@@ -24712,15 +27416,15 @@
 "ilerleme": [
 [
 0,
-0.0
+0
 ],
 [
 0.5,
-55.0
+100
 ],
 [
 1,
-20.0
+0
 ]
 ]
 },
@@ -24734,7 +27438,7 @@
 "info": null,
 "heavy": false,
 "n": 372,
-"ready": false
+"ready": true
 },
 {
 "type": "typewriter",
@@ -26495,7 +29199,7 @@
 "info": "Buzlu cam için üstüne Gauss Bulanıklığı ekle.",
 "heavy": false,
 "n": 327,
-"ready": false
+"ready": true
 },
 {
 "type": "posterizetime",
@@ -26775,7 +29479,7 @@
 "info": null,
 "heavy": false,
 "n": 328,
-"ready": false
+"ready": true
 },
 {
 "type": "grain",
@@ -26972,13 +29676,14 @@
 }
 ],
 "pad": {
-"add": 10
+"k": "yatayBozu",
+"mul": 3
 },
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 329,
-"ready": false
+"ready": true
 },
 {
 "type": "oldfilm",
@@ -27146,12 +29851,15 @@
 "auto": true
 }
 ],
-"pad": null,
+"pad": {
+"k": "kareTitr",
+"mul": 1
+},
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 330,
-"ready": false
+"ready": true
 },
 {
 "type": "crt",
@@ -27309,7 +30017,7 @@
 "info": null,
 "heavy": false,
 "n": 331,
-"ready": false
+"ready": true
 },
 {
 "type": "pixelsort",
@@ -27468,14 +30176,14 @@
 }
 ],
 "pad": {
-"k": "len",
+"k": "maksimumIz",
 "mul": 1
 },
 "passes": null,
 "info": null,
 "heavy": true,
 "n": 332,
-"ready": false
+"ready": true
 },
 {
 "type": "ascii",
@@ -27617,7 +30325,7 @@
 "info": null,
 "heavy": false,
 "n": 333,
-"ready": false
+"ready": true
 },
 {
 "type": "curves",
@@ -30212,12 +32920,15 @@
 "auto": true
 }
 ],
-"pad": null,
+"pad": {
+"k": "fircaBoyu",
+"mul": 1
+},
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 72,
-"ready": false
+"ready": true
 },
 {
 "type": "glass",
@@ -30363,12 +33074,15 @@
 "auto": true
 }
 ],
-"pad": null,
+"pad": {
+"k": "kirilma",
+"mul": 1
+},
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 73,
-"ready": false
+"ready": true
 },
 {
 "type": "plastic",
@@ -30508,14 +33222,12 @@
 "auto": true
 }
 ],
-"pad": {
-"add": 2
-},
+"pad": null,
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 74,
-"ready": false
+"ready": true
 },
 {
 "type": "coloremboss",
@@ -30648,7 +33360,7 @@
 "info": null,
 "heavy": false,
 "n": 75,
-"ready": false
+"ready": true
 },
 {
 "type": "texturize",
@@ -30813,7 +33525,7 @@
 "info": null,
 "heavy": false,
 "n": 76,
-"ready": false
+"ready": true
 },
 {
 "type": "bevelalpha",
@@ -30970,7 +33682,7 @@
 "info": null,
 "heavy": false,
 "n": 77,
-"ready": false
+"ready": true
 },
 {
 "type": "beveledges",
@@ -31118,7 +33830,7 @@
 "info": null,
 "heavy": false,
 "n": 78,
-"ready": false
+"ready": true
 },
 {
 "type": "spotlight",
@@ -31278,7 +33990,7 @@
 "info": null,
 "heavy": false,
 "n": 79,
-"ready": false
+"ready": true
 },
 {
 "type": "anaglyph",
@@ -31424,14 +34136,14 @@
 }
 ],
 "pad": {
-"k": "amount",
-"mul": 1
+"k": "ayrisma",
+"mul": 0.6
 },
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 80,
-"ready": false
+"ready": true
 },
 {
 "type": "lightsweep",
@@ -31595,7 +34307,7 @@
 "info": null,
 "heavy": false,
 "n": 81,
-"ready": false
+"ready": true
 },
 {
 "type": "vegas",
@@ -31763,15 +34475,18 @@
 }
 ],
 "pad": {
-"k": "width",
-"mul": 3,
-"add": 6
+"sum": [
+"noktaBoyu",
+"hale"
+],
+"mul": 1,
+"add": 2
 },
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 82,
-"ready": false
+"ready": true
 },
 {
 "type": "scribble",
@@ -31944,7 +34659,7 @@
 "info": null,
 "heavy": false,
 "n": 83,
-"ready": false
+"ready": true
 },
 {
 "type": "watercolor",
@@ -32087,12 +34802,18 @@
 "auto": true
 }
 ],
-"pad": null,
+"pad": {
+"sum": [
+"renkYayi",
+"lekeBoyu"
+],
+"mul": 0.8
+},
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 84,
-"ready": false
+"ready": true
 },
 {
 "type": "oilpaint",
@@ -32238,7 +34959,7 @@
 "info": null,
 "heavy": false,
 "n": 85,
-"ready": false
+"ready": true
 },
 {
 "type": "comic",
@@ -32384,7 +35105,7 @@
 "info": null,
 "heavy": false,
 "n": 86,
-"ready": false
+"ready": true
 },
 {
 "type": "stipple",
@@ -32547,7 +35268,7 @@
 "info": null,
 "heavy": false,
 "n": 87,
-"ready": false
+"ready": true
 },
 {
 "type": "neonsign",
@@ -32701,13 +35422,18 @@
 }
 ],
 "pad": {
-"add": 30
+"sum": [
+"tupKali",
+"hale"
+],
+"mul": 1,
+"add": 2
 },
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 88,
-"ready": false
+"ready": true
 },
 {
 "type": "hologram",
@@ -32866,7 +35592,7 @@
 "info": null,
 "heavy": false,
 "n": 89,
-"ready": false
+"ready": true
 },
 {
 "type": "bilateral",
@@ -32986,9 +35712,9 @@
 "pad": null,
 "passes": null,
 "info": null,
-"heavy": false,
+"heavy": true,
 "n": 113,
-"ready": false
+"ready": true
 },
 {
 "type": "chanblur",
@@ -33133,13 +35859,27 @@
 }
 ],
 "pad": {
-"add": 40
+"max": [
+"kirmiziYari",
+"yesilYari",
+"maviYari",
+"alfaYari"
+]
 },
-"passes": null,
+"passes": [
+{
+"fs": "chanblur_h",
+"out": "A"
+},
+{
+"fs": "chanblur_v",
+"in": "A"
+}
+],
 "info": null,
 "heavy": false,
 "n": 114,
-"ready": false
+"ready": true
 },
 {
 "type": "crossblur",
@@ -33252,34 +35992,25 @@
 }
 ],
 "pad": {
-"add": 40
+"max": [
+"yatayYari",
+"dikeyYari"
+]
 },
 "passes": [
 {
-"fs": "crossblur",
-"set": {
-"u_dir": [
-1,
-0
-]
-},
+"fs": "crossblur_h",
 "out": "A"
 },
 {
-"fs": "crossblur",
-"in": "A",
-"set": {
-"u_dir": [
-0,
-1
-]
-}
+"fs": "crossblur_v",
+"in": "A"
 }
 ],
 "info": null,
 "heavy": false,
 "n": 115,
-"ready": false
+"ready": true
 },
 {
 "type": "vectorblur",
@@ -33429,7 +36160,7 @@
 "info": null,
 "heavy": false,
 "n": 116,
-"ready": false
+"ready": true
 },
 {
 "type": "median",
@@ -33554,7 +36285,7 @@
 "info": null,
 "heavy": false,
 "n": 117,
-"ready": false
+"ready": true
 },
 {
 "type": "dustscratch",
@@ -33689,7 +36420,7 @@
 "info": null,
 "heavy": false,
 "n": 118,
-"ready": false
+"ready": true
 },
 {
 "type": "bezierwarp",
@@ -36233,7 +38964,7 @@
 "info": null,
 "heavy": false,
 "n": 203,
-"ready": false
+"ready": true
 },
 {
 "type": "lightburst",
@@ -36462,7 +39193,7 @@
 "info": null,
 "heavy": false,
 "n": 204,
-"ready": false
+"ready": true
 },
 {
 "type": "circlefx",
@@ -36619,7 +39350,7 @@
 "info": null,
 "heavy": false,
 "n": 205,
-"ready": false
+"ready": true
 },
 {
 "type": "ellipsefx",
@@ -36804,7 +39535,7 @@
 "info": null,
 "heavy": false,
 "n": 206,
-"ready": false
+"ready": true
 },
 {
 "type": "audiospec",
@@ -37408,7 +40139,7 @@
 "info": null,
 "heavy": false,
 "n": 209,
-"ready": false
+"ready": true
 },
 {
 "type": "fireworks",
@@ -37609,9 +40340,9 @@
 "pad": null,
 "passes": null,
 "info": null,
-"heavy": false,
+"heavy": true,
 "n": 210,
-"ready": false
+"ready": true
 },
 {
 "type": "heartrain",
@@ -37795,7 +40526,7 @@
 "info": null,
 "heavy": false,
 "n": 211,
-"ready": false
+"ready": true
 },
 {
 "type": "bokeh",
@@ -37983,7 +40714,7 @@
 "info": null,
 "heavy": false,
 "n": 212,
-"ready": false
+"ready": true
 },
 {
 "type": "smoke",
@@ -38167,7 +40898,7 @@
 "info": null,
 "heavy": false,
 "n": 213,
-"ready": false
+"ready": true
 },
 {
 "type": "aurora",
@@ -38353,7 +41084,7 @@
 "info": null,
 "heavy": false,
 "n": 214,
-"ready": false
+"ready": true
 },
 {
 "type": "galaxy",
@@ -38542,7 +41273,7 @@
 "info": null,
 "heavy": false,
 "n": 215,
-"ready": false
+"ready": true
 },
 {
 "type": "coderain",
@@ -38715,7 +41446,7 @@
 "info": null,
 "heavy": false,
 "n": 216,
-"ready": false
+"ready": true
 },
 {
 "type": "tetra",
@@ -38796,14 +41527,213 @@
 "jog": 1,
 "src": "Anahtar",
 "def": 0
+},
+{
+"k": "yonelimXY",
+"l": "Yönelim X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -180.0,
+"max": 180.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "surekliDonuX",
+"l": "Sürekli dönüş X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -3600.0,
+"max": 3600.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "konumXY",
+"l": "Konum X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -4000.0,
+"max": 4000.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "perspekt",
+"l": "Perspektif",
+"anim": "step",
+"kind": "choice",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"opts": [
+"Perspektif",
+"Ortografik"
+],
+"src": "Seçim",
+"def": 0
+},
+{
+"k": "gorusAcis",
+"l": "Görüş açısı",
+"anim": "yes",
+"kind": "jog",
+"min": 10.0,
+"max": 120.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "Cetvel",
+"def": 45.0
+},
+{
+"k": "isikEtki",
+"l": "Işık etkin",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"def": 1
+},
+{
+"k": "isikKonu",
+"l": "Işık konumu",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -4000.0,
+"max": 4000.0,
+"defY": -100.0,
+"defZ": -200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"def": -100.0
+},
+{
+"k": "isikReng",
+"l": "Işık rengi",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"src": "Renk seçici",
+"def": "#FFFFFF"
+},
+{
+"k": "ortamIsig",
+"l": "Ortam ışığı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 45.0
+},
+{
+"k": "yonluIsikGucu",
+"l": "Yönlü ışık gücü",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 65.0
+},
+{
+"k": "parlakYans",
+"l": "Parlak yansıma",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 20.0
+},
+{
+"k": "puruzlul",
+"l": "Pürüzlülük",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 50.0
+},
+{
+"k": "arkaYuzlGost",
+"l": "Arka yüzleri göster",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"def": 0
+},
+{
+"k": "kenarYumu",
+"l": "Kenar yumuşatma",
+"anim": "no",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Kapalı",
+"Otomatik",
+"Yüksek"
+],
+"src": "Seçim",
+"def": 1
 }
 ],
 "presets": [
 {
-"code": "HF",
-"name": "Hafif",
+"code": "DN",
+"name": "Dönen",
 "vals": {
-"boyut": 100.0
+"yonelimXYX": 18,
+"surekliDonuXY": 90
 },
 "keys": {},
 "cols": {},
@@ -38811,10 +41741,11 @@
 "auto": true
 },
 {
-"code": "GÇ",
-"name": "Güçlü",
+"code": "EG",
+"name": "Eğik Duruş",
 "vals": {
-"boyut": 360.0
+"yonelimXYX": 25,
+"yonelimXYY": 35
 },
 "keys": {},
 "cols": {},
@@ -38824,20 +41755,22 @@
 {
 "code": "AN",
 "name": "Animasyonlu",
-"vals": {},
+"vals": {
+"yonelimXYX": 15
+},
 "keys": {
-"boyut": [
+"yonelimXYY": [
 [
 0,
-0.0
+-40
 ],
 [
 0.5,
-360.0
+40
 ],
 [
 1,
-200.0
+-40
 ]
 ]
 },
@@ -38846,12 +41779,14 @@
 "auto": true
 }
 ],
-"pad": null,
+"pad": {
+"box": 0.45
+},
 "passes": null,
 "info": null,
-"heavy": false,
+"heavy": true,
 "n": 238,
-"ready": false
+"ready": true
 },
 {
 "type": "icosa",
@@ -38920,14 +41855,213 @@
 ],
 "src": "Seçim",
 "def": 0
+},
+{
+"k": "yonelimXY",
+"l": "Yönelim X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -180.0,
+"max": 180.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "surekliDonuX",
+"l": "Sürekli dönüş X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -3600.0,
+"max": 3600.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "konumXY",
+"l": "Konum X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -4000.0,
+"max": 4000.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "perspekt",
+"l": "Perspektif",
+"anim": "step",
+"kind": "choice",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"opts": [
+"Perspektif",
+"Ortografik"
+],
+"src": "Seçim",
+"def": 0
+},
+{
+"k": "gorusAcis",
+"l": "Görüş açısı",
+"anim": "yes",
+"kind": "jog",
+"min": 10.0,
+"max": 120.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "Cetvel",
+"def": 45.0
+},
+{
+"k": "isikEtki",
+"l": "Işık etkin",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"def": 1
+},
+{
+"k": "isikKonu",
+"l": "Işık konumu",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -4000.0,
+"max": 4000.0,
+"defY": -100.0,
+"defZ": -200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"def": -100.0
+},
+{
+"k": "isikReng",
+"l": "Işık rengi",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"src": "Renk seçici",
+"def": "#FFFFFF"
+},
+{
+"k": "ortamIsig",
+"l": "Ortam ışığı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 45.0
+},
+{
+"k": "yonluIsikGucu",
+"l": "Yönlü ışık gücü",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 65.0
+},
+{
+"k": "parlakYans",
+"l": "Parlak yansıma",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 20.0
+},
+{
+"k": "puruzlul",
+"l": "Pürüzlülük",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 50.0
+},
+{
+"k": "arkaYuzlGost",
+"l": "Arka yüzleri göster",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"def": 0
+},
+{
+"k": "kenarYumu",
+"l": "Kenar yumuşatma",
+"anim": "no",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Kapalı",
+"Otomatik",
+"Yüksek"
+],
+"src": "Seçim",
+"def": 1
 }
 ],
 "presets": [
 {
-"code": "HF",
-"name": "Hafif",
+"code": "DN",
+"name": "Dönen",
 "vals": {
-"yaricap": 50.0
+"yonelimXYX": 18,
+"surekliDonuXY": 90
 },
 "keys": {},
 "cols": {},
@@ -38935,10 +42069,11 @@
 "auto": true
 },
 {
-"code": "GÇ",
-"name": "Güçlü",
+"code": "EG",
+"name": "Eğik Duruş",
 "vals": {
-"yaricap": 180.0
+"yonelimXYX": 25,
+"yonelimXYY": 35
 },
 "keys": {},
 "cols": {},
@@ -38948,20 +42083,22 @@
 {
 "code": "AN",
 "name": "Animasyonlu",
-"vals": {},
+"vals": {
+"yonelimXYX": 15
+},
 "keys": {
-"yaricap": [
+"yonelimXYY": [
 [
 0,
-0.0
+-40
 ],
 [
 0.5,
-180.0
+40
 ],
 [
 1,
-100.0
+-40
 ]
 ]
 },
@@ -38970,12 +42107,14 @@
 "auto": true
 }
 ],
-"pad": null,
+"pad": {
+"box": 0.45
+},
 "passes": null,
 "info": null,
-"heavy": false,
+"heavy": true,
 "n": 239,
-"ready": false
+"ready": true
 },
 {
 "type": "fold3d",
@@ -39082,14 +42221,213 @@
 "jog": 1,
 "src": "Anahtar",
 "def": 1
+},
+{
+"k": "yonelimXY",
+"l": "Yönelim X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -180.0,
+"max": 180.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "surekliDonuX",
+"l": "Sürekli dönüş X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -3600.0,
+"max": 3600.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "konumXY",
+"l": "Konum X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -4000.0,
+"max": 4000.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "perspekt",
+"l": "Perspektif",
+"anim": "step",
+"kind": "choice",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"opts": [
+"Perspektif",
+"Ortografik"
+],
+"src": "Seçim",
+"def": 0
+},
+{
+"k": "gorusAcis",
+"l": "Görüş açısı",
+"anim": "yes",
+"kind": "jog",
+"min": 10.0,
+"max": 120.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "Cetvel",
+"def": 45.0
+},
+{
+"k": "isikEtki",
+"l": "Işık etkin",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"def": 1
+},
+{
+"k": "isikKonu",
+"l": "Işık konumu",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -4000.0,
+"max": 4000.0,
+"defY": -100.0,
+"defZ": -200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"def": -100.0
+},
+{
+"k": "isikReng",
+"l": "Işık rengi",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"src": "Renk seçici",
+"def": "#FFFFFF"
+},
+{
+"k": "ortamIsig",
+"l": "Ortam ışığı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 45.0
+},
+{
+"k": "yonluIsikGucu",
+"l": "Yönlü ışık gücü",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 65.0
+},
+{
+"k": "parlakYans",
+"l": "Parlak yansıma",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 20.0
+},
+{
+"k": "puruzlul",
+"l": "Pürüzlülük",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 50.0
+},
+{
+"k": "arkaYuzlGost",
+"l": "Arka yüzleri göster",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"def": 0
+},
+{
+"k": "kenarYumu",
+"l": "Kenar yumuşatma",
+"anim": "no",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Kapalı",
+"Otomatik",
+"Yüksek"
+],
+"src": "Seçim",
+"def": 1
 }
 ],
 "presets": [
 {
-"code": "HF",
-"name": "Hafif",
+"code": "DN",
+"name": "Dönen",
 "vals": {
-"katAcis": 22.5
+"yonelimXYX": 18,
+"surekliDonuXY": 90
 },
 "keys": {},
 "cols": {},
@@ -39097,10 +42435,11 @@
 "auto": true
 },
 {
-"code": "GÇ",
-"name": "Güçlü",
+"code": "EG",
+"name": "Eğik Duruş",
 "vals": {
-"katAcis": 81.0
+"yonelimXYX": 25,
+"yonelimXYY": 35
 },
 "keys": {},
 "cols": {},
@@ -39110,20 +42449,22 @@
 {
 "code": "AN",
 "name": "Animasyonlu",
-"vals": {},
+"vals": {
+"yonelimXYX": 15
+},
 "keys": {
-"katAcis": [
+"yonelimXYY": [
 [
 0,
-0.0
+-40
 ],
 [
 0.5,
-81.0
+40
 ],
 [
 1,
-45.0
+-40
 ]
 ]
 },
@@ -39132,12 +42473,14 @@
 "auto": true
 }
 ],
-"pad": null,
+"pad": {
+"box": 0.45
+},
 "passes": null,
 "info": null,
-"heavy": false,
+"heavy": true,
 "n": 240,
-"ready": false
+"ready": true
 },
 {
 "type": "transformfx",
@@ -40040,7 +43383,7 @@
 "info": null,
 "heavy": false,
 "n": 295,
-"ready": false
+"ready": true
 },
 {
 "type": "lincolorkey",
@@ -40191,7 +43534,7 @@
 ],
 "n": 296,
 "inner": "Renk Anahtarı",
-"ready": false
+"ready": true
 },
 {
 "type": "spill",
@@ -40325,7 +43668,7 @@
 "info": null,
 "heavy": false,
 "n": 297,
-"ready": false
+"ready": true
 },
 {
 "type": "noisealpha",
@@ -40472,7 +43815,7 @@
 "info": null,
 "heavy": false,
 "n": 298,
-"ready": false
+"ready": true
 },
 {
 "type": "strobelight",
@@ -40628,7 +43971,7 @@
 "info": null,
 "heavy": false,
 "n": 311,
-"ready": false
+"ready": true
 },
 {
 "type": "flash",
@@ -41397,25 +44740,43 @@
 ],
 "presets": [
 {
-"code": "HF",
-"name": "Hafif",
-"vals": {
-"ilerleme": 20.0
+"code": "GR",
+"name": "Giriş",
+"vals": {},
+"keys": {
+"ilerleme": [
+[
+0,
+100
+],
+[
+0.7,
+0
+]
+]
 },
-"keys": {},
 "cols": {},
 "at": "start",
 "auto": true
 },
 {
-"code": "GÇ",
-"name": "Güçlü",
-"vals": {
-"ilerleme": 55.0
+"code": "CK",
+"name": "Çıkış",
+"vals": {},
+"keys": {
+"ilerleme": [
+[
+-0.7,
+0
+],
+[
+0,
+100
+]
+]
 },
-"keys": {},
 "cols": {},
-"at": "start",
+"at": "end",
 "auto": true
 },
 {
@@ -41426,15 +44787,15 @@
 "ilerleme": [
 [
 0,
-0.0
+0
 ],
 [
 0.5,
-55.0
+100
 ],
 [
 1,
-20.0
+0
 ]
 ]
 },
@@ -41444,13 +44805,13 @@
 }
 ],
 "pad": {
-"add": 0
+"box": 0.6
 },
 "passes": null,
 "info": null,
-"heavy": false,
+"heavy": true,
 "n": 353,
-"ready": false
+"ready": true
 },
 {
 "type": "pixelpolly",
@@ -41584,25 +44945,43 @@
 ],
 "presets": [
 {
-"code": "HF",
-"name": "Hafif",
-"vals": {
-"ilerleme": 20.0
+"code": "GR",
+"name": "Giriş",
+"vals": {},
+"keys": {
+"ilerleme": [
+[
+0,
+100
+],
+[
+0.7,
+0
+]
+]
 },
-"keys": {},
 "cols": {},
 "at": "start",
 "auto": true
 },
 {
-"code": "GÇ",
-"name": "Güçlü",
-"vals": {
-"ilerleme": 55.0
+"code": "CK",
+"name": "Çıkış",
+"vals": {},
+"keys": {
+"ilerleme": [
+[
+-0.7,
+0
+],
+[
+0,
+100
+]
+]
 },
-"keys": {},
 "cols": {},
-"at": "start",
+"at": "end",
 "auto": true
 },
 {
@@ -41613,15 +44992,15 @@
 "ilerleme": [
 [
 0,
-0.0
+0
 ],
 [
 0.5,
-55.0
+100
 ],
 [
 1,
-20.0
+0
 ]
 ]
 },
@@ -41631,13 +45010,13 @@
 }
 ],
 "pad": {
-"add": 0
+"box": 0.5
 },
 "passes": null,
 "info": null,
-"heavy": false,
+"heavy": true,
 "n": 354,
-"ready": false
+"ready": true
 },
 {
 "type": "carddance",
@@ -41833,13 +45212,13 @@
 }
 ],
 "pad": {
-"add": 0
+"box": 0.15
 },
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 355,
-"ready": false
+"ready": true
 },
 {
 "type": "caustics",
@@ -42012,7 +45391,7 @@
 "info": null,
 "heavy": false,
 "n": 356,
-"ready": false
+"ready": true
 },
 {
 "type": "waveworld",
@@ -42190,12 +45569,15 @@
 "auto": true
 }
 ],
-"pad": null,
+"pad": {
+"k": "dalgaYuks",
+"mul": 1
+},
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 357,
-"ready": false
+"ready": true
 },
 {
 "type": "mercury",
@@ -42381,13 +45763,13 @@
 }
 ],
 "pad": {
-"add": 60
+"box": 0.4
 },
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 358,
-"ready": false
+"ready": true
 },
 {
 "type": "foam",
@@ -42576,7 +45958,7 @@
 "info": null,
 "heavy": false,
 "n": 359,
-"ready": false
+"ready": true
 },
 {
 "type": "particles",
@@ -42796,12 +46178,14 @@
 "auto": true
 }
 ],
-"pad": null,
+"pad": {
+"box": 0.6
+},
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 360,
-"ready": false
+"ready": true
 },
 {
 "type": "scatterize",
@@ -42936,25 +46320,43 @@
 ],
 "presets": [
 {
-"code": "HF",
-"name": "Hafif",
-"vals": {
-"ilerleme": 20.0
+"code": "GR",
+"name": "Giriş",
+"vals": {},
+"keys": {
+"ilerleme": [
+[
+0,
+100
+],
+[
+0.7,
+0
+]
+]
 },
-"keys": {},
 "cols": {},
 "at": "start",
 "auto": true
 },
 {
-"code": "GÇ",
-"name": "Güçlü",
-"vals": {
-"ilerleme": 55.0
+"code": "CK",
+"name": "Çıkış",
+"vals": {},
+"keys": {
+"ilerleme": [
+[
+-0.7,
+0
+],
+[
+0,
+100
+]
+]
 },
-"keys": {},
 "cols": {},
-"at": "start",
+"at": "end",
 "auto": true
 },
 {
@@ -42965,15 +46367,15 @@
 "ilerleme": [
 [
 0,
-0.0
+0
 ],
 [
 0.5,
-55.0
+100
 ],
 [
 1,
-20.0
+0
 ]
 ]
 },
@@ -42983,14 +46385,14 @@
 }
 ],
 "pad": {
-"k": "dist",
+"k": "savrulma",
 "mul": 1
 },
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 361,
-"ready": false
+"ready": true
 },
 {
 "type": "drizzle",
@@ -43145,12 +46547,15 @@
 "auto": true
 }
 ],
-"pad": null,
+"pad": {
+"k": "dalgaYuks",
+"mul": 1
+},
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 362,
-"ready": false
+"ready": true
 },
 {
 "type": "hair",
@@ -43344,14 +46749,14 @@
 }
 ],
 "pad": {
-"k": "len",
+"k": "uzunluk",
 "mul": 1
 },
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 363,
-"ready": false
+"ready": true
 },
 {
 "type": "ballaction",
@@ -43533,13 +46938,14 @@
 }
 ],
 "pad": {
-"add": 60
+"k": "dagilma",
+"mul": 1
 },
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 364,
-"ready": false
+"ready": true
 },
 {
 "type": "starburst",
@@ -43773,12 +47179,15 @@
 "auto": true
 }
 ],
-"pad": null,
+"pad": {
+"k": "kirilma",
+"mul": 1
+},
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 365,
-"ready": false
+"ready": true
 },
 {
 "type": "cardwipe",
@@ -43910,25 +47319,43 @@
 ],
 "presets": [
 {
-"code": "HF",
-"name": "Hafif",
-"vals": {
-"ilerleme": 20.0
+"code": "GR",
+"name": "Giriş",
+"vals": {},
+"keys": {
+"ilerleme": [
+[
+0,
+100
+],
+[
+0.7,
+0
+]
+]
 },
-"keys": {},
 "cols": {},
 "at": "start",
 "auto": true
 },
 {
-"code": "GÇ",
-"name": "Güçlü",
-"vals": {
-"ilerleme": 55.0
+"code": "CK",
+"name": "Çıkış",
+"vals": {},
+"keys": {
+"ilerleme": [
+[
+-0.7,
+0
+],
+[
+0,
+100
+]
+]
 },
-"keys": {},
 "cols": {},
-"at": "start",
+"at": "end",
 "auto": true
 },
 {
@@ -43939,15 +47366,15 @@
 "ilerleme": [
 [
 0,
-0.0
+0
 ],
 [
 0.5,
-55.0
+100
 ],
 [
 1,
-20.0
+0
 ]
 ]
 },
@@ -43956,14 +47383,12 @@
 "auto": true
 }
 ],
-"pad": {
-"add": 0
-},
+"pad": null,
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 373,
-"ready": false
+"ready": true
 },
 {
 "type": "glasswipe",
@@ -44087,25 +47512,43 @@
 ],
 "presets": [
 {
-"code": "HF",
-"name": "Hafif",
-"vals": {
-"ilerleme": 20.0
+"code": "GR",
+"name": "Giriş",
+"vals": {},
+"keys": {
+"ilerleme": [
+[
+0,
+100
+],
+[
+0.7,
+0
+]
+]
 },
-"keys": {},
 "cols": {},
 "at": "start",
 "auto": true
 },
 {
-"code": "GÇ",
-"name": "Güçlü",
-"vals": {
-"ilerleme": 55.0
+"code": "CK",
+"name": "Çıkış",
+"vals": {},
+"keys": {
+"ilerleme": [
+[
+-0.7,
+0
+],
+[
+0,
+100
+]
+]
 },
-"keys": {},
 "cols": {},
-"at": "start",
+"at": "end",
 "auto": true
 },
 {
@@ -44116,15 +47559,15 @@
 "ilerleme": [
 [
 0,
-0.0
+0
 ],
 [
 0.5,
-55.0
+100
 ],
 [
 1,
-20.0
+0
 ]
 ]
 },
@@ -44133,12 +47576,15 @@
 "auto": true
 }
 ],
-"pad": null,
+"pad": {
+"k": "dagilma",
+"mul": 1.5
+},
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 374,
-"ready": false
+"ready": true
 },
 {
 "type": "gridwipe",
@@ -44271,25 +47717,43 @@
 ],
 "presets": [
 {
-"code": "HF",
-"name": "Hafif",
-"vals": {
-"ilerleme": 20.0
+"code": "GR",
+"name": "Giriş",
+"vals": {},
+"keys": {
+"ilerleme": [
+[
+0,
+100
+],
+[
+0.7,
+0
+]
+]
 },
-"keys": {},
 "cols": {},
 "at": "start",
 "auto": true
 },
 {
-"code": "GÇ",
-"name": "Güçlü",
-"vals": {
-"ilerleme": 55.0
+"code": "CK",
+"name": "Çıkış",
+"vals": {},
+"keys": {
+"ilerleme": [
+[
+-0.7,
+0
+],
+[
+0,
+100
+]
+]
 },
-"keys": {},
 "cols": {},
-"at": "start",
+"at": "end",
 "auto": true
 },
 {
@@ -44300,15 +47764,15 @@
 "ilerleme": [
 [
 0,
-0.0
+0
 ],
 [
 0.5,
-55.0
+100
 ],
 [
 1,
-20.0
+0
 ]
 ]
 },
@@ -44322,7 +47786,7 @@
 "info": null,
 "heavy": false,
 "n": 375,
-"ready": false
+"ready": true
 },
 {
 "type": "jaws",
@@ -44415,25 +47879,43 @@
 ],
 "presets": [
 {
-"code": "HF",
-"name": "Hafif",
-"vals": {
-"ilerleme": 20.0
+"code": "GR",
+"name": "Giriş",
+"vals": {},
+"keys": {
+"ilerleme": [
+[
+0,
+100
+],
+[
+0.7,
+0
+]
+]
 },
-"keys": {},
 "cols": {},
 "at": "start",
 "auto": true
 },
 {
-"code": "GÇ",
-"name": "Güçlü",
-"vals": {
-"ilerleme": 55.0
+"code": "CK",
+"name": "Çıkış",
+"vals": {},
+"keys": {
+"ilerleme": [
+[
+-0.7,
+0
+],
+[
+0,
+100
+]
+]
 },
-"keys": {},
 "cols": {},
-"at": "start",
+"at": "end",
 "auto": true
 },
 {
@@ -44444,15 +47926,15 @@
 "ilerleme": [
 [
 0,
-0.0
+0
 ],
 [
 0.5,
-55.0
+100
 ],
 [
 1,
-20.0
+0
 ]
 ]
 },
@@ -44466,7 +47948,7 @@
 "info": null,
 "heavy": false,
 "n": 376,
-"ready": false
+"ready": true
 },
 {
 "type": "lightwipe",
@@ -44572,25 +48054,43 @@
 ],
 "presets": [
 {
-"code": "HF",
-"name": "Hafif",
-"vals": {
-"ilerleme": 20.0
+"code": "GR",
+"name": "Giriş",
+"vals": {},
+"keys": {
+"ilerleme": [
+[
+0,
+100
+],
+[
+0.7,
+0
+]
+]
 },
-"keys": {},
 "cols": {},
 "at": "start",
 "auto": true
 },
 {
-"code": "GÇ",
-"name": "Güçlü",
-"vals": {
-"ilerleme": 55.0
+"code": "CK",
+"name": "Çıkış",
+"vals": {},
+"keys": {
+"ilerleme": [
+[
+-0.7,
+0
+],
+[
+0,
+100
+]
+]
 },
-"keys": {},
 "cols": {},
-"at": "start",
+"at": "end",
 "auto": true
 },
 {
@@ -44601,15 +48101,15 @@
 "ilerleme": [
 [
 0,
-0.0
+0
 ],
 [
 0.5,
-55.0
+100
 ],
 [
 1,
-20.0
+0
 ]
 ]
 },
@@ -44623,7 +48123,7 @@
 "info": null,
 "heavy": false,
 "n": 377,
-"ready": false
+"ready": true
 },
 {
 "type": "linesweep",
@@ -44731,25 +48231,43 @@
 ],
 "presets": [
 {
-"code": "HF",
-"name": "Hafif",
-"vals": {
-"ilerleme": 20.0
+"code": "GR",
+"name": "Giriş",
+"vals": {},
+"keys": {
+"ilerleme": [
+[
+0,
+100
+],
+[
+0.7,
+0
+]
+]
 },
-"keys": {},
 "cols": {},
 "at": "start",
 "auto": true
 },
 {
-"code": "GÇ",
-"name": "Güçlü",
-"vals": {
-"ilerleme": 55.0
+"code": "CK",
+"name": "Çıkış",
+"vals": {},
+"keys": {
+"ilerleme": [
+[
+-0.7,
+0
+],
+[
+0,
+100
+]
+]
 },
-"keys": {},
 "cols": {},
-"at": "start",
+"at": "end",
 "auto": true
 },
 {
@@ -44760,15 +48278,15 @@
 "ilerleme": [
 [
 0,
-0.0
+0
 ],
 [
 0.5,
-55.0
+100
 ],
 [
 1,
-20.0
+0
 ]
 ]
 },
@@ -44782,7 +48300,7 @@
 "info": null,
 "heavy": false,
 "n": 378,
-"ready": false
+"ready": true
 },
 {
 "type": "radscalewipe",
@@ -44865,25 +48383,43 @@
 ],
 "presets": [
 {
-"code": "HF",
-"name": "Hafif",
-"vals": {
-"ilerleme": 20.0
+"code": "GR",
+"name": "Giriş",
+"vals": {},
+"keys": {
+"ilerleme": [
+[
+0,
+100
+],
+[
+0.7,
+0
+]
+]
 },
-"keys": {},
 "cols": {},
 "at": "start",
 "auto": true
 },
 {
-"code": "GÇ",
-"name": "Güçlü",
-"vals": {
-"ilerleme": 55.0
+"code": "CK",
+"name": "Çıkış",
+"vals": {},
+"keys": {
+"ilerleme": [
+[
+-0.7,
+0
+],
+[
+0,
+100
+]
+]
 },
-"keys": {},
 "cols": {},
-"at": "start",
+"at": "end",
 "auto": true
 },
 {
@@ -44894,15 +48430,15 @@
 "ilerleme": [
 [
 0,
-0.0
+0
 ],
 [
 0.5,
-55.0
+100
 ],
 [
 1,
-20.0
+0
 ]
 ]
 },
@@ -44916,7 +48452,7 @@
 "info": null,
 "heavy": false,
 "n": 379,
-"ready": false
+"ready": true
 },
 {
 "type": "scalewipe",
@@ -45012,25 +48548,43 @@
 ],
 "presets": [
 {
-"code": "HF",
-"name": "Hafif",
-"vals": {
-"ilerleme": 20.0
+"code": "GR",
+"name": "Giriş",
+"vals": {},
+"keys": {
+"ilerleme": [
+[
+0,
+100
+],
+[
+0.7,
+0
+]
+]
 },
-"keys": {},
 "cols": {},
 "at": "start",
 "auto": true
 },
 {
-"code": "GÇ",
-"name": "Güçlü",
-"vals": {
-"ilerleme": 55.0
+"code": "CK",
+"name": "Çıkış",
+"vals": {},
+"keys": {
+"ilerleme": [
+[
+-0.7,
+0
+],
+[
+0,
+100
+]
+]
 },
-"keys": {},
 "cols": {},
-"at": "start",
+"at": "end",
 "auto": true
 },
 {
@@ -45041,15 +48595,15 @@
 "ilerleme": [
 [
 0,
-0.0
+0
 ],
 [
 0.5,
-55.0
+100
 ],
 [
 1,
-20.0
+0
 ]
 ]
 },
@@ -45063,7 +48617,7 @@
 "info": null,
 "heavy": false,
 "n": 380,
-"ready": false
+"ready": true
 },
 {
 "type": "twister",
@@ -45184,25 +48738,43 @@
 ],
 "presets": [
 {
-"code": "HF",
-"name": "Hafif",
-"vals": {
-"ilerleme": 20.0
+"code": "GR",
+"name": "Giriş",
+"vals": {},
+"keys": {
+"ilerleme": [
+[
+0,
+100
+],
+[
+0.7,
+0
+]
+]
 },
-"keys": {},
 "cols": {},
 "at": "start",
 "auto": true
 },
 {
-"code": "GÇ",
-"name": "Güçlü",
-"vals": {
-"ilerleme": 55.0
+"code": "CK",
+"name": "Çıkış",
+"vals": {},
+"keys": {
+"ilerleme": [
+[
+-0.7,
+0
+],
+[
+0,
+100
+]
+]
 },
-"keys": {},
 "cols": {},
-"at": "start",
+"at": "end",
 "auto": true
 },
 {
@@ -45213,15 +48785,15 @@
 "ilerleme": [
 [
 0,
-0.0
+0
 ],
 [
 0.5,
-55.0
+100
 ],
 [
 1,
-20.0
+0
 ]
 ]
 },
@@ -45230,12 +48802,14 @@
 "auto": true
 }
 ],
-"pad": null,
+"pad": {
+"box": 0.1
+},
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 381,
-"ready": false
+"ready": true
 },
 {
 "type": "warpomatic",
@@ -45343,25 +48917,43 @@
 ],
 "presets": [
 {
-"code": "HF",
-"name": "Hafif",
-"vals": {
-"ilerleme": 20.0
+"code": "GR",
+"name": "Giriş",
+"vals": {},
+"keys": {
+"ilerleme": [
+[
+0,
+100
+],
+[
+0.7,
+0
+]
+]
 },
-"keys": {},
 "cols": {},
 "at": "start",
 "auto": true
 },
 {
-"code": "GÇ",
-"name": "Güçlü",
-"vals": {
-"ilerleme": 55.0
+"code": "CK",
+"name": "Çıkış",
+"vals": {},
+"keys": {
+"ilerleme": [
+[
+-0.7,
+0
+],
+[
+0,
+100
+]
+]
 },
-"keys": {},
 "cols": {},
-"at": "start",
+"at": "end",
 "auto": true
 },
 {
@@ -45372,15 +48964,15 @@
 "ilerleme": [
 [
 0,
-0.0
+0
 ],
 [
 0.5,
-55.0
+100
 ],
 [
 1,
-20.0
+0
 ]
 ]
 },
@@ -45394,7 +48986,7 @@
 "info": null,
 "heavy": false,
 "n": 382,
-"ready": false
+"ready": true
 },
 {
 "type": "gradwipe",
@@ -45492,25 +49084,43 @@
 ],
 "presets": [
 {
-"code": "HF",
-"name": "Hafif",
-"vals": {
-"ilerleme": 20.0
+"code": "GR",
+"name": "Giriş",
+"vals": {},
+"keys": {
+"ilerleme": [
+[
+0,
+100
+],
+[
+0.7,
+0
+]
+]
 },
-"keys": {},
 "cols": {},
 "at": "start",
 "auto": true
 },
 {
-"code": "GÇ",
-"name": "Güçlü",
-"vals": {
-"ilerleme": 55.0
+"code": "CK",
+"name": "Çıkış",
+"vals": {},
+"keys": {
+"ilerleme": [
+[
+-0.7,
+0
+],
+[
+0,
+100
+]
+]
 },
-"keys": {},
 "cols": {},
-"at": "start",
+"at": "end",
 "auto": true
 },
 {
@@ -45521,15 +49131,15 @@
 "ilerleme": [
 [
 0,
-0.0
+0
 ],
 [
 0.5,
-55.0
+100
 ],
 [
 1,
-20.0
+0
 ]
 ]
 },
@@ -45543,7 +49153,7 @@
 "info": null,
 "heavy": false,
 "n": 383,
-"ready": false
+"ready": true
 },
 {
 "type": "inkwipe",
@@ -45667,25 +49277,43 @@
 ],
 "presets": [
 {
-"code": "HF",
-"name": "Hafif",
-"vals": {
-"ilerleme": 20.0
+"code": "GR",
+"name": "Giriş",
+"vals": {},
+"keys": {
+"ilerleme": [
+[
+0,
+100
+],
+[
+0.7,
+0
+]
+]
 },
-"keys": {},
 "cols": {},
 "at": "start",
 "auto": true
 },
 {
-"code": "GÇ",
-"name": "Güçlü",
-"vals": {
-"ilerleme": 55.0
+"code": "CK",
+"name": "Çıkış",
+"vals": {},
+"keys": {
+"ilerleme": [
+[
+-0.7,
+0
+],
+[
+0,
+100
+]
+]
 },
-"keys": {},
 "cols": {},
-"at": "start",
+"at": "end",
 "auto": true
 },
 {
@@ -45696,15 +49324,15 @@
 "ilerleme": [
 [
 0,
-0.0
+0
 ],
 [
 0.5,
-55.0
+100
 ],
 [
 1,
-20.0
+0
 ]
 ]
 },
@@ -45718,7 +49346,7 @@
 "info": null,
 "heavy": false,
 "n": 384,
-"ready": false
+"ready": true
 },
 {
 "type": "widetime",
@@ -46178,26 +49806,11 @@
 }
 ],
 "pad": null,
-"passes": [
-{
-"blur": "src",
-"r": {
-"k": "rad",
-"mul": 1
-},
-"out": "B"
-},
-{
-"fs": "unsharp",
-"aux": {
-"u_aux": "B"
-}
-}
-],
+"passes": null,
 "info": null,
 "heavy": false,
 "n": 119,
-"ready": false
+"ready": true
 },
 {
 "type": "compoundblur",
@@ -46341,27 +49954,15 @@
 "auto": true
 }
 ],
-"pad": null,
-"passes": [
-{
-"blur": "src",
-"r": {
-"k": "amount",
-"mul": 1
+"pad": {
+"k": "maksimumYari",
+"mul": 0.8
 },
-"out": "B"
-},
-{
-"fs": "compoundblur",
-"aux": {
-"u_aux": "B"
-}
-}
-],
+"passes": null,
 "info": null,
 "heavy": false,
 "n": 120,
-"ready": false
+"ready": true
 },
 {
 "type": "autocolor",
@@ -47977,9 +51578,9 @@
 "pad": null,
 "passes": null,
 "info": null,
-"heavy": false,
+"heavy": true,
 "n": 217,
-"ready": false
+"ready": true
 },
 {
 "type": "cellpattern",
@@ -48173,7 +51774,7 @@
 ],
 "n": 218,
 "inner": "Hücreler",
-"ready": false
+"ready": true
 },
 {
 "type": "thresholdrgb",
@@ -48306,7 +51907,7 @@
 "info": null,
 "heavy": false,
 "n": 90,
-"ready": false
+"ready": true
 },
 {
 "type": "scatterpx",
@@ -48440,14 +52041,14 @@
 }
 ],
 "pad": {
-"k": "amount",
+"k": "sacilmaMesa",
 "mul": 1
 },
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 91,
-"ready": false
+"ready": true
 },
 {
 "type": "repetile",
@@ -48617,10 +52218,10 @@
 ],
 "pad": {
 "max": [
-"l",
-"r",
-"u",
-"d"
+"solUzat",
+"sagUzat",
+"ustUzat",
+"altUzat"
 ]
 },
 "passes": null,
@@ -48635,7 +52236,7 @@
 ],
 "n": 92,
 "inner": "Hareketli Döşeme",
-"ready": false
+"ready": true
 },
 {
 "type": "burnfilm",
@@ -48809,7 +52410,7 @@
 "info": null,
 "heavy": false,
 "n": 93,
-"ready": false
+"ready": true
 },
 {
 "type": "blockload",
@@ -48948,7 +52549,7 @@
 "info": null,
 "heavy": false,
 "n": 94,
-"ready": false
+"ready": true
 },
 {
 "type": "particleworld",
@@ -49181,12 +52782,14 @@
 "auto": true
 }
 ],
-"pad": null,
+"pad": {
+"box": 0.6
+},
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 366,
-"ready": false
+"ready": true
 },
 {
 "type": "speed",
@@ -49547,7 +53150,7 @@
 ],
 "n": 334,
 "inner": "Türbülans",
-"ready": false
+"ready": true
 },
 {
 "type": "noisehls",
@@ -49692,7 +53295,7 @@
 "info": null,
 "heavy": false,
 "n": 335,
-"ready": false
+"ready": true
 },
 {
 "type": "denoise",
@@ -49837,9 +53440,9 @@
 "pad": null,
 "passes": null,
 "info": null,
-"heavy": false,
+"heavy": true,
 "n": 336,
-"ready": false
+"ready": true
 },
 {
 "type": "arithmetic",
@@ -49991,7 +53594,7 @@
 "info": null,
 "heavy": false,
 "n": 337,
-"ready": false
+"ready": true
 },
 {
 "type": "minimax",
@@ -50119,15 +53722,12 @@
 "auto": true
 }
 ],
-"pad": {
-"k": "rad",
-"mul": 1
-},
+"pad": null,
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 338,
-"ready": false
+"ready": true
 },
 {
 "type": "blendorig",
@@ -50255,7 +53855,7 @@
 "info": "Efekt listesinde en sona koy.",
 "heavy": false,
 "n": 339,
-"ready": false
+"ready": true
 },
 {
 "type": "keylight",
@@ -50442,9 +54042,9 @@
 "pad": null,
 "passes": null,
 "info": null,
-"heavy": false,
+"heavy": true,
 "n": 299,
-"ready": false
+"ready": true
 },
 {
 "type": "colorkey",
@@ -50761,7 +54361,7 @@
 "info": null,
 "heavy": false,
 "n": 340,
-"ready": false
+"ready": true
 },
 {
 "type": "reorient360",
@@ -50897,7 +54497,7 @@
 "info": null,
 "heavy": false,
 "n": 341,
-"ready": false
+"ready": true
 },
 {
 "type": "tinyplanet",
@@ -51044,7 +54644,7 @@
 "info": null,
 "heavy": false,
 "n": 342,
-"ready": false
+"ready": true
 },
 {
 "type": "chromaber",
@@ -51201,14 +54801,14 @@
 }
 ],
 "pad": {
-"k": "amount",
-"mul": 1
+"k": "siddet",
+"mul": 2
 },
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 343,
-"ready": false
+"ready": true
 },
 {
 "type": "pathtext",
@@ -53770,7 +57370,7 @@
 "info": null,
 "heavy": false,
 "n": 121,
-"ready": false
+"ready": true
 },
 {
 "type": "upscale",
@@ -53914,14 +57514,12 @@
 "auto": true
 }
 ],
-"pad": {
-"add": 0
-},
+"pad": null,
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 122,
-"ready": false
+"ready": true
 },
 {
 "type": "liquify",
@@ -54237,7 +57835,7 @@
 "info": null,
 "heavy": true,
 "n": 219,
-"ready": false
+"ready": true
 },
 {
 "type": "eyedropper",
@@ -54372,7 +57970,7 @@
 "info": null,
 "heavy": false,
 "n": 220,
-"ready": false
+"ready": true
 },
 {
 "type": "diffmatte",
@@ -54684,7 +58282,7 @@
 "info": null,
 "heavy": false,
 "n": 301,
-"ready": false
+"ready": true
 },
 {
 "type": "fringe",
@@ -54815,7 +58413,7 @@
 "info": null,
 "heavy": false,
 "n": 302,
-"ready": false
+"ready": true
 },
 {
 "type": "matchgrain",
@@ -55271,7 +58869,7 @@
 "info": null,
 "heavy": false,
 "n": 95,
-"ready": false
+"ready": true
 },
 {
 "type": "depthblur",
@@ -55437,7 +59035,7 @@
 "info": "Telefonun portre modunda çekilmiş, içinde derinlik haritası olan fotoğraflarda çalışır.",
 "heavy": true,
 "n": 123,
-"ready": false
+"ready": true
 },
 {
 "type": "depthmatte",
@@ -55584,7 +59182,7 @@
 "info": "Telefonun portre modunda çekilmiş, içinde derinlik haritası olan fotoğraflarda çalışır.",
 "heavy": false,
 "n": 303,
-"ready": false
+"ready": true
 },
 {
 "type": "depthfog",
@@ -55748,7 +59346,7 @@
 "info": "Telefonun portre modunda çekilmiş, içinde derinlik haritası olan fotoğraflarda çalışır.",
 "heavy": false,
 "n": 345,
-"ready": false
+"ready": true
 },
 {
 "type": "chromvortex",
@@ -55895,12 +59493,14 @@
 "auto": true
 }
 ],
-"pad": null,
+"pad": {
+"box": 0.2
+},
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 124,
-"ready": false
+"ready": true
 },
 {
 "type": "chromzoom",
@@ -56048,13 +59648,13 @@
 }
 ],
 "pad": {
-"add": 20
+"box": 0.15
 },
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 125,
-"ready": false
+"ready": true
 },
 {
 "type": "innerblur",
@@ -56169,26 +59769,11 @@
 }
 ],
 "pad": null,
-"passes": [
-{
-"blur": "src",
-"r": {
-"k": "amount",
-"mul": 1
-},
-"out": "B"
-},
-{
-"fs": "innerblur",
-"aux": {
-"u_aux": "B"
-}
-}
-],
+"passes": null,
 "info": null,
 "heavy": false,
 "n": 126,
-"ready": false
+"ready": true
 },
 {
 "type": "linstreaks",
@@ -56330,14 +59915,14 @@
 }
 ],
 "pad": {
-"k": "len",
+"k": "izUzun",
 "mul": 1
 },
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 127,
-"ready": false
+"ready": true
 },
 {
 "type": "maskblur",
@@ -56481,27 +60066,15 @@
 "auto": true
 }
 ],
-"pad": null,
-"passes": [
-{
-"blur": "src",
-"r": {
-"k": "amount",
-"mul": 1
+"pad": {
+"k": "yaricap",
+"mul": 0.8
 },
-"out": "B"
-},
-{
-"fs": "maskblur",
-"aux": {
-"u_aux": "B"
-}
-}
-],
+"passes": null,
 "info": null,
 "heavy": false,
 "n": 128,
-"ready": false
+"ready": true
 },
 {
 "type": "spinstreaks",
@@ -56644,12 +60217,14 @@
 "auto": true
 }
 ],
-"pad": null,
+"pad": {
+"box": 0.2
+},
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 129,
-"ready": false
+"ready": true
 },
 {
 "type": "streakstrips",
@@ -56805,14 +60380,14 @@
 }
 ],
 "pad": {
-"k": "len",
+"k": "azamiIz",
 "mul": 1
 },
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 130,
-"ready": false
+"ready": true
 },
 {
 "type": "swirlblur",
@@ -56961,7 +60536,7 @@
 "info": null,
 "heavy": false,
 "n": 131,
-"ready": false
+"ready": true
 },
 {
 "type": "warpblur",
@@ -57105,12 +60680,18 @@
 "auto": true
 }
 ],
-"pad": null,
+"pad": {
+"sum": [
+"bukmeMikt",
+"bulaniklUzun"
+],
+"mul": 0.8
+},
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 132,
-"ready": false
+"ready": true
 },
 {
 "type": "zoomstreaks",
@@ -57253,13 +60834,14 @@
 }
 ],
 "pad": {
-"add": 30
+"k": "izUzun",
+"mul": 1
 },
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 133,
-"ready": false
+"ready": true
 },
 {
 "type": "darkglow",
@@ -58967,7 +62549,7 @@
 "info": null,
 "heavy": false,
 "n": 221,
-"ready": false
+"ready": true
 },
 {
 "type": "grunge",
@@ -59152,7 +62734,7 @@
 "info": null,
 "heavy": false,
 "n": 222,
-"ready": false
+"ready": true
 },
 {
 "type": "ominodiff",
@@ -59329,7 +62911,7 @@
 "info": null,
 "heavy": false,
 "n": 223,
-"ready": false
+"ready": true
 },
 {
 "type": "volclouds",
@@ -59461,6 +63043,152 @@
 "int": true,
 "src": "Tam sayı / yeniden üret",
 "def": 1.0
+}
+],
+"presets": [
+{
+"code": "HF",
+"name": "Hafif",
+"vals": {
+"bulutYogu": 27.5
+},
+"keys": {},
+"cols": {},
+"at": "start",
+"auto": true
+},
+{
+"code": "GÇ",
+"name": "Güçlü",
+"vals": {
+"bulutYogu": 99.0
+},
+"keys": {},
+"cols": {},
+"at": "start",
+"auto": true
+},
+{
+"code": "AN",
+"name": "Animasyonlu",
+"vals": {},
+"keys": {
+"bulutYogu": [
+[
+0,
+0.0
+],
+[
+0.5,
+99.0
+],
+[
+1,
+55.0
+]
+]
+},
+"cols": {},
+"at": "start",
+"auto": true
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": true,
+"n": 224,
+"ready": true
+},
+{
+"type": "box3d",
+"name": "Kutu",
+"en": "Box",
+"cat": 5,
+"kind": "3d",
+"desc": "Eni, boyu ve derinliği ayrı ayarlanan kutu.",
+"tags": [
+"3B",
+"Şekil"
+],
+"params": [
+{
+"k": "en",
+"l": "En",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 800.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "Cetvel",
+"def": 200.0
+},
+{
+"k": "boy",
+"l": "Boy",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 600.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "Cetvel",
+"def": 150.0
+},
+{
+"k": "derinlik",
+"l": "Derinlik",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 500.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "Cetvel",
+"def": 100.0
+},
+{
+"k": "pah",
+"l": "Pah",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 500.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "Cetvel",
+"def": 0.0
+},
+{
+"k": "yuzKatm",
+"l": "Yüz katmanları",
+"anim": "no",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"multi": true,
+"hint": "Uygun bir veya birden çok katman",
+"src": "Katman seçici",
+"def": ""
+},
+{
+"k": "oranlariBagl",
+"l": "Oranları bağla",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"def": 0
 },
 {
 "k": "yonelimXY",
@@ -59568,7 +63296,7 @@
 "def": -100.0
 },
 {
-"k": "isikReng2",
+"k": "isikReng",
 "l": "Işık rengi",
 "anim": "yes",
 "kind": "color",
@@ -59663,10 +63391,11 @@
 ],
 "presets": [
 {
-"code": "HF",
-"name": "Hafif",
+"code": "DN",
+"name": "Dönen",
 "vals": {
-"bulutYogu": 27.5
+"yonelimXYX": 18,
+"surekliDonuXY": 90
 },
 "keys": {},
 "cols": {},
@@ -59674,156 +63403,11 @@
 "auto": true
 },
 {
-"code": "GÇ",
-"name": "Güçlü",
+"code": "EG",
+"name": "Eğik Duruş",
 "vals": {
-"bulutYogu": 99.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "AN",
-"name": "Animasyonlu",
-"vals": {},
-"keys": {
-"bulutYogu": [
-[
-0,
-0.0
-],
-[
-0.5,
-99.0
-],
-[
-1,
-55.0
-]
-]
-},
-"cols": {},
-"at": "start",
-"auto": true
-}
-],
-"pad": null,
-"passes": null,
-"info": null,
-"heavy": false,
-"n": 224,
-"ready": false
-},
-{
-"type": "box3d",
-"name": "Kutu",
-"en": "Box",
-"cat": 5,
-"kind": "3d",
-"desc": "Eni, boyu ve derinliği ayrı ayarlanan kutu.",
-"tags": [
-"3B",
-"Şekil"
-],
-"params": [
-{
-"k": "en",
-"l": "En",
-"anim": "yes",
-"kind": "jog",
-"min": 0.0,
-"max": 800.0,
-"step": 0.1,
-"jog": 0.1,
-"unit": "px",
-"src": "Cetvel",
-"def": 200.0
-},
-{
-"k": "boy",
-"l": "Boy",
-"anim": "yes",
-"kind": "jog",
-"min": 0.0,
-"max": 600.0,
-"step": 0.1,
-"jog": 0.1,
-"unit": "px",
-"src": "Cetvel",
-"def": 150.0
-},
-{
-"k": "derinlik",
-"l": "Derinlik",
-"anim": "yes",
-"kind": "jog",
-"min": 0.0,
-"max": 500.0,
-"step": 0.1,
-"jog": 0.1,
-"unit": "px",
-"src": "Cetvel",
-"def": 100.0
-},
-{
-"k": "pah",
-"l": "Pah",
-"anim": "yes",
-"kind": "jog",
-"min": 0.0,
-"max": 500.0,
-"step": 0.1,
-"jog": 0.1,
-"unit": "px",
-"src": "Cetvel",
-"def": 0.0
-},
-{
-"k": "yuzKatm",
-"l": "Yüz katmanları",
-"anim": "no",
-"kind": "source",
-"min": 0,
-"max": 0,
-"step": 1,
-"jog": 1,
-"multi": true,
-"hint": "Uygun bir veya birden çok katman",
-"src": "Katman seçici",
-"def": ""
-},
-{
-"k": "oranlariBagl",
-"l": "Oranları bağla",
-"anim": "step",
-"kind": "toggle",
-"min": 0,
-"max": 1,
-"step": 1,
-"jog": 1,
-"src": "Anahtar",
-"def": 0
-}
-],
-"presets": [
-{
-"code": "HF",
-"name": "Hafif",
-"vals": {
-"en": 100.0
-},
-"keys": {},
-"cols": {},
-"at": "start",
-"auto": true
-},
-{
-"code": "GÇ",
-"name": "Güçlü",
-"vals": {
-"en": 360.0
+"yonelimXYX": 25,
+"yonelimXYY": 35
 },
 "keys": {},
 "cols": {},
@@ -59833,20 +63417,22 @@
 {
 "code": "AN",
 "name": "Animasyonlu",
-"vals": {},
+"vals": {
+"yonelimXYX": 15
+},
 "keys": {
-"en": [
+"yonelimXYY": [
 [
 0,
-0.0
+-40
 ],
 [
 0.5,
-360.0
+40
 ],
 [
 1,
-200.0
+-40
 ]
 ]
 },
@@ -59855,12 +63441,14 @@
 "auto": true
 }
 ],
-"pad": null,
+"pad": {
+"box": 0.45
+},
 "passes": null,
 "info": null,
-"heavy": false,
+"heavy": true,
 "n": 241,
-"ready": false
+"ready": true
 },
 {
 "type": "ellipsoid",
@@ -59938,14 +63526,213 @@
 "int": true,
 "src": "Tam sayı cetveli",
 "def": 48.0
+},
+{
+"k": "yonelimXY",
+"l": "Yönelim X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -180.0,
+"max": 180.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "surekliDonuX",
+"l": "Sürekli dönüş X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -3600.0,
+"max": 3600.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "konumXY",
+"l": "Konum X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -4000.0,
+"max": 4000.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "perspekt",
+"l": "Perspektif",
+"anim": "step",
+"kind": "choice",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"opts": [
+"Perspektif",
+"Ortografik"
+],
+"src": "Seçim",
+"def": 0
+},
+{
+"k": "gorusAcis",
+"l": "Görüş açısı",
+"anim": "yes",
+"kind": "jog",
+"min": 10.0,
+"max": 120.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "Cetvel",
+"def": 45.0
+},
+{
+"k": "isikEtki",
+"l": "Işık etkin",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"def": 1
+},
+{
+"k": "isikKonu",
+"l": "Işık konumu",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -4000.0,
+"max": 4000.0,
+"defY": -100.0,
+"defZ": -200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"def": -100.0
+},
+{
+"k": "isikReng",
+"l": "Işık rengi",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"src": "Renk seçici",
+"def": "#FFFFFF"
+},
+{
+"k": "ortamIsig",
+"l": "Ortam ışığı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 45.0
+},
+{
+"k": "yonluIsikGucu",
+"l": "Yönlü ışık gücü",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 65.0
+},
+{
+"k": "parlakYans",
+"l": "Parlak yansıma",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 20.0
+},
+{
+"k": "puruzlul",
+"l": "Pürüzlülük",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 50.0
+},
+{
+"k": "arkaYuzlGost",
+"l": "Arka yüzleri göster",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"def": 0
+},
+{
+"k": "kenarYumu",
+"l": "Kenar yumuşatma",
+"anim": "no",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Kapalı",
+"Otomatik",
+"Yüksek"
+],
+"src": "Seçim",
+"def": 1
 }
 ],
 "presets": [
 {
-"code": "HF",
-"name": "Hafif",
+"code": "DN",
+"name": "Dönen",
 "vals": {
-"xYari": 50.0
+"yonelimXYX": 18,
+"surekliDonuXY": 90
 },
 "keys": {},
 "cols": {},
@@ -59953,10 +63740,11 @@
 "auto": true
 },
 {
-"code": "GÇ",
-"name": "Güçlü",
+"code": "EG",
+"name": "Eğik Duruş",
 "vals": {
-"xYari": 180.0
+"yonelimXYX": 25,
+"yonelimXYY": 35
 },
 "keys": {},
 "cols": {},
@@ -59966,20 +63754,22 @@
 {
 "code": "AN",
 "name": "Animasyonlu",
-"vals": {},
+"vals": {
+"yonelimXYX": 15
+},
 "keys": {
-"xYari": [
+"yonelimXYY": [
 [
 0,
-0.0
+-40
 ],
 [
 0.5,
-180.0
+40
 ],
 [
 1,
-100.0
+-40
 ]
 ]
 },
@@ -59988,12 +63778,14 @@
 "auto": true
 }
 ],
-"pad": null,
+"pad": {
+"box": 0.45
+},
 "passes": null,
 "info": null,
-"heavy": false,
+"heavy": true,
 "n": 242,
-"ready": false
+"ready": true
 },
 {
 "type": "hollowbox",
@@ -60090,14 +63882,213 @@
 "jog": 1,
 "src": "Renk seçici",
 "def": "#778899"
+},
+{
+"k": "yonelimXY",
+"l": "Yönelim X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -180.0,
+"max": 180.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "surekliDonuX",
+"l": "Sürekli dönüş X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -3600.0,
+"max": 3600.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "konumXY",
+"l": "Konum X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -4000.0,
+"max": 4000.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "perspekt",
+"l": "Perspektif",
+"anim": "step",
+"kind": "choice",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"opts": [
+"Perspektif",
+"Ortografik"
+],
+"src": "Seçim",
+"def": 0
+},
+{
+"k": "gorusAcis",
+"l": "Görüş açısı",
+"anim": "yes",
+"kind": "jog",
+"min": 10.0,
+"max": 120.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "Cetvel",
+"def": 45.0
+},
+{
+"k": "isikEtki",
+"l": "Işık etkin",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"def": 1
+},
+{
+"k": "isikKonu",
+"l": "Işık konumu",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -4000.0,
+"max": 4000.0,
+"defY": -100.0,
+"defZ": -200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"def": -100.0
+},
+{
+"k": "isikReng",
+"l": "Işık rengi",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"src": "Renk seçici",
+"def": "#FFFFFF"
+},
+{
+"k": "ortamIsig",
+"l": "Ortam ışığı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 45.0
+},
+{
+"k": "yonluIsikGucu",
+"l": "Yönlü ışık gücü",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 65.0
+},
+{
+"k": "parlakYans",
+"l": "Parlak yansıma",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 20.0
+},
+{
+"k": "puruzlul",
+"l": "Pürüzlülük",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 50.0
+},
+{
+"k": "arkaYuzlGost",
+"l": "Arka yüzleri göster",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"def": 0
+},
+{
+"k": "kenarYumu",
+"l": "Kenar yumuşatma",
+"anim": "no",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Kapalı",
+"Otomatik",
+"Yüksek"
+],
+"src": "Seçim",
+"def": 1
 }
 ],
 "presets": [
 {
-"code": "HF",
-"name": "Hafif",
+"code": "DN",
+"name": "Dönen",
 "vals": {
-"en": 100.0
+"yonelimXYX": 18,
+"surekliDonuXY": 90
 },
 "keys": {},
 "cols": {},
@@ -60105,10 +64096,11 @@
 "auto": true
 },
 {
-"code": "GÇ",
-"name": "Güçlü",
+"code": "EG",
+"name": "Eğik Duruş",
 "vals": {
-"en": 360.0
+"yonelimXYX": 25,
+"yonelimXYY": 35
 },
 "keys": {},
 "cols": {},
@@ -60118,20 +64110,22 @@
 {
 "code": "AN",
 "name": "Animasyonlu",
-"vals": {},
+"vals": {
+"yonelimXYX": 15
+},
 "keys": {
-"en": [
+"yonelimXYY": [
 [
 0,
-0.0
+-40
 ],
 [
 0.5,
-360.0
+40
 ],
 [
 1,
-200.0
+-40
 ]
 ]
 },
@@ -60140,12 +64134,14 @@
 "auto": true
 }
 ],
-"pad": null,
+"pad": {
+"box": 0.45
+},
 "passes": null,
 "info": null,
-"heavy": false,
+"heavy": true,
 "n": 243,
-"ready": false
+"ready": true
 },
 {
 "type": "ring3d",
@@ -60237,14 +64233,213 @@
 "int": true,
 "src": "Tam sayı cetveli",
 "def": 64.0
+},
+{
+"k": "yonelimXY",
+"l": "Yönelim X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -180.0,
+"max": 180.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "surekliDonuX",
+"l": "Sürekli dönüş X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -3600.0,
+"max": 3600.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "konumXY",
+"l": "Konum X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -4000.0,
+"max": 4000.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "perspekt",
+"l": "Perspektif",
+"anim": "step",
+"kind": "choice",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"opts": [
+"Perspektif",
+"Ortografik"
+],
+"src": "Seçim",
+"def": 0
+},
+{
+"k": "gorusAcis",
+"l": "Görüş açısı",
+"anim": "yes",
+"kind": "jog",
+"min": 10.0,
+"max": 120.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "Cetvel",
+"def": 45.0
+},
+{
+"k": "isikEtki",
+"l": "Işık etkin",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"def": 1
+},
+{
+"k": "isikKonu",
+"l": "Işık konumu",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -4000.0,
+"max": 4000.0,
+"defY": -100.0,
+"defZ": -200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"def": -100.0
+},
+{
+"k": "isikReng",
+"l": "Işık rengi",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"src": "Renk seçici",
+"def": "#FFFFFF"
+},
+{
+"k": "ortamIsig",
+"l": "Ortam ışığı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 45.0
+},
+{
+"k": "yonluIsikGucu",
+"l": "Yönlü ışık gücü",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 65.0
+},
+{
+"k": "parlakYans",
+"l": "Parlak yansıma",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 20.0
+},
+{
+"k": "puruzlul",
+"l": "Pürüzlülük",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 50.0
+},
+{
+"k": "arkaYuzlGost",
+"l": "Arka yüzleri göster",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"def": 0
+},
+{
+"k": "kenarYumu",
+"l": "Kenar yumuşatma",
+"anim": "no",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Kapalı",
+"Otomatik",
+"Yüksek"
+],
+"src": "Seçim",
+"def": 1
 }
 ],
 "presets": [
 {
-"code": "HF",
-"name": "Hafif",
+"code": "DN",
+"name": "Dönen",
 "vals": {
-"disYari": 50.0
+"yonelimXYX": 18,
+"surekliDonuXY": 90
 },
 "keys": {},
 "cols": {},
@@ -60252,10 +64447,11 @@
 "auto": true
 },
 {
-"code": "GÇ",
-"name": "Güçlü",
+"code": "EG",
+"name": "Eğik Duruş",
 "vals": {
-"disYari": 180.0
+"yonelimXYX": 25,
+"yonelimXYY": 35
 },
 "keys": {},
 "cols": {},
@@ -60265,20 +64461,22 @@
 {
 "code": "AN",
 "name": "Animasyonlu",
-"vals": {},
+"vals": {
+"yonelimXYX": 15
+},
 "keys": {
-"disYari": [
+"yonelimXYY": [
 [
 0,
-0.0
+-40
 ],
 [
 0.5,
-180.0
+40
 ],
 [
 1,
-100.0
+-40
 ]
 ]
 },
@@ -60287,12 +64485,14 @@
 "auto": true
 }
 ],
-"pad": null,
+"pad": {
+"box": 0.45
+},
 "passes": null,
 "info": null,
-"heavy": false,
+"heavy": true,
 "n": 244,
-"ready": false
+"ready": true
 },
 {
 "type": "starpoly",
@@ -60360,14 +64560,213 @@
 "jog": 1,
 "src": "Anahtar",
 "def": 0
+},
+{
+"k": "yonelimXY",
+"l": "Yönelim X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -180.0,
+"max": 180.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "surekliDonuX",
+"l": "Sürekli dönüş X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -3600.0,
+"max": 3600.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "konumXY",
+"l": "Konum X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -4000.0,
+"max": 4000.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "perspekt",
+"l": "Perspektif",
+"anim": "step",
+"kind": "choice",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"opts": [
+"Perspektif",
+"Ortografik"
+],
+"src": "Seçim",
+"def": 0
+},
+{
+"k": "gorusAcis",
+"l": "Görüş açısı",
+"anim": "yes",
+"kind": "jog",
+"min": 10.0,
+"max": 120.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "Cetvel",
+"def": 45.0
+},
+{
+"k": "isikEtki",
+"l": "Işık etkin",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"def": 1
+},
+{
+"k": "isikKonu",
+"l": "Işık konumu",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -4000.0,
+"max": 4000.0,
+"defY": -100.0,
+"defZ": -200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"def": -100.0
+},
+{
+"k": "isikReng",
+"l": "Işık rengi",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"src": "Renk seçici",
+"def": "#FFFFFF"
+},
+{
+"k": "ortamIsig",
+"l": "Ortam ışığı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 45.0
+},
+{
+"k": "yonluIsikGucu",
+"l": "Yönlü ışık gücü",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 65.0
+},
+{
+"k": "parlakYans",
+"l": "Parlak yansıma",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 20.0
+},
+{
+"k": "puruzlul",
+"l": "Pürüzlülük",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 50.0
+},
+{
+"k": "arkaYuzlGost",
+"l": "Arka yüzleri göster",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"def": 0
+},
+{
+"k": "kenarYumu",
+"l": "Kenar yumuşatma",
+"anim": "no",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Kapalı",
+"Otomatik",
+"Yüksek"
+],
+"src": "Seçim",
+"def": 1
 }
 ],
 "presets": [
 {
-"code": "HF",
-"name": "Hafif",
+"code": "DN",
+"name": "Dönen",
 "vals": {
-"yaricap": 50.0
+"yonelimXYX": 18,
+"surekliDonuXY": 90
 },
 "keys": {},
 "cols": {},
@@ -60375,10 +64774,11 @@
 "auto": true
 },
 {
-"code": "GÇ",
-"name": "Güçlü",
+"code": "EG",
+"name": "Eğik Duruş",
 "vals": {
-"yaricap": 180.0
+"yonelimXYX": 25,
+"yonelimXYY": 35
 },
 "keys": {},
 "cols": {},
@@ -60388,20 +64788,22 @@
 {
 "code": "AN",
 "name": "Animasyonlu",
-"vals": {},
+"vals": {
+"yonelimXYX": 15
+},
 "keys": {
-"yaricap": [
+"yonelimXYY": [
 [
 0,
-0.0
+-40
 ],
 [
 0.5,
-180.0
+40
 ],
 [
 1,
-100.0
+-40
 ]
 ]
 },
@@ -60410,12 +64812,14 @@
 "auto": true
 }
 ],
-"pad": null,
+"pad": {
+"box": 0.45
+},
 "passes": null,
 "info": null,
-"heavy": false,
+"heavy": true,
 "n": 245,
-"ready": false
+"ready": true
 },
 {
 "type": "cross3",
@@ -60503,14 +64907,213 @@
 "unit": "px",
 "src": "Cetvel",
 "def": 3.0
+},
+{
+"k": "yonelimXY",
+"l": "Yönelim X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -180.0,
+"max": 180.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "surekliDonuX",
+"l": "Sürekli dönüş X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -3600.0,
+"max": 3600.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "konumXY",
+"l": "Konum X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -4000.0,
+"max": 4000.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "perspekt",
+"l": "Perspektif",
+"anim": "step",
+"kind": "choice",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"opts": [
+"Perspektif",
+"Ortografik"
+],
+"src": "Seçim",
+"def": 0
+},
+{
+"k": "gorusAcis",
+"l": "Görüş açısı",
+"anim": "yes",
+"kind": "jog",
+"min": 10.0,
+"max": 120.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "Cetvel",
+"def": 45.0
+},
+{
+"k": "isikEtki",
+"l": "Işık etkin",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"def": 1
+},
+{
+"k": "isikKonu",
+"l": "Işık konumu",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -4000.0,
+"max": 4000.0,
+"defY": -100.0,
+"defZ": -200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"def": -100.0
+},
+{
+"k": "isikReng",
+"l": "Işık rengi",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"src": "Renk seçici",
+"def": "#FFFFFF"
+},
+{
+"k": "ortamIsig",
+"l": "Ortam ışığı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 45.0
+},
+{
+"k": "yonluIsikGucu",
+"l": "Yönlü ışık gücü",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 65.0
+},
+{
+"k": "parlakYans",
+"l": "Parlak yansıma",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 20.0
+},
+{
+"k": "puruzlul",
+"l": "Pürüzlülük",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 50.0
+},
+{
+"k": "arkaYuzlGost",
+"l": "Arka yüzleri göster",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"def": 0
+},
+{
+"k": "kenarYumu",
+"l": "Kenar yumuşatma",
+"anim": "no",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Kapalı",
+"Otomatik",
+"Yüksek"
+],
+"src": "Seçim",
+"def": 1
 }
 ],
 "presets": [
 {
-"code": "HF",
-"name": "Hafif",
+"code": "DN",
+"name": "Dönen",
 "vals": {
-"kolUzun": 100.0
+"yonelimXYX": 18,
+"surekliDonuXY": 90
 },
 "keys": {},
 "cols": {},
@@ -60518,10 +65121,11 @@
 "auto": true
 },
 {
-"code": "GÇ",
-"name": "Güçlü",
+"code": "EG",
+"name": "Eğik Duruş",
 "vals": {
-"kolUzun": 360.0
+"yonelimXYX": 25,
+"yonelimXYY": 35
 },
 "keys": {},
 "cols": {},
@@ -60531,20 +65135,22 @@
 {
 "code": "AN",
 "name": "Animasyonlu",
-"vals": {},
+"vals": {
+"yonelimXYX": 15
+},
 "keys": {
-"kolUzun": [
+"yonelimXYY": [
 [
 0,
-0.0
+-40
 ],
 [
 0.5,
-360.0
+40
 ],
 [
 1,
-200.0
+-40
 ]
 ]
 },
@@ -60553,12 +65159,14 @@
 "auto": true
 }
 ],
-"pad": null,
+"pad": {
+"box": 0.45
+},
 "passes": null,
 "info": null,
-"heavy": false,
+"heavy": true,
 "n": 246,
-"ready": false
+"ready": true
 },
 {
 "type": "triprism",
@@ -60635,14 +65243,213 @@
 "unit": "px",
 "src": "Cetvel",
 "def": 0.0
+},
+{
+"k": "yonelimXY",
+"l": "Yönelim X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -180.0,
+"max": 180.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "surekliDonuX",
+"l": "Sürekli dönüş X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -3600.0,
+"max": 3600.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "konumXY",
+"l": "Konum X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -4000.0,
+"max": 4000.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "perspekt",
+"l": "Perspektif",
+"anim": "step",
+"kind": "choice",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"opts": [
+"Perspektif",
+"Ortografik"
+],
+"src": "Seçim",
+"def": 0
+},
+{
+"k": "gorusAcis",
+"l": "Görüş açısı",
+"anim": "yes",
+"kind": "jog",
+"min": 10.0,
+"max": 120.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "Cetvel",
+"def": 45.0
+},
+{
+"k": "isikEtki",
+"l": "Işık etkin",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"def": 1
+},
+{
+"k": "isikKonu",
+"l": "Işık konumu",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -4000.0,
+"max": 4000.0,
+"defY": -100.0,
+"defZ": -200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"def": -100.0
+},
+{
+"k": "isikReng",
+"l": "Işık rengi",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"src": "Renk seçici",
+"def": "#FFFFFF"
+},
+{
+"k": "ortamIsig",
+"l": "Ortam ışığı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 45.0
+},
+{
+"k": "yonluIsikGucu",
+"l": "Yönlü ışık gücü",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 65.0
+},
+{
+"k": "parlakYans",
+"l": "Parlak yansıma",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 20.0
+},
+{
+"k": "puruzlul",
+"l": "Pürüzlülük",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 50.0
+},
+{
+"k": "arkaYuzlGost",
+"l": "Arka yüzleri göster",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"def": 0
+},
+{
+"k": "kenarYumu",
+"l": "Kenar yumuşatma",
+"anim": "no",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Kapalı",
+"Otomatik",
+"Yüksek"
+],
+"src": "Seçim",
+"def": 1
 }
 ],
 "presets": [
 {
-"code": "HF",
-"name": "Hafif",
+"code": "DN",
+"name": "Dönen",
 "vals": {
-"tabanGeni": 90.0
+"yonelimXYX": 18,
+"surekliDonuXY": 90
 },
 "keys": {},
 "cols": {},
@@ -60650,10 +65457,11 @@
 "auto": true
 },
 {
-"code": "GÇ",
-"name": "Güçlü",
+"code": "EG",
+"name": "Eğik Duruş",
 "vals": {
-"tabanGeni": 324.0
+"yonelimXYX": 25,
+"yonelimXYY": 35
 },
 "keys": {},
 "cols": {},
@@ -60663,20 +65471,22 @@
 {
 "code": "AN",
 "name": "Animasyonlu",
-"vals": {},
+"vals": {
+"yonelimXYX": 15
+},
 "keys": {
-"tabanGeni": [
+"yonelimXYY": [
 [
 0,
-0.0
+-40
 ],
 [
 0.5,
-324.0
+40
 ],
 [
 1,
-180.0
+-40
 ]
 ]
 },
@@ -60685,12 +65495,14 @@
 "auto": true
 }
 ],
-"pad": null,
+"pad": {
+"box": 0.45
+},
 "passes": null,
 "info": null,
-"heavy": false,
+"heavy": true,
 "n": 247,
-"ready": false
+"ready": true
 },
 {
 "type": "tunnel",
@@ -60808,14 +65620,213 @@
 "jog": 1,
 "src": "Anahtar",
 "def": 0
+},
+{
+"k": "yonelimXY",
+"l": "Yönelim X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -180.0,
+"max": 180.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "surekliDonuX",
+"l": "Sürekli dönüş X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -3600.0,
+"max": 3600.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "konumXY",
+"l": "Konum X/Y/Z",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -4000.0,
+"max": 4000.0,
+"defY": 0.0,
+"defZ": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"def": 0.0
+},
+{
+"k": "perspekt",
+"l": "Perspektif",
+"anim": "step",
+"kind": "choice",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"opts": [
+"Perspektif",
+"Ortografik"
+],
+"src": "Seçim",
+"def": 0
+},
+{
+"k": "gorusAcis",
+"l": "Görüş açısı",
+"anim": "yes",
+"kind": "jog",
+"min": 10.0,
+"max": 120.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"src": "Cetvel",
+"def": 45.0
+},
+{
+"k": "isikEtki",
+"l": "Işık etkin",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"def": 1
+},
+{
+"k": "isikKonu",
+"l": "Işık konumu",
+"anim": "yes",
+"kind": "jog",
+"three": true,
+"min": -4000.0,
+"max": 4000.0,
+"defY": -100.0,
+"defZ": -200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"src": "3 eksen cetvel",
+"def": -100.0
+},
+{
+"k": "isikReng",
+"l": "Işık rengi",
+"anim": "yes",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"src": "Renk seçici",
+"def": "#FFFFFF"
+},
+{
+"k": "ortamIsig",
+"l": "Ortam ışığı",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 45.0
+},
+{
+"k": "yonluIsikGucu",
+"l": "Yönlü ışık gücü",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 65.0
+},
+{
+"k": "parlakYans",
+"l": "Parlak yansıma",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 20.0
+},
+{
+"k": "puruzlul",
+"l": "Pürüzlülük",
+"anim": "yes",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"src": "Cetvel",
+"def": 50.0
+},
+{
+"k": "arkaYuzlGost",
+"l": "Arka yüzleri göster",
+"anim": "step",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"src": "Anahtar",
+"def": 0
+},
+{
+"k": "kenarYumu",
+"l": "Kenar yumuşatma",
+"anim": "no",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Kapalı",
+"Otomatik",
+"Yüksek"
+],
+"src": "Seçim",
+"def": 1
 }
 ],
 "presets": [
 {
-"code": "HF",
-"name": "Hafif",
+"code": "DN",
+"name": "Dönen",
 "vals": {
-"tunelYari": 75.0
+"yonelimXYX": 18,
+"surekliDonuXY": 90
 },
 "keys": {},
 "cols": {},
@@ -60823,10 +65834,11 @@
 "auto": true
 },
 {
-"code": "GÇ",
-"name": "Güçlü",
+"code": "EG",
+"name": "Eğik Duruş",
 "vals": {
-"tunelYari": 270.0
+"yonelimXYX": 25,
+"yonelimXYY": 35
 },
 "keys": {},
 "cols": {},
@@ -60836,20 +65848,22 @@
 {
 "code": "AN",
 "name": "Animasyonlu",
-"vals": {},
+"vals": {
+"yonelimXYX": 15
+},
 "keys": {
-"tunelYari": [
+"yonelimXYY": [
 [
 0,
-0.0
+-40
 ],
 [
 0.5,
-270.0
+40
 ],
 [
 1,
-150.0
+-40
 ]
 ]
 },
@@ -60861,9 +65875,9 @@
 "pad": null,
 "passes": null,
 "info": null,
-"heavy": false,
+"heavy": true,
 "n": 248,
-"ready": false
+"ready": true
 },
 {
 "type": "growparts",
@@ -61048,7 +66062,7 @@
 "info": null,
 "heavy": false,
 "n": 270,
-"ready": false
+"ready": true
 },
 {
 "type": "morphpath",
@@ -61894,14 +66908,14 @@
 }
 ],
 "pad": {
-"k": "amount",
-"mul": 2
+"k": "konumSidd",
+"mul": 1
 },
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 275,
-"ready": false
+"ready": true
 },
 {
 "type": "stretchaxis",
@@ -62174,12 +67188,16 @@
 "auto": true
 }
 ],
-"pad": null,
+"pad": {
+"k": "kenarMesa",
+"mul": 1,
+"add": 2
+},
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 96,
-"ready": false
+"ready": true
 },
 {
 "type": "contourlines",
@@ -62333,13 +67351,15 @@
 }
 ],
 "pad": {
-"add": 60
+"k": "aralik",
+"mul": 6,
+"add": 4
 },
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 97,
-"ready": false
+"ready": true
 },
 {
 "type": "electricedges",
@@ -62497,15 +67517,19 @@
 }
 ],
 "pad": {
-"k": "amount",
-"mul": 1.5,
-"add": 20
+"sum": [
+"dalgalan",
+"hale",
+"cizgiKali"
+],
+"mul": 1,
+"add": 2
 },
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 98,
-"ready": false
+"ready": true
 },
 {
 "type": "glowscan",
@@ -62672,8 +67696,9 @@
 }
 ],
 "pad": {
-"k": "amount",
-"mul": 2
+"k": "yaricap",
+"mul": 1,
+"add": 2
 },
 "passes": [
 {
@@ -62683,8 +67708,8 @@
 {
 "blur": "A",
 "r": {
-"k": "amount",
-"mul": 1
+"k": "yaricap",
+"mul": 0.5
 },
 "out": "B"
 },
@@ -62698,7 +67723,7 @@
 "info": null,
 "heavy": false,
 "n": 99,
-"ready": false
+"ready": true
 },
 {
 "type": "halftonelines",
@@ -62855,7 +67880,7 @@
 "info": null,
 "heavy": false,
 "n": 100,
-"ready": false
+"ready": true
 },
 {
 "type": "smoothedges",
@@ -62987,7 +68012,7 @@
 "info": null,
 "heavy": false,
 "n": 101,
-"ready": false
+"ready": true
 },
 {
 "type": "stroketaper",
@@ -63285,7 +68310,7 @@
 "info": null,
 "heavy": false,
 "n": 304,
-"ready": false
+"ready": true
 },
 {
 "type": "repeatpath",
@@ -63474,13 +68499,16 @@
 }
 ],
 "pad": {
-"add": 0
+"max": [
+"boyutX",
+"boyutY"
+]
 },
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 283,
-"ready": false
+"ready": true
 },
 {
 "type": "scatterfield",
@@ -63675,13 +68703,13 @@
 }
 ],
 "pad": {
-"add": 0
+"box": 1.0
 },
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 284,
-"ready": false
+"ready": true
 },
 {
 "type": "remaphsv",
@@ -63854,7 +68882,7 @@
 "info": null,
 "heavy": false,
 "n": 346,
-"ready": false
+"ready": true
 },
 {
 "type": "magnifybg",
@@ -64007,7 +69035,7 @@
 "info": "Katmanı bir daire şekli yapıp üstüne ekle: büyüteç olur.",
 "heavy": false,
 "n": 347,
-"ready": false
+"ready": true
 },
 {
 "type": "flagwave",
@@ -64336,7 +69364,11 @@
 "auto": true
 }
 ],
-"pad": null,
+"pad": {
+"k": "dalgaYuks",
+"mul": 1.3,
+"add": 2
+},
 "passes": null,
 "info": null,
 "heavy": false,
@@ -64349,7 +69381,7 @@
 "3B gölge açıksa dalganın yerel eğiminden açık/koyu ton hesaplanır; bayrak rengi ve alfa korunur. Kenarları koru seçeneği mesh sınırını ve saydamlığı korur; bayrağın serbest kenarı yine dalgalanır.",
 "Kusursuz döngü açıksa f ve ikincil dalgalar döngü süresine tam sayıda tur sığacak şekilde ayarlanır veya evrim periyodik hesaplanır. Uygulama gerçek hızı gösterir. Düzensizlik aynı döngü içinde tekrarlanmalıdır."
 ],
-"ready": false
+"ready": true
 },
 {
 "type": "cbshade",
@@ -64522,7 +69554,7 @@
 "info": null,
 "heavy": false,
 "n": 402,
-"ready": false
+"ready": true
 },
 {
 "type": "cbeyes",
@@ -65649,7 +70681,7 @@
 "info": null,
 "heavy": false,
 "n": 408,
-"ready": false
+"ready": true
 },
 {
 "type": "cbsurprise",
@@ -65835,12 +70867,14 @@
 "auto": true
 }
 ],
-"pad": null,
+"pad": {
+"box": 0.3
+},
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 409,
-"ready": false
+"ready": true
 },
 {
 "type": "cbsweat",
@@ -66022,12 +71056,14 @@
 "auto": true
 }
 ],
-"pad": null,
+"pad": {
+"box": 0.2
+},
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 410,
-"ready": false
+"ready": true
 },
 {
 "type": "cbshadow",
@@ -66630,7 +71666,7 @@
 "info": null,
 "heavy": false,
 "n": 413,
-"ready": false
+"ready": true
 },
 {
 "type": "cboutline",
@@ -66783,12 +71819,15 @@
 "auto": true
 }
 ],
-"pad": null,
+"pad": {
+"k": "tepeKali",
+"mul": 1
+},
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 414,
-"ready": false
+"ready": true
 },
 {
 "type": "cbbubble",
@@ -67170,12 +72209,15 @@
 "auto": true
 }
 ],
-"pad": null,
+"pad": {
+"k": "parlama",
+"mul": 1
+},
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 416,
-"ready": false
+"ready": true
 },
 {
 "type": "cbborder",
@@ -68083,12 +73125,15 @@
 "auto": true
 }
 ],
-"pad": null,
+"pad": {
+"k": "uzunluk",
+"mul": 1.5
+},
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 421,
-"ready": false
+"ready": true
 },
 {
 "type": "cbdust",
@@ -68272,12 +73317,15 @@
 "auto": true
 }
 ],
-"pad": null,
+"pad": {
+"k": "yayilma",
+"mul": 1
+},
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 422,
-"ready": false
+"ready": true
 },
 {
 "type": "cblabel",
@@ -68629,7 +73677,7 @@
 "info": null,
 "heavy": false,
 "n": 424,
-"ready": false
+"ready": true
 },
 {
 "type": "cbbeat",
@@ -69326,12 +74374,20 @@
 "auto": true
 }
 ],
-"pad": null,
+"pad": {
+"sum": [
+"icKont",
+"disKont",
+"golgeUzak"
+],
+"mul": 1,
+"add": 2
+},
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 428,
-"ready": false
+"ready": true
 },
 {
 "type": "cbmaplock",
@@ -69703,36 +74759,6 @@
 "info": null,
 "heavy": false,
 "n": 430,
-"notes": [
-"Tek bir veri güdümlü panel sistemi kullan: `effectId`, `categoryId`, `parameterId`, `labelTr`, `labelEn`, `controlType`, `default`, `min`, `max`, `step`, `unit`, `animationMode`, `visibleWhen`, `requiredSource`, `rendererCapability` ve sürüm. ID, görünen isimden bağımsız kalmalı. Her efektin paneli bu şemadan üretilmeli.",
-"AK'li alanlarda değer, anahtar kare listesi, zaman ve eğri saklanır. Etkinlik gözü kapalıysa render düğümü atlanır ama parametreler silinmez. Grup değişiklikleri tek undo işlemi; sürüklerken hafif önizleme, bırakınca kaliteli yeniden çizim.",
-"Lite mod: yalnız önizleme çözünürlüğü, örnek sayısı ve önizleme güncelleme sıklığı düşürülebilir. Kullanıcının ayarları, zamanlama, efekt sayısı ve dışa aktarma kalitesi değişmemeli. Özellikle 3B, bulanıklık, parçacık, optik akış ve zamansal efektler için önbellek ve iptal edilebilir işlemler gerekli.",
-"Eksik kaynak, sıfıra bölme, alpha kenarı, HDR/SDR renk dönüşümü, son kare, Unicode ve farklı FPS için test. Birim dönüşümleri merkezi yapılmalı.",
-"WardenCB Öğret mini projeleri: her efekt için bir başlangıç katmanı, 2–4 örnek ayar değişikliği, öncesi/sonrası ve geri dön düğmesi. Kaynak isteyen efektlerde demo kaynak otomatik atanır.",
-"Kabul testleri: 430 ID tekil; her parametre uygun kontrol türünde; sayı varsayılanı aralıkta; X/Y birbirinden bağımsız; efekt sırası değişince render değişebilir; bypass geri açınca aynı durum gelir; anahtar kareler kaydet/aç sonrası korunur; bayrak sabit çizgisi tüm karelerde hareket etmez; Lite ve standart dışa aktarma aynı ayarlarda aynı sonucu verir.",
-"Farklılaşma: uygulamanın kendi mavi paleti, ikonları, yazı tipi ve yardım metinleri olmalı. Alight Motion veya Adobe'ye ait kaynak kod, grafik varlıkları ve lisanslı eklentiler kopyalanmamalı.",
-"[Alight Motion resmi efekt kataloğu](https://guide.alightmotion.com/effects/) — efekt listesi, çeşitli özellik açıklamaları.",
-"[Alight Motion Effects Guide yardım sayfası](https://support.alightmotion.com/hc/en-us/articles/10536991943569-Effects-Guide) — uygulama içi Guide erişimi.",
-"[Oscillate](https://guide.alightmotion.com/effects/oscillate) — açı, frekans, genlik ve dalga tipi.",
-"[Tiles](https://guide.alightmotion.com/effects/tiles) — döşeme ve açı.",
-"[Checker](https://guide.alightmotion.com/effects/checker) — X/Y ölçeği ve kaydırma.",
-"[Displacement Map](https://guide.alightmotion.com/effects/displacement-map) — eksen miktarları, kanal seçimi, kenar davranışı.",
-"[Offset](https://support.alightmotion.com/hc/en-us/articles/10537152548753-Offset) — yatay ve dikey kaydırma.",
-"[Wave Warp](https://guide.alightmotion.com/effects/wave-warp) — genel dalga efekti; kılavuzun ayrıntı seviyesi sınırlı olabilir.",
-"[Bend](https://guide.alightmotion.com/effects/bend) — sabit başlangıç kenarı ve bükme.",
-"[Color Tune](https://guide.alightmotion.com/effects/color-tune) — renk ayarı grupları.",
-"[Exposure/Gamma](https://guide.alightmotion.com/effects/exposure-gamma) — ton ayarı.",
-"[Cube](https://support.alightmotion.com/hc/en-us/articles/10537038285841-Cube) — 3B eksenler ve ışık.",
-"[Ellipsoid](https://guide.alightmotion.com/effects/ellipsoid) ve [Hollow Box](https://guide.alightmotion.com/effects/hollow-box) — sahte 3B çıktı, yönelim/dönüş ve doku.",
-"[Motion Blur](https://support.alightmotion.com/hc/en-us/articles/10537118778129-Motion-Blur) — anahtar kare aracı ve hareket bulanıklığı.",
-"[Animation Easing Curves](https://support.alightmotion.com/hc/en-us/articles/10536934703889-Animation-Easing-Curves) — eğri düzenleme.",
-"[Copy/Paste Effects](https://support.alightmotion.com/hc/en-us/articles/13725250940689-How-do-I-copy-and-paste-effects) — efekt kopyalama.",
-"[TechTudo görselli Oscillate/Tiles öğreticisi](https://www.techtudo.com.br/dicas-e-tutoriais/2021/06/como-usar-o-alight-motion-para-colocar-efeito-shake-em-clipes.ghtml) — cetvel, elmas, eğri, göz ve efekt kartı ekran görüntüleri (2021; sürüme göre görünüm değişebilir).",
-"[Alight Motion resmi efekt tarayıcısı videosu](https://www.youtube.com/watch?v=pyWNCMoVI2Q) — kategori, arama ve önizleme yaklaşımı.",
-"[Adobe After Effects efekt listesi](https://helpx.adobe.com/after-effects/desktop/apply-effects-and-animation-presets/effects-and-animation-presets/effect-list.html) — kategori/efekt karşılaştırması.",
-"[Adobe efekt kontrolleri](https://helpx.adobe.com/after-effects/desktop/apply-effects-and-animation-presets/effects-and-animation-presets/effects-animation-presets-overview.html) — genel kontrol paneli.",
-"[Adobe renk düzeltme efektleri](https://helpx.adobe.com/after-effects/desktop/adjust-colors/work-with-color-correction-effects/color-correction-effects.html) — profesyonel renk parametreleri."
-],
 "ready": false
 }
 ],

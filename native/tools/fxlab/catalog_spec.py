@@ -82,7 +82,19 @@ for n, s in _SP.items():
     for pr in e["presets"]:
         if pr.get("alias"): keep.append(pr); continue
         if set(pr["vals"]) | set(pr["keys"]) | set(pr["cols"]) <= keys and (pr["vals"] or pr["keys"] or pr["cols"]): keep.append(pr)
-    e["presets"] = auto_presets(e) + keep
+    TRANS = e["cat"] == 13 or e["type"] in ("shatter", "pixelpolly", "scatterize", "dissolve", "blockdissolve", "blinds", "linwipe", "radwipe", "iris")
+    if TRANS and any(p["k"] == "ilerleme" for p in e["params"]):
+        P3 = lambda code, name, keys, at="start": dict(code=code, name=name, vals={}, keys=keys, cols={}, at=at, auto=True)
+        inv = e["type"] in ("iris",)  # iris: 0 = kapalı
+        a, b = (0, 100) if inv else (100, 0)
+        e["presets"] = [P3("GR", "Giriş", {"ilerleme": [[0, a], [0.7, b]]}), P3("CK", "Çıkış", {"ilerleme": [[-0.7, b], [0, a]]}, "end"),
+                        P3("AN", "Animasyonlu", {"ilerleme": [[0, 0], [0.5, 100], [1, 0]]})] + keep
+    elif any(p["k"] == "yonelimXY" for p in e["params"]):
+        P3 = lambda code, name, vals=None, keys=None: dict(code=code, name=name, vals=vals or {}, keys=keys or {}, cols={}, at="start", auto=True)
+        e["presets"] = [P3("DN", "Dönen", {"yonelimXYX": 18, "surekliDonuXY": 90}), P3("EG", "Eğik Duruş", {"yonelimXYX": 25, "yonelimXYY": 35}),
+                        P3("AN", "Animasyonlu", {"yonelimXYX": 15}, {"yonelimXYY": [[0, -40], [0.5, 40], [1, -40]]})] + keep
+    else:
+        e["presets"] = auto_presets(e) + keep
     e["ready"] = e["type"] in READY
     if e["ready"]:
         d = FXDEF.get(e["type"], {})

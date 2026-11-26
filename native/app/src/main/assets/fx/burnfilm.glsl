@@ -1,9 +1,12 @@
 // burnfilm
-uniform float p_prog; uniform float p_scale; uniform vec2 p_center;
+uniform float p_yanmaIler, p_kenarGeni, p_puruz, p_tohum, p_delikAc; uniform vec2 p_merkez; uniform vec3 c_yanikReng, c_isikReng;
 void main() {
-  vec4 s = texture(u_tex, v_uv); vec2 px = v_uv * u_res; float d = length(px - fromUnit(p_center)) / length(u_box.zw) * 2.0;
-  float n = fbm(px / (p_scale * u_s), 5.0) * 0.5; float v = d + n - p_prog / 100.0 * 1.8;
-  float hole = smoothstep(-0.02, 0.0, v); float ember = (1.0 - smoothstep(0.0, 0.06, abs(v - 0.02))) * step(0.0, v); float char = 1.0 - smoothstep(0.02, 0.18, v);
-  vec3 c = unpre(s); c = mix(c, vec3(0.12, 0.05, 0.02), char * 0.85); c += vec3(1.0, 0.55, 0.1) * ember * 1.4;
-  float a = s.a * hole; o = pre(clamp(c, 0.0, 1.0), a);
+  vec4 s = texture(u_tex, v_uv); vec2 q = toUnit(here()); vec2 B = boxU();
+  float d = length((q - p_merkez) / (length(B) * 0.5)); float n = fbm(q / 40.0 + seedf(p_tohum), 4.0) * p_puruz / 100.0;
+  float front = p_yanmaIler / 100.0 * 1.6 - d * 0.7 + n; // >0 yanmış
+  float w = max(p_kenarGeni, 1.0) / (length(B) * 0.5);
+  float hole = smoothstep(0.0, 0.02, front); float glow = exp(-abs(front) / (w * 0.4)); float char_ = smoothstep(-w, 0.0, front);
+  vec3 c = unpre(s); c = mix(c, c_yanikReng, char_ * 0.9); c += c_isikReng * glow * 1.2;
+  float a = s.a * (p_delikAc > 0.5 ? 1.0 - hole : 1.0);
+  o = pre(clamp(c, 0.0, 1.0), a);
 }

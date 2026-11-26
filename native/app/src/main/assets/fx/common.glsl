@@ -122,3 +122,47 @@ vec3 lin2srgb(vec3 c) { c = max(c, 0.0); return mix(c * 12.92, 1.055 * pow(c, ve
 void stats(out vec3 mn, out vec3 mx, out vec3 avg) { mn = vec3(1.0); mx = vec3(0.0); avg = vec3(0.0); float n = 0.0;
   for (int j = 0; j < 8; j++) for (int i = 0; i < 8; i++) { vec4 s = texPx(boxPx((vec2(float(i), float(j)) + 0.5) / 8.0)); if (s.a < 0.1) continue; vec3 c = s.rgb / s.a; mn = min(mn, c); mx = max(mx, c); avg += c; n += 1.0; }
   avg = n > 0.0 ? avg / n : vec3(0.5); if (n < 1.0) { mn = vec3(0.0); mx = vec3(1.0); } }
+
+// --- kenar / siluet yardımcıları (px cinsinden yarıçap) ---
+float dilateA(vec2 px, float r) { if (r < 0.5) return texPx(px).a; float m = texPx(px).a;
+  for (int k = 1; k <= 3; k++) { float rr = r * float(k) / 3.0; for (int i = 0; i < 16; i++) { float a = float(i) * TAU / 16.0 + float(k) * 0.4; m = max(m, texPx(px + vec2(cos(a), sin(a)) * rr).a); } } return m; }
+float erodeA(vec2 px, float r) { if (r < 0.5) return texPx(px).a; float m = texPx(px).a;
+  for (int k = 1; k <= 3; k++) { float rr = r * float(k) / 3.0; for (int i = 0; i < 16; i++) { float a = float(i) * TAU / 16.0 + float(k) * 0.4; m = min(m, texPx(px + vec2(cos(a), sin(a)) * rr).a); } } return m; }
+// İçeride kenara yaklaşık uzaklık (px), en çok maxr
+float innerDist(vec2 px, float maxr) { if (texPx(px).a < 0.5) return 0.0; float d = maxr;
+  for (int k = 1; k <= 12; k++) { float rr = maxr * float(k) / 12.0; for (int i = 0; i < 12; i++) { float a = float(i) * TAU / 12.0; if (texPx(px + vec2(cos(a), sin(a)) * rr).a < 0.5) { d = min(d, rr); } } if (d < maxr) break; } return d; }
+float outerDist(vec2 px, float maxr) { if (texPx(px).a >= 0.5) return 0.0; float d = maxr;
+  for (int k = 1; k <= 12; k++) { float rr = maxr * float(k) / 12.0; for (int i = 0; i < 12; i++) { float a = float(i) * TAU / 12.0; if (texPx(px + vec2(cos(a), sin(a)) * rr).a >= 0.5) { d = min(d, rr); } } if (d < maxr) break; } return d; }
+float lumAt(vec2 px) { vec4 s = texPx(px); return s.a > 0.0 ? luma(s.rgb / s.a) * s.a + (1.0 - s.a) * 0.0 : 0.0; }
+// Sobel kenar büyüklüğü (px adım)
+float sobel(vec2 px, float st) {
+  float tl = lumAt(px + vec2(-st, -st)), t = lumAt(px + vec2(0.0, -st)), tr = lumAt(px + vec2(st, -st));
+  float l = lumAt(px + vec2(-st, 0.0)), r = lumAt(px + vec2(st, 0.0));
+  float bl = lumAt(px + vec2(-st, st)), b = lumAt(px + vec2(0.0, st)), br = lumAt(px + vec2(st, st));
+  float gx = -tl - 2.0 * l - bl + tr + 2.0 * r + br, gy = -tl - 2.0 * t - tr + bl + 2.0 * b + br; return length(vec2(gx, gy)); }
+vec2 alphaGrad(vec2 px, float st) { return vec2(texPx(px + vec2(st, 0.0)).a - texPx(px - vec2(st, 0.0)).a, texPx(px + vec2(0.0, st)).a - texPx(px - vec2(0.0, st)).a) / (2.0 * st); }
+vec2 lumGrad(vec2 px, float st) { return vec2(lumAt(px + vec2(st, 0.0)) - lumAt(px - vec2(st, 0.0)), lumAt(px + vec2(0.0, st)) - lumAt(px - vec2(0.0, st))) / (2.0 * st); }
+
+// --- bulanıklık yardımcıları ---
+vec4 gauss1(vec2 px, vec2 dir, float sigma, float edge) {
+  if (sigma < 0.3) return texEdge(px, edge);
+  float stepPx = max(1.0, sigma / 8.0); int n = int(min(24.0, ceil(sigma * 3.0 / stepPx)));
+  vec4 acc = vec4(0.0); float ws = 0.0;
+  for (int i = -24; i <= 24; i++) { if (i < -n || i > n) continue; float x = float(i) * stepPx; float w = exp(-0.5 * x * x / (sigma * sigma)); acc += texEdge(px + dir * x, edge) * w; ws += w; }
+  return acc / ws;
+}
+// Çizgi boyunca ortalama (a'dan b'ye, N örnek)
+vec4 lineAvg(vec2 a, vec2 b, int N, float edge) { vec4 acc = vec4(0.0); for (int i = 0; i < 128; i++) { if (i >= N) break; float t = (float(i) + 0.5) / float(N); acc += texEdge(mix(a, b, t), edge); } return acc / float(N); }
+
+// --- üretici yardımcıları ---
+// Desen (önceden çarpılmış) katmanın dolu kısmına, üstüne konur
+vec4 genOver(vec4 pat) { vec4 s = texture(u_tex, v_uv); return overPre(pat * s.a, s); }
+vec4 colA(vec3 c, float a) { return vec4(c * a, a); }
+float aaStep(float edge, float x) { float w = fwidth(x) + 1e-4; return smoothstep(edge - w, edge + w, x); }
+// Hücre (Voronoi) gürültüsü: x = en yakın uzaklık, y = ikinci, zw = hücre kimliği
+vec4 voronoi(vec2 p) { vec2 i = floor(p), f = fract(p); float d1 = 8.0, d2 = 8.0; vec2 id = vec2(0.0);
+  for (int y = -1; y <= 1; y++) for (int x = -1; x <= 1; x++) { vec2 g = vec2(float(x), float(y)); vec2 o2 = hash2(i + g); vec2 r = g + o2 - f; float d = dot(r, r);
+    if (d < d1) { d2 = d1; d1 = d; id = i + g; } else if (d < d2) d2 = d; }
+  return vec4(sqrt(d1), sqrt(d2), id); }
+float starShape(vec2 p, float n, float inner) { float a = atan(p.y, p.x); float r = length(p); float k = cos(PI / n) / cos(mod(a + PI / n, TAU / n) - PI / n); float m = mix(inner, 1.0, pow(abs(cos(a * n * 0.5)), 2.0)); return r / max(m, 1e-3); }
+float heartSDF(vec2 p) { p.y = -p.y + 0.25; p.x = abs(p.x); float a = atan(p.x, p.y) / PI; float r = length(p); float h = abs(a); float d = (13.0 * h - 22.0 * h * h + 10.0 * h * h * h) / (6.0 - 5.0 * h); return r - d * 0.55; }

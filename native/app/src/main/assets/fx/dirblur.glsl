@@ -1,4 +1,3 @@
 // dirblur
-uniform float p_amount; uniform float p_ang;
-void main() { vec2 d = vec2(cos(radians(p_ang)), sin(radians(p_ang))) * p_amount * u_s / u_res; vec4 acc = vec4(0.0);
-  for (int i = 0; i < 48; i++) { float t = float(i) / 47.0 - 0.5; acc += tex(v_uv + d * t); } o = acc / 48.0; }
+uniform float p_uzunluk, p_aci, p_ornekSayi, p_kenarUzat;
+void main() { float a = radians(p_aci); vec2 d = vec2(cos(a), sin(a)) * p_uzunluk * u_s * 0.5; o = lineAvg(here() - d, here() + d, int(clamp(p_ornekSayi, 4.0, 128.0)), p_kenarUzat > 0.5 ? 3.0 : 0.0); }

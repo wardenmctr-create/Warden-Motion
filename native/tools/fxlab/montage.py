@@ -6,7 +6,7 @@ src, out, title, types = sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4:]
 cat = {e['type']: e for e in json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../app/src/main/assets/fx/catalog.json')))['effects']}
 FONT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../app/src/main/res/font/inter_bold.otf')
 f1 = ImageFont.truetype(FONT, 15); f2 = ImageFont.truetype(FONT, 26)
-types = [t for t in types if os.path.isdir(os.path.join(src, t))]
+types = [t for t in types if os.path.isdir(os.path.join(src, t)) and len(os.listdir(os.path.join(src, t))) >= 20]
 cols = 6; T = 170; LH = 40; rows = (len(types) + cols - 1) // cols
 W = cols * T + (cols + 1) * 8; H = 64 + rows * (T + LH) + 8
 W += W % 2; H += H % 2

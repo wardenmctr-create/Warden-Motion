@@ -1,7 +1,9 @@
 // spotlight
-uniform vec2 p_pos; uniform float p_rad; uniform float p_soft; uniform float p_dark; uniform vec3 c_col;
+uniform vec2 p_merkez; uniform float p_isikYari, p_kenarYumu, p_isikYogu, p_ortamIsig, p_elipsOran; uniform vec3 c_isikReng;
 void main() {
   vec4 s = texture(u_tex, v_uv); if (s.a <= 0.0) { o = s; return; }
-  float d = length(v_uv * u_res - fromUnit(p_pos)) / (p_rad * u_s); float k = 1.0 - smoothstep(1.0 - p_soft / 100.0, 1.0 + p_soft / 100.0, d);
-  vec3 c = unpre(s); vec3 lit = c * mix(vec3(1.0), c_col * 1.3, 0.5) ; c = mix(c * (1.0 - p_dark / 100.0), lit, k); o = pre(clamp(c, 0.0, 1.0), s.a);
+  vec2 r = toUnit(here()) - p_merkez; r.x /= max(p_elipsOran, 0.05); float R = max(p_isikYari, 1.0);
+  float l = 1.0 - smoothstep(R * (1.0 - p_kenarYumu / 100.0), R, length(r));
+  vec3 k = mix(vec3(p_ortamIsig / 100.0), c_isikReng * (0.6 + 0.6 * p_isikYogu / 100.0), l);
+  o = pre(clamp(unpre(s) * k, 0.0, 1.0), s.a);
 }

@@ -99,7 +99,13 @@ def param(row, used):
 def parse(path):
     t = open(path, encoding="utf-8").read()
     out = {}
-    for b in re.split(r"\n### ", t)[1:]:
+    common3d = []
+    for b0 in re.split(r"\n### ", t)[1:]:
+        cut = re.split(r"\n## ", b0, maxsplit=1)
+        b = cut[0]
+        if len(cut) > 1 and "Ortak 3B grubu" in cut[1]:
+            common3d = [[x.strip() for x in r.strip().strip("|").split("|")] for r in cut[1].split("\n")
+                        if r.startswith("|") and not r.startswith("|---") and not r.startswith("| Özellik")]
         m = re.match(r"(\d+)\. \*\*(.+?)\*\* \((.+?)\):\s*(.*)", b)
         if not m: continue
         n, name, en, desc = int(m.group(1)), m.group(2), m.group(3), m.group(4).strip()
@@ -116,6 +122,10 @@ def parse(path):
             elif line.startswith("- ") or line.startswith("**Referans"): notes.append(line.lstrip("- "))
         inner = re.search(r"\*İçinde: (.+?)\.\*", desc)
         desc = re.sub(r"\s*\*İçinde:.*$", "", desc).strip()
+        if 225 <= n <= 248 and common3d:
+            labs = {p["l"].lower() for p in ps}
+            for r in common3d:
+                if len(r) == 5 and r[0].lower() not in labs: ps.append(param(r, used))
         out[str(n)] = dict(n=n, name=name, en=en, desc=desc, params=ps, notes=notes, presetText=pres, teach=teach,
                            inner=inner.group(1) if inner else None)
     return out

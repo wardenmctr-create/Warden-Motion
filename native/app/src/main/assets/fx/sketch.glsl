@@ -1,19 +1,11 @@
 // sketch
-uniform float p_amount; uniform float p_detail; uniform float p_mix;
-float lumAt(vec2 uv) { vec4 t = tex(uv); return luma(t.rgb) + (1.0 - t.a) * 0.0; }
-vec2 sobel(vec2 uv, float r) { vec2 px = r / u_res;
-  float tl = lumAt(uv + px * vec2(-1, -1)), t = lumAt(uv + px * vec2(0, -1)), tr = lumAt(uv + px * vec2(1, -1));
-  float l = lumAt(uv + px * vec2(-1, 0)), rr = lumAt(uv + px * vec2(1, 0));
-  float bl = lumAt(uv + px * vec2(-1, 1)), b = lumAt(uv + px * vec2(0, 1)), br = lumAt(uv + px * vec2(1, 1));
-  return vec2(tr + 2.0 * rr + br - tl - 2.0 * l - bl, bl + 2.0 * b + br - tl - 2.0 * t - tr); }
-float alphaEdge(vec2 uv, float r) { vec2 px = r / u_res; return abs(tex(uv + vec2(px.x, 0)).a - tex(uv - vec2(px.x, 0)).a) + abs(tex(uv + vec2(0, px.y)).a - tex(uv - vec2(0, px.y)).a); }
+uniform float p_cizgiGucu, p_kalemKali, p_taramaYogu, p_renkliKale; uniform vec3 c_kagitReng, c_kalemReng;
 void main() {
   vec4 s = texture(u_tex, v_uv); if (s.a <= 0.0) { o = s; return; }
-  float e = length(sobel(v_uv, p_detail)) + alphaEdge(v_uv, p_detail) * 0.5; float l = luma(unpre(s));
-  vec2 px = v_uv * u_res; float hatch = 0.0;
-  if (l < 0.75) hatch += step(0.5, fract((px.x + px.y) / (3.0 * u_s))) * 0.15;
-  if (l < 0.45) hatch += step(0.5, fract((px.x - px.y) / (3.0 * u_s))) * 0.15;
-  float paper = 0.96 + hash1(floor(px / 2.0)) * 0.04;
-  float v = clamp(paper - e * p_amount / 100.0 * 1.2 - hatch, 0.0, 1.0);
-  o = pre(mix(unpre(s), vec3(v * 0.98, v * 0.97, v * 0.95), p_mix / 100.0), s.a);
+  vec3 c = unpre(s); float e = sobel(here(), max(1.0, p_kalemKali * u_s * 0.6)) * p_cizgiGucu / 100.0 * 1.6;
+  float l = luma(c); vec2 p = here() / max(u_s * 4.0, 2.0);
+  float h1 = step(0.5, fract((p.x + p.y) * 0.7)) * (1.0 - smoothstep(0.35, 0.6, l)); float h2 = step(0.5, fract((p.x - p.y) * 0.7)) * (1.0 - smoothstep(0.1, 0.35, l));
+  float ink = clamp(e + (h1 + h2) * p_taramaYogu / 100.0 * 0.5, 0.0, 1.0);
+  vec3 pen = p_renkliKale > 0.5 ? c * 0.6 : c_kalemReng;
+  o = pre(mix(c_kagitReng, pen, ink), s.a);
 }

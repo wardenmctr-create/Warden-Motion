@@ -210,6 +210,7 @@ class Renderer(private val ctx: Context, maxSide: Int = 2048, private val sync: 
     private fun padOf(e: Effect, m: com.warden.motion.app.model.FxMeta, t: Double, l: Layer): Double {
         val pd = m.pad ?: return 0.0
         if (pd.box > 0) return pd.box * max(l.w, l.h) + pd.add
+        if (pd.sum != null) return max(0.0, pd.sum.sumOf { k -> max(0.0, e.value(k, t)) } * pd.mul + pd.add)
         if (pd.max != null) return pd.max.maxOf { k -> max(0.0, e.value(k, t)) }
         return max(0.0, pd.add + (pd.k?.let { e.value(it, t) } ?: 0.0) * pd.mul)
     }
@@ -282,9 +283,21 @@ class Renderer(private val ctx: Context, maxSide: Int = 2048, private val sync: 
         tmp.recycle(); buf.recycle()
     }
 
+    private var bgDepth = 0
     /** Efektlerin "Kaynak seçici" ayarlarındaki katmanlar (harita, doku…): kendi düzleminde, aynı boyutta çizilir */
     private fun sourcesFor(p: Project, l: Layer, fx: List<Effect>, t: Double, q: Double): Map<String, Bitmap> {
         val out = HashMap<String, Bitmap>()
+        if (fx.any { it.type == "copybg" || it.type == "magnifybg" } && bgDepth < 2) {
+            // Katmanın arkasındaki görüntü, katmanın kendi düzleminde (kutusu boyunda)
+            val w = kotlin.math.ceil(l.w * q).toInt().coerceIn(1, 2048); val h = kotlin.math.ceil(l.h * q).toInt().coerceIn(1, 2048)
+            val b = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888); val cc = Canvas(b)
+            val tr = worldTransform(p, l, t)
+            cc.translate(w / 2f, h / 2f); cc.scale(q.toFloat(), q.toFloat()); cc.scale(1f / tr.scale.toFloat(), 1f / tr.scale.toFloat()); cc.rotate(-tr.rot.toFloat()); cc.translate(-tr.x.toFloat(), -tr.y.toFloat())
+            paint.reset(); paint.color = parseCol(p.background, android.graphics.Color.WHITE); cc.drawRect(0f, 0f, p.width.toFloat(), p.height.toFloat(), paint)
+            bgDepth++
+            try { for (below in p.layers) { if (below.id == l.id) break; if (below.type == "audio" || below.hidden == true || t < below.start || t >= below.end) continue; paintLayer(cc, p, below, t) } } finally { bgDepth-- }
+            out["bgsrc"] = b
+        }
         for (e in fx) for (pr in fxMeta(e.type).params) if (pr.kind == "source") {
             val id = e.c?.get(pr.key) ?: continue
             val src = p.layers.find { it.id == id } ?: continue

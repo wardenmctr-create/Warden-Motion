@@ -1,4 +1,8 @@
 // scatterpx
-uniform float p_amount; uniform float p_dir; uniform float p_anim;
-void main() { vec2 px = v_uv * u_res; float fr = p_anim > 0.5 ? floor(u_t * 24.0) : 0.0; vec2 r = (hash2(floor(px) + fr * 13.1) - 0.5) * 2.0 * p_amount * u_s;
-  int d = int(p_dir + 0.5); if (d == 1) r.y = 0.0; if (d == 2) r.x = 0.0; o = tex((px + r) / u_res); }
+uniform float p_sacilmaMesa, p_yogunluk, p_eksen, p_tohum, p_zamanaBagl;
+void main() {
+  vec2 px = here(); float tk = p_zamanaBagl > 0.5 ? floor(u_t * 24.0) : 0.0;
+  vec2 r = hash2(floor(px) + seedf(p_tohum) + tk * 1.7) * 2.0 - 1.0; if (p_eksen > 0.5 && p_eksen < 1.5) r.y = 0.0; if (p_eksen > 1.5) r.x = 0.0;
+  float on = step(hash1(floor(px) + 9.1 + tk), p_yogunluk / 100.0);
+  o = texPx(px + r * p_sacilmaMesa * u_s * on);
+}

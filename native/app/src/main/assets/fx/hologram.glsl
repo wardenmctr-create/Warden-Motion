@@ -1,11 +1,11 @@
 // hologram
-uniform vec3 c_col; uniform float p_lines; uniform float p_flick; uniform float p_speed;
+uniform vec3 c_hologramReng; uniform float p_taramaAral, p_cizgiOpak, p_bozulma, p_akisHizi, p_titreme, p_saydamla;
 void main() {
-  float jit = (hash1(vec2(floor(u_t * 10.0 * p_speed), floor(v_uv.y * 40.0))) - 0.5) * 0.01 * p_flick / 100.0 * step(0.85, hash1(vec2(floor(u_t * 7.0), 1.0)));
-  vec4 s = tex(v_uv + vec2(jit, 0.0)); if (s.a <= 0.0) { o = vec4(0.0); return; }
-  float l = luma(unpre(s)); vec3 c = c_col * (0.35 + l * 1.1);
-  float ln = 0.65 + 0.35 * step(0.5, fract(v_uv.y * u_res.y / (4.0 * u_s) - u_t * p_speed * 2.0)); c *= mix(1.0, ln, p_lines / 100.0);
-  float band = smoothstep(0.0, 0.05, abs(fract(v_uv.y - u_t * 0.35 * p_speed) - 0.5)); c += c_col * (1.0 - band) * 0.4;
-  float fl = 1.0 - p_flick / 100.0 * 0.4 * hash1(vec2(floor(u_t * 20.0), 5.0)); float a = s.a * 0.85 * fl;
-  o = vec4(min(c, vec3(1.0)) * a, a);
+  vec2 px = here(); float y = px.y / u_s; float jit = (hash1(vec2(floor(y / 3.0), floor(u_t * 12.0))) - 0.5) * p_bozulma * step(0.85, hash1(vec2(floor(u_t * 6.0), floor(y / 20.0))));
+  vec4 s = texPx(px + vec2(jit * u_s, 0.0)); if (s.a <= 0.0) { o = s; return; }
+  float l = luma(unpre(s)); vec3 c = c_hologramReng * (0.35 + l * 1.1);
+  float scan = step(0.5, fract((y - u_t * p_akisHizi * 20.0) / max(p_taramaAral, 0.5))); c *= 1.0 - scan * p_cizgiOpak / 100.0;
+  c += c_hologramReng * 0.6 * clamp(length(alphaGrad(px, 1.5)) * 4.0, 0.0, 1.0);
+  float fl = 1.0 - p_titreme / 100.0 * hash1(vec2(floor(u_t * 20.0), 3.0));
+  o = pre(clamp(c, 0.0, 1.0), s.a * (1.0 - p_saydamla / 100.0) * fl);
 }
