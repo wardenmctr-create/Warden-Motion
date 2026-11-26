@@ -319,3 +319,20 @@ ADD("speed", [TG("dondur", "Kareyi dondur", 0, GZ), SEC("dondurZaman", "Dondurma
     [P("YC", "Yavaş çekim", {"hiz": 40}), P("HZ", "Hızlı", {"hiz": 200}), P("TR", "Ters oynat", {"hiz": -100}),
      P("RP", "Rampa (yavaşla-hızlan)", keys={"hiz": [[0, 100], [0.4, 25], [0.6, 25], [1, 100]]}), P("DN", "Dondur ve devam et", {"dondur": 1, "dondurZaman": 1, "dondurSure": 1})])
 _sp = next(p for p in _BY["speed"]["params"] if p["k"] == "kareYont"); _sp["hideUi"] = True
+
+# ---- 277–284 Tekrar ortak ayarları ----
+GR = "Kopya Değişimi"
+for _t in ("gridrepeat", "linrepeat", "radrepeat", "scatter", "spiral", "mirrorrepeat", "repeatpath", "scatterfield"):
+    ADD(_t, [DG("rTonAdim", "Kopya başına renk tonu kayması", 0, -180, 180, GR), PC("rOpakAdim", "Kopya başına opaklık değişimi", 0, -100, 100, GR),
+        PX("rRastKonum", "Rastgele konum", 0, 0, 500, GR), DG("rRastAci", "Rastgele açı", 0, 0, 180, GR), PC("rRastOlcek", "Rastgele ölçek", 0, 0, 90, GR),
+        IN("rTohum", "Tohum", 1, 0, 999999, "", GR), TG("rSiraTers", "Çizim sırasını ters çevir", 0, GR)])
+    for _p in _BY[_t]["params"]:
+        if _p["k"] == "rTohum": _p["reseed"] = True
+
+# ---- CB rig: grup seçicileri birden çok katman alır ----
+for _t, _ks in (("cbrig", ("gozGrub", "aksesuarGrub")),):
+    for _p in _BY[_t]["params"]:
+        if _p["k"] in _ks: _p["multi"] = True
+# Telefon motorunda çalışan (shader dışı) efektler
+for _t in ("cbeyes", "cbblink", "cbbrow", "cbtalk", "cbexpr", "cbrig", "cbmaplock", "echo", "pixelmb", "motionblur", "speed", "posterizetime", "cbhold"):
+    _BY[_t]["ready"] = True

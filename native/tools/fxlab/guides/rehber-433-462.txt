@@ -1,0 +1,596 @@
+BÖLÜM C – 30 YENİ EFEKT ADAYI
+
+Aşağıdaki efektler mevcut motorlardan faydalanabilir. Ayrı efekt olarak eklenmelerine rağmen aynı algoritmaların gereksiz yere yeniden yazılmaması gerekir.
+
+Bütün yeni 3B efektler ortak 3B kamera, ışık, malzeme ve dönüşüm panelini kullanmalıdır.
+
+1. Üç Boyutlu Dünya
+
+Döndürülebilir ve farklı harita görünümlerine sahip Dünya modeli.
+
+- [K] Büyüklük: 250 px (10–2000).
+- [K] Eksen eğikliği: 23,44°.
+- [K] Enlem: 0° (−90 ile 90).
+- [K] Boylam: 0° (−180 ile 180).
+- [K] Basıklık: %0,3 (%0–30).
+- [S] Harita: Siyasi, fiziksel, uydu, gece, özel.
+- [D] Özel harita.
+- [A] Ülke sınırları: Kapalı.
+- [R] Sınır rengi: Siyah.
+- [K] Sınır kalınlığı: 1 px (0–20).
+- [A] Atmosfer: Açık.
+- [R] Atmosfer rengi: Mavi.
+- [K] Atmosfer kalınlığı: %4 (%0–30).
+- [A] Bulutlar: Açık.
+- [K] Bulut yoğunluğu: %35 (%0–100).
+- [K] Bulut hızı: 10°/sn.
+- [A] Gece ışıkları: Kapalı.
+- [K] Okyanus yansıması: %25 (%0–100).
+
+Şablonlar: Siyasi Dünya, gerçekçi Dünya, gece, çizgi film, karton Dünya.
+
+Siyasi sınırlar kullanılan harita verisine bağlı olmalıdır. Efekt kendi kendine sınır uydurmamalıdır.
+
+2. Üç Boyutlu Gezegen
+
+- [S] Gezegen türü: Kayalık, gaz devi, buz, çöl, lav, okyanus.
+- [K] Büyüklük: 250 px (10–2000).
+- [R] Ana renk: Turuncu.
+- [R] İkinci renk: Kırmızı.
+- [K] Yüzey ayrıntısı: %60 (%0–100).
+- [K] Krater yoğunluğu: %20 (%0–100).
+- [K] Krater büyüklüğü: 15 px (1–200).
+- [K] Yüzey yükseltisi: %10 (%0–30).
+- [N] Bulut şeridi sayısı: 8 (1–50).
+- [K] Fırtına yoğunluğu: %30 (%0–100).
+- [K] Atmosfer kalınlığı: %5 (%0–30).
+- [R] Atmosfer rengi: Açık turuncu.
+- [N] Tohum: 1.
+
+Şablonlar: Mars, Jüpiter, Neptün, lav gezegeni, hayalî gezegen.
+
+3. Halkalı Gezegen
+
+- [A] Gezegen gövdesi: Açık.
+- [K] Gezegen büyüklüğü: 200 px (10–2000).
+- [K] İç halka yarıçapı: %130 (%105–500).
+- [K] Dış halka yarıçapı: %220 (%110–1000).
+- [N] Halka sayısı: 6 (1–30).
+- [K] Halka boşluğu: %8 (%0–90).
+- [K] Halka kalınlığı: 3 px (0–100).
+- [XYZ] Halka eğimi: 25°, 0°, 0°.
+- [R] Ana renk: Açık kahverengi.
+- [R] İkinci renk: Gri.
+- [K] Parçacık yoğunluğu: %70 (%0–100).
+- [K] Halka opaklığı: %80 (%0–100).
+- [K] Dönüş hızı: 15°/sn.
+- [A] Karşılıklı gölge: Açık.
+
+Şablonlar: Satürn, buz halkası, toz halkası, neon halka.
+
+Bu efekt Üç Boyutlu Gezegen motorunun halka moduyla da sunulabilir.
+
+4. Üç Boyutlu Bayrak Direği
+
+Bayrak Dalgalanması ile üç boyutlu direk modelini birleştirir.
+
+- [L] Bayrak katmanı.
+- [D] Bayrak görseli.
+- [XY] Bayrak boyutu: 300, 200 px.
+- [A] En-boy oranını koru: Açık.
+- [S] Sabit kenar: Sol, sağ, üst, alt, özel.
+- [K] Dalga yüksekliği: 22 px (0–500).
+- [K] Dalga boyu: 110 px (1–1000).
+- [K] Rüzgâr hızı: 1,2 Hz (0–10).
+- [K] Kumaş sertliği: %50 (%0–100).
+- [A] Direği göster: Açık.
+- [K] Direk yüksekliği: 600 px (10–5000).
+- [K] Direk kalınlığı: 12 px (1–100).
+- [S] Direk malzemesi: Metal, ahşap, plastik.
+- [R] Direk rengi: Gri.
+- [S] Direk tepesi: Küre, düz, sivri, yok.
+- [K] Bayrağın yüksekliği: %90 (%0–100).
+- [A] Bağlantı ipi: Açık.
+- [K] İp kalınlığı: 2 px (1–20).
+
+Şablonlar: Masa bayrağı, tören bayrağı, çizgi film, güçlü rüzgâr.
+
+5. Üç Boyutlu Kitap
+
+- [XY] Kitap boyutu: 250, 350 px.
+- [K] Kalınlık: 40 px (1–500).
+- [N] Sayfa sayısı: 120 (1–1000).
+- [K] Kapak kalınlığı: 4 px (0–50).
+- [K] Açılma açısı: 0° (0–180).
+- [N] Açık sayfa: 1.
+- [K] Sayfa çevirme: %0 (%0–100).
+- [K] Sayfa kıvrımı: %35 (%0–100).
+- [K] Sayfa sertliği: %40 (%0–100).
+- [D] Ön kapak görseli.
+- [D] Arka kapak görseli.
+- [D] Kitap sırtı görseli.
+- [D] Sayfa görselleri.
+- [R] Sayfa rengi: Krem.
+- [A] Sayfa çizgileri: Açık.
+- [A] Sayfa gölgeleri: Açık.
+
+Şablonlar: Tarih kitabı, atlas, defter, eski kitap, çizgi roman.
+
+6. Üç Boyutlu Zar
+
+- [S] Yüz sayısı: 4, 6, 8, 12, 20.
+- [K] Büyüklük: 150 px (10–1000).
+- [K] Köşe yuvarlaklığı: 8 px (0–50).
+- [K] Kenar pahı: 3 px (0–30).
+- [S] Yüz görünümü: Nokta, sayı, özel görsel.
+- [K] Nokta büyüklüğü: %12 (%1–40).
+- [K] Nokta derinliği: 2 px (0–20).
+- [R] Zar rengi: Beyaz.
+- [R] İşaret rengi: Siyah.
+- [D] Her yüz için ayrı görsel.
+- [A] Otomatik yuvarlanma: Kapalı.
+- [K] Yuvarlanma ilerlemesi: %0 (%0–100).
+- [K] Sıçrama yüksekliği: 20 px (0–500).
+- [N] Son yüz: 6.
+- [N] Tohum: 1.
+
+Şablonlar: Klasik zar, ahşap, metal, bayraklı zar.
+
+Bu efekt yalnızca dekoratif animasyon ve oyun görselleri içindir.
+
+7. Üç Boyutlu Dişli
+
+- [K] Çap: 200 px (10–2000).
+- [K] Kalınlık: 25 px (1–500).
+- [N] Diş sayısı: 16 (3–150).
+- [K] Diş yüksekliği: 15 px (1–200).
+- [K] Diş genişliği: %50 (%10–90).
+- [K] Merkez deliği: %25 (%0–90).
+- [A] Destek kolları: Kapalı.
+- [N] Destek kolu sayısı: 5 (2–20).
+- [K] Dönüş hızı: 60°/sn.
+- [A] Başka dişliye bağla: Kapalı.
+- [L] Bağlantılı dişli.
+- [A] Dönüş hızını diş sayısına göre eşleştir: Açık.
+
+Şablonlar: Saat dişlisi, mekanik dişli, çizgi film.
+
+8. Üç Boyutlu Zincir
+
+- [N] Halka sayısı: 20 (1–200).
+- [XY] Halka boyutu: 30, 50 px.
+- [K] Halka kalınlığı: 5 px (1–100).
+- [K] Halka aralığı: 20 px (1–300).
+- [K] Ardışık halka dönüşü: 90°.
+- [S] Halka biçimi: Oval, yuvarlak, kare.
+- [S] Yol: Düz, yay, daire, sarkık, özel.
+- [K] Sarkma: 60 px (0–2000).
+- [XY] Başlangıç noktası.
+- [XY] Bitiş noktası.
+- [A] Sallanma: Kapalı.
+- [K] Sallanma büyüklüğü: 15°.
+- [K] Sallanma hızı: 1 Hz.
+
+Şablonlar: Metal zincir, dekoratif zincir, altın zincir.
+
+9. Üç Boyutlu Madeni Para
+
+- [K] Çap: 180 px (10–2000).
+- [K] Kalınlık: 8 px (1–100).
+- [K] Pah: 2 px (0–30).
+- [S] Biçim: Yuvarlak, çokgen, özel.
+- [N] Kenar sayısı: 8 (3–50).
+- [A] Tırtıklı kenar: Açık.
+- [N] Tırtık sayısı: 100 (10–300).
+- [K] Tırtık derinliği: 1 px (0–10).
+- [D] Ön yüz.
+- [D] Arka yüz.
+- [K] Yüzey kabartması: %35 (%0–100).
+- [A] Otomatik dönme: Kapalı.
+- [K] Dönme hızı: 90°/sn.
+- [K] Yalpalama: 5° (0–45).
+
+Şablonlar: Altın, gümüş, bronz, oyun parası, ülke rozeti.
+
+10. Üç Boyutlu Boru
+
+- [K] Dış çap: 80 px (2–1000).
+- [K] Uzunluk: 400 px (10–5000).
+- [K] Duvar kalınlığı: 8 px (1–200).
+- [S] Kesit: Daire, kare, altıgen.
+- [S] Boru yolu: Düz, yay, sarmal, özel.
+- [K] Bükülme açısı: 0°.
+- [K] Bükülme yarıçapı: 150 px (1–2000).
+- [K] Koniklik: %0 (−90 ile 90).
+- [A] Başlangıç kapağı: Kapalı.
+- [A] Bitiş kapağı: Kapalı.
+- [A] İç yüzeyi göster: Açık.
+- [R] İç yüzey rengi: Gri.
+
+Şablonlar: Cam boru, metal boru, neon boru, karton rulo.
+
+11. Meteor Yağmuru
+
+- [K] Meteor yoğunluğu: 15/sn (0–200).
+- [K] Büyüklük: 4 px (1–100).
+- [K] Rastgele büyüklük: %50 (%0–100).
+- [K] Hız: 600 px/sn (0–5000).
+- [K] Yön: 135°.
+- [K] Yön dağılımı: 20°.
+- [K] Yaşam süresi: 1,5 sn (0,1–20).
+- [K] İz uzunluğu: 150 px (0–1000).
+- [R] Meteor rengi: Beyaz.
+- [R] Kuyruk rengi: Mavi.
+- [K] Parlama: %70 (%0–200).
+- [N] Tohum: 1.
+- [A] Döngü: Kapalı.
+
+Şablonlar: Yıldız kayması, renkli meteor, çizgi film gökyüzü.
+
+12. Kara Delik
+
+- [XY] Merkez: %50, %50.
+- [K] Merkez yarıçapı: 100 px (1–2000).
+- [K] Bükülme alanı: 300 px (1–3000).
+- [K] Mercek etkisi: %70 (%0–200).
+- [K] Girdap etkisi: %35 (−200 ile 200).
+- [A] Arka planı bük: Açık.
+- [L] Bükülecek katman.
+- [A] Işıklı disk: Açık.
+- [K] Disk genişliği: 80 px (1–1000).
+- [K] Disk eğimi: 65°.
+- [K] Disk dönüş hızı: 45°/sn.
+- [R] İç disk rengi: Beyaz.
+- [R] Dış disk rengi: Turuncu.
+- [K] Türbülans: %40 (%0–100).
+- [K] Parlama: %80 (%0–200).
+
+Şablonlar: Sinematik kara delik, kozmik portal, mavi girdap.
+
+13. Yıldız Bulutsusu
+
+- [XY] Merkez: %50, %50.
+- [K] Büyüklük: %100 (%10–1000).
+- [K] Gaz yoğunluğu: %65 (%0–100).
+- [K] Ayrıntı: %60 (%0–100).
+- [K] Türbülans: %45 (%0–100).
+- [N] Bulut katmanı: 5 (1–12).
+- [R] Birinci renk: Mor.
+- [R] İkinci renk: Mavi.
+- [R] Üçüncü renk: Pembe.
+- [K] Hareket hızı: %10.
+- [A] Yıldızlar: Açık.
+- [K] Yıldız yoğunluğu: %35 (%0–100).
+- [K] Derinlik: %50 (%0–100).
+- [N] Tohum: 1.
+
+Şablonlar: Mavi bulutsu, kırmızı bulutsu, mor uzay, karanlık uzay.
+
+14. Güneş Yüzeyi
+
+- [K] Büyüklük: 250 px (10–2000).
+- [R] Ana renk: Turuncu.
+- [R] Sıcak bölge: Sarı.
+- [R] Koyu bölge: Kırmızı.
+- [K] Yüzey ayrıntısı: %70 (%0–100).
+- [K] Yüzey hareketi: %40 (%0–100).
+- [K] Parlaklık: %100 (%0–300).
+- [A] Güneş lekeleri: Açık.
+- [K] Leke yoğunluğu: %10 (%0–100).
+- [A] Korona: Açık.
+- [K] Korona yüksekliği: 50 px (0–500).
+- [A] Plazma yayları: Açık.
+- [K] Yay büyüklüğü: 30 px (0–300).
+- [K] Parlama: %80 (%0–300).
+
+Şablonlar: Sarı yıldız, mavi yıldız, kırmızı dev, stilize Güneş.
+
+15. Kasırga
+
+- [S] Görünüm: Üstten, yandan huni, toz girdabı.
+- [XY] Merkez: %50, %50.
+- [K] Dış yarıçap: 300 px (10–2000).
+- [K] Göz yarıçapı: 40 px (0–500).
+- [K] Yükseklik: 500 px (10–3000).
+- [K] Dönüş hızı: 90°/sn.
+- [N] Sarmal kol sayısı: 5 (1–20).
+- [K] Sarmal sıkılığı: %60 (%0–100).
+- [K] Bulut yoğunluğu: %70 (%0–100).
+- [K] Türbülans: %50 (%0–100).
+- [R] Bulut rengi: Gri.
+- [K] Opaklık: %85 (%0–100).
+- [N] Tohum: 1.
+
+Şablonlar: Uydu görünümü, çizgi film, toz girdabı.
+16. Kum Fırtınası
+
+- [K] Yoğunluk: %70 (%0–100).
+- [K] Kum büyüklüğü: 2 px (0,5–30).
+- [K] Rüzgâr hızı: 350 px/sn (0–3000).
+- [K] Rüzgâr yönü: 0°.
+- [K] Türbülans: %45 (%0–100).
+- [K] Toz tabakası: %40 (%0–100).
+- [K] Görüş azalması: %30 (%0–100).
+- [R] Kum rengi: Kahverengi.
+- [K] Hareket bulanıklığı: %35 (%0–100).
+- [A] Değişken rüzgâr: Açık.
+- [K] Rüzgâr değişim sıklığı: 0,5 Hz.
+- [N] Tohum: 1.
+
+Şablonlar: Hafif toz, çöl, çizgi film kumu.
+
+17. Yaprak Yağmuru
+
+- [S] Yaprak türü: Sonbahar, meşe, akçaağaç, çiçek, özel.
+- [D] Özel yaprak görseli.
+- [N] Yaprak sayısı: 80 (1–1000).
+- [K] Büyüklük: 25 px (1–300).
+- [K] Büyüklük rastgeleliği: %60 (%0–100).
+- [R] Yaprak renkleri.
+- [K] Düşme hızı: 80 px/sn.
+- [XY] Rüzgâr: 50, 0 px/sn.
+- [K] Sallanma genişliği: 30 px (0–300).
+- [K] Sallanma hızı: 1 Hz.
+- [K] Dönme hızı: 45°/sn.
+- [A] 3B dönüş: Açık.
+- [K] Derinlik dağılımı: %60 (%0–100).
+- [A] Döngü: Açık.
+
+Şablonlar: Sonbahar, ilkbahar, kiraz çiçeği, yeşil yapraklar.
+
+18. Su Damlacıkları
+
+- [N] Damla sayısı: 45 (1–500).
+- [K] Damla büyüklüğü: 18 px (1–200).
+- [K] Büyüklük rastgeleliği: %65 (%0–100).
+- [K] Yuvarlaklık: %80 (%0–100).
+- [K] Yükselti: %60 (%0–100).
+- [K] Saydamlık: %85 (%0–100).
+- [K] Işık kırılması: %40 (%0–200).
+- [K] Kenar parlaklığı: %35 (%0–100).
+- [A] Damla hareketi: Açık.
+- [K] Akış hızı: 30 px/sn.
+- [K] Akış yönü: 90°.
+- [A] Damla izi: Açık.
+- [K] İz uzunluğu: 40 px (0–500).
+- [A] Damlaları birleştir: Kapalı.
+
+Şablonlar: Yağmurlu pencere, çiy, kamera damlası.
+
+19. Donmuş Cam
+
+- [K] Donma miktarı: %65 (%0–100).
+- [K] Kristal büyüklüğü: 35 px (1–500).
+- [K] Kristal yoğunluğu: %60 (%0–100).
+- [K] Dallanma: %55 (%0–100).
+- [K] Buz kalınlığı: %30 (%0–100).
+- [K] Bulanıklık: 12 px (0–100).
+- [K] Işık kırılması: %25 (%0–200).
+- [R] Buz rengi: Mavi.
+- [R] Kristal rengi: Beyaz.
+- [S] Donma başlangıcı: Kenarlar, merkez, rastgele, maske.
+- [A] Donma animasyonu: Kapalı.
+- [K] Donma ilerlemesi: %65 (%0–100).
+- [N] Tohum: 1.
+
+Şablonlar: Hafif kırağı, donmuş pencere, buz kristalleri.
+
+20. Islak Yüzey
+
+- [K] Islaklık: %65 (%0–100).
+- [K] Yüzey kararması: %15 (%0–100).
+- [K] Yansıma gücü: %40 (%0–100).
+- [K] Pürüzlülük: %25 (%0–100).
+- [K] Su kalınlığı: %20 (%0–100).
+- [K] Yansıma bulanıklığı: 8 px (0–100).
+- [S] Yansıma kaynağı: Yapay ışık, arka plan, katman.
+- [L] Yansıma katmanı.
+- [A] Su birikintileri: Kapalı.
+- [K] Birikinti yoğunluğu: %25 (%0–100).
+- [A] Su akışı: Kapalı.
+- [K] Akış hızı: 15 px/sn.
+- [A] Alfa sınırını koru: Açık.
+
+Şablonlar: Islak asfalt, taş, metal, parlak su.
+
+21. Perspektif Izgarası
+
+- [XY] Ufuk noktası: %50, %40.
+- [K] Izgara genişliği: 2000 px (10–10000).
+- [K] Izgara derinliği: 3000 px (10–10000).
+- [K] Hücre büyüklüğü: 80 px (2–1000).
+- [K] Çizgi kalınlığı: 2 px (0,5–30).
+- [R] Çizgi rengi: Mavi.
+- [K] Çizgi opaklığı: %80 (%0–100).
+- [A] Hücre dolgusu: Kapalı.
+- [K] Uzaklıkta solma: %70 (%0–100).
+- [K] Perspektif gücü: %65 (%0–100).
+- [XYZ] Izgara dönüşü: 65°, 0°, 0°.
+- [XY] Hareket hızı: 0, 100 px/sn.
+- [A] Parlama: Açık.
+- [K] Parlama gücü: %40 (%0–200).
+
+Şablonlar: Retro neon zemin, teknik çizim, dijital ortam.
+
+22. Sonsuz Ayna
+
+- [XY] Merkez: %50, %50.
+- [N] Yansıma sayısı: 12 (1–100).
+- [K] Küçülme oranı: %75 (%5–99).
+- [K] Derinlik aralığı: 20 px (0–500).
+- [K] Kopya dönüşü: 5°.
+- [K] Opaklık kaybı: %10 (%0–100).
+- [XY] Kopya konum farkı: 0, 0 px.
+- [A] Yatay aynalama: Açık.
+- [A] Dikey aynalama: Kapalı.
+- [A] Renk geçişi: Kapalı.
+- [R] Uzak kopya rengi: Mavi.
+- [K] Uzak kopya bulanıklığı: 5 px (0–100).
+- [K] Derinlik hareketi: 0 px/sn.
+
+Şablonlar: Sonsuz tünel, neon portal, dönen ayna.
+
+23. Derinlik Paralaksı
+
+- [S] Derinlik kaynağı: Dosya, katman, elle tanımlama, parlaklık.
+- [D] Derinlik haritası.
+- [L] Derinlik katmanı.
+- [A] Derinliği ters çevir: Kapalı.
+- [K] Derinlik gücü: 100 px (0–1000).
+- [K] Derinlik yumuşatma: 5 px (0–100).
+- [N] Derinlik katmanı sayısı: 8 (2–32).
+- [XY] Kamera kayması: 0, 0 px.
+- [K] Yakınlaştırma: %100 (%10–1000).
+- [XYZ] Kamera dönüşü: 0°, 0°, 0°.
+- [K] Paralaks gücü: %50 (%0–200).
+- [A] Boşlukları doldur: Açık.
+- [S] Boşluk doldurma: Kenar uzatma, ayna, saydam, özel arka plan.
+- [A] Kenarları koru: Açık.
+
+Şablonlar: Fotoğraf canlandırma, manzara, Countryballs sahne derinliği.
+
+24. Ortam Gölgelendirmesi
+
+- [S] Kaynak: Alfa, derinlik haritası, gerçek 3B geometri.
+- [L] Derinlik katmanı.
+- [K] Gölge yarıçapı: 20 px (1–300).
+- [K] Yoğunluk: %40 (%0–100).
+- [K] Derinlik hassasiyeti: %50 (%0–100).
+- [K] Yumuşaklık: 10 px (0–100).
+- [R] Gölge rengi: Siyah.
+- [K] Kontrast: %20 (%0–100).
+- [A] Alfa sınırını koru: Açık.
+- [A] Yalnız gölgeyi göster: Kapalı.
+- [S] Kalite: Otomatik, düşük, orta, yüksek.
+
+Şablonlar: Karton derinliği, temas gölgesi, oyuncak, güçlü 3B gölge.
+
+25. Hacimsel Işık
+
+- [S] Işık türü: Spot, güneş, noktasal, koni.
+- [XY] Işık konumu: %50, %10.
+- [K] Işık yönü: 90°.
+- [K] Işın uzunluğu: 600 px (10–5000).
+- [K] Işın genişliği: 180 px (1–2000).
+- [K] Koni açısı: 35°.
+- [R] Işık rengi: Sarı.
+- [K] Işık gücü: %80 (%0–300).
+- [K] Yumuşaklık: %60 (%0–100).
+- [K] Sis yoğunluğu: %35 (%0–100).
+- [K] Işık saçılması: %50 (%0–100).
+- [A] Havadaki tozlar: Açık.
+- [K] Toz yoğunluğu: %20 (%0–100).
+- [A] Katmanlar ışığı engellesin: Kapalı.
+- [L] Engelleyici katman.
+
+Şablonlar: Pencere ışığı, sahne ışığı, sinematik sis.
+
+26. Mürekkep Çizimi
+
+- [K] Çizgi kalınlığı: 2 px (0,5–30).
+- [K] Kenar hassasiyeti: %65 (%0–100).
+- [K] Ayrıntı: %70 (%0–100).
+- [K] Çizgi düzensizliği: %20 (%0–100).
+- [K] Mürekkep yayılması: 1 px (0–20).
+- [K] Mürekkep yoğunluğu: %90 (%0–100).
+- [R] Mürekkep rengi: Siyah.
+- [K] Orijinal renk koruması: %0 (%0–100).
+- [A] Kâğıt dokusu: Açık.
+- [S] Kâğıt türü: Beyaz, kraft, parşömen, karton.
+- [K] Doku gücü: %25 (%0–100).
+- [K] Tarama yoğunluğu: %40 (%0–100).
+- [A] Dinamik çizgiler: Kapalı.
+- [N] Yenilenme aralığı: 3 kare (1–60).
+
+Şablonlar: Mürekkep eskizi, çizgi roman, gravür.
+
+27. Nakış
+
+- [S] Dikiş türü: Düz, zincir, çapraz, saten, zikzak.
+- [K] Dikiş uzunluğu: 8 px (1–100).
+- [K] İplik kalınlığı: 3 px (0,5–30).
+- [K] Dikiş aralığı: 2 px (0–50).
+- [K] Dikiş yönü: 45°.
+- [S] Dikiş yönlendirmesi: Sabit, kontura göre, renk bölgelerine göre.
+- [K] Dikiş düzensizliği: %10 (%0–100).
+- [K] İplik kabartması: %30 (%0–100).
+- [A] Orijinal renkleri kullan: Açık.
+- [R] Özel iplik rengi.
+- [N] Renk sayısı: 16 (2–128).
+- [A] Kumaş altlığı: Kapalı.
+- [S] Kumaş türü: Keçe, pamuk, keten, kot, özel.
+- [A] Kenar dikişi: Açık.
+- [K] İşlenme ilerlemesi: %100 (%0–100).
+- [A] Şekil değişimini takip et: Açık.
+
+Şablonlar: Nakışlı bayrak, arma, keçe karakter, işlenmiş rozet.
+
+28. Kurşun Kalem Tarama
+
+- [S] Tarama: Paralel, çapraz, çok yönlü, kontura uyumlu.
+- [K] Çizgi kalınlığı: 1 px (0,5–10).
+- [K] Çizgi aralığı: 5 px (1–50).
+- [K] Çizgi uzunluğu: 30 px (2–300).
+- [K] Birinci açı: 45°.
+- [K] İkinci açı: 135°.
+- [N] Tarama katmanı: 3 (1–8).
+- [K] Kalem basıncı: %60 (%0–100).
+- [K] Ton hassasiyeti: %70 (%0–100).
+- [K] Çizgi düzensizliği: %15 (%0–100).
+- [K] Uç yumuşaklığı: %30 (%0–100).
+- [R] Kalem rengi: Gri.
+- [A] Kâğıt dokusu: Açık.
+- [A] Çizgileri canlandır: Kapalı.
+- [N] Yenilenme aralığı: 3 kare (1–60).
+
+Şablonlar: Teknik çizim, klasik eskiz, yoğun tarama.
+
+Mevcut Karakalem efektine yeni bir gelişmiş tarama modu olarak da eklenebilir.
+
+29. Fotokopi
+
+- [K] Kontrast: %60 (%0–200).
+- [K] Parlaklık: %0 (−100 ile 100).
+- [K] Toner yoğunluğu: %70 (%0–100).
+- [K] Siyah eşiği: %45 (%0–100).
+- [K] Renk kaybı: %100 (%0–100).
+- [K] Baskı çözünürlüğü: %60 (%5–100).
+- [K] Kenar aşınması: %15 (%0–100).
+- [K] Toner taşması: 1 px (0–20).
+- [K] Gürültü: %25 (%0–100).
+- [R] Toner rengi: Siyah.
+- [R] Kâğıt rengi: Kırık beyaz.
+- [K] Kâğıt dokusu: %35 (%0–100).
+- [K] Leke yoğunluğu: %10 (%0–100).
+- [A] Baskı çizgileri: Açık.
+- [N] Kopya nesli: 1 (1–20).
+- [A] Saydamlığı koru: Açık.
+
+Kopya nesli arttıkça görüntünün baskı kalitesi kademeli olarak düşmelidir.
+
+Şablonlar: Temiz fotokopi, eski belge, bozuk yazıcı, yirminci kopya.
+
+30. Veri Bozulması
+
+Video sıkıştırma hatalarına benzeyen görsel sonuçlar üretir. Kaynak dosyaya zarar vermez.
+
+- [K] Bozulma miktarı: %40 (%0–100).
+- [K] Blok büyüklüğü: 16 px (2–256).
+- [K] Blok yoğunluğu: %35 (%0–100).
+- [K] Blok kayması: 30 px (0–500).
+- [K] Hareket yayılması: %65 (%0–200).
+- [K] Renk bozulması: %25 (%0–100).
+- [K] Çözünürlük: %70 (%5–100).
+- [K] Önceki kareyi taşıma: %60 (%0–100).
+- [N] Kare hafızası: 8 (1–120).
+- [N] Donmuş blok süresi: 4 kare (1–60).
+- [N] Yenilenme aralığı: 3 kare (1–60).
+- [A] Otomatik tetikleme: Açık.
+- [K] Elle tetikleme: %0 (%0–100).
+- [A] Hareket yönünü takip et: Açık.
+- [A] Sahne değişiminde hafızayı temizle: Açık.
+- [A] Ani parlaklık değişimlerini sınırla: Açık.
+- [N] Tohum: 1.
+
+Şablonlar: Dijital erime, donmuş görüntü, sıkıştırma hatası, hareketli bloklar.
+

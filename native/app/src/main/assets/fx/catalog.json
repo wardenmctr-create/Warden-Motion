@@ -8802,7 +8802,7 @@
 "info": "Kullanmak için katmanı Taşı ve Çevir ile canlandır (bulanıklık kendiliğinden uygulanır).",
 "heavy": true,
 "n": 110,
-"ready": false
+"ready": true
 },
 {
 "type": "streaks",
@@ -31058,6 +31058,99 @@
 "jog": 1,
 "src": "Anahtar",
 "def": 0
+},
+{
+"k": "rTonAdim",
+"l": "Kopya başına renk tonu kayması",
+"kind": "jog",
+"min": -180,
+"max": 180,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"anim": "yes",
+"g": "Kopya Değişimi",
+"def": 0
+},
+{
+"k": "rOpakAdim",
+"l": "Kopya başına opaklık değişimi",
+"kind": "jog",
+"min": -100,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Kopya Değişimi",
+"def": 0
+},
+{
+"k": "rRastKonum",
+"l": "Rastgele konum",
+"kind": "jog",
+"min": 0,
+"max": 500,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "Kopya Değişimi",
+"def": 0
+},
+{
+"k": "rRastAci",
+"l": "Rastgele açı",
+"kind": "jog",
+"min": 0,
+"max": 180,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"anim": "yes",
+"g": "Kopya Değişimi",
+"def": 0
+},
+{
+"k": "rRastOlcek",
+"l": "Rastgele ölçek",
+"kind": "jog",
+"min": 0,
+"max": 90,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Kopya Değişimi",
+"def": 0
+},
+{
+"k": "rTohum",
+"l": "Tohum",
+"kind": "jog",
+"min": 0,
+"max": 999999,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "yes",
+"g": "Kopya Değişimi",
+"int": true,
+"reseed": true,
+"def": 1
+},
+{
+"k": "rSiraTers",
+"l": "Çizim sırasını ters çevir",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Kopya Değişimi",
+"def": 0
 }
 ],
 "presets": [
@@ -31218,6 +31311,99 @@
 "jog": 1,
 "src": "Anahtar",
 "def": 1
+},
+{
+"k": "rTonAdim",
+"l": "Kopya başına renk tonu kayması",
+"kind": "jog",
+"min": -180,
+"max": 180,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"anim": "yes",
+"g": "Kopya Değişimi",
+"def": 0
+},
+{
+"k": "rOpakAdim",
+"l": "Kopya başına opaklık değişimi",
+"kind": "jog",
+"min": -100,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Kopya Değişimi",
+"def": 0
+},
+{
+"k": "rRastKonum",
+"l": "Rastgele konum",
+"kind": "jog",
+"min": 0,
+"max": 500,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "Kopya Değişimi",
+"def": 0
+},
+{
+"k": "rRastAci",
+"l": "Rastgele açı",
+"kind": "jog",
+"min": 0,
+"max": 180,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"anim": "yes",
+"g": "Kopya Değişimi",
+"def": 0
+},
+{
+"k": "rRastOlcek",
+"l": "Rastgele ölçek",
+"kind": "jog",
+"min": 0,
+"max": 90,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Kopya Değişimi",
+"def": 0
+},
+{
+"k": "rTohum",
+"l": "Tohum",
+"kind": "jog",
+"min": 0,
+"max": 999999,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "yes",
+"g": "Kopya Değişimi",
+"int": true,
+"reseed": true,
+"def": 1
+},
+{
+"k": "rSiraTers",
+"l": "Çizim sırasını ters çevir",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Kopya Değişimi",
+"def": 0
 }
 ],
 "presets": [
@@ -31392,6 +31578,99 @@
 "step": 1,
 "jog": 1,
 "src": "Anahtar",
+"def": 0
+},
+{
+"k": "rTonAdim",
+"l": "Kopya başına renk tonu kayması",
+"kind": "jog",
+"min": -180,
+"max": 180,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"anim": "yes",
+"g": "Kopya Değişimi",
+"def": 0
+},
+{
+"k": "rOpakAdim",
+"l": "Kopya başına opaklık değişimi",
+"kind": "jog",
+"min": -100,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Kopya Değişimi",
+"def": 0
+},
+{
+"k": "rRastKonum",
+"l": "Rastgele konum",
+"kind": "jog",
+"min": 0,
+"max": 500,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "Kopya Değişimi",
+"def": 0
+},
+{
+"k": "rRastAci",
+"l": "Rastgele açı",
+"kind": "jog",
+"min": 0,
+"max": 180,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"anim": "yes",
+"g": "Kopya Değişimi",
+"def": 0
+},
+{
+"k": "rRastOlcek",
+"l": "Rastgele ölçek",
+"kind": "jog",
+"min": 0,
+"max": 90,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Kopya Değişimi",
+"def": 0
+},
+{
+"k": "rTohum",
+"l": "Tohum",
+"kind": "jog",
+"min": 0,
+"max": 999999,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "yes",
+"g": "Kopya Değişimi",
+"int": true,
+"reseed": true,
+"def": 1
+},
+{
+"k": "rSiraTers",
+"l": "Çizim sırasını ters çevir",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Kopya Değişimi",
 "def": 0
 }
 ],
@@ -31570,6 +31849,99 @@
 "jog": 1,
 "src": "Anahtar",
 "def": 0
+},
+{
+"k": "rTonAdim",
+"l": "Kopya başına renk tonu kayması",
+"kind": "jog",
+"min": -180,
+"max": 180,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"anim": "yes",
+"g": "Kopya Değişimi",
+"def": 0
+},
+{
+"k": "rOpakAdim",
+"l": "Kopya başına opaklık değişimi",
+"kind": "jog",
+"min": -100,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Kopya Değişimi",
+"def": 0
+},
+{
+"k": "rRastKonum",
+"l": "Rastgele konum",
+"kind": "jog",
+"min": 0,
+"max": 500,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "Kopya Değişimi",
+"def": 0
+},
+{
+"k": "rRastAci",
+"l": "Rastgele açı",
+"kind": "jog",
+"min": 0,
+"max": 180,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"anim": "yes",
+"g": "Kopya Değişimi",
+"def": 0
+},
+{
+"k": "rRastOlcek",
+"l": "Rastgele ölçek",
+"kind": "jog",
+"min": 0,
+"max": 90,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Kopya Değişimi",
+"def": 0
+},
+{
+"k": "rTohum",
+"l": "Tohum",
+"kind": "jog",
+"min": 0,
+"max": 999999,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "yes",
+"g": "Kopya Değişimi",
+"int": true,
+"reseed": true,
+"def": 1
+},
+{
+"k": "rSiraTers",
+"l": "Çizim sırasını ters çevir",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Kopya Değişimi",
+"def": 0
 }
 ],
 "presets": [
@@ -31735,6 +32107,99 @@
 "step": 1,
 "jog": 1,
 "src": "Anahtar",
+"def": 0
+},
+{
+"k": "rTonAdim",
+"l": "Kopya başına renk tonu kayması",
+"kind": "jog",
+"min": -180,
+"max": 180,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"anim": "yes",
+"g": "Kopya Değişimi",
+"def": 0
+},
+{
+"k": "rOpakAdim",
+"l": "Kopya başına opaklık değişimi",
+"kind": "jog",
+"min": -100,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Kopya Değişimi",
+"def": 0
+},
+{
+"k": "rRastKonum",
+"l": "Rastgele konum",
+"kind": "jog",
+"min": 0,
+"max": 500,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "Kopya Değişimi",
+"def": 0
+},
+{
+"k": "rRastAci",
+"l": "Rastgele açı",
+"kind": "jog",
+"min": 0,
+"max": 180,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"anim": "yes",
+"g": "Kopya Değişimi",
+"def": 0
+},
+{
+"k": "rRastOlcek",
+"l": "Rastgele ölçek",
+"kind": "jog",
+"min": 0,
+"max": 90,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Kopya Değişimi",
+"def": 0
+},
+{
+"k": "rTohum",
+"l": "Tohum",
+"kind": "jog",
+"min": 0,
+"max": 999999,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "yes",
+"g": "Kopya Değişimi",
+"int": true,
+"reseed": true,
+"def": 1
+},
+{
+"k": "rSiraTers",
+"l": "Çizim sırasını ters çevir",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Kopya Değişimi",
 "def": 0
 }
 ],
@@ -31967,7 +32432,7 @@
 ],
 "n": 385,
 "inner": "Geniş Zaman",
-"ready": false
+"ready": true
 },
 {
 "type": "mirrorrepeat",
@@ -32064,6 +32529,99 @@
 "jog": 1,
 "src": "Anahtar",
 "def": 1
+},
+{
+"k": "rTonAdim",
+"l": "Kopya başına renk tonu kayması",
+"kind": "jog",
+"min": -180,
+"max": 180,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"anim": "yes",
+"g": "Kopya Değişimi",
+"def": 0
+},
+{
+"k": "rOpakAdim",
+"l": "Kopya başına opaklık değişimi",
+"kind": "jog",
+"min": -100,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Kopya Değişimi",
+"def": 0
+},
+{
+"k": "rRastKonum",
+"l": "Rastgele konum",
+"kind": "jog",
+"min": 0,
+"max": 500,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "Kopya Değişimi",
+"def": 0
+},
+{
+"k": "rRastAci",
+"l": "Rastgele açı",
+"kind": "jog",
+"min": 0,
+"max": 180,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"anim": "yes",
+"g": "Kopya Değişimi",
+"def": 0
+},
+{
+"k": "rRastOlcek",
+"l": "Rastgele ölçek",
+"kind": "jog",
+"min": 0,
+"max": 90,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Kopya Değişimi",
+"def": 0
+},
+{
+"k": "rTohum",
+"l": "Tohum",
+"kind": "jog",
+"min": 0,
+"max": 999999,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "yes",
+"g": "Kopya Değişimi",
+"int": true,
+"reseed": true,
+"def": 1
+},
+{
+"k": "rSiraTers",
+"l": "Çizim sırasını ters çevir",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Kopya Değişimi",
+"def": 0
 }
 ],
 "presets": [
@@ -37882,7 +38440,7 @@
 "info": null,
 "heavy": false,
 "n": 386,
-"ready": false
+"ready": true
 },
 {
 "type": "scanlines",
@@ -59775,7 +60333,7 @@
 "info": null,
 "heavy": true,
 "n": 387,
-"ready": false
+"ready": true
 },
 {
 "type": "timedisplace",
@@ -63502,7 +64060,7 @@
 "info": null,
 "heavy": false,
 "n": 389,
-"ready": false
+"ready": true
 },
 {
 "type": "fractalnoise",
@@ -82469,6 +83027,99 @@
 "jog": 1,
 "src": "Anahtar",
 "def": 1
+},
+{
+"k": "rTonAdim",
+"l": "Kopya başına renk tonu kayması",
+"kind": "jog",
+"min": -180,
+"max": 180,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"anim": "yes",
+"g": "Kopya Değişimi",
+"def": 0
+},
+{
+"k": "rOpakAdim",
+"l": "Kopya başına opaklık değişimi",
+"kind": "jog",
+"min": -100,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Kopya Değişimi",
+"def": 0
+},
+{
+"k": "rRastKonum",
+"l": "Rastgele konum",
+"kind": "jog",
+"min": 0,
+"max": 500,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "Kopya Değişimi",
+"def": 0
+},
+{
+"k": "rRastAci",
+"l": "Rastgele açı",
+"kind": "jog",
+"min": 0,
+"max": 180,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"anim": "yes",
+"g": "Kopya Değişimi",
+"def": 0
+},
+{
+"k": "rRastOlcek",
+"l": "Rastgele ölçek",
+"kind": "jog",
+"min": 0,
+"max": 90,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Kopya Değişimi",
+"def": 0
+},
+{
+"k": "rTohum",
+"l": "Tohum",
+"kind": "jog",
+"min": 0,
+"max": 999999,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "yes",
+"g": "Kopya Değişimi",
+"int": true,
+"reseed": true,
+"def": 1
+},
+{
+"k": "rSiraTers",
+"l": "Çizim sırasını ters çevir",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Kopya Değişimi",
+"def": 0
 }
 ],
 "presets": [
@@ -82673,6 +83324,99 @@
 "jog": 1,
 "src": "Anahtar",
 "def": 1
+},
+{
+"k": "rTonAdim",
+"l": "Kopya başına renk tonu kayması",
+"kind": "jog",
+"min": -180,
+"max": 180,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"anim": "yes",
+"g": "Kopya Değişimi",
+"def": 0
+},
+{
+"k": "rOpakAdim",
+"l": "Kopya başına opaklık değişimi",
+"kind": "jog",
+"min": -100,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Kopya Değişimi",
+"def": 0
+},
+{
+"k": "rRastKonum",
+"l": "Rastgele konum",
+"kind": "jog",
+"min": 0,
+"max": 500,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "Kopya Değişimi",
+"def": 0
+},
+{
+"k": "rRastAci",
+"l": "Rastgele açı",
+"kind": "jog",
+"min": 0,
+"max": 180,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"anim": "yes",
+"g": "Kopya Değişimi",
+"def": 0
+},
+{
+"k": "rRastOlcek",
+"l": "Rastgele ölçek",
+"kind": "jog",
+"min": 0,
+"max": 90,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Kopya Değişimi",
+"def": 0
+},
+{
+"k": "rTohum",
+"l": "Tohum",
+"kind": "jog",
+"min": 0,
+"max": 999999,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "yes",
+"g": "Kopya Değişimi",
+"int": true,
+"reseed": true,
+"def": 1
+},
+{
+"k": "rSiraTers",
+"l": "Çizim sırasını ters çevir",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Kopya Değişimi",
+"def": 0
 }
 ],
 "presets": [
@@ -84246,7 +84990,7 @@
 "info": null,
 "heavy": false,
 "n": 403,
-"ready": false
+"ready": true
 },
 {
 "type": "cbblink",
@@ -84433,7 +85177,7 @@
 "info": null,
 "heavy": false,
 "n": 404,
-"ready": false
+"ready": true
 },
 {
 "type": "cbbrow",
@@ -84614,7 +85358,7 @@
 "info": null,
 "heavy": false,
 "n": 405,
-"ready": false
+"ready": true
 },
 {
 "type": "cbtalk",
@@ -84817,7 +85561,7 @@
 "info": null,
 "heavy": false,
 "n": 406,
-"ready": false
+"ready": true
 },
 {
 "type": "cbhop",
@@ -87743,7 +88487,7 @@
 "info": null,
 "heavy": false,
 "n": 420,
-"ready": false
+"ready": true
 },
 {
 "type": "cbspeed",
@@ -88802,7 +89546,7 @@
 "info": null,
 "heavy": false,
 "n": 426,
-"ready": false
+"ready": true
 },
 {
 "type": "cbrig",
@@ -88840,7 +89584,7 @@
 "max": 0,
 "step": 1,
 "jog": 1,
-"multi": false,
+"multi": true,
 "hint": "Uygun katman/dosya/ses",
 "src": "Kaynak seçici",
 "def": ""
@@ -88854,7 +89598,7 @@
 "max": 0,
 "step": 1,
 "jog": 1,
-"multi": false,
+"multi": true,
 "hint": "Uygun katman/dosya/ses",
 "src": "Kaynak seçici",
 "def": ""
@@ -88992,7 +89736,7 @@
 "info": null,
 "heavy": false,
 "n": 427,
-"ready": false
+"ready": true
 },
 {
 "type": "cbsticker",
@@ -89482,7 +90226,7 @@
 "info": null,
 "heavy": false,
 "n": 429,
-"ready": false
+"ready": true
 },
 {
 "type": "cbcaption",

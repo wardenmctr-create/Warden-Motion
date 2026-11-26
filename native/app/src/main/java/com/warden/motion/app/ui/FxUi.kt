@@ -569,13 +569,17 @@ private fun ParamRow(s: EditorState, layer: Layer, e: Effect, pr: FxParam, line:
                 var open by remember { mutableStateOf(false) }
                 val id = e.c?.get(pr.key)
                 val others = s.project.layers.filter { it.id != layer.id && it.type != "audio" || (pr.label.contains("Ses") && it.type == "audio") }
+                val sel = id?.split(',')?.filter { it.isNotBlank() } ?: emptyList()
                 Box(Modifier.weight(1f)) {
                     Row(Modifier.fillMaxWidth().height(34.dp).clip(RoundedCornerShape(6.dp)).background(Color(0xFF34417A)).tap { open = true }.padding(horizontal = 10.dp), verticalAlignment = Alignment.CenterVertically) {
-                        Text(others.find { it.id == id }?.name ?: "Seçilmedi", fontSize = 12.5.sp, color = if (id == null) C.dText2 else C.dText, modifier = Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis); Ico("chevD", C.dText2, 16.dp)
+                        Text(if (pr.multi && sel.size > 1) "${sel.size} katman" else others.find { it.id == sel.firstOrNull() }?.name ?: "Seçilmedi", fontSize = 12.5.sp, color = if (id == null) C.dText2 else C.dText, modifier = Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis); Ico("chevD", C.dText2, 16.dp)
                     }
                     androidx.compose.material3.DropdownMenu(open, { open = false }, Modifier.background(C.dPanel)) {
                         androidx.compose.material3.DropdownMenuItem(text = { Text("Seçilmedi", color = C.dText2) }, onClick = { s.updateLayer(layer.id) { l -> l.copy(effects = l.effects.map { if (it.id == e.id) it.copy(c = (it.c ?: emptyMap()) - pr.key) else it }) }; open = false })
-                        others.forEach { o -> androidx.compose.material3.DropdownMenuItem(text = { Text(o.name, color = if (o.id == id) C.turq else C.dText) }, onClick = { setC(o.id); open = false }) }
+                        others.forEach { o -> val on = o.id in sel
+                            androidx.compose.material3.DropdownMenuItem(text = { Text((if (pr.multi) (if (on) "☑ " else "☐ ") else "") + o.name, color = if (on) C.turq else C.dText) }, onClick = {
+                                if (pr.multi) { val n = if (on) sel - o.id else sel + o.id; if (n.isEmpty()) s.updateLayer(layer.id) { l -> l.copy(effects = l.effects.map { if (it.id == e.id) it.copy(c = (it.c ?: emptyMap()) - pr.key) else it }) } else setC(n.joinToString(",")) }
+                                else { setC(o.id); open = false } }) }
                     }
                 }
             }

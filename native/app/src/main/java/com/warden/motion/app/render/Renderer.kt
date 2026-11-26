@@ -60,10 +60,12 @@ fun layerTransform(l: Layer, t0: Double): TR {
 
 /** Takip zinciri (ebeveyn) dahil gerçek dönüşüm */
 fun worldTransform(p: Project, l: Layer, t: Double, depth: Int = 0): TR {
-    val loc = layerTransform(l, t)
+    var loc = layerTransform(l, t)
+    l.effects.find { it.type == "cbtalk" && it.on != false }?.let { loc = talkFx(p, l, it, t, loc) }
     val par = if (l.parent != null && depth < 8) p.layers.find { it.id == l.parent } else null
-    if (par == null) return loc
-    val pw = worldTransform(p, par, t, depth + 1)
+    val pw = if (par != null) worldTransform(p, par, t, depth + 1) else null
+    loc = rigLocal(p, l, t, loc, pw)
+    if (pw == null) return loc
     val a = pw.rot * PI / 180
     return TR(
         pw.x + (loc.x * cos(a) - loc.y * sin(a)) * pw.scale,
@@ -80,6 +82,7 @@ fun parseCol(hex: String?, def: Int = 0xFF8F7CF0.toInt()): Int = runCatching { a
  */
 class Renderer(private val ctx: Context, maxSide: Int = 2048, private val sync: Boolean = false, cacheMb: Int = 64) {
     private val store = Store.get(ctx)
+    init { AudioLevels.resolver = { l -> l.src?.takeIf { it.startsWith("media:") }?.let { runCatching { AudioDecode.peaks(store.mediaFile(it.removePrefix("media:"))) }.getOrNull() } } }
     /** Önizlemedeki görsellerin en uzun kenarı (Lite ayarı 'img'); değişince görseller yeniden çözülür */
     var maxSide: Int = maxSide
         set(v) { if (v != field && !sync) { field = v; cache.evictAll(); failed.clear(); _version.value++ } else field = v }
