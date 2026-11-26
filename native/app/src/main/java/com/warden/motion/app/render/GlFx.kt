@@ -32,9 +32,9 @@ object GlFx {
 
     private val exec = Executors.newSingleThreadExecutor { r -> Thread(r, "GlFx").apply { priority = Thread.NORM_PRIORITY + 1 } }
     private var ctx: Context? = null
-    private var dpy: EGLDisplay = EGL14.EGL_NO_DISPLAY
-    private var eglCtx: EGLContext = EGL14.EGL_NO_CONTEXT
-    private var surf: EGLSurface = EGL14.EGL_NO_SURFACE
+    private var dpy: EGLDisplay? = null
+    private var eglCtx: EGLContext? = null
+    private var surf: EGLSurface? = null
     @Volatile var failed = false; private set
     private var common = ""
     private val progs = HashMap<String, Int>()
@@ -48,7 +48,7 @@ in vec2 a_pos; out vec2 v_uv; uniform mat3 u_m;
 void main(){ v_uv = a_pos; vec3 p = u_m * vec3(a_pos, 1.0); gl_Position = vec4(p.xy, 0.0, 1.0); }"""
 
     private fun setup(): Boolean {
-        if (eglCtx != EGL14.EGL_NO_CONTEXT) return true
+        if (eglCtx != null && eglCtx != EGL14.EGL_NO_CONTEXT) return true
         if (failed) return false
         try {
             dpy = EGL14.eglGetDisplay(EGL14.EGL_DEFAULT_DISPLAY)
@@ -58,7 +58,7 @@ void main(){ v_uv = a_pos; vec3 p = u_m * vec3(a_pos, 1.0); gl_Position = vec4(p
             val cfg = arrayOfNulls<EGLConfig>(1); val n = IntArray(1)
             check(EGL14.eglChooseConfig(dpy, attr, 0, cfg, 0, 1, n, 0) && n[0] > 0)
             eglCtx = EGL14.eglCreateContext(dpy, cfg[0], EGL14.EGL_NO_CONTEXT, intArrayOf(EGL14.EGL_CONTEXT_CLIENT_VERSION, 3, EGL14.EGL_NONE), 0)
-            check(eglCtx != EGL14.EGL_NO_CONTEXT)
+            check(eglCtx != null && eglCtx != EGL14.EGL_NO_CONTEXT)
             surf = EGL14.eglCreatePbufferSurface(dpy, cfg[0], intArrayOf(EGL14.EGL_WIDTH, 1, EGL14.EGL_HEIGHT, 1, EGL14.EGL_NONE), 0)
             check(EGL14.eglMakeCurrent(dpy, surf, surf, eglCtx))
             common = asset("fx/common.glsl") ?: error("common.glsl yok")

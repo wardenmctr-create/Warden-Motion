@@ -42,7 +42,7 @@ import kotlin.math.hypot
 import kotlin.math.max
 import kotlin.math.min
 
-const val APP_VERSION = "0.19.3"
+const val APP_VERSION = "0.20"
 private const val VER = "g0.3"
 
 // ---------------------------------------------------------------------------------------------
