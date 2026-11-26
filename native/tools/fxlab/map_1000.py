@@ -27,3 +27,17 @@ N10A([
  (845, "depthrim", "Renk ve Işık", "pixel", ["Derinlik", "Parlama"], {"k": "hale"}), (846, "lightocclusion", "Renk ve Işık", "pixel", ["Işık", "Gölge", "Maske"], None),
 ])
 HIDE10.update({"focusstack": ["otomatikHiza"], "tailribbon": ["kuyrukProf"]})
+N10A([
+ (847, "lineweight", "Çizim ve Kenar", "pixel", ["Çizgi", "Kalınlık"], None), (848, "linesmooth", "Çizim ve Kenar", "pixel", ["Kontur", "Düzeltme"], None),
+ (849, "colorbleed", "Çizim ve Kenar", "pixel", ["Çizgi", "Renk"], None), (850, "paperfold", "Çizim ve Kenar", "pixel", ["Kâğıt", "Kat"], None),
+ (851, "stencilprint", "Çizim ve Kenar", "pixel", ["Baskı", "Şablon"], None), (852, "woodcarve", "Çizim ve Kenar", "pixel", ["Ahşap", "Oyma"], None),
+ (853, "paperstitch", "Çizim ve Kenar", "pixel", ["Nakış", "Kâğıt"], None), (854, "cardboardcut", "Çizim ve Kenar", "pixel", ["Karton", "Kesit"], None),
+ (855, "coffeering", "Çizim ve Kenar", "pixel", ["Boya", "Kenar"], None), (856, "scratchreveal", "Maske ve Anahtar", "pixel", ["Kazıma", "Açma"], None),
+ (857, "paperfibers", "Çizim ve Kenar", "pixel", ["Kâğıt", "Lif"], {"k": "lifUzun"}), (858, "pencilpressure", "Çizim ve Kenar", "pixel", ["Kalem", "Basınç"], None),
+ (859, "glassetch", "Çizim ve Kenar", "pixel", ["Cam", "Oyma"], None), (860, "hammeredmetal", "Çizim ve Kenar", "pixel", ["Metal", "Doku"], None),
+ (861, "crackvarnish", "Çizim ve Kenar", "pixel", ["Çatlak", "Vernik"], None), (862, "heathertwine", "Çizim ve Kenar", "pixel", ["İplik", "Örgü"], None),
+ (863, "seamallowance", "Çizim ve Kenar", "pixel", ["Dikiş", "Kumaş"], None), (864, "flipstrips", "Geçiş", "pixel", ["Lentiküler", "Şerit"], None),
+ (865, "pixelclean", "Çizim ve Kenar", "pixel", ["Piksel sanatı", "Düzeltme"], None), (866, "subpixeldither", "Renk ve Işık", "pixel", ["Piksel sanatı", "Titreme"], None),
+ (867, "twotonelines", "Çizim ve Kenar", "pixel", ["Çizgi", "Işık"], None), (868, "wetblend", "Çizim ve Kenar", "pixel", ["Boya", "Karışım"], None),
+])
+HIDE10.update({"lineweight": ["kalinlikProf"], "pencilpressure": ["basinc"]})

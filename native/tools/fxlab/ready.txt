@@ -60,6 +60,7 @@ bumpcard
 burnfilm
 bwmix
 capsule
+cardboardcut
 carddance
 cardpuppet
 cardwipe
@@ -103,9 +104,11 @@ clahe
 clothphys
 clouds
 coderain
+coffeering
 coin3d
 colorama
 colorbal
+colorbleed
 colorbounce
 coloremboss
 colorize
@@ -136,6 +139,7 @@ contourstrips
 convexhull
 copybg
 cornerpin
+crackvarnish
 crescents
 cross3
 crossblur
@@ -229,6 +233,7 @@ flagwave
 flash
 flatfield
 flip3d
+flipstrips
 flomotion
 floorreflect
 floorshadow
@@ -268,6 +273,7 @@ gear3d
 geodesiccolor
 geoheat
 glass
+glassetch
 glasswipe
 glintstretch
 glitch
@@ -294,10 +300,12 @@ hair
 halation
 halftone
 halftonelines
+hammeredmetal
 hdrsdr
 heart3d
 heartrain
 heathaze
+heathertwine
 heatmapchart
 hexarray
 hexcells
@@ -362,7 +370,9 @@ lincolorkey
 linebridge
 linedensity
 linejunction
+linesmooth
 linesweep
+lineweight
 linocut
 linrepeat
 linstreaks
@@ -450,14 +460,18 @@ painttrail
 paletteextract
 palettemap
 panorama
+paperfibers
+paperfold
 paperhole
 paperrelief
+paperstitch
 papiermache
 parallaxstrips
 particles
 particleworld
 peel
 pencilhatch
+pencilpressure
 penrose
 perspfix
 perspgrid
@@ -466,6 +480,7 @@ photocopy
 photofilter
 pipe3d
 pixelate
+pixelclean
 pixelpolly
 pixelsort
 planet3d
@@ -538,7 +553,9 @@ scatterize
 scatterplot
 scatterpx
 scratchart
+scratchreveal
 scribble
+seamallowance
 sectionview
 selcolor
 selfavoid
@@ -594,6 +611,7 @@ starfield
 starfilter
 starpoly
 starprism
+stencilprint
 stipple
 strata
 streaks
@@ -604,6 +622,7 @@ stripes
 strobelight
 stroke
 subdivide
+subpixeldither
 subsurface
 sunsurface
 sweeppath
@@ -652,6 +671,7 @@ turingmaze
 twist3d
 twister
 twotargetzoom
+twotonelines
 underwater
 unsharp
 upscale
@@ -683,9 +703,11 @@ waveworld
 waxcrayon
 waxseal
 weldedges
+wetblend
 wetsurface
 wireframe3d
 wireremove
+woodcarve
 xray
 zoomblur
 zoomstreaks

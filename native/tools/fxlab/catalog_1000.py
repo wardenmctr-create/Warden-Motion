@@ -16,7 +16,9 @@ TRANS10 = set()
 PFIX10 = {}  # tür: ayar listesini düzelten işlev (birleşik kontrolleri ayırma, aralık düzeltme)
 def _J10(k, l, d, mn, mx, unit="", g=None, st=None): return dict(k=k, l=l, kind="jog", min=mn, max=mx, def_=d, step=st or (1 if unit in ("Hz", "ms") else 0.1), jog=st or (1 if unit in ("Hz", "ms") else 0.1), unit=unit, anim="yes", g=g)
 exec(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "map_1000.py")).read())
+_OLD10 = {e["type"] for e in E}  # 1000 rehberi öncesi türler: yeni bir tür eski bir efektin yerini alamaz (eski projeler bozulur)
 for n, (t, cat, kind, tags, pad) in sorted(N10.items()):
+    assert t not in _OLD10, f"tür adı çakışması: {n} {t}"
     if t not in READY4: continue
     s = _SP4[str(n)]
     if t in _BY: E.remove(_BY[t])
