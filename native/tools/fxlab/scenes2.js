@@ -41,3 +41,5 @@ window.probe = async function (type) {
 SC2.cutback = { subj: 'cb', w: 140, h: 140, v: (p) => ({ malzRenk: ['#C9A57A', '#F4F1EA', '#E30A17', '#2F7BF6'][Math.floor(p * 3.999)] }) };
 SC2.cardpuppet = { subj: 'cb', w: 140, h: 140, v: () => ({}), tr: (p) => ({ rot: Math.sin(p * Math.PI * 2) * 8 }) };
 SC2.texturize = { photo: 'istanbul', v: (p) => ({ dokuTuru: Math.floor(p * 5.999) * 2 % 13, dokuGucu: 85, kabartma: 6 }) };
+SC2.cube = { subj: 'photo', photo: 'kapadokya', w: 160, h: 160, bg: dark('#E3EEFC'), v: (p) => ({ yonelimXYX: 25, yonelimXYY: p * 360, malzeme: Math.floor(p * 2.999) }) };
+SC2.extrude = { subj: 'cb', w: 140, h: 140, v: (p) => ({ yonelimXYX: 15, yonelimXYY: Math.sin(p * Math.PI * 2) * 40, derinlik: 30 }) };

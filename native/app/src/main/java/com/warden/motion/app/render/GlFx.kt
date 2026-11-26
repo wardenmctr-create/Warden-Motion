@@ -83,7 +83,8 @@ void main(){ v_uv = a_pos; vec3 p = u_m * vec3(a_pos, 1.0); gl_Position = vec4(p
         progs[name]?.let { return it }
         if (name in bad) return 0
         val src = asset("fx/$name.glsl") ?: run { bad += name; return 0 }
-        val vs = shader(GLES30.GL_VERTEX_SHADER, VS); val full = Regex("^INCLUDE\\((\\w+)\\)\\s*$", RegexOption.MULTILINE).replace(src) { m -> asset("fx/${m.groupValues[1]}.glsl") ?: "" }
+        val vs = shader(GLES30.GL_VERTEX_SHADER, VS); var full = src; val inc = Regex("^INCLUDE\\((\\w+)\\)\\s*$", RegexOption.MULTILINE)
+        repeat(4) { if (inc.containsMatchIn(full)) full = inc.replace(full) { m -> asset("fx/${m.groupValues[1]}.glsl") ?: "" } }
         val fs = shader(GLES30.GL_FRAGMENT_SHADER, "#version 300 es\n$common\n${gradientExpand(full)}")
         if (vs == 0 || fs == 0) { bad += name; return 0 }
         val p = GLES30.glCreateProgram(); GLES30.glAttachShader(p, vs); GLES30.glAttachShader(p, fs)

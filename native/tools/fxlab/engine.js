@@ -32,7 +32,8 @@ class Engine {
   }
   async shaderSrc(name) {
     if (!this.src[name]) { let t = await (await fetch(FX + name + '.glsl')).text();
-      for (const m of [...t.matchAll(/^INCLUDE\((\w+)\)\s*$/mg)]) t = t.replace(m[0], await (await fetch(FX + m[1] + '.glsl')).text());
+      for (let guard = 0; guard < 4; guard++) { const ms = [...t.matchAll(/^INCLUDE\((\w+)\)\s*$/mg)]; if (!ms.length) break;
+        for (const m of ms) t = t.replace(m[0], await (await fetch(FX + m[1] + '.glsl')).text()); }
       this.src[name] = t; }
     return this.src[name]; }
   async prog(name) {

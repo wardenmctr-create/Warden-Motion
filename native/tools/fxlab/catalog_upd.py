@@ -203,3 +203,74 @@ ADD("linwipe", [CS("mod", "Silme modu", ["Tek taraftan", "Çift taraftan", "Merk
     TG("sinirBagla", "Başlangıç ve bitişi bağla", 0, G367), TG("kenarCizgi", "Kenar çizgisi", 0, G367), CL("kenarRenk", "Kenar çizgisi rengi", "#FFFFFF", G367, {"k": "kenarCizgi", "in": [1]}),
     PX("kenarKalin", "Kenar çizgisi kalınlığı", 2, 0, 100, G367, {"k": "kenarCizgi", "in": [1]}), TG("kenarParla", "Kenar parlaması", 0, G367),
     PX("parlaBuyu", "Parlama büyüklüğü", 10, 0, 300, G367, {"k": "kenarParla", "in": [1]})])
+
+# 225–248 Ortak 3B sistemi: dönüşüm, kamera, malzeme, ışık ve gölge (her 3B nesneye)
+GD, GK, GM, GL = "3B Dönüşüm", "Kamera", "Malzeme", "Işık ve Gölge"
+COMMON3D = [
+    _u(dict(k="olcekXYZ", l="Ölçek", kind="jog", three=True, min=1, max=1000, def_=100, defY=100, defZ=100, step=0.1, jog=0.1), "%", GD, link=True), TG("orantili", "Orantılı ölçek", 1, GD),
+    _u(dict(k="donusMerk", l="Dönüş merkezi", kind="jog", three=True, min=-5000, max=5000, def_=0, defY=0, defZ=0, step=0.1, jog=0.1), "px", GD),
+    CS("donusYontem", "Dönüş yöntemi", ["Eksen bazlı", "En kısa yönelim"], 0, GD), TG("otoDonus", "Otomatik dönüş", 0, GD),
+    PX("kameraUzak", "Kamera uzaklığı", 800, 10, 10000, GK), PC("perspGuc", "Perspektif gücü", 100, g=GK),
+    CS("malzeme", "Malzeme", ["Mat", "Metal", "Plastik", "Cam", "Kâğıt", "Karton", "Ahşap", "Özel"], 0, GM), CL("tabanRenk", "Taban rengi", "#FFFFFF", GM),
+    SRC("ozelDoku3", "Özel doku", GM, {"k": "malzeme", "in": [7]}), PC("dokuGucu3", "Doku gücü", 100, g=GM), XYP("dokuOlcek3", "Doku ölçeği", 100, 100, 1, 1000, "%", GM, link=True),
+    XYP("dokuKonum3", "Doku konumu", 0, 0, -4000, 4000, "px", GM), DG("dokuAci3", "Doku açısı", 0, -360, 360, GM), PC("metalik", "Metalik görünüm", 0, g=GM),
+    PC("kabartma3", "Kabartma", 0, g=GM), PC("opaklik3", "Opaklık", 100, g=GM),
+    CS("golgelendirme", "Gölgelendirme", ["Düz", "Noktasal", "Yönlü"], 1, GL), TG("golgeOlustur", "Gölge oluştur", 1, GL), PC("golgeOpak3", "Gölge opaklığı", 35, g=GL, vis={"k": "golgeOlustur", "in": [1]}),
+    PX("golgeYumu3", "Gölge yumuşaklığı", 12, 0, 100, GL, {"k": "golgeOlustur", "in": [1]}), CS("kalite3", "Geometri kalitesi", ["Otomatik", "Düşük", "Orta", "Yüksek", "Ultra"], 0, GL)]
+for _e in E:
+    if _e["kind"] == "3d" and any(p["k"] == "yonelimXY" for p in _e["params"]):
+        for p in _e["params"]:
+            if p["k"] == "konumXY": p["min"], p["max"] = -5000, 5000; p["g"] = GD; p["l"] = "Konum"
+            if p["k"] == "yonelimXY": p["min"], p["max"] = -3600, 3600; p["g"] = GD; p["l"] = "Dönüş"
+            if p["k"] == "surekliDonuX": p["g"] = GD; p["l"] = "Dönüş hızı (°/sn)"
+            if p["k"] in ("perspekt", "gorusAcis"): p["g"] = GK
+            if p["k"] == "perspekt": p["l"] = "Kamera"; p["opts"] = ["Perspektif", "Ortografik", "Proje kamerası"]; p["max"] = 2
+            if p["k"] in ("isikEtki", "isikKonu", "isikReng", "ortamIsig", "yonluIsikGucu", "parlakYans", "puruzlul", "arkaYuzlGost", "kenarYumu"): p["g"] = GL
+            if p["k"] == "yonluIsikGucu": p["l"] = "Işık gücü"
+            if p["k"] == "parlakYans": p["l"] = "Parlaklık"; p["g"] = GM
+            if p["k"] == "puruzlul": p["l"] = "Pürüzlülük"; p["g"] = GM
+        ADD(_e["type"], [dict(p) for p in COMMON3D])
+
+# 237 Kalınlık Ver
+G237 = "Kalınlık"
+ADD("extrude", [CS("kalinYon", "Kalınlaştırma yönü", ["İki tarafa", "Öne", "Arkaya"], 0, G237), PC("yanRenkGuc", "Yan yüz renklendirme gücü", 100, g=G237), TG("derinGecis", "Derinliğe bağlı renk geçişi", 0, G237),
+    CL("derinSonRenk", "Derinlik sonu rengi", "#000000", G237, {"k": "derinGecis", "in": [1]}), PC("gecisGuc", "Renk geçişi gücü", 100, g=G237, vis={"k": "derinGecis", "in": [1]}),
+    IN("pahSegment", "Pah segmenti", 4, 1, 32, "", G237), TG("inceKoru", "İnce ayrıntıları koru", 1, G237), PX("siluetYumu", "Siluet yumuşatma", 1, 0, 30, G237),
+    CS("alfaYorum", "Alfa yorumu", ["Sert", "Yumuşak", "Ağırlıklı", "Eşiğe göre"], 2, G237), PC("alfaEsik", "Alfa eşiği", 35, g=G237, vis={"k": "alfaYorum", "in": [3]}), TG("sekilGuncel", "Şekil değişiminde geometriyi güncelle", 1, G237)])
+
+# 401 Bayrak Dalgalanması
+GF = "Kumaş ve Rüzgâr"
+ADD("flagwave", [PC("sertlik", "Kumaş sertliği", 50, g=GF), PC("agirlik", "Kumaş ağırlığı", 20, g=GF), PX("sarkma", "Sarkma miktarı", 0, 0, 500, GF), TG("degisken", "Değişken rüzgâr", 0, GF),
+    PC("degisGuc", "Rüzgâr değişim gücü", 20, g=GF, vis={"k": "degisken", "in": [1]}), _u(J("degisSik", "Rüzgâr değişim sıklığı", 0, 10, 0.5, 0.01, 0.01), "Hz", GF, vis={"k": "degisken", "in": [1]}),
+    PC("ucTitre", "Uç bölgesi titreşimi", 15, g=GF), PC("kumasParlak", "Kumaş parlaklığı", 10, g=GF), PC("kumasDoku", "Kumaş doku gücü", 0, g=GF),
+    TG("arkaGoster", "Arka yüzü göster", 1, GF), CS("arkaYuz", "Arka yüz", ["Aynalanmış ön yüz", "Özel görsel", "Düz renk"], 0, GF, {"k": "arkaGoster", "in": [1]}),
+    LAY("arkaGorsel", "Özel arka yüz görseli", GF, {"k": "arkaYuz", "in": [1]}), CL("arkaRenk", "Arka yüz rengi", "#DDDDDD", GF, {"k": "arkaYuz", "in": [2]})],
+    [P("HR", "Hafif rüzgâr", {"dalgaYuks": 8, "dalgaBoyu": 150, "ruzgarHizi": 0.5}), P("GR", "Güçlü rüzgâr", {"dalgaYuks": 40, "dalgaBoyu": 75, "ruzgarHizi": 2, "ucTitre": 40}),
+     P("AK", "Ağır kumaş", {"dalgaYuks": 15, "agirlik": 70, "sarkma": 25, "ruzgarHizi": 0.7}), P("IK", "İnce kumaş", {"dalgaYuks": 25, "sertlik": 15, "ucTitre": 50, "ruzgarHizi": 1.8}),
+     P("CF", "Çizgi film", {"dalgaYuks": 20, "ikinciDalg": 0, "duzensiz": 0, "kumasParlak": 30}), P("KB", "Kâğıt bayrak", {"dalgaYuks": 10, "sertlik": 85, "kumasDoku": 40})])
+# 402 CB Yuvarlak Gölgelendirme
+GS = "Parlaklık ve İkinci Işık"
+ADD("cbshade", [PC("yuzeyParlak", "Yüzey parlaklığı", 0, g=GS), PC("noktaBuyu", "Parlak nokta büyüklüğü", 20, g=GS), PC("noktaGuc", "Parlak nokta gücü", 0, g=GS), TG("isik2", "İkinci ışık kaynağı", 0, GS),
+    _u(XY("isik2Konum", "İkinci ışık konumu", 75, 30, -100, 200, 0.1), "box%", GS, vis={"k": "isik2", "in": [1]}), CL("isik2Renk", "İkinci ışık rengi", "#53A8FF", GS, {"k": "isik2", "in": [1]}),
+    PC("isik2Guc", "İkinci ışık gücü", 20, g=GS, vis={"k": "isik2", "in": [1]}), TG("bayrakKoru", "Bayrak renklerini koru", 1, GS), TG("konturIsik", "Siyah konturu ışıklandır", 0, GS)],
+    [P("DC", "Düz çizgi film", {"isikGucu": 15, "golgeGucu": 20, "yumusakl": 20}), P("GK", "Gerçekçi küre", {"isikGucu": 35, "golgeGucu": 50, "noktaGuc": 60, "yuzeyParlak": 30}),
+     P("KR", "Karton", {"isikGucu": 15, "golgeGucu": 25, "kenarKara": 25, "yuzeyParlak": 0}), P("PO", "Plastik oyuncak", {"noktaGuc": 90, "noktaBuyu": 12, "yuzeyParlak": 60}),
+     P("YG", "Yumuşak gölge", {"golgeGucu": 30, "yumusakl": 95, "isikGucu": 10})])
+# 413 CB Bayrak Kaplama
+GB = "Yüzey Eşleme"
+ADD("cbskin", [CS("esleme", "Yüzey eşleme", ["Düz", "Küresel", "Eliptik"], 1, GB), DG("kureDonus", "Küresel dönüş", 0, -360, 360, GB), DG("dikeyDonus", "Dikey yüzey dönüşü", 0, -90, 90, GB),
+    TG("yuzeySabit", "Bayrağı yüzeyde sabitle", 1, GB), TG("sekilTakip", "Karakter şekil değişimini takip et", 1, GB), PC("yuzeyKabar", "Yüzey kabartması", 0, g=GB), TG("aksesuarKoru", "Gözlerin ve aksesuarların rengini koru", 1, GB)])
+# 416 CB Harita Vurgusu
+GH = "Dolgu ve Çizim"
+ADD("cbmaphl", [CS("dolguBicim", "Dolgu biçimi", ["Düz renk", "Geçiş", "Bayrak", "Tarama", "Nokta", "Doku"], 0, GH), CL("dolgu2", "Geçiş ikinci rengi", "#22D3C5", GH, {"k": "dolguBicim", "in": [1]}),
+    LAY("dolguGorsel", "Bayrak veya doku görseli", GH, {"k": "dolguBicim", "in": [2, 5]}), DG("taramaAci", "Tarama açısı", 45, -360, 360, GH, {"k": "dolguBicim", "in": [3]}),
+    PX("taramaAral", "Tarama aralığı", 8, 1, 200, GH, {"k": "dolguBicim", "in": [3, 4]}), PX("taramaKalin", "Tarama kalınlığı", 3, 0, 100, GH, {"k": "dolguBicim", "in": [3, 4]}),
+    TG("sinirKirp", "Bölge sınırına kırp", 1, GH), TG("sinirCiz", "Sınırı çizerek göster", 0, GH), PC("cizimIler", "Sınır çizim ilerlemesi", 100, g=GH, vis={"k": "sinirCiz", "in": [1]}),
+    PC("dolguIler", "Dolgu belirme ilerlemesi", 100, g=GH), TG("konturSabit", "Kontur kalınlığını kamera yakınlaşmasından bağımsız tut", 1, GH)])
+# 428 CB Çıkartma Konturu (eski kimlik "cbsticker" korunur)
+_BY["cbsticker"]["name"] = "CB Çıkartma Konturu"
+GC = "Altlık ve Malzeme"
+ADD("cbsticker", [CS("altlikBicim", "Altlık biçimi", ["Düz kontur", "Çift kontur", "Kesilmiş altlık"], 1, GC), CS("alfaYorum", "Alfa yorumu", ["Sert", "Yumuşak", "Ağırlıklı", "Eşiğe göre"], 2, GC),
+    PC("alfaEsik", "Alfa eşiği", 35, g=GC, vis={"k": "alfaYorum", "in": [3]}), XYP("disKayma", "Dış kontur kayması", 0, 0, -1000, 1000, "px", GC), TG("malzDoku", "Malzeme dokusu", 0, GC),
+    CS("malz", "Malzeme", ["Kâğıt", "Karton", "Mukavva", "Plastik", "Özel"], 0, GC, {"k": "malzDoku", "in": [1]}), LAY("malzOzel", "Özel malzeme", GC, {"k": "malz", "in": [4]}),
+    PC("dokuGucuS", "Doku gücü", 30, g=GC, vis={"k": "malzDoku", "in": [1]})])
