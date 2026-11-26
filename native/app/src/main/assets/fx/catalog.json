@@ -90460,7 +90460,7 @@
 "l": "Kalınlık",
 "kind": "jog",
 "min": 0,
-"max": 100,
+"max": 500,
 "step": 0.1,
 "jog": 0.1,
 "unit": "px",
@@ -90575,8 +90575,8 @@
 "k": "ofsX",
 "l": "Ofset X",
 "kind": "jog",
-"min": -100,
-"max": 100,
+"min": -1000,
+"max": 1000,
 "step": 0.1,
 "jog": 0.1,
 "unit": "px",
@@ -90588,8 +90588,8 @@
 "k": "ofsY",
 "l": "Ofset Y",
 "kind": "jog",
-"min": -100,
-"max": 100,
+"min": -1000,
+"max": 1000,
 "step": 0.1,
 "jog": 0.1,
 "unit": "px",
@@ -90766,8 +90766,8 @@
 "k": "dokuOlcek",
 "l": "Doku ölçeği",
 "kind": "jog",
-"min": 10,
-"max": 500,
+"min": 1,
+"max": 1000,
 "step": 0.1,
 "jog": 0.1,
 "unit": "%",
@@ -90847,7 +90847,7 @@
 "l": "Yüzey yükseltisi",
 "kind": "jog",
 "min": 0,
-"max": 50,
+"max": 100,
 "step": 0.1,
 "jog": 0.1,
 "unit": "px",
@@ -90912,7 +90912,7 @@
 "l": "Malzeme kalınlığı",
 "kind": "jog",
 "min": 0,
-"max": 50,
+"max": 100,
 "step": 0.1,
 "jog": 0.1,
 "unit": "px",
@@ -91306,7 +91306,7 @@
 "l": "Gölge uzaklığı",
 "kind": "jog",
 "min": 0,
-"max": 50,
+"max": 200,
 "step": 0.1,
 "jog": 0.1,
 "unit": "px",
@@ -91319,7 +91319,7 @@
 "l": "Gölge yumuşaklığı",
 "kind": "jog",
 "min": 0,
-"max": 50,
+"max": 200,
 "step": 0.1,
 "jog": 0.1,
 "unit": "px",
@@ -91352,6 +91352,19 @@
 "anim": "yes",
 "g": "İçerik Gölgesi (nesneden altlığa)",
 "def": "#3A302A"
+},
+{
+"k": "golgeTasma",
+"l": "Altlığın dışına gölge taşmasını engelle",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "İçerik Gölgesi (nesneden altlığa)",
+"def": 1
 },
 {
 "k": "agAcik",
@@ -91479,7 +91492,7 @@
 "l": "Yenilenme aralığı",
 "kind": "jog",
 "min": 1,
-"max": 24,
+"max": 120,
 "step": 1,
 "jog": 1,
 "unit": " kare",
@@ -91556,16 +91569,17 @@
 },
 {
 "k": "kenarTohum",
-"l": "Kenar tohumu",
+"l": "Rastgelelik tohumu",
 "kind": "jog",
 "min": 0,
-"max": 9999,
+"max": 999999,
 "step": 1,
 "jog": 1,
 "unit": "",
 "anim": "yes",
 "g": "Dinamik Takip",
 "int": true,
+"reseed": true,
 "def": 1
 },
 {
@@ -91582,7 +91596,81 @@
 "def": 1
 }
 ],
-"presets": [],
+"presets": [
+{
+"code": "KR",
+"name": "Karton",
+"vals": {
+"dolguTuru": 4
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "BK",
+"name": "Beyaz kâğıt",
+"vals": {
+"dolguTuru": 2
+},
+"keys": {},
+"cols": {
+"malzRenk": "#FFFFFF"
+},
+"at": "start"
+},
+{
+"code": "KF",
+"name": "Kraft kâğıt",
+"vals": {
+"dolguTuru": 7
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "YK",
+"name": "Yırtılmış kâğıt",
+"vals": {
+"dolguTuru": 9,
+"kenarStili": 4
+},
+"keys": {},
+"cols": {
+"malzRenk": "#F4EFE4"
+},
+"at": "start"
+},
+{
+"code": "KC",
+"name": "Keçe",
+"vals": {
+"dolguTuru": 11,
+"kenarStili": 1
+},
+"keys": {},
+"cols": {
+"malzRenk": "#B85C5C"
+},
+"at": "start"
+},
+{
+"code": "CK",
+"name": "Çıkartma",
+"vals": {
+"dolguTuru": 16,
+"kenarStili": 1,
+"kusursuz": 100,
+"kalinlik": 12
+},
+"keys": {},
+"cols": {
+"malzRenk": "#FFFFFF"
+},
+"at": "start"
+}
+],
 "pad": {
 "sum": [
 "kalinlik",
@@ -91631,7 +91719,7 @@
 "l": "Doku türü",
 "kind": "choice",
 "min": 0,
-"max": 6,
+"max": 7,
 "step": 1,
 "jog": 1,
 "opts": [
@@ -91641,7 +91729,8 @@
 "Mukavva",
 "Buruşturulmuş Kağıt",
 "Kağıt",
-"Özel Doku"
+"Özel Doku",
+"Keçe"
 ],
 "unit": "",
 "anim": "step",
@@ -91665,8 +91754,8 @@
 "k": "dokuOlcek",
 "l": "Doku ölçeği",
 "kind": "jog",
-"min": 25,
-"max": 400,
+"min": 1,
+"max": 1000,
 "step": 0.1,
 "jog": 0.1,
 "unit": "%",
@@ -91728,7 +91817,7 @@
 },
 {
 "k": "kabarti",
-"l": "Kabartı gücü",
+"l": "Doku kabartması",
 "kind": "jog",
 "min": 0,
 "max": 50,
@@ -91737,7 +91826,7 @@
 "unit": "px",
 "anim": "yes",
 "g": "Ana Doku",
-"def": 6
+"def": 3
 },
 {
 "k": "lif",
@@ -91754,7 +91843,7 @@
 },
 {
 "k": "renkleBirles",
-"l": "Renkle birleştir",
+"l": "Orijinal renkleri koru",
 "kind": "toggle",
 "min": 0,
 "max": 1,
@@ -91802,7 +91891,7 @@
 "l": "Altlık kalınlığı",
 "kind": "jog",
 "min": 0,
-"max": 100,
+"max": 500,
 "step": 0.1,
 "jog": 0.1,
 "unit": "px",
@@ -91814,8 +91903,8 @@
 "k": "ofsX",
 "l": "Altlık ofset X",
 "kind": "jog",
-"min": -100,
-"max": 100,
+"min": -1000,
+"max": 1000,
 "step": 0.1,
 "jog": 0.1,
 "unit": "px",
@@ -91827,8 +91916,8 @@
 "k": "ofsY",
 "l": "Altlık ofset Y",
 "kind": "jog",
-"min": -100,
-"max": 100,
+"min": -1000,
+"max": 1000,
 "step": 0.1,
 "jog": 0.1,
 "unit": "px",
@@ -91841,7 +91930,7 @@
 "l": "Altlık doku türü",
 "kind": "choice",
 "min": 0,
-"max": 6,
+"max": 7,
 "step": 1,
 "jog": 1,
 "opts": [
@@ -91851,7 +91940,8 @@
 "Mukavva",
 "Buruşturulmuş Kağıt",
 "Düz Renk",
-"Özel Doku"
+"Özel Doku",
+"Keçe"
 ],
 "unit": "",
 "anim": "step",
@@ -92024,7 +92114,7 @@
 "l": "Yenilenme aralığı",
 "kind": "jog",
 "min": 1,
-"max": 24,
+"max": 120,
 "step": 1,
 "jog": 1,
 "unit": " kare",
@@ -92074,16 +92164,17 @@
 },
 {
 "k": "kenarTohum",
-"l": "Kenar tohumu",
+"l": "Rastgelelik tohumu",
 "kind": "jog",
 "min": 0,
-"max": 9999,
+"max": 999999,
 "step": 1,
 "jog": 1,
 "unit": "",
 "anim": "yes",
 "g": "Kenar Canlılığı",
 "int": true,
+"reseed": true,
 "def": 1
 },
 {
@@ -92130,7 +92221,7 @@
 "l": "Gölge uzaklığı",
 "kind": "jog",
 "min": 0,
-"max": 50,
+"max": 100,
 "step": 0.1,
 "jog": 0.1,
 "unit": "px",
@@ -92143,7 +92234,7 @@
 "l": "Gölge yumuşaklığı",
 "kind": "jog",
 "min": 0,
-"max": 50,
+"max": 100,
 "step": 0.1,
 "jog": 0.1,
 "unit": "px",
@@ -92272,8 +92363,8 @@
 "k": "kuklaFps",
 "l": "Kukla kare hızı",
 "kind": "jog",
-"min": 4,
-"max": 24,
+"min": 1,
+"max": 60,
 "step": 1,
 "jog": 1,
 "unit": " FPS",
@@ -92307,29 +92398,48 @@
 "anim": "yes",
 "g": "Kukla Animasyon",
 "def": 8
+},
+{
+"k": "esneklik",
+"l": "Esneklik (hareketle ezilip esneme)",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Kukla Animasyon",
+"def": 0
 }
 ],
 "presets": [
 {
 "code": "CB",
-"name": "CB Karton",
-"vals": {},
+"name": "Countryballs karton kukla",
+"vals": {
+"dokuTuru": 0,
+"dokuGucu": 42,
+"kalinlik": 16,
+"ofsX": -6,
+"ofsY": 7,
+"kenarStili": 3,
+"kusursuz": 78
+},
 "keys": {},
 "cols": {},
 "at": "start"
 },
 {
 "code": "OP",
-"name": "Okul Projesi",
+"name": "Okul projesi",
 "vals": {
 "dokuTuru": 5,
 "dokuGucu": 30,
-"altlikDoku": 5,
-"kalinlik": 10,
+"kalinlik": 22,
 "kenarStili": 5,
-"kusursuz": 60,
-"stopMotion": 1,
-"kuklaFps": 10
+"kusursuz": 55,
+"altlikDoku": 5
 },
 "keys": {},
 "cols": {
@@ -92338,65 +92448,60 @@
 "at": "start"
 },
 {
-"code": "KC",
-"name": "Komik Çıkartma",
+"code": "KK",
+"name": "Kâğıt kukla",
 "vals": {
-"dokuGucu": 15,
-"altlikDoku": 5,
-"kalinlik": 14,
-"ofsX": 0,
-"ofsY": 4,
-"kenarStili": 1,
-"kusursuz": 95,
-"kenarDavr": 0
+"dokuTuru": 5,
+"dokuGucu": 35,
+"kalinlik": 10,
+"kenarStili": 3,
+"altlikDoku": 5
 },
 "keys": {},
 "cols": {
-"altlikRenk": "#FFFFFF"
+"altlikRenk": "#F4EFE4"
+},
+"at": "start"
+},
+{
+"code": "MK",
+"name": "Mukavva kukla",
+"vals": {
+"dokuTuru": 3,
+"dokuGucu": 50,
+"kalinlik": 20,
+"altlikDoku": 3,
+"kusursuz": 85
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "KE",
+"name": "Keçe kukla",
+"vals": {
+"dokuTuru": 7,
+"dokuGucu": 60,
+"kalinlik": 14,
+"altlikDoku": 7,
+"kenarStili": 1
+},
+"keys": {},
+"cols": {
+"altlikRenk": "#B85C5C"
 },
 "at": "start"
 },
 {
 "code": "SM",
-"name": "Sert Mukavva",
+"name": "Stop-motion",
 "vals": {
-"dokuTuru": 3,
-"dokuGucu": 60,
-"altlikDoku": 3,
-"kalinlik": 20,
-"kabarti": 10,
-"kenarStili": 2,
-"kusursuz": 70
-},
-"keys": {},
-"cols": {},
-"at": "start"
-},
-{
-"code": "YK",
-"name": "Yumuşak Kağıt",
-"vals": {
-"dokuTuru": 4,
-"dokuGucu": 35,
-"altlikDoku": 4,
-"kalinlik": 12,
-"kenarStili": 1,
-"koseYumu": 60
-},
-"keys": {},
-"cols": {},
-"at": "start"
-},
-{
-"code": "EK",
-"name": "El Kesimi",
-"vals": {
-"kenarStili": 5,
-"kusursuz": 55,
-"kenarKarars": 25,
-"kenarDegis": 30,
 "stopMotion": 1,
-"kuklaFps": 8
+"kuklaFps": 12,
+"mikroSallan": 15,
+"eklemSert": 40,
+"esneklik": 10
 },
 "keys": {},
 "cols": {},

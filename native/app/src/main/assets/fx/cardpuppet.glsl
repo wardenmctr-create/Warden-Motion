@@ -28,7 +28,7 @@ vec4 backShadowAt(vec2 bp, float R) { if (p_agAcik < 0.5) return vec4(0.0); floa
 void main() {
   vec4 s = texture(u_tex, v_uv); vec2 q = toUnit(here());
   // üst doku
-  const int TOP[7] = int[7](3, 4, 6, 5, 7, 1, 17); int id = TOP[int(clamp(p_dokuTuru, 0.0, 6.0))];
+  const int TOP[8] = int[8](3, 4, 6, 5, 7, 1, 17, 10); int id = TOP[int(clamp(p_dokuTuru, 0.0, 7.0))];
   vec2 tp = rot2(-p_dokuAci) * q / max(p_dokuOlcek / 100.0, 0.05); vec4 sp = vec4(0.3, 0.6, 0.0, 0.0); float fib = p_lif / 100.0;
   vec4 obj = s;
   if (s.a > 0.0) {
@@ -42,7 +42,7 @@ void main() {
   }
   if (p_altlikAcik < 0.5) { o = obj; return; }
   vec2 ofs = vec2(p_ofsX, p_ofsY); vec2 bp = here() - ofs * u_s; float m = backMask(bp, p_kalinlik * u_s); vec4 bsh = backShadowAt(bp, p_kalinlik * u_s); if (m <= 0.001) { o = overPre(obj, bsh); return; }
-  const int BK[7] = int[7](3, 4, 6, 5, 7, 0, 17); int bid = BK[int(clamp(p_altlikDoku, 0.0, 6.0))]; vec2 bq = toUnit(bp) / max(p_dokuOlcek / 100.0, 0.05);
+  const int BK[8] = int[8](3, 4, 6, 5, 7, 0, 17, 10); int bid = BK[int(clamp(p_altlikDoku, 0.0, 7.0))]; vec2 bq = toUnit(bp) / max(p_dokuOlcek / 100.0, 0.05);
   vec3 bc; float bl = 1.0;
   if (bid == 0) bc = c_altlikRenk; else if (bid == 17) { vec4 t = p_altlikOzelOn > 0.5 ? texture(s_altlikOzel, fract(bq / 200.0)) : vec4(0.8); bc = unpre(t); }
   else { vec3 nat = matSample(bid, bq, 5.0, sp, fib, 0.0).rgb; bc = mix(c_altlikRenk, c_altlikRenk * (nat / max(matBase(bid), vec3(0.05))), p_altlikDokuGuc / 100.0); bl = matLight(bid, bq, 5.0, sp, fib, 0.0, p_altlikKabarti * 0.8, 135.0); }

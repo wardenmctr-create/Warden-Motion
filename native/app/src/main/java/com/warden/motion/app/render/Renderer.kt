@@ -55,6 +55,11 @@ fun layerTransform(l: Layer, t0: Double): TR {
     var tr = TR(l.x.at(t), l.y.at(t), l.rotation.at(t), l.scale.at(t), l.opacity.at(t))
     if (cp != null) { val tick = kotlin.math.floor((t0 - l.start) * cp.value("kuklaFps", t0)); val m = cp.value("mikroSallan", t0) / 100
         tr = tr.copy(x = tr.x + (noise1(tick, 1.0) * 3 * m), y = tr.y + noise1(tick, 2.0) * 3 * m, rot = tr.rot + noise1(tick, 3.0) * 2.5 * m) }
+    // Karton Kukla esnekliği: hızlı harekette hareket yönünde hafif esneme, yavaşlayınca geri toplanma
+    l.effects.find { it.type == "cardpuppet" && it.on != false && it.value("esneklik", t0) > 0 }?.let { e ->
+        val dt = 1.0 / 30; val vx = (l.x.at(t) - l.x.at(t - dt)) / dt; val vy = (l.y.at(t) - l.y.at(t - dt)) / dt
+        val k = (kotlin.math.hypot(vx, vy) / 1500 * e.value("esneklik", t0) / 100).coerceAtMost(0.35)
+        if (k > 1e-4) { val horiz = kotlin.math.abs(vx) >= kotlin.math.abs(vy); tr = if (horiz) tr.copy(sx = tr.sx * (1 + k), sy = tr.sy / (1 + k)) else tr.copy(sx = tr.sx / (1 + k), sy = tr.sy * (1 + k)) } }
     return if (l.effects.isEmpty()) tr else applyMotionFx(l, t, tr)
 }
 

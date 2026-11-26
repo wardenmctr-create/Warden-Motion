@@ -336,3 +336,29 @@ for _t, _ks in (("cbrig", ("gozGrub", "aksesuarGrub")),):
 # Telefon motorunda çalışan (shader dışı) efektler
 for _t in ("cbeyes", "cbblink", "cbbrow", "cbtalk", "cbexpr", "cbrig", "cbmaplock", "echo", "pixelmb", "motionblur", "speed", "posterizetime", "cbhold"):
     _BY[_t]["ready"] = True
+
+# ---- Bölüm B: Kesim Altlığı ve Karton Kukla aralıkları/ayarları ----
+for _t in ("cutback", "cardpuppet"):
+    RANGE(_t, "kalinlik", 0, 500); RANGE(_t, "ofsX", -1000, 1000); RANGE(_t, "ofsY", -1000, 1000); RANGE(_t, "yenilenme", 1, 120); RANGE(_t, "kenarTohum", 0, 999999); RANGE(_t, "dokuOlcek", 1, 1000)
+    for _p in _BY[_t]["params"]:
+        if _p["k"] == "kenarTohum": _p.update(int=True, reseed=True, l="Rastgelelik tohumu")
+RANGE("cutback", "golgeUzak", 0, 200); RANGE("cutback", "golgeYumu", 0, 200); RANGE("cutback", "yuzeyYuks", 0, 100); RANGE("cutback", "malzKalin", 0, 100)
+RANGE("cardpuppet", "golgeUzak", 0, 100); RANGE("cardpuppet", "golgeYumu", 0, 100); RANGE("cardpuppet", "kuklaFps", 1, 60); RANGE("cardpuppet", "kabarti", 0, 50)
+_e = _BY["cutback"]; _i = next(i for i, p in enumerate(_e["params"]) if p["k"] == "golgeRenk") + 1
+_e["params"].insert(_i, TG("golgeTasma", "Altlığın dışına gölge taşmasını engelle", 1, "İçerik Gölgesi (nesneden altlığa)"))
+OPTS("cardpuppet", "dokuTuru", ["Keçe"]); OPTS("cardpuppet", "altlikDoku", ["Keçe"])
+for _p in _BY["cardpuppet"]["params"]:
+    if _p["k"] == "kabarti": _p.update(l="Doku kabartması", def_=3)
+    if _p["k"] == "renkleBirles": _p["l"] = "Orijinal renkleri koru"
+_e = _BY["cardpuppet"]; _i = next(i for i, p in enumerate(_e["params"]) if p["k"] == "mikroSallan") + 1
+_e["params"].insert(_i, PC("esneklik", "Esneklik (hareketle ezilip esneme)", 0, g="Kukla Animasyon"))
+CP = lambda c, n, v: P(c, n, v)
+_e["presets"] = [P("CB", "Countryballs karton kukla", {"dokuTuru": 0, "dokuGucu": 42, "kalinlik": 16, "ofsX": -6, "ofsY": 7, "kenarStili": 3, "kusursuz": 78}),
+    P("OP", "Okul projesi", {"dokuTuru": 5, "dokuGucu": 30, "kalinlik": 22, "kenarStili": 5, "kusursuz": 55, "altlikDoku": 5}, cols={"altlikRenk": "#FFFFFF"}),
+    P("KK", "Kâğıt kukla", {"dokuTuru": 5, "dokuGucu": 35, "kalinlik": 10, "kenarStili": 3, "altlikDoku": 5}, cols={"altlikRenk": "#F4EFE4"}),
+    P("MK", "Mukavva kukla", {"dokuTuru": 3, "dokuGucu": 50, "kalinlik": 20, "altlikDoku": 3, "kusursuz": 85}),
+    P("KE", "Keçe kukla", {"dokuTuru": 7, "dokuGucu": 60, "kalinlik": 14, "altlikDoku": 7, "kenarStili": 1}, cols={"altlikRenk": "#B85C5C"}),
+    P("SM", "Stop-motion", {"stopMotion": 1, "kuklaFps": 12, "mikroSallan": 15, "eklemSert": 40, "esneklik": 10})]
+_BY["cutback"]["presets"] = [P("KR", "Karton", {"dolguTuru": 4}), P("BK", "Beyaz kâğıt", {"dolguTuru": 2}, cols={"malzRenk": "#FFFFFF"}),
+    P("KF", "Kraft kâğıt", {"dolguTuru": 7}), P("YK", "Yırtılmış kâğıt", {"dolguTuru": 9, "kenarStili": 4}, cols={"malzRenk": "#F4EFE4"}),
+    P("KC", "Keçe", {"dolguTuru": 11, "kenarStili": 1}, cols={"malzRenk": "#B85C5C"}), P("CK", "Çıkartma", {"dolguTuru": 16, "kenarStili": 1, "kusursuz": 100, "kalinlik": 12}, cols={"malzRenk": "#FFFFFF"})]
