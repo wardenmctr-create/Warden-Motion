@@ -27,6 +27,15 @@ function layerCanvas(L, pad, s) {
   return { c, box: [pad * s, pad * s, L.w * s, L.h * s] };
 }
 // Bir kare: sahne → piksel verisi
+const HIST_T = { // History.kt ile aynı sıra (lab için 1/12 sn kare)
+  feedbackloop: (v, t) => [...Array(10).keys()].map((k) => t - k / 12), frameshuffle: (v, t) => [t - Math.floor(Math.random() * 6) / 12],
+  temporalmedian: (v, t) => [...Array(7).keys()].map((k) => t + (k - 3) / 12), temporaldenoise: (v, t) => [...Array(5).keys()].map((k) => t + (k - 2) / 12),
+  brightaccum: (v, t) => [...Array(10).keys()].map((k) => t - k / 12 * 3), darkaccum: (v, t) => [...Array(10).keys()].map((k) => t - k / 12 * 3),
+  timemosaic: (v, t) => [...Array(9).keys()].map((k) => t - k * 0.2), timemap: (v, t) => [...Array(9).keys()].map((k) => t + (k - 4) / 4),
+  motioncomposite: (v, t, d) => [...Array(8).keys()].map((k) => d * k / 7), temporalfreq: (v, t) => [...Array(10).keys()].map((k) => t - k * 0.1),
+  colortrail: (v, t) => [...Array(10).keys()].map((k) => t - k * 0.1), movingmatte: (v, t) => [t, ...[...Array(8).keys()].map((k) => t - (k + 1) * 0.15)],
+  motiondirmatte: (v, t) => [t, t - 1 / 12, t + 1 / 12], motionmagnify: (v, t) => [t, t - 1 / 12, t + 1 / 12], cinemagraph: (v, t) => [0],
+};
 async function frame(scene, p) {
   const gl = E.gl, S = scene.size, s = 480 / S, t = p * scene.dur; window.PHASE = p;
   gl.bindFramebuffer(gl.FRAMEBUFFER, null); gl.viewport(0, 0, 480, 480);
@@ -42,9 +51,17 @@ async function frame(scene, p) {
     const lc = layerCanvas(L, pad, s);
     const base = E.upload(lc.c);
     const extra = {}; if (L.depth) extra.u_depth = E.upload(layerCanvas({ ...L, draw: L.depth }, pad, s).c);
+    // Zamansal efektler: katmanın başka anlardaki görüntüsünden kare şeridi (motordaki History.kt ile aynı sıra, yaklaşık)
+    const hfx = fx.find((e) => HIST_T[e.type]);
+    if (hfx) { const ts = HIST_T[hfx.type](hfx.v, t, scene.dur); const n = ts.length; const one = layerCanvas(L, pad, s).c; const st = document.createElement('canvas'); st.width = one.width * n; st.height = one.height; const sg = st.getContext('2d');
+      const tr0 = L.tr ? L.tr(p, t) : {}; const keep = window.PHASE;
+      ts.forEach((tt, i) => { const pp = ((tt / scene.dur) % 1 + 1) % 1; window.PHASE = pp; const fr = layerCanvas(L, pad, s).c; const tr1 = L.tr ? L.tr(pp, pp * scene.dur) : {};
+        sg.save(); sg.beginPath(); sg.rect(i * one.width, 0, one.width, one.height); sg.clip(); sg.translate(i * one.width + one.width / 2 + ((tr1.x ?? 0) - (tr0.x ?? 0)) * s, one.height / 2 + ((tr1.y ?? 0) - (tr0.y ?? 0)) * s);
+        sg.rotate(((tr1.rot ?? 0) - (tr0.rot ?? 0)) * Math.PI / 180); sg.drawImage(fr, -one.width / 2, -one.height / 2); sg.restore(); });
+      window.PHASE = keep; extra.s_hist = E.upload(st); }
     window.CUR_ROT = L.tr ? (L.tr(p, t).rot || 0) : 0;
     const out = await applyEffects(E, base, lc.box, s, fx, t, scene.dur, extra);
-    if (extra.u_depth) E.free(extra.u_depth);
+    if (extra.u_depth) E.free(extra.u_depth); if (extra.s_hist) E.free(extra.s_hist);
     // sahneye: merkez (x,y), dönme, ölçek
     const tr = L.tr ? L.tr(p, t) : {};
     const x = (tr.x ?? L.x) * s, y = (tr.y ?? L.y) * s, rot = (tr.rot ?? 0) * Math.PI / 180, sc = tr.scale ?? 1, op = tr.op ?? 1;

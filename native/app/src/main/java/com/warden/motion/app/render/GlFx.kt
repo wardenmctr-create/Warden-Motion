@@ -238,6 +238,9 @@ vec3 palc_$k(int i) { vec3 c[32] = vec3[32]($c); return c[clamp(i, 0, 31)]; }"""
                 pr.three -> u["p_" + pr.key] = floatArrayOf(e.value(pr.key + "X", t).toFloat(), e.value(pr.key + "Y", t).toFloat(), e.value(pr.key + "Z", t).toFloat())
                 pr.kind == "jog" || pr.kind == "slider" || pr.kind == "toggle" || pr.kind == "choice" -> u["p_" + pr.key] = e.value(pr.key, t).toFloat()
                 pr.kind == "source" -> u["p_" + pr.key + "On"] = if (e.c?.get(pr.key).isNullOrEmpty()) 0f else 1f
+                pr.kind == "text" -> { // metindeki sayılar dizi olarak (ör. çekirdek matrisi): p_<k>[i], p_<k>N
+                    val nums = Regex("-?\\d+(?:[.,]\\d+)?").findAll(e.c?.get(pr.key) ?: pr.defStr ?: "").map { it.value.replace(',', '.').toFloat() }.take(256).toList()
+                    nums.forEachIndexed { i, v -> u["p_" + pr.key + "[" + i + "]"] = v }; u["p_" + pr.key + "N"] = nums.size.toFloat() }
             }
         }
         // Motorun yazdığı veri dizisi (grafik/ölçer verisi): v["dv0".."dvN"] → p_dv[i], dvN sayısı p_dvN

@@ -96,7 +96,8 @@ function fxUniforms(meta, vals, box, s) {
     else if (pr.kind === 'gradient' || pr.kind === 'palette') {
       let st = vals[pr.k] ?? pr.def; if (typeof st === 'string') st = JSON.parse(st); const n = Math.min(32, st.length); u['p_' + pr.k + 'N'] = n;
       for (let i = 0; i < 32; i++) { const q = st[Math.min(i, n - 1)]; u['c_' + pr.k + i] = hexToRgb(q[0]); u['p_' + pr.k + 'P' + i] = (q[1] ?? 0) / 100; }
-    } else if (typeof (vals[pr.k] ?? pr.def) === 'number') u['p_' + pr.k] = vals[pr.k] ?? pr.def;
+    } else if (pr.kind === 'text') { const nums = String(vals[pr.k] ?? pr.def ?? '').match(/-?\d+(?:[.,]\d+)?/g) || []; nums.slice(0, 256).forEach((x, i) => { u['p_' + pr.k + '[' + i + ']'] = parseFloat(x.replace(',', '.')); }); u['p_' + pr.k + 'N'] = Math.min(nums.length, 256); }
+    else if (typeof (vals[pr.k] ?? pr.def) === 'number') u['p_' + pr.k] = vals[pr.k] ?? pr.def;
   }
   return u;
 }

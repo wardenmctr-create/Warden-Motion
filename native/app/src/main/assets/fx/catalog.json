@@ -120575,6 +120575,1898 @@
 "heavy": false,
 "n": 600,
 "ready": true
+},
+{
+"type": "kernelfilter",
+"name": "Özel Çekirdek Filtresi",
+"en": "",
+"cat": 2,
+"kind": "pixel",
+"desc": "Kullanıcının sayı matrisinden yeni bir görüntü konvolüsyonu oluşturur; kendi keskinlik ve kabartma çekirdeklerini tasarlayabilir.",
+"tags": [
+"Çekirdek",
+"Matris",
+"Filtre"
+],
+"params": [
+{
+"k": "matrisBoyu",
+"l": "Matris boyutu",
+"g": null,
+"anim": "yes",
+"hint": "kare çekirdek boyutu",
+"kind": "jog",
+"min": 3.0,
+"max": 15.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 3.0
+},
+{
+"k": "katsayil",
+"l": "Katsayılar",
+"g": null,
+"anim": "no",
+"hint": "satır sıralı katsayılar, her biri −32–32",
+"kind": "text",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "0,0,0 / 0,1,0 / 0,0,0"
+},
+{
+"k": "normaliz",
+"l": "Normalize",
+"g": null,
+"anim": "step",
+"hint": "toplamı sıfır olmayan katsayıları toplamlarına böler",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+}
+],
+"presets": [
+{
+"code": "S2",
+"name": "Yumuşatma",
+"vals": {
+"normaliz": 1
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": {
+"k": "matrisBoyu",
+"mul": 0.5
+},
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 601,
+"ready": true
+},
+{
+"type": "bandpassimg",
+"name": "Bant Geçiren Görüntü",
+"en": "",
+"cat": 1,
+"kind": "pixel",
+"desc": "Belirli uzamsal ayrıntı ölçeğini bırakıp daha geniş ve daha ince detayları bastırır.",
+"tags": [
+"Frekans",
+"Bant"
+],
+"params": [
+{
+"k": "altOlce",
+"l": "Alt ölçek",
+"g": null,
+"anim": "yes",
+"hint": "ince ayrıntı sınırı",
+"kind": "jog",
+"min": 0.5,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 2.0
+},
+{
+"k": "ustOlce",
+"l": "Üst ölçek",
+"g": null,
+"anim": "yes",
+"hint": "kaba ayrıntı sınırı",
+"kind": "jog",
+"min": 1.0,
+"max": 500.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 20.0
+},
+{
+"k": "kazanc",
+"l": "Kazanç",
+"g": null,
+"anim": "yes",
+"hint": "seçilen bant kazancı",
+"kind": "jog",
+"min": 0.0,
+"max": 300.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 100.0
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "İnce bant",
+"vals": {
+"kazanc": 100.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Geniş bant",
+"vals": {
+"kazanc": 150.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 602,
+"ready": true
+},
+{
+"type": "gabor",
+"name": "Yönlü Ayrıntı Ayrımı",
+"en": "",
+"cat": 1,
+"kind": "pixel",
+"desc": "Seçilen frekans ve yön boyunca çizgi detaylarını izole eder; normal yönlü bulanıklık değildir.",
+"tags": [
+"Yön",
+"Frekans",
+"Ayrıntı"
+],
+"params": [
+{
+"k": "yon",
+"l": "Yön",
+"g": null,
+"anim": "yes",
+"hint": "çizgi yönü",
+"kind": "jog",
+"min": 0.0,
+"max": 180.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"def": 45.0
+},
+{
+"k": "frekans",
+"l": "Frekans",
+"g": null,
+"anim": "yes",
+"hint": "hedef frekans",
+"kind": "jog",
+"min": 0.005,
+"max": 0.5,
+"step": 0.01,
+"jog": 0.01,
+"unit": "px",
+"def": 0.1
+},
+{
+"k": "bantGeni",
+"l": "Bant genişliği",
+"g": null,
+"anim": "yes",
+"hint": "komşu frekanslara tolerans",
+"kind": "jog",
+"min": 0.1,
+"max": 4.0,
+"step": 0.01,
+"jog": 0.01,
+"unit": "",
+"def": 1.0
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Yatay çizgi",
+"vals": {
+"yon": 0.0,
+"frekans": 0.1
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "İnce çapraz",
+"vals": {
+"yon": 45.0,
+"frekans": 0.25
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 603,
+"ready": true
+},
+{
+"type": "spatialdiffuse",
+"name": "Uzamsal Difüzyon",
+"en": "",
+"cat": 2,
+"kind": "pixel",
+"desc": "Piksellerin ışık ve renk enerjisini kontrollü yayar, analog yumuşak görüntü oluşturur; rastgele piksel saçma değildir.",
+"tags": [
+"Yayılım",
+"Işık"
+],
+"params": [
+{
+"k": "yayilim",
+"l": "Yayılım",
+"g": null,
+"anim": "yes",
+"hint": "yayılma uzaklığı",
+"kind": "jog",
+"min": 0.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 8.0
+},
+{
+"k": "parlakliAgir",
+"l": "Parlaklık ağırlığı",
+"g": null,
+"anim": "yes",
+"hint": "parlak piksellere ek ağırlık",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 50.0
+},
+{
+"k": "karisim",
+"l": "Karışım",
+"g": null,
+"anim": "yes",
+"hint": "difüzyonun payı",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 40.0
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Yumuşak film",
+"vals": {
+"yayilim": 6.0,
+"karisim": 30.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Parlak örtü",
+"vals": {
+"yayilim": 30.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": {
+"k": "yayilim"
+},
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 604,
+"ready": true
+},
+{
+"type": "freelens",
+"name": "Serbest Mercek",
+"en": "",
+"cat": 2,
+"kind": "pixel",
+"desc": "Mercek düzlemini eğip kaydırarak seçili odak düzlemini perspektif içinde değiştirir.",
+"tags": [
+"Mercek",
+"Odak",
+"Eğim"
+],
+"params": [
+{
+"k": "mercekKaym",
+"l": "Mercek kayması",
+"g": null,
+"anim": "yes",
+"hint": "mercek merkez kayması",
+"kind": "jog",
+"two": true,
+"three": false,
+"min": -1000.0,
+"max": 1000.0,
+"defY": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 0.0
+},
+{
+"k": "egim",
+"l": "Eğim",
+"g": null,
+"anim": "yes",
+"hint": "odak düzlemi eğimi",
+"kind": "jog",
+"two": true,
+"three": false,
+"min": -60.0,
+"max": 60.0,
+"defY": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"def": 0.0
+},
+{
+"k": "odakUzak",
+"l": "Odak uzaklığı",
+"g": null,
+"anim": "yes",
+"hint": "sanal odak uzaklığı",
+"kind": "jog",
+"min": 10.0,
+"max": 300.0,
+"step": 0.01,
+"jog": 0.01,
+"unit": "",
+"def": 50.0
+},
+{
+"k": "odakBandGeni",
+"l": "Odak bandı genişliği",
+"g": "Gelişmiş",
+"anim": "yes",
+"hint": "düzlemsel odak çevresindeki keskin bölge",
+"kind": "jog",
+"min": 1.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 20.0
+},
+{
+"k": "odakDisiBula",
+"l": "Odak dışı bulanıklık",
+"g": "Gelişmiş",
+"anim": "yes",
+"hint": "maksimum bulanıklık",
+"kind": "jog",
+"min": 0.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 20.0
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 605,
+"ready": true
+},
+{
+"type": "anamorphic",
+"name": "Anamorfik Mercek",
+"en": "",
+"cat": 0,
+"kind": "pixel",
+"desc": "Görüntüyü tek eksende optik olarak sıkıştırır, oval bokeh ve yönlü ışık izleriyle birleştirir.",
+"tags": [
+"Mercek",
+"Işık izi"
+],
+"params": [
+{
+"k": "sikistirOran",
+"l": "Sıkıştırma oranı",
+"g": null,
+"anim": "yes",
+"hint": "yatay sıkıştırma oranı",
+"kind": "jog",
+"min": 1.0,
+"max": 3.0,
+"step": 0.01,
+"jog": 0.01,
+"unit": "",
+"def": 2.0
+},
+{
+"k": "bokehOval",
+"l": "Bokeh ovali",
+"g": null,
+"anim": "yes",
+"hint": "bokeh en-boy oranı",
+"kind": "jog",
+"min": 0.25,
+"max": 4.0,
+"step": 0.01,
+"jog": 0.01,
+"unit": "",
+"def": 1.5
+},
+{
+"k": "isikIzi",
+"l": "Işık izi",
+"g": null,
+"anim": "yes",
+"hint": "yönlü ışık izi gücü",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 30.0
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 606,
+"ready": true
+},
+{
+"type": "lensbreathe",
+"name": "Mercek Soluması",
+"en": "",
+"cat": 3,
+"kind": "pixel",
+"desc": "Odak değiştikçe kadraj büyüklüğünde oluşan küçük optik değişimi simüle eder.",
+"tags": [
+"Mercek",
+"Odak"
+],
+"params": [
+{
+"k": "odak",
+"l": "Odak",
+"g": null,
+"anim": "yes",
+"hint": "yakın/uzak odak konumu",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 50.0
+},
+{
+"k": "solumaGucu",
+"l": "Soluma gücü",
+"g": null,
+"anim": "yes",
+"hint": "uç odaklar arasındaki ölçek farkı",
+"kind": "jog",
+"min": -30.0,
+"max": 30.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 5.0
+},
+{
+"k": "merkez",
+"l": "Merkez",
+"g": null,
+"anim": "yes",
+"hint": "sabit optik merkez",
+"kind": "jog",
+"two": true,
+"three": false,
+"min": -100,
+"max": 200,
+"defY": 50.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "box%",
+"def": 50.0
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 607,
+"ready": true
+},
+{
+"type": "lightleak",
+"name": "Işık Sızıntısı",
+"en": "",
+"cat": 0,
+"kind": "pixel",
+"desc": "Kare kenarından giren geniş renkli ışık örtülerini üretir; film yanması gibi alfa deliği açmaz.",
+"tags": [
+"Işık",
+"Film"
+],
+"params": [
+{
+"k": "isikRenk",
+"l": "Işık renkleri",
+"g": null,
+"anim": "yes",
+"hint": "sızıntı paleti",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#FF9030"
+},
+{
+"k": "kaynak",
+"l": "Kaynak",
+"g": null,
+"anim": "yes",
+"hint": "ışık merkezi",
+"kind": "jog",
+"two": true,
+"three": false,
+"min": -100.0,
+"max": 200.0,
+"defY": 50.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 0.0
+},
+{
+"k": "yayilim",
+"l": "Yayılım",
+"g": null,
+"anim": "yes",
+"hint": "ışık örtüsü genişliği",
+"kind": "jog",
+"min": 0.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 40.0
+},
+{
+"k": "hareket",
+"l": "Hareket",
+"g": null,
+"anim": "yes",
+"hint": "yavaş hareket miktarı",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 15.0
+},
+{
+"k": "isikGucu",
+"l": "Işık gücü",
+"g": "Gelişmiş",
+"anim": "yes",
+"hint": "ışık örtüsünün enerjisi",
+"kind": "jog",
+"min": 0.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 50.0
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Sıcak sızıntı",
+"vals": {
+"yayilim": 40.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Soğuk kenar",
+"vals": {
+"yayilim": 25.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 608,
+"ready": true
+},
+{
+"type": "starfilter",
+"name": "Mercek Yıldız Kırınımı",
+"en": "",
+"cat": 0,
+"kind": "pixel",
+"desc": "Parlak noktaları diyafram kanatlarının oluşturduğu keskin ışık sivrileriyle gösterir.",
+"tags": [
+"Işık",
+"Yıldız"
+],
+"params": [
+{
+"k": "kanatSayi",
+"l": "Kanat sayısı",
+"g": null,
+"anim": "yes",
+"hint": "diyafram kanat sayısı",
+"kind": "jog",
+"min": 3.0,
+"max": 16.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 6.0
+},
+{
+"k": "sivriUzun",
+"l": "Sivri uzunluğu",
+"g": null,
+"anim": "yes",
+"hint": "sivri ışık uzunluğu",
+"kind": "jog",
+"min": 0.0,
+"max": 500.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 40.0
+},
+{
+"k": "esik",
+"l": "Eşik",
+"g": null,
+"anim": "yes",
+"hint": "parlak nokta sınırı",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 80.0
+},
+{
+"k": "aci",
+"l": "Açı",
+"g": null,
+"anim": "yes",
+"hint": "yıldız yönü",
+"kind": "jog",
+"min": 0.0,
+"max": 180.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"def": 0.0
+}
+],
+"presets": [],
+"pad": {
+"k": "sivriUzun"
+},
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 609,
+"ready": true
+},
+{
+"type": "prismfx",
+"name": "Hareketli Aynalı Prizma",
+"en": "",
+"cat": 3,
+"kind": "pixel",
+"desc": "Görüntüyü fiziksel prizma yüzeylerinin farklı kırılma yönleriyle çoklu görünüm olarak oluşturur.",
+"tags": [
+"Prizma",
+"Kırılma"
+],
+"params": [
+{
+"k": "yuzSayi",
+"l": "Yüz sayısı",
+"g": null,
+"anim": "yes",
+"hint": "prizma yüz sayısı",
+"kind": "jog",
+"min": 3.0,
+"max": 16.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 5.0
+},
+{
+"k": "prizmaAcis",
+"l": "Prizma açısı",
+"g": null,
+"anim": "yes",
+"hint": "yüz eğimi",
+"kind": "jog",
+"min": 0.0,
+"max": 90.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"def": 25.0
+},
+{
+"k": "kirilmaIndi",
+"l": "Kırılma indisi",
+"g": null,
+"anim": "yes",
+"hint": "kırılma miktarı",
+"kind": "jog",
+"min": 1.0,
+"max": 2.5,
+"step": 0.01,
+"jog": 0.01,
+"unit": "",
+"def": 1.45
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 610,
+"ready": true
+},
+{
+"type": "insecteye",
+"name": "Böcek Gözü Merceği",
+"en": "",
+"cat": 3,
+"kind": "pixel",
+"desc": "Birden çok küçük mercekten aynı sahnenin farklı yerel görüşlerini üretir; basit karo kopyası değildir.",
+"tags": [
+"Mercek",
+"Petek"
+],
+"params": [
+{
+"k": "mercekSayi",
+"l": "Mercek sayısı",
+"g": null,
+"anim": "yes",
+"hint": "mercek ızgarası (her eksen)",
+"kind": "jog",
+"min": 1.0,
+"max": 64.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 8.0
+},
+{
+"k": "odak",
+"l": "Odak",
+"g": null,
+"anim": "yes",
+"hint": "merceğin örnekleme derinliği",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 50.0
+},
+{
+"k": "mercekAral",
+"l": "Mercek aralığı",
+"g": null,
+"anim": "yes",
+"hint": "mercekler arası boşluk",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 4.0
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 611,
+"ready": true
+},
+{
+"type": "warpfield",
+"name": "Optik Dönüşüm Alanı",
+"en": "",
+"cat": 3,
+"kind": "pixel",
+"desc": "Birden çok hareketli kontrol noktasının etkisiyle düz görüntüyü kesintisiz deforme eder.",
+"tags": [
+"Bükme",
+"Kontrol"
+],
+"params": [
+{
+"k": "kontrolEkle",
+"l": "Kontrol ekle",
+"g": null,
+"anim": "no",
+"hint": "kaynak/hedef noktası çiftini oluşturur",
+"kind": "button",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"hideUi": true,
+"def": 0
+},
+{
+"k": "hedefler",
+"l": "Hedefler",
+"g": null,
+"anim": "yes",
+"hint": "hedefin kaynak konumundan farkı",
+"kind": "jog",
+"two": true,
+"three": false,
+"min": -4000.0,
+"max": 4000.0,
+"defY": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 0.0
+},
+{
+"k": "etkiYari",
+"l": "Etki yarıçapı",
+"g": null,
+"anim": "yes",
+"hint": "kontrolün yerel etki alanı",
+"kind": "jog",
+"min": 1.0,
+"max": 3000.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 120.0
+},
+{
+"k": "seciliKontSil",
+"l": "Seçili kontrolü sil",
+"g": "Gelişmiş",
+"anim": "no",
+"hint": "kaynak/hedef nokta çiftini kaldırır",
+"kind": "button",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"hideUi": true,
+"def": 0
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 612,
+"ready": true
+},
+{
+"type": "flowwarp",
+"name": "Yüzey Akışı Bükmesi",
+"en": "",
+"cat": 3,
+"kind": "pixel",
+"desc": "Bir vektör alanının akış çizgileri boyunca görüntüyü adım adım sürükler; tek örnekli yer değiştirmeden farklıdır.",
+"tags": [
+"Akış",
+"Bükme"
+],
+"params": [
+{
+"k": "vektorHari",
+"l": "Vektör haritası",
+"g": null,
+"anim": "no",
+"hint": "RG vektör alanı kaynağı",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": ""
+},
+{
+"k": "adim",
+"l": "Adım",
+"g": null,
+"anim": "yes",
+"hint": "bütünleme adımı",
+"kind": "jog",
+"min": 1.0,
+"max": 64.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 12.0
+},
+{
+"k": "akisGucu",
+"l": "Akış gücü",
+"g": null,
+"anim": "yes",
+"hint": "toplam akış uzaklığı",
+"kind": "jog",
+"min": -500.0,
+"max": 500.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 50.0
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Hafif akış",
+"vals": {
+"adim": 8.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Uzun akış",
+"vals": {
+"adim": 32.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 613,
+"ready": true
+},
+{
+"type": "feedbackloop",
+"name": "Döngülü Geri Besleme",
+"en": "",
+"cat": 14,
+"kind": "pixel",
+"desc": "Önceki işlem sonucunu tekrar giriş olarak kullanarak giderek büyüyen/çözünen desen üretir; normal yankı yalnız eski kaynak kareleri alır.",
+"tags": [
+"Zaman",
+"Geri besleme"
+],
+"params": [
+{
+"k": "geriBesl",
+"l": "Geri besleme",
+"g": null,
+"anim": "yes",
+"hint": "geri beslenen önceki sonuç ağırlığı",
+"kind": "jog",
+"min": 0.0,
+"max": 99.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 75.0
+},
+{
+"k": "olcek",
+"l": "Ölçek",
+"g": null,
+"anim": "yes",
+"hint": "her döngüde ölçek",
+"kind": "jog",
+"min": 10.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 103.0
+},
+{
+"k": "donus",
+"l": "Dönüş",
+"g": null,
+"anim": "yes",
+"hint": "kare başına dönüş",
+"kind": "jog",
+"min": -180.0,
+"max": 180.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"def": 2.0
+},
+{
+"k": "onbellekSifi",
+"l": "Önbellek sıfırla",
+"g": null,
+"anim": "no",
+"hint": "durum önbelleğini temizler",
+"kind": "button",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"hideUi": true,
+"def": 0
+},
+{
+"k": "birlesti",
+"l": "Birleştirme",
+"g": "Gelişmiş",
+"anim": "step",
+"hint": "geri besleme ile yeni karenin karışımı",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Normal",
+"Ekle",
+"Ekran"
+],
+"def": 0
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Sarmal tünel",
+"vals": {
+"geriBesl": 80.0,
+"olcek": 105.0,
+"donus": 3.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Yumuşak iz",
+"vals": {
+"olcek": 100.0,
+"donus": 0.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": {
+"box": 0.3
+},
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 616,
+"ready": true
+},
+{
+"type": "frameshuffle",
+"name": "Kare Sırası Karıştırma",
+"en": "",
+"cat": 14,
+"kind": "pixel",
+"desc": "Seçilen zaman aralığındaki karelerin oynatma sırasını sabit tohumla değiştirir.",
+"tags": [
+"Zaman",
+"Kare"
+],
+"params": [
+{
+"k": "pencere",
+"l": "Pencere",
+"g": null,
+"anim": "yes",
+"hint": "karıştırma penceresi",
+"kind": "jog",
+"min": 2.0,
+"max": 240.0,
+"step": 1,
+"jog": 1,
+"unit": "kare",
+"int": true,
+"def": 12.0
+},
+{
+"k": "karistir",
+"l": "Karıştırma",
+"g": null,
+"anim": "yes",
+"hint": "yeri değişen kare payı",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 50.0
+},
+{
+"k": "tohum",
+"l": "Tohum",
+"g": null,
+"anim": "yes",
+"hint": "tekrar üretilebilir dizilim",
+"kind": "jog",
+"min": 0.0,
+"max": 999999.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"reseed": true,
+"def": 1.0
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 617,
+"ready": true
+},
+{
+"type": "temporalmedian",
+"name": "Zamansal Ortanca",
+"en": "",
+"cat": 14,
+"kind": "pixel",
+"desc": "Geçici geçen nesne veya paraziti, sabit kameranın komşu karelerinin ortanca değerinden azaltır.",
+"tags": [
+"Zaman",
+"Gürültü"
+],
+"params": [
+{
+"k": "karePenc",
+"l": "Kare penceresi",
+"g": null,
+"anim": "yes",
+"hint": "ortanca örnek sayısı",
+"kind": "jog",
+"min": 3.0,
+"max": 61.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 9.0
+},
+{
+"k": "hareketEsig",
+"l": "Hareket eşiği",
+"g": null,
+"anim": "yes",
+"hint": "uyuşmazlık reddi",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 20.0
+},
+{
+"k": "hizala",
+"l": "Hizala",
+"g": null,
+"anim": "step",
+"hint": "kameranın küçük hareketlerini telafi eder",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Kısa ortanca",
+"vals": {
+"hizala": 1
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Sabit sahne",
+"vals": {
+"hizala": 1
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 618,
+"ready": true
+},
+{
+"type": "brightaccum",
+"name": "En Parlak Kare Birikimi",
+"en": "",
+"cat": 14,
+"kind": "pixel",
+"desc": "Seçilen aralıktan her pikselin en parlak değerini biriktirir; ışıkla çizim ve yıldız izleri için.",
+"tags": [
+"Zaman",
+"Işık izi"
+],
+"params": [
+{
+"k": "kareSayi",
+"l": "Kare sayısı",
+"g": null,
+"anim": "yes",
+"hint": "geçmiş örnek sayısı",
+"kind": "jog",
+"min": 1.0,
+"max": 600.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 30.0
+},
+{
+"k": "azalma",
+"l": "Azalma",
+"g": null,
+"anim": "yes",
+"hint": "kare başına eski iz azalması",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 0.0
+},
+{
+"k": "renkleriBirlAl",
+"l": "Renkleri birlikte al",
+"g": null,
+"anim": "step",
+"hint": "en parlak pikselin RGB'sini birlikte seçer",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Işık çizgisi",
+"vals": {
+"azalma": 0.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Solan iz",
+"vals": {
+"azalma": 15.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": {
+"box": 0.5
+},
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 619,
+"ready": true
+},
+{
+"type": "darkaccum",
+"name": "En Koyu Kare Birikimi",
+"en": "",
+"cat": 14,
+"kind": "pixel",
+"desc": "Geçmiş karelerdeki en koyu değerleri toplar; hareketli gölge yolları oluşturur.",
+"tags": [
+"Zaman",
+"Birikim"
+],
+"params": [
+{
+"k": "kareSayi",
+"l": "Kare sayısı",
+"g": null,
+"anim": "yes",
+"hint": "örnek pencere",
+"kind": "jog",
+"min": 1.0,
+"max": 600.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 30.0
+},
+{
+"k": "azalma",
+"l": "Azalma",
+"g": null,
+"anim": "yes",
+"hint": "eski karanlık izden kurtulma",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 5.0
+},
+{
+"k": "alfayiKoru",
+"l": "Alfayı koru",
+"g": null,
+"anim": "step",
+"hint": "kaynak alfayı korur",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Koyu iz",
+"vals": {
+"azalma": 0.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Kısa gölge",
+"vals": {
+"azalma": 20.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": {
+"box": 0.5
+},
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 620,
+"ready": true
+},
+{
+"type": "timemosaic",
+"name": "Zaman Mozaiği",
+"en": "",
+"cat": 14,
+"kind": "pixel",
+"desc": "Aynı videonun farklı zamanlarını yan yana küçük hücrelerde gösterir; mekânsal tekrar değildir.",
+"tags": [
+"Zaman",
+"Izgara"
+],
+"params": [
+{
+"k": "satirSutu",
+"l": "Satır/sütun",
+"g": null,
+"anim": "yes",
+"hint": "satır/sütun sayısı (her eksen)",
+"kind": "jog",
+"min": 1.0,
+"max": 16.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 3.0
+},
+{
+"k": "zamanAral",
+"l": "Zaman aralığı",
+"g": null,
+"anim": "yes",
+"hint": "hücreler arası zaman farkı",
+"kind": "jog",
+"min": 0.0,
+"max": 30.0,
+"step": 0.01,
+"jog": 0.01,
+"unit": "sn",
+"def": 0.2
+},
+{
+"k": "etiketle",
+"l": "Etiketle",
+"g": null,
+"anim": "step",
+"hint": "kaynak zaman kodunu gösterir",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 0
+},
+{
+"k": "hucreBosl",
+"l": "Hücre boşluğu",
+"g": "Gelişmiş",
+"anim": "yes",
+"hint": "zaman hücreleri arasındaki mesafe",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 4.0
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 621,
+"ready": true
+},
+{
+"type": "timemap",
+"name": "Kare İçinde Zaman Haritası",
+"en": "",
+"cat": 14,
+"kind": "pixel",
+"desc": "Kullanıcının zaman haritası boyunca farklı zamanlardan kaynak karelerini örnekler; satır tabanlı Zaman Kayması'ndan daha genel, ayrı mod olma adayı.",
+"tags": [
+"Zaman",
+"Harita"
+],
+"params": [
+{
+"k": "zamanHari",
+"l": "Zaman haritası",
+"g": null,
+"anim": "no",
+"hint": "zaman dağılım haritası",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": ""
+},
+{
+"k": "azamiFark",
+"l": "Azami fark",
+"g": null,
+"anim": "yes",
+"hint": "en büyük ileri/geri zaman farkı",
+"kind": "jog",
+"min": 0.0,
+"max": 30.0,
+"step": 0.01,
+"jog": 0.01,
+"unit": "sn",
+"def": 1.0
+},
+{
+"k": "enterpol",
+"l": "Enterpolasyon",
+"g": null,
+"anim": "step",
+"hint": "kaynak kareleri arasında enterpolasyon yapar",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+}
+],
+"presets": [
+{
+"code": "S2",
+"name": "Geniş zaman farkı",
+"vals": {
+"enterpol": 1
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 622,
+"ready": true
+},
+{
+"type": "motioncomposite",
+"name": "Hareketten Kare Birleştirme",
+"en": "",
+"cat": 14,
+"kind": "pixel",
+"desc": "Kısa zaman aralığındaki hareketli nesnenin konumlarını arka plan üzerinde tek görüntüde birleştirir.",
+"tags": [
+"Zaman",
+"Strob"
+],
+"params": [
+{
+"k": "ornek",
+"l": "Örnek",
+"g": null,
+"anim": "yes",
+"hint": "örnek kare sayısı",
+"kind": "jog",
+"min": 2.0,
+"max": 64.0,
+"step": 1,
+"jog": 1,
+"unit": "kare",
+"int": true,
+"def": 8.0
+},
+{
+"k": "nesneMati",
+"l": "Nesne matı",
+"g": null,
+"anim": "no",
+"hint": "ayrılacak nesnenin matı",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": ""
+},
+{
+"k": "ortusme",
+"l": "Örtüşme",
+"g": null,
+"anim": "yes",
+"hint": "örtüşen örneklerin karışımı",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 50.0
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Az örnek",
+"vals": {
+"ortusme": 20.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Hareket analizi",
+"vals": {
+"ortusme": 60.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": {
+"box": 1.0
+},
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 623,
+"ready": true
+},
+{
+"type": "temporalfreq",
+"name": "Zamansal Fark Frekansı",
+"en": "",
+"cat": 14,
+"kind": "pixel",
+"desc": "Sabit yavaş ışık değişimi ile hızlı titreşimi zaman bandına göre ayırır; hareket büyütmeden farklı olarak yalnız ölçüm/maske çıkarır.",
+"tags": [
+"Zaman",
+"Analiz"
+],
+"params": [
+{
+"k": "altUst",
+"l": "Alt/üst",
+"g": null,
+"anim": "yes",
+"hint": "alt/üst hareket frekansı",
+"kind": "jog",
+"min": 0.1,
+"max": 100,
+"step": 0.01,
+"jog": 0.01,
+"unit": "Hz",
+"def": 0.5
+},
+{
+"k": "pencere",
+"l": "Pencere",
+"g": null,
+"anim": "yes",
+"hint": "analiz penceresi",
+"kind": "jog",
+"min": 8.0,
+"max": 600.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 60.0
+},
+{
+"k": "cikti",
+"l": "Çıktı",
+"g": null,
+"anim": "step",
+"hint": "çıktı biçimi",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Maske",
+"Isı haritası",
+"Grafik"
+],
+"def": 0
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Yavaş değişim",
+"vals": {
+"pencere": 120.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 624,
+"ready": true
+},
+{
+"type": "colortrail",
+"name": "Renk İzli Pozlama",
+"en": "",
+"cat": 14,
+"kind": "pixel",
+"desc": "Geçmiş kareleri zamanına göre farklı renklerle kodlayıp üst üste birleştirir; hareketin yönünü görsel olarak anlatır.",
+"tags": [
+"Zaman",
+"İz",
+"Renk"
+],
+"params": [
+{
+"k": "ornek",
+"l": "Örnek",
+"g": null,
+"anim": "yes",
+"hint": "geçmiş örnek sayısı",
+"kind": "jog",
+"min": 1.0,
+"max": 120.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 12.0
+},
+{
+"k": "basSonRenk",
+"l": "Baş/son renk",
+"g": null,
+"anim": "yes",
+"hint": "eski/yeni zaman renkleri",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#327DFF"
+},
+{
+"k": "zamanAral",
+"l": "Zaman aralığı",
+"g": null,
+"anim": "yes",
+"hint": "toplam örnek zaman aralığı",
+"kind": "jog",
+"min": 0.0,
+"max": 30.0,
+"step": 0.01,
+"jog": 0.01,
+"unit": "sn",
+"def": 1.0
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Kısa renk izi",
+"vals": {
+"ornek": 6.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Uzun hareket izi",
+"vals": {
+"ornek": 24.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": {
+"box": 0.6
+},
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 625,
+"ready": true
 }
 ],
 "featured": [

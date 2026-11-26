@@ -4,6 +4,7 @@ alphaskel
 alphathr
 ambientocc
 anaglyph
+anamorphic
 anisodiff
 arithmetic
 ascii
@@ -13,6 +14,7 @@ autolevels
 avgcolor
 ballaction
 bandclean
+bandpassimg
 beam
 bender
 bendit
@@ -34,6 +36,7 @@ book3d
 box3d
 boxblur
 bricon
+brightaccum
 broadcast
 brokenglass
 brushstrokes
@@ -90,6 +93,7 @@ colorprofile
 colorrange
 colorselect
 colorstab
+colortrail
 colortune
 comic
 compisolate
@@ -113,6 +117,7 @@ curl
 curves
 cutback
 cylinder
+darkaccum
 darkframe
 darkglow
 datacorrupt
@@ -157,6 +162,7 @@ exposurezones
 extrude
 eyedropper
 feather
+feedbackloop
 fftnotch
 fire
 fireworks
@@ -168,6 +174,7 @@ flomotion
 floorreflect
 floorshadow
 flowfield
+flowwarp
 foam
 focusmap
 fog
@@ -178,10 +185,13 @@ fractalnoise
 fractalpath
 fractalset
 frame
+frameshuffle
+freelens
 freqsep
 fresnelmatte
 fringe
 frostglass
+gabor
 galaxy
 gammagain
 gamutwarn
@@ -235,21 +245,25 @@ innerblur
 innerbulge
 innerglow
 innershadow
+insecteye
 interference
 invert
 iridescence
 iris
 jaws
 kaleido
+kernelfilter
 keylight
 lathe3d
 leaffall
 lens
 lensblur
+lensbreathe
 lensdirt
 lensflare
 levels
 lightglow
+lightleak
 lightning
 lightrays
 lightsweep
@@ -288,6 +302,7 @@ mirror
 mirrorrepeat
 morphimg
 mosaic
+motioncomposite
 multiscale
 nebula
 neonedge
@@ -331,6 +346,7 @@ pointcloud
 polar
 polardisp
 posterize
+prismfx
 pyramid
 quilling
 radialshadow
@@ -391,6 +407,7 @@ snowflake
 softglow
 solidcolor
 solidmatte
+spatialdiffuse
 sphere
 spill
 spinblur
@@ -402,6 +419,7 @@ spotlight
 squeeze
 star
 starfield
+starfilter
 starpoly
 starprism
 stipple
@@ -416,6 +434,9 @@ sunsurface
 swirl
 swirlblur
 temperature
+temporaldenoise
+temporalfreq
+temporalmedian
 tetra
 texsimilar
 texturize
@@ -427,6 +448,8 @@ tilerotate
 tiles
 tileshift
 tiltshift
+timemap
+timemosaic
 tinyplanet
 tornado
 tornpaper
@@ -453,6 +476,7 @@ volslices
 volumelight
 vrcombined
 warpblur
+warpfield
 warpomatic
 warpstyle
 watercolor

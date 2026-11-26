@@ -230,6 +230,28 @@ class Renderer(private val ctx: Context, maxSide: Int = 2048, private val sync: 
             v = v + (key + "X" to com.warden.motion.app.model.Anim(lx / l.w * 100 + 50)) + (key + "Y" to com.warden.motion.app.model.Anim(ly / l.h * 100 + 50)) }
         return e.copy(v = v)
     }
+    /**
+     * Zamansal efektler için kare şeridi (s_hist): katman, istenen anlarda bu karenin yerel düzlemine göre (kendi hareketi dahil) çizilir.
+     * Kareler yan yana dizilir; shader k. kareyi ((k + u) / N, v) ile okur. Önbellek gerekmez; ileri-geri sarmada sonuç aynıdır.
+     */
+    private fun historySource(p: Project, l: Layer, fx: List<Effect>, t: Double, tr: TR, bw: Int, bh: Int, q: Double): Map<String, Bitmap> {
+        if (historyDepth > 0) return emptyMap()
+        val times = fx.firstNotNullOfOrNull { History.times(it, l, t, p.fps.toDouble(), exporting) } ?: return emptyMap()
+        val n = times.size; if (n == 0) return emptyMap()
+        val maxW = if (exporting) 8192 else 4096; val f = min(1.0, min(maxW.toDouble() / (bw * n), (if (exporting) 2048.0 else 1024.0) / max(bw, bh)))
+        val fw = max(1, (bw * f).toInt()); val fh = max(1, (bh * f).toInt()); val out = Bitmap.createBitmap(fw * n, fh, Bitmap.Config.ARGB_8888); val c = Canvas(out)
+        val keepT = curT; historyDepth++
+        try { for ((i, tt0) in times.withIndex()) { val tt = tt0.coerceIn(l.start, l.end - 1e-4); val b = worldTransform(p, l, tt)
+            c.save(); c.clipRect(i * fw, 0, (i + 1) * fw, fh); c.translate(i * fw + fw / 2f, fh / 2f); c.scale((q * f).toFloat(), (q * f).toFloat())
+            // önceki/sonraki anın dönüşümü, şimdiki karenin yerel düzlemine göre
+            val a = -tr.rot * PI / 180; val dx = (b.x - tr.x); val dy = (b.y - tr.y); val sc = if (kotlin.math.abs(tr.scale) > 1e-6) tr.scale else 1.0
+            c.translate(((dx * cos(a) - dy * sin(a)) / sc / tr.sx).toFloat(), ((dx * sin(a) + dy * cos(a)) / sc / tr.sy).toFloat()); c.rotate((b.rot - tr.rot).toFloat())
+            c.scale((b.scale * b.sx / (sc * tr.sx)).toFloat(), (b.scale * b.sy / (sc * tr.sy)).toFloat())
+            if (l.flipX == true || l.flipY == true) c.scale(if (l.flipX == true) -1f else 1f, if (l.flipY == true) -1f else 1f)
+            curT = tt; drawLayer(c, l); c.restore() } } finally { curT = keepT; historyDepth-- }
+        return mapOf("hist" to out)
+    }
+    private var historyDepth = 0
     private var flockXf: DoubleArray? = null
     private fun paintLayer(c: Canvas, p: Project, l: Layer, t: Double) {
         // 506 Sürü Hareketi: katman, sürüdeki her birey için kopyalanır
@@ -302,7 +324,7 @@ class Renderer(private val ctx: Context, maxSide: Int = 2048, private val sync: 
         drawLayer(bc, l)
         if (gpu.isNotEmpty()) {
             val box = floatArrayOf((pad * q).toFloat(), (pad * q).toFloat(), (l.w * q).toFloat(), (l.h * q).toFloat())
-            val job = GlFx.Job(gpu.map { it to fxMeta(it.type) }, t, t - l.start, l.end - l.start, box, q.toFloat(), sourcesFor(p, l, gpu, t, q) + Analysis.sources(gpu, buf, t), tr.rot.toFloat(), exporting)
+            val job = GlFx.Job(gpu.map { it to fxMeta(it.type) }, t, t - l.start, l.end - l.start, box, q.toFloat(), sourcesFor(p, l, gpu, t, q) + Analysis.sources(gpu, buf, t) + historySource(p, l, gpu, t, tr, bw, bh, q), tr.rot.toFloat(), exporting)
             GlFx.apply(buf, job)?.let { buf.recycle(); buf = it }
         }
         val rect = RectF((-bw / q / 2).toFloat(), (-bh / q / 2).toFloat(), (bw / q / 2).toFloat(), (bh / q / 2).toFloat())

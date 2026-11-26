@@ -25,3 +25,18 @@ N8A([
  (597, "normalselect", "Maske ve Anahtar", "pixel", ["Normal", "Yön", "Maske"], None), (599, "fresnelmatte", "Maske ve Anahtar", "pixel", ["Yansıma", "Fresnel"], None),
  (600, "diffmap", "Diğer", "pixel", ["Fark", "Analiz"], None),
 ])
+N8A([
+ (601, "kernelfilter", "Bulanıklık", "pixel", ["Çekirdek", "Matris", "Filtre"], {"k": "matrisBoyu", "mul": 0.5}), (602, "bandpassimg", "Çizim ve Kenar", "pixel", ["Frekans", "Bant"], None),
+ (603, "gabor", "Çizim ve Kenar", "pixel", ["Yön", "Frekans", "Ayrıntı"], None), (604, "spatialdiffuse", "Bulanıklık", "pixel", ["Yayılım", "Işık"], {"k": "yayilim"}),
+ (605, "freelens", "Bulanıklık", "pixel", ["Mercek", "Odak", "Eğim"], None), (606, "anamorphic", "Renk ve Işık", "pixel", ["Mercek", "Işık izi"], None),
+ (607, "lensbreathe", "Bükme ve Bozulma", "pixel", ["Mercek", "Odak"], None), (608, "lightleak", "Renk ve Işık", "pixel", ["Işık", "Film"], None),
+ (609, "starfilter", "Renk ve Işık", "pixel", ["Işık", "Yıldız"], {"k": "sivriUzun"}), (610, "prismfx", "Bükme ve Bozulma", "pixel", ["Prizma", "Kırılma"], None),
+ (611, "insecteye", "Bükme ve Bozulma", "pixel", ["Mercek", "Petek"], None), (612, "warpfield", "Bükme ve Bozulma", "pixel", ["Bükme", "Kontrol"], None),
+ (613, "flowwarp", "Bükme ve Bozulma", "pixel", ["Akış", "Bükme"], None),
+ (616, "feedbackloop", "Zaman", "pixel", ["Zaman", "Geri besleme"], {"box": 0.3}), (617, "frameshuffle", "Zaman", "pixel", ["Zaman", "Kare"], None),
+ (618, "temporalmedian", "Zaman", "pixel", ["Zaman", "Gürültü"], None), (619, "brightaccum", "Zaman", "pixel", ["Zaman", "Işık izi"], {"box": 0.5}),
+ (620, "darkaccum", "Zaman", "pixel", ["Zaman", "Birikim"], {"box": 0.5}), (621, "timemosaic", "Zaman", "pixel", ["Zaman", "Izgara"], None),
+ (622, "timemap", "Zaman", "pixel", ["Zaman", "Harita"], None), (623, "motioncomposite", "Zaman", "pixel", ["Zaman", "Strob"], {"box": 1.0}),
+ (624, "temporalfreq", "Zaman", "pixel", ["Zaman", "Analiz"], None), (625, "colortrail", "Zaman", "pixel", ["Zaman", "İz", "Renk"], {"box": 0.6}),
+])
+HIDE8.update({"warpfield": ["kontrolEkle", "seciliKontSil"], "feedbackloop": ["onbellekSifi"]})
