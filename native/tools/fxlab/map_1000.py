@@ -41,3 +41,17 @@ N10A([
  (867, "twotonelines", "Çizim ve Kenar", "pixel", ["Çizgi", "Işık"], None), (868, "wetblend", "Çizim ve Kenar", "pixel", ["Boya", "Karışım"], None),
 ])
 HIDE10.update({"lineweight": ["kalinlikProf"], "pencilpressure": ["basinc"]})
+N10A([
+ (869, "celticknot", "Prosedürel", "gen", ["Düğüm", "Örgü"], None), (870, "fourierdraw", "Prosedürel", "gen", ["Fourier", "Eğri", "Matematik"], {"box": 0.3}),
+ (871, "superformula", "Prosedürel", "gen", ["Şekil", "Matematik"], None), (872, "evolute", "Prosedürel", "gen", ["Eğri", "Matematik"], {"box": 0.4}),
+ (873, "offsetfamily", "Tekrar", "pixel", ["Kontur", "Ofset"], {"sum": ["aralik"], "mul": 8}), (874, "envelope", "Prosedürel", "gen", ["Eğri", "Zarf"], None),
+ (875, "rotsym", "Bükme ve Bozulma", "pixel", ["Simetri", "Döndürme"], None), (876, "aperiodicplace", "Tekrar", "gen", ["Yerleşim", "Şekil"], None),
+ (877, "weightedstipple", "Çizim ve Kenar", "pixel", ["Noktalama", "Ton"], None), (878, "circlepack", "Prosedürel", "pixel", ["Çember", "Paketleme"], None),
+ (879, "cellnetwork", "Prosedürel", "pixel", ["Hücre", "Ağ"], None), (880, "streamlines", "Prosedürel", "pixel", ["Akış", "Çizgi"], None),
+ (881, "densitycontour", "Çizim ve Kenar", "pixel", ["Eş değer", "Yoğunluk"], None), (882, "forceflow", "Simülasyon", "gen", ["Akış", "Kuvvet"], None),
+ (883, "plotfunc", "Diğer", "gen", ["Fonksiyon", "Grafik", "Matematik"], None), (884, "escapepath", "Prosedürel", "gen", ["Fraktal", "Matematik"], None),
+ (885, "lightvoronoi", "Renk ve Işık", "pixel", ["Işık", "Bölge"], None), (886, "hexpath", "Diğer", "pixel", ["Yol", "Altıgen"], None),
+ (887, "arrowfield", "Diğer", "pixel", ["Vektör", "Ok"], None), (888, "chorddiagram", "Diğer", "gen", ["Grafik", "Veri", "Dairesel"], None),
+ (889, "capillary", "Prosedürel", "gen", ["Desen", "Dairesel"], None), (890, "edgecrystal", "Simülasyon", "pixel", ["Kristal", "Büyüme"], {"k": "fasetBoyu", "mul": 6}),
+])
+HIDE10.update({"lightvoronoi": ["cozunurl"], "offsetfamily": ["kesisimiTemi"]})

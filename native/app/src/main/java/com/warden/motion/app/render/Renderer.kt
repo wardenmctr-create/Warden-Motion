@@ -298,6 +298,9 @@ class Renderer(private val ctx: Context, maxSide: Int = 2048, private val sync: 
     private var echoMul = 1.0; private var echoBlend: BlendMode? = null; private var inEcho = false
     /** Canlı Bağlantı Çizgisi / Ölçü Oku: uçlara seçilen katmanların o anki konumu yazılır (katmanın kutusuna göre %) */
     private fun linkPoints(p: Project, l: Layer, e: Effect, t: Double, tr: TR): Effect {
+        // 1000 rehberi: motorun hesapladığı eğri/fonksiyon/konum verisi
+        Fx1000.data(p, l, e, t) { wx, wy -> val a = -tr.rot * PI / 180; val dx = wx - tr.x; val dy = wy - tr.y; val sc = if (kotlin.math.abs(tr.scale) > 1e-6) tr.scale else 1.0
+            (dx * cos(a) - dy * sin(a)) / sc / tr.sx to (dx * sin(a) + dy * cos(a)) / sc / tr.sy }?.let { return it }
         // Grafik/harita verisi: seçilen metin katmanındaki satırlar (virgül/boşlukla ayrılmış sayılar) → dv dizisi, dvR satır, dvC sütun
         if (e.type == "sweeppath" || e.type == "skelvolume" || e.type == "painttrail" || e.type == "bendtocurve" || e.type == "brushmask" || e.type == "tailribbon") { // nokta listesi → dv (bu katmanın yerel birimi)
             fun loc(wx: Double, wy: Double): Pair<Double, Double> { val a = -tr.rot * PI / 180; val dx = wx - tr.x; val dy = wy - tr.y; val sc = if (kotlin.math.abs(tr.scale) > 1e-6) tr.scale else 1.0; return (dx * cos(a) - dy * sin(a)) / sc / tr.sx to (dx * sin(a) + dy * cos(a)) / sc / tr.sy }

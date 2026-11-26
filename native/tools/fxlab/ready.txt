@@ -7,11 +7,13 @@ anaglyph
 anamorphic
 animchart
 anisodiff
+aperiodicplace
 apollonian
 applique
 areacompare
 areameter
 arithmetic
+arrowfield
 ascii
 audiospec
 audiowave
@@ -59,6 +61,7 @@ bulge
 bumpcard
 burnfilm
 bwmix
+capillary
 capsule
 cardboardcut
 carddance
@@ -78,7 +81,9 @@ cbsticker
 cbsurprise
 cbsweat
 cellauto
+cellnetwork
 cellpattern
+celticknot
 ceramicglaze
 chain3d
 chanalpha
@@ -89,6 +94,7 @@ chanshift
 checker
 chipcollage
 choke
+chorddiagram
 chromaber
 chromadenoise
 chromakey
@@ -100,6 +106,7 @@ chromzoom
 cinemagraph
 cinematic
 circlefx
+circlepack
 clahe
 clothphys
 clouds
@@ -174,6 +181,7 @@ deinterlace
 delaunay
 demoire
 denoise
+densitycontour
 depthblur
 depthclip3d
 depthfog
@@ -201,6 +209,7 @@ duneripples
 dustinlight
 dustscratch
 edgeband
+edgecrystal
 edgedirextend
 edgedirmatte
 edgeextend
@@ -212,8 +221,11 @@ ellipsefx
 ellipsoid
 emboss
 embroidery
+envelope
 envelopewarp
 equalize
+escapepath
+evolute
 explodefaces
 exposure
 exposurefuse
@@ -250,7 +262,9 @@ focusstack
 fog
 fold3d
 foldpanels
+forceflow
 fourcolor
+fourierdraw
 fractal
 fractalnoise
 fractalpath
@@ -309,6 +323,7 @@ heathertwine
 heatmapchart
 hexarray
 hexcells
+hexpath
 hexprism
 hexrotate
 hexshift
@@ -364,6 +379,7 @@ lightning
 lightocclusion
 lightrays
 lightsweep
+lightvoronoi
 lightwipe
 lightwrap
 lincolorkey
@@ -443,6 +459,7 @@ objectmatte
 ocean3d
 octahedron
 offset
+offsetfamily
 oilpaint
 oldfilm
 ominodiff
@@ -489,6 +506,7 @@ plasma
 plastic
 plateseparate
 plexus
+plotfunc
 pointcloud
 poissondots
 polar
@@ -534,6 +552,7 @@ risograph
 rollingfix
 rootnet
 ropephys
+rotsym
 roughen
 roughmeter
 roundcorners
@@ -616,6 +635,7 @@ stipple
 strata
 streaks
 streakstrips
+streamlines
 stretchseg
 stringart
 stripes
@@ -625,6 +645,7 @@ subdivide
 subpixeldither
 subsurface
 sunsurface
+superformula
 sweeppath
 swirl
 swirlblur
@@ -702,6 +723,7 @@ wavefront
 waveworld
 waxcrayon
 waxseal
+weightedstipple
 weldedges
 wetblend
 wetsurface
