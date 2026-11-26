@@ -83,3 +83,17 @@ N10A([
  (933, "gantt", "Diğer", "gen", ["Grafik", "Zaman"], None), (934, "dotdensity", "Diğer", "gen", ["Harita", "Nokta", "Veri"], None),
 ])
 HIDE10.update({"textpathfit": [], "strokewrite": ["sira"] if False else [], "regionmerge": ["grupAlan"], "cartogram": ["yineleme"], "mapswipe": ["koordinaKili"]})
+N10A([
+ (935, "latticevolume", "3B", "3d", ["3B", "Kafes"], {"box": 0.15}), (936, "bevel3d", "3B", "3d", ["3B", "Pah"], {"box": 0.15}),
+ (937, "twistbridge", "3B", "3d", ["3B", "Köprü", "Burgu"], {"box": 0.2}), (938, "geodesicline3d", "3B", "3d", ["3B", "Çizgi"], {"box": 0.15}),
+ (939, "normalsmooth", "3B", "3d", ["3B", "Normal"], {"box": 0.15}), (940, "seamline3d", "3B", "3d", ["3B", "Dikiş"], {"box": 0.15}),
+ (941, "unfold3d", "3B", "3d", ["3B", "Açılım"], {"box": 0.3}), (942, "shellpeel", "3B", "3d", ["3B", "Kabuk"], {"box": 0.4}),
+ (943, "surfwave3d", "3B", "3d", ["3B", "Dalga"], {"box": 0.2}), (944, "slopeattach", "Taşı ve Dönüştür", "rig", ["Yüzey", "Eğim"], None),
+ (945, "bonepropagate", "Countryball", "rig", ["Rig", "Kemik"], None), (946, "morphparticles3d", "Simülasyon", "gen", ["Parçacık", "Dönüşüm"], {"box": 0.2}),
+ (947, "atlasfaces", "3B", "3d", ["3B", "Doku"], {"box": 0.15}), (948, "cameracapture", "3B", "3d", ["3B", "Kamera", "Maske"], {"box": 0.15}),
+ (949, "projectionpaint", "3B", "3d", ["3B", "Projeksiyon"], {"box": 0.15}), (950, "multiview", "3B", "gen", ["3B", "Kamera", "Pano"], None),
+ (951, "depthpointsize", "3B", "gen", ["Nokta bulutu", "Derinlik"], None), (952, "areasample", "3B", "pixel", ["Nokta", "Örnekleme"], None),
+ (953, "normallines3d", "3B", "pixel", ["Normal", "Ok"], {"k": "okBoyu"}), (954, "depthsort", "3B", "special", ["Derinlik", "Sıralama"], None),
+ (955, "camframe3d", "3B", "special", ["Kamera", "Kadraj"], None), (956, "sectioncap", "3B", "3d", ["3B", "Kesit"], {"box": 0.15}),
+])
+HIDE10.update({"bevel3d": ["aciEsig"], "twistbridge": ["kenarSeci"], "normalsmooth": ["agirlik"], "unfold3d": ["kokYuz", "cakismalIsar"], "depthsort": ["kamera", "alfaKariKoru"], "camframe3d": ["telafi"]})

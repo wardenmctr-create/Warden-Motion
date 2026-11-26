@@ -207,6 +207,11 @@ class Renderer(private val ctx: Context, maxSide: Int = 2048, private val sync: 
     private class Cam(val tx: Double, val ty: Double, val z: Double, val k: Double, val host: String?)
     /** 412 CB Kamera Tepkisi: hedefe yumuşak yakınlaşma, bekleme ve geri dönüş */
     private fun camFx(p: Project, t: Double): Cam? {
+        // 955 Üç Boyutlu Kamera Yakın Plan Kısıtı: hedefin ekranı kaplama oranı sabit tutulur (sahne yakınlaşması hedef çevresinde)
+        for (h in p.layers) { if (t < h.start || t >= h.end || h.hidden == true) continue; val e = h.effects.find { it.type == "camframe3d" && it.on != false } ?: continue
+            val tg = e.c?.get("hedef")?.let { id -> p.layers.find { it.id == id } } ?: h; val sm = max(0.0, e.value("yumusatm", t)); var x = 0.0; var y = 0.0; var hh = 0.0; val S = if (sm > 0.01) 6 else 1
+            for (i in 0 until S) { val w = worldTransform(p, tg, t - sm * i / max(1, S - 1)); x += w.x / S; y += w.y / S; hh += tg.h * kotlin.math.abs(w.scale * w.sy) / S }
+            val z = (p.height * e.value("kaplama", t) / 100 / max(1.0, hh)).coerceIn(0.2, 8.0); return Cam(x, y, z, 1.0, null) }
         for (h in p.layers) { if (t < h.start || t >= h.end || h.hidden == true) continue
             val e = h.effects.find { it.type == "cbcam" && it.on != false } ?: continue
             val gi = max(1e-3, e.value("girisSure", t)); val be = max(0.0, e.value("bekleme", t)); val ci = max(1e-3, e.value("cikisSure", t))
@@ -377,8 +382,14 @@ class Renderer(private val ctx: Context, maxSide: Int = 2048, private val sync: 
     private var historyDepth = 0
     /** 693 Karakter Parça Sırası: seçili parçalar, açı eşiğine göre ana katmanın önüne ya da arkasına alınır */
     private fun drawOrder(p: Project, t: Double): List<Layer> {
-        val hosts = p.layers.filter { h -> h.effects.any { it.type == "partorder" && it.on != false } }; if (hosts.isEmpty()) return p.layers
+        val hosts = p.layers.filter { h -> h.effects.any { (it.type == "partorder" || it.type == "depthsort") && it.on != false } }; if (hosts.isEmpty()) return p.layers
         val list = p.layers.toMutableList()
+        // 954 Derinlikte Katman Sıralama: seçili kartlar 3B konum Z'sine göre (yoksa ölçeğe göre) uzaktan yakına çizilir; yakın derinlikler toleransla sabit sırada
+        for (h in hosts) for (e in h.effects) { if (e.type != "depthsort" || e.on == false) continue
+            val ids = e.c?.get("katmanla")?.split(',')?.filter { it.isNotBlank() } ?: continue; val tol = e.value("derinlikTole", t)
+            fun depth(l: Layer): Double { val e3 = l.effects.firstOrNull { it.on != false && fxMeta(it.type).kind == "3d" }; return e3?.value("konumXYZ", t) ?: (worldTransform(p, l, t).scale * 100) }
+            val idx = list.withIndex().filter { it.value.id in ids }; if (idx.size < 2) continue; val sorted = idx.map { it.value }.sortedWith { a, b -> val da = depth(a); val db = depth(b); if (kotlin.math.abs(da - db) <= tol) 0 else da.compareTo(db) }
+            idx.forEachIndexed { k, iv -> list[iv.index] = sorted[k] } }
         for (h in hosts) for (e in h.effects) { if (e.type != "partorder" || e.on == false) continue
             val ids = e.c?.get("parcalar")?.split(',')?.filter { it.isNotBlank() } ?: continue; val ang = e.value("aci", t); val mode = e.value("siraSabl", t).roundToInt()
             val behind = when (mode) { 0 -> ang < 0; 2 -> kotlin.math.abs(((worldTransform(p, h, t).rot + ang) % 360 + 360) % 360 - 180) < 90; else -> false }; if (mode == 1) continue

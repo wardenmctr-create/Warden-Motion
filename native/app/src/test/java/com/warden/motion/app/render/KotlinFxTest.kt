@@ -73,6 +73,10 @@ class KotlinFxTest {
             Case("motionmirror", mapOf("kaynakRig" to "S", "hedefRig" to "T"), listOf(L("S", 100.0, 200.0, xs = moving, rot = Anim(0.0, listOf(Key(0.0, 0.0), Key(2.0, 60.0)))), L("T", 300.0, 200.0, fill = "#2244AA"))),
             Case("phasespread", mapOf("grup" to "P1,P2"), listOf(L("P1", 0.0, 150.0, xs = moving), L("P2", 0.0, 250.0, xs = moving, fill = "#2244AA")), mapOf("fazFark" to 180.0)),
             Case("stepcycle", mapOf("rig" to "K1,K2"), listOf(L("K1", 150.0, 300.0), L("K2", 250.0, 300.0, fill = "#2244AA"))),
+            Case("bubblelayout", mapOf("balonlar" to "U1,U2"), listOf(L("U1", 190.0, 200.0, 90.0, 50.0), L("U2", 210.0, 210.0, 90.0, 50.0, fill = "#2244AA"))),
+            Case("labelavoid", mapOf("etiketle" to "E1,E2"), listOf(L("E1", 195.0, 200.0, 80.0, 30.0), L("E2", 205.0, 205.0, 80.0, 30.0, fill = "#2244AA"))),
+            Case("bonepropagate", mapOf("rig" to "R1,R2,R3"), listOf(L("R1", 150.0, 200.0, 80.0, 20.0, rot = Anim(0.0, listOf(Key(0.0, 0.0), Key(2.0, 80.0)))), L("R2", 230.0, 200.0, 80.0, 20.0, fill = "#2244AA"), L("R3", 300.0, 200.0, 80.0, 20.0, fill = "#22AA44"))),
+            Case("depthsort", mapOf("katmanla" to "D1,D2"), listOf(L("D1", 190.0, 200.0, 120.0, 120.0).copy(scale = Anim(1.4)), L("D2", 210.0, 210.0, 120.0, 120.0, fill = "#2244AA"))),
         )
         val fails = ArrayList<String>()
         for (cs in cases) {

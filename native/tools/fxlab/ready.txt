@@ -12,9 +12,11 @@ apollonian
 applique
 areacompare
 areameter
+areasample
 arithmetic
 arrowfield
 ascii
+atlasfaces
 audiospec
 audiowave
 aurora
@@ -31,6 +33,7 @@ beam
 bender
 bendit
 bendtocurve
+bevel3d
 bevelalpha
 beveledges
 bezierwarp
@@ -62,6 +65,7 @@ bulge
 bumpcard
 burnfilm
 bwmix
+cameracapture
 capillary
 capsule
 cardboardcut
@@ -191,6 +195,7 @@ depthclip3d
 depthfog
 depthmatte
 depthparallax
+depthpointsize
 depthpriority
 depthrim
 depthview
@@ -293,6 +298,7 @@ gamutwarn
 gantt
 gear3d
 geodesiccolor
+geodesicline3d
 geoheat
 glass
 glassetch
@@ -372,6 +378,7 @@ keylight
 knitting
 lathe3d
 lattice
+latticevolume
 leaffall
 lens
 lensblur
@@ -444,6 +451,7 @@ mirror3d
 mirrorrepeat
 moireprint
 morphimg
+morphparticles3d
 mosaic
 mosaicgrout
 mossgrow
@@ -454,6 +462,7 @@ movingmatte
 mudcrack
 multicam
 multiscale
+multiview
 nebula
 neonedge
 neonsign
@@ -463,8 +472,10 @@ nlmeans
 noise
 noisealpha
 noisehls
+normallines3d
 normalmap
 normalselect
+normalsmooth
 objectmatte
 ocean3d
 octahedron
@@ -526,6 +537,7 @@ poseblend
 posterize
 powervoronoi
 prismfx
+projectionpaint
 propsymbols
 puppetpin
 pyramid
@@ -587,6 +599,8 @@ scratchart
 scratchreveal
 scribble
 seamallowance
+seamline3d
+sectioncap
 sectionview
 selcolor
 selfavoid
@@ -602,6 +616,7 @@ shapematchtrans
 sharpen
 shatter
 shear
+shellpeel
 skelvolume
 sketch
 slant
@@ -660,6 +675,7 @@ subsurface
 sunburst
 sunsurface
 superformula
+surfwave3d
 sweeppath
 swirl
 swirlblur
@@ -704,10 +720,12 @@ truchet
 tunnel
 turingmaze
 twist3d
+twistbridge
 twister
 twotargetzoom
 twotonelines
 underwater
+unfold3d
 unsharp
 upscale
 uvmap

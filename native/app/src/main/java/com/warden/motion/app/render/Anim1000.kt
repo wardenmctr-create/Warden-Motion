@@ -13,7 +13,7 @@ import kotlin.math.*
  * local: efektin bulunduğu katmanın kendi dönüşümü; rig: efektin seçtiği diğer katmanlar (ayak, uzuv, iris, yüz parçaları, poz grupları).
  */
 object Anim1000 {
-    val RIG = setOf("bubblelayout", "labelavoid", "footlock", "stepcycle", "irislock", "exprweights", "facecoords", "jointlimit", "phasespread", "speedpose", "motionmirror")
+    val RIG = setOf("slopeattach", "bonepropagate", "bubblelayout", "labelavoid", "footlock", "stepcycle", "irislock", "exprweights", "facecoords", "jointlimit", "phasespread", "speedpose", "motionmirror")
     private fun ids(e: Effect, k: String) = e.c?.get(k)?.split(',')?.filter { it.isNotBlank() } ?: emptyList()
     private fun lay(p: Project, e: Effect, k: String) = e.c?.get(k)?.split(',')?.firstOrNull { it.isNotBlank() }?.let { id -> p.layers.find { it.id == id } }
     private fun h1(n: Double): Double { val x = sin(n * 127.1 + 311.7) * 43758.5453; return x - floor(x) }
@@ -130,6 +130,17 @@ object Anim1000 {
         var loc = loc0; fun v(k: String) = e.value(k, t)
         when (e.type) {
             "bubblelayout", "labelavoid" -> { val o = layoutOffsets(p, e, t)[l.id] ?: return loc; val (lx, ly) = off(o.first, o.second); loc = loc.copy(x = loc.x + lx, y = loc.y + ly) }
+            "slopeattach" -> { // 944: nesne yüzey şeklinin üst konturuna oturur; tabanı yerel eğime göre döner, normal yönünde ofset korunur
+                if (e.c?.get("takipNesn") != l.id) return loc; val sf = lay(p, e, "yuzey") ?: return loc; if (sf.type != "shape") return loc
+                val sw = worldTransform(p, sf, t); val pts = ShapeFx.sample(ShapeFx.path(sf, t), 160).map { q -> val r = sw.rot * PI / 180; val x = q[0] * sw.scale * sw.sx; val y = q[1] * sw.scale * sw.sy; (sw.x + x * cos(r) - y * sin(r)) to (sw.y + x * sin(r) + y * cos(r)) }
+                val me = worldTransform(p, l, t); fun topY(x: Double): Double? { var best: Double? = null; for (i in pts.indices) { val a = pts[i]; val b = pts[(i + 1) % pts.size]; if ((a.first - x) * (b.first - x) > 0 || a.first == b.first) continue; val y = a.second + (b.second - a.second) * (x - a.first) / (b.first - a.first); if (best == null || y < best) best = y }; return best }
+                val y0 = topY(me.x) ?: return loc; val h = 4.0; val ang = atan2((topY(me.x + h) ?: y0) - (topY(me.x - h) ?: y0), 2 * h); val sm = max(0.0, v("donusYumu")); var a2 = ang
+                if (sm > 0.01) { var acc = 0.0; for (k in 0 until 5) { val tt = t - sm * k / 4; val mx = worldTransform(p, l, tt).x; val ya = topY(mx + h); val yb = topY(mx - h); acc += if (ya != null && yb != null) atan2(ya - yb, 2 * h) else ang }; a2 = acc / 5 }
+                val off = l.h * abs(me.scale) / 2 + v("ofset"); val tx = me.x + sin(a2) * off; val ty = y0 - cos(a2) * off; val (lx, ly) = off(tx - me.x, ty - me.y)
+                loc = loc.copy(x = loc.x + lx, y = loc.y + ly, rot = loc.rot + a2 * 180 / PI) }
+            "bonepropagate" -> { // 945: ilk kemiğin dönüşü sonraki kemiklere gecikme ve azalmayla yayılır
+                val bones = ids(e, "rig"); val i = bones.indexOf(l.id); if (i <= 0 || i > v("yayilimDeri").roundToInt()) return loc; val first = p.layers.find { it.id == bones[0] } ?: return loc
+                val d = first.rotation.at(t - v("gecikme") * i) - first.rotation.at(first.start); loc = loc.copy(rot = loc.rot + d * (1 - v("azalma") / 100).pow(i)) }
             "footlock" -> { // 898: ayak zemine değince temas başlangıcındaki sahne x'inde sabit kalır
                 if (e.c?.get("ayak") != l.id) return loc; val g = lay(p, e, "zemin"); val th = max(0.5, v("gecis"))
                 fun bottom(tt: Double): Pair<Double, Double> { val w = worldTransform(p, l, tt); return w.x to w.y + l.h / 2 * abs(w.scale) }

@@ -26,3 +26,7 @@ textdiff
 bubblelayout
 labelavoid
 lettergrid
+slopeattach
+bonepropagate
+depthsort
+camframe3d
