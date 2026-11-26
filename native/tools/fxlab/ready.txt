@@ -209,6 +209,7 @@ diffmap
 diffmatte
 diffraction
 dirblur
+directionaltear
 displace
 dispmap
 dissolve
@@ -612,6 +613,7 @@ scanlines
 scatter
 scatter3d
 scatterfield
+scatterglitch
 scatterize
 scatterplot
 scatterpx
