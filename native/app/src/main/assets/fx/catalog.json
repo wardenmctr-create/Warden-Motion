@@ -122467,6 +122467,1939 @@
 "heavy": false,
 "n": 625,
 "ready": true
+},
+{
+"type": "linocut",
+"name": "Linol Baskı",
+"en": "",
+"cat": 1,
+"kind": "pixel",
+"desc": "Oyulmuş yüzeylerden kalan kalın ve yönlü siyah çizgilerle baskı görünümü üretir.",
+"tags": [
+"Baskı",
+"Oyma"
+],
+"params": [
+{
+"k": "oyukGeni",
+"l": "Oyuk genişliği",
+"g": null,
+"anim": "yes",
+"hint": "oyuk çizgisi genişliği",
+"kind": "jog",
+"min": 0.5,
+"max": 50.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 3.0
+},
+{
+"k": "tonEsig",
+"l": "Ton eşiği",
+"g": null,
+"anim": "yes",
+"hint": "mürekkep bırakılan ton sınırı",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 50.0
+},
+{
+"k": "murekkep",
+"l": "Mürekkep",
+"g": null,
+"anim": "yes",
+"hint": "baskı mürekkebi",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#171717"
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 626,
+"ready": true
+},
+{
+"type": "risograph",
+"name": "Risograf Baskı",
+"en": "",
+"cat": 1,
+"kind": "pixel",
+"desc": "Renkleri ayrı baskı plakalarına ayırıp renk katlarının fiziksel kayıt kaymasını ve mürekkep tramını simüle eder.",
+"tags": [
+"Baskı",
+"Tram"
+],
+"params": [
+{
+"k": "plakaSayi",
+"l": "Plaka sayısı",
+"g": null,
+"anim": "yes",
+"hint": "ayrı baskı renkleri",
+"kind": "jog",
+"min": 1.0,
+"max": 8.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 3.0
+},
+{
+"k": "plakaKaym",
+"l": "Plaka kayması",
+"g": null,
+"anim": "yes",
+"hint": "plaka başına kayıt kayması",
+"kind": "jog",
+"two": true,
+"three": false,
+"min": -50.0,
+"max": 50.0,
+"defY": 1.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 2.0
+},
+{
+"k": "tram",
+"l": "Tram",
+"g": null,
+"anim": "yes",
+"hint": "tram hücresi boyu",
+"kind": "jog",
+"min": 1.0,
+"max": 50.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 6.0
+},
+{
+"k": "plakaRenk",
+"l": "Plaka renkleri",
+"g": "Gelişmiş",
+"anim": "yes",
+"hint": "her plakanın mürekkep rengi",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#E53935"
+}
+],
+"presets": [
+{
+"code": "S2",
+"name": "Retro baskı",
+"vals": {
+"tram": 8.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 627,
+"ready": true
+},
+{
+"type": "cyanotype",
+"name": "Siyanotip Baskı",
+"en": "",
+"cat": 0,
+"kind": "pixel",
+"desc": "Işıkla duyarlı mavi baskı sürecini ton eğrisi ve kâğıt üzerinde görselleştirir.",
+"tags": [
+"Baskı",
+"Mavi"
+],
+"params": [
+{
+"k": "pozlama",
+"l": "Pozlama",
+"g": null,
+"anim": "yes",
+"hint": "baskı ton yoğunluğu",
+"kind": "jog",
+"min": 0.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 100.0
+},
+{
+"k": "maviYogu",
+"l": "Mavi yoğunluğu",
+"g": null,
+"anim": "yes",
+"hint": "mavi pigment doygunluğu",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 80.0
+},
+{
+"k": "kagitDoku",
+"l": "Kâğıt dokusu",
+"g": null,
+"anim": "yes",
+"hint": "kâğıt liflerinin etkisi",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 25.0
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Soluk mavi",
+"vals": {
+"pozlama": 70.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Koyu baskı",
+"vals": {
+"pozlama": 140.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 628,
+"ready": true
+},
+{
+"type": "chromolitho",
+"name": "Kromolitografi",
+"en": "",
+"cat": 1,
+"kind": "pixel",
+"desc": "Sınırlı renkli taş baskı plakalarıyla geniş renk bölgeleri ve üst üste gelen baskı dokusu oluşturur.",
+"tags": [
+"Baskı",
+"Plaka"
+],
+"params": [
+{
+"k": "renkPlak",
+"l": "Renk plakası",
+"g": null,
+"anim": "yes",
+"hint": "baskı plakası sayısı",
+"kind": "jog",
+"min": 2.0,
+"max": 16.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 6.0
+},
+{
+"k": "kenarKaym",
+"l": "Kenar kayması",
+"g": null,
+"anim": "yes",
+"hint": "plaka sınırı kayması",
+"kind": "jog",
+"min": 0.0,
+"max": 30.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 1.0
+},
+{
+"k": "murekkepOrtu",
+"l": "Mürekkep örtüşmesi",
+"g": null,
+"anim": "yes",
+"hint": "örtüşen mürekkep karışımı",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 40.0
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 629,
+"ready": true
+},
+{
+"type": "drypastel",
+"name": "Kuru Pastel",
+"en": "",
+"cat": 1,
+"kind": "pixel",
+"desc": "Kâğıt üzerinde kuru renk pigmentinin parçalı, tozlu dağılımını taklit eder.",
+"tags": [
+"Pastel",
+"Boya"
+],
+"params": [
+{
+"k": "pastelCapi",
+"l": "Pastel çapı",
+"g": null,
+"anim": "yes",
+"hint": "pastel darbe çapı",
+"kind": "jog",
+"min": 1.0,
+"max": 150.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 12.0
+},
+{
+"k": "basinc",
+"l": "Basınç",
+"g": null,
+"anim": "yes",
+"hint": "pigment basıncı",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 65.0
+},
+{
+"k": "kagitDisi",
+"l": "Kâğıt dişi",
+"g": null,
+"anim": "yes",
+"hint": "kâğıdın pütürleri",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 50.0
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Yumuşak pastel",
+"vals": {
+"basinc": 45.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 630,
+"ready": true
+},
+{
+"type": "waxcrayon",
+"name": "Mum Boya",
+"en": "",
+"cat": 1,
+"kind": "pixel",
+"desc": "Doku üzerinde düzensiz boşluklar bırakan renkli balmumu darbeleri üretir.",
+"tags": [
+"Mum boya",
+"Çocuk"
+],
+"params": [
+{
+"k": "darbeCapi",
+"l": "Darbe çapı",
+"g": null,
+"anim": "yes",
+"hint": "boya darbe çapı",
+"kind": "jog",
+"min": 1.0,
+"max": 150.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 10.0
+},
+{
+"k": "bosluk",
+"l": "Boşluk",
+"g": null,
+"anim": "yes",
+"hint": "boş kalan yüzey oranı",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 30.0
+},
+{
+"k": "basinc",
+"l": "Basınç",
+"g": null,
+"anim": "yes",
+"hint": "pigment yoğunluğu",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 70.0
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Dolu mum boya",
+"vals": {
+"basinc": 90.0,
+"bosluk": 10.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Kuru boya",
+"vals": {
+"basinc": 45.0,
+"bosluk": 60.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 631,
+"ready": true
+},
+{
+"type": "inkwash",
+"name": "Sulu Mürekkep Kenarı",
+"en": "",
+"cat": 1,
+"kind": "pixel",
+"desc": "Renk pigmentinin suyla yayıldığı bölgelerin kenarında koyu birikme halkaları oluşturur.",
+"tags": [
+"Mürekkep",
+"Sulu"
+],
+"params": [
+{
+"k": "yayilma",
+"l": "Yayılma",
+"g": null,
+"anim": "yes",
+"hint": "pigment yayılma mesafesi",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 8.0
+},
+{
+"k": "kenarPigm",
+"l": "Kenar pigmenti",
+"g": null,
+"anim": "yes",
+"hint": "sınırdaki koyulaşma",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 50.0
+},
+{
+"k": "kuruma",
+"l": "Kuruma",
+"g": null,
+"anim": "yes",
+"hint": "kuruma ilerlemesi",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 70.0
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Hafif mürekkep",
+"vals": {
+"yayilma": 3.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Islak mürekkep",
+"vals": {
+"yayilma": 18.0,
+"kuruma": 30.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": {
+"k": "yayilma"
+},
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 632,
+"ready": true
+},
+{
+"type": "paintdrip",
+"name": "Damlama Boyası",
+"en": "",
+"cat": 1,
+"kind": "pixel",
+"desc": "Kaynak renkten örneklenen boya izlerini aşağı doğru akıtır ve kuruma sınırları oluşturur; genel sıvı bükme değildir.",
+"tags": [
+"Boya",
+"Akış"
+],
+"params": [
+{
+"k": "akisHizi",
+"l": "Akış hızı",
+"g": null,
+"anim": "yes",
+"hint": "akış hızı",
+"kind": "jog",
+"min": 0.0,
+"max": 1000.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 45.0
+},
+{
+"k": "viskozit",
+"l": "Viskozite",
+"g": null,
+"anim": "yes",
+"hint": "akışa direnç",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 60.0
+},
+{
+"k": "damlaYogu",
+"l": "Damla yoğunluğu",
+"g": null,
+"anim": "yes",
+"hint": "damla oluşturma yoğunluğu",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 15.0
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Yavaş damla",
+"vals": {
+"viskozit": 85.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Akışkan boya",
+"vals": {
+"viskozit": 25.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": {
+"box": 0.5
+},
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 633,
+"ready": true
+},
+{
+"type": "marbling",
+"name": "Boya Mermerleme",
+"en": "",
+"cat": 4,
+"kind": "pixel",
+"desc": "Bir sıvı yüzey üzerindeki renklerin çekilmesi ve taranmasıyla ebru benzeri desen oluşturur.",
+"tags": [
+"Ebru",
+"Desen"
+],
+"params": [
+{
+"k": "renkSayi",
+"l": "Renk sayısı",
+"g": null,
+"anim": "yes",
+"hint": "palet renk sayısı",
+"kind": "jog",
+"min": 2.0,
+"max": 16.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 5.0
+},
+{
+"k": "taramaAral",
+"l": "Tarama aralığı",
+"g": null,
+"anim": "yes",
+"hint": "tarak çizgisi aralığı",
+"kind": "jog",
+"min": 1.0,
+"max": 300.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 25.0
+},
+{
+"k": "akisGucu",
+"l": "Akış gücü",
+"g": null,
+"anim": "yes",
+"hint": "bükülme şiddeti",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 50.0
+},
+{
+"k": "boyaPale",
+"l": "Boya paleti",
+"g": "Gelişmiş",
+"anim": "yes",
+"hint": "düzenlenebilir renkler",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#1B2A55"
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 634,
+"ready": true
+},
+{
+"type": "batik",
+"name": "Batik Boyama",
+"en": "",
+"cat": 4,
+"kind": "pixel",
+"desc": "Bağlama bölgelerinden yayılan renkleri emilim ve korunan çizgilerle üretir.",
+"tags": [
+"Batik",
+"Kumaş"
+],
+"params": [
+{
+"k": "baglamaNokt",
+"l": "Bağlama noktası",
+"g": null,
+"anim": "yes",
+"hint": "bağlama merkezi sayısı",
+"kind": "jog",
+"min": 1.0,
+"max": 100.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 6.0
+},
+{
+"k": "yayilim",
+"l": "Yayılım",
+"g": null,
+"anim": "yes",
+"hint": "boya yayılımı",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 50.0
+},
+{
+"k": "renkler",
+"l": "Renkler",
+"g": null,
+"anim": "yes",
+"hint": "boya paleti",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#285BC0"
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Halka batik",
+"vals": {
+"yayilim": 75.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Çoklu batik",
+"vals": {
+"yayilim": 40.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 635,
+"ready": true
+},
+{
+"type": "applique",
+"name": "Kumaş Aplike",
+"en": "",
+"cat": 1,
+"kind": "pixel",
+"desc": "Renk bölgelerini ayrı kumaş parçalarına dönüştürür; nakış ipliği yerine katmanlı kesim ve çevre dikişi kullanır.",
+"tags": [
+"Kumaş",
+"Dikiş"
+],
+"params": [
+{
+"k": "renkBolg",
+"l": "Renk bölgesi",
+"g": null,
+"anim": "yes",
+"hint": "hedef renk bölgesi sayısı",
+"kind": "jog",
+"min": 2.0,
+"max": 64.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 12.0
+},
+{
+"k": "kenarDiki",
+"l": "Kenar dikişi",
+"g": null,
+"anim": "yes",
+"hint": "çevre dikişi kalınlığı",
+"kind": "jog",
+"min": 0.0,
+"max": 20.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 2.0
+},
+{
+"k": "parcaOrtu",
+"l": "Parça örtüşmesi",
+"g": null,
+"anim": "yes",
+"hint": "parçaların örtüşme payı",
+"kind": "jog",
+"min": 0.0,
+"max": 50.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 3.0
+},
+{
+"k": "kumasMalz",
+"l": "Kumaş malzemesi",
+"g": "Gelişmiş",
+"anim": "step",
+"hint": "parçaların dokusu",
+"kind": "choice",
+"min": 0,
+"max": 4,
+"step": 1,
+"jog": 1,
+"opts": [
+"Keçe",
+"Pamuk",
+"Keten",
+"Kot",
+"Özel"
+],
+"def": 0
+},
+{
+"k": "dokuGucu",
+"l": "Doku gücü",
+"g": "Gelişmiş",
+"anim": "yes",
+"hint": "lif/dokuma görünürlüğü",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 35.0
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 636,
+"ready": true
+},
+{
+"type": "stainedglass",
+"name": "Vitray",
+"en": "",
+"cat": 1,
+"kind": "pixel",
+"desc": "Görüntüyü renkli cam parçaları ve kalın birleştirme çizgilerine dönüştürür; Hücre Deseni'nin yalnız düz paletinden farklı optik geçirgenlik sağlar.",
+"tags": [
+"Vitray",
+"Cam"
+],
+"params": [
+{
+"k": "parcaSayi",
+"l": "Parça sayısı",
+"g": null,
+"anim": "yes",
+"hint": "cam parçası hedefi",
+"kind": "jog",
+"min": 5.0,
+"max": 2000.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 120.0
+},
+{
+"k": "kursunCizg",
+"l": "Kurşun çizgi",
+"g": null,
+"anim": "yes",
+"hint": "koyu birleştirme çizgisi",
+"kind": "jog",
+"min": 0.0,
+"max": 30.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 3.0
+},
+{
+"k": "camGeci",
+"l": "Cam geçirgenliği",
+"g": null,
+"anim": "yes",
+"hint": "camın ışık geçirgenliği",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 65.0
+},
+{
+"k": "birlestiCizgReng",
+"l": "Birleştirme çizgisi rengi",
+"g": "Gelişmiş",
+"anim": "yes",
+"hint": "cam parçaları arasındaki çizgi",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#242424"
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 637,
+"ready": true
+},
+{
+"type": "ceramicglaze",
+"name": "Seramik Sır",
+"en": "",
+"cat": 1,
+"kind": "pixel",
+"desc": "Renk bölgeleri üzerinde akmış parlak sır ve çatlakların altındaki mat zemini simüle eder.",
+"tags": [
+"Seramik",
+"Sır"
+],
+"params": [
+{
+"k": "sirAkis",
+"l": "Sır akışı",
+"g": null,
+"anim": "yes",
+"hint": "sırın akma düzensizliği",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 40.0
+},
+{
+"k": "catlakYogu",
+"l": "Çatlak yoğunluğu",
+"g": null,
+"anim": "yes",
+"hint": "çatlak yoğunluğu",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 25.0
+},
+{
+"k": "parlakli",
+"l": "Parlaklık",
+"g": null,
+"anim": "yes",
+"hint": "sır parlaklığı",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 65.0
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Parlak seramik",
+"vals": {
+"parlakli": 90.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Eskimiş sır",
+"vals": {
+"parlakli": 35.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 638,
+"ready": true
+},
+{
+"type": "mosaicgrout",
+"name": "Mozaik Derz Kabartması",
+"en": "",
+"cat": 1,
+"kind": "pixel",
+"desc": "Kaynak renkli taşları düzensiz parça sınırlarına göre yerleştirir ve derzleri gerçek ışık yönüyle gölgelendirir; Mozaik gelişmiş modu olma adayı.",
+"tags": [
+"Mozaik",
+"Taş"
+],
+"params": [
+{
+"k": "tasBoyu",
+"l": "Taş boyutu",
+"g": null,
+"anim": "yes",
+"hint": "ortalama taş boyutu",
+"kind": "jog",
+"min": 2.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 18.0
+},
+{
+"k": "derzDeri",
+"l": "Derz derinliği",
+"g": null,
+"anim": "yes",
+"hint": "derzin derinliği",
+"kind": "jog",
+"min": 0.0,
+"max": 30.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 3.0
+},
+{
+"k": "isikYonu",
+"l": "Işık yönü",
+"g": null,
+"anim": "yes",
+"hint": "ışık yönü",
+"kind": "jog",
+"min": 0.0,
+"max": 360.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"def": 135.0
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 639,
+"ready": true
+},
+{
+"type": "sequins",
+"name": "Pullu Yüzey",
+"en": "",
+"cat": 1,
+"kind": "pixel",
+"desc": "Katmanı yönleri farklı küçük pullarla kaplar; pullar kamera ve ışıkla ayrı ayrı parıldar.",
+"tags": [
+"Pul",
+"Parıltı"
+],
+"params": [
+{
+"k": "pulCapi",
+"l": "Pul çapı",
+"g": null,
+"anim": "yes",
+"hint": "pul çapı",
+"kind": "jog",
+"min": 1.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 12.0
+},
+{
+"k": "yonRast",
+"l": "Yön rastgeleliği",
+"g": null,
+"anim": "yes",
+"hint": "pul normal yönü değişkenliği",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 30.0
+},
+{
+"k": "parlakli",
+"l": "Parlaklık",
+"g": null,
+"anim": "yes",
+"hint": "yansıma gücü",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 70.0
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Düzenli pul",
+"vals": {
+"yonRast": 5.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 640,
+"ready": true
+},
+{
+"type": "beadwork",
+"name": "Boncuk İşleme",
+"en": "",
+"cat": 1,
+"kind": "pixel",
+"desc": "Renk örneklerinden yarı küresel boncuklar ve aralarındaki ip boşlukları oluşturur.",
+"tags": [
+"Boncuk"
+],
+"params": [
+{
+"k": "boncukCapi",
+"l": "Boncuk çapı",
+"g": null,
+"anim": "yes",
+"hint": "boncuk çapı",
+"kind": "jog",
+"min": 1.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 8.0
+},
+{
+"k": "aralik",
+"l": "Aralık",
+"g": null,
+"anim": "yes",
+"hint": "boncuklar arası boşluk",
+"kind": "jog",
+"min": 0.0,
+"max": 50.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 2.0
+},
+{
+"k": "isikGucu",
+"l": "Işık gücü",
+"g": null,
+"anim": "yes",
+"hint": "yüzey ışığı gücü",
+"kind": "jog",
+"min": 0.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 70.0
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "İnce boncuk",
+"vals": {
+"aralik": 1.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Kalın boncuk",
+"vals": {
+"aralik": 3.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 641,
+"ready": true
+},
+{
+"type": "knitting",
+"name": "Örgü İlmekleri",
+"en": "",
+"cat": 1,
+"kind": "pixel",
+"desc": "Görüntüye renkli, birbirine geçen ip ilmekleri ekler; düz dokuma deseninden farklı geometri kullanır.",
+"tags": [
+"Örgü",
+"İplik"
+],
+"params": [
+{
+"k": "ilmekBoyu",
+"l": "İlmek boyu",
+"g": null,
+"anim": "yes",
+"hint": "ilmek boyutu",
+"kind": "jog",
+"min": 2.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 12.0
+},
+{
+"k": "ipKali",
+"l": "İp kalınlığı",
+"g": null,
+"anim": "yes",
+"hint": "ip kalınlığı",
+"kind": "jog",
+"min": 0.5,
+"max": 30.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 3.0
+},
+{
+"k": "orguTipi",
+"l": "Örgü tipi",
+"g": null,
+"anim": "step",
+"hint": "ilmek düzeni",
+"kind": "choice",
+"min": 0,
+"max": 3,
+"step": 1,
+"jog": 1,
+"opts": [
+"Düz",
+"Ters",
+"Lastik",
+"Saç örgüsü"
+],
+"def": 0
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 642,
+"ready": true
+},
+{
+"type": "papiermache",
+"name": "Kâğıt Hamuru Kabartması",
+"en": "",
+"cat": 1,
+"kind": "pixel",
+"desc": "Renk alanlarını pütürlü, yükseltili kâğıt hamuru kütlelerine çevirir; düz karton dokusundan farklıdır.",
+"tags": [
+"Kâğıt",
+"Kabartma"
+],
+"params": [
+{
+"k": "hamurYuks",
+"l": "Hamur yüksekliği",
+"g": null,
+"anim": "yes",
+"hint": "hamur kabartı yüksekliği",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 6.0
+},
+{
+"k": "lifBoyu",
+"l": "Lif boyu",
+"g": null,
+"anim": "yes",
+"hint": "görünür lif uzunluğu",
+"kind": "jog",
+"min": 0.5,
+"max": 50.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 3.0
+},
+{
+"k": "kenarYumu",
+"l": "Kenar yumuşaklığı",
+"g": null,
+"anim": "yes",
+"hint": "kütle kenarı yuvarlaklığı",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 35.0
+},
+{
+"k": "yuzeyPuru",
+"l": "Yüzey pürüzlülüğü",
+"g": "Gelişmiş",
+"anim": "yes",
+"hint": "lifli hamurun matlığı",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 60.0
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 643,
+"ready": true
+},
+{
+"type": "waxseal",
+"name": "Mum Mühür",
+"en": "",
+"cat": 1,
+"kind": "pixel",
+"desc": "Silueti basılmış kabartma izi ve dağınık mum çevresiyle dekoratif mühüre dönüştürür.",
+"tags": [
+"Mühür",
+"Mum"
+],
+"params": [
+{
+"k": "kenarTasm",
+"l": "Kenar taşması",
+"g": null,
+"anim": "yes",
+"hint": "mühür kenarı taşması",
+"kind": "jog",
+"min": 0.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 15.0
+},
+{
+"k": "izDeri",
+"l": "İz derinliği",
+"g": null,
+"anim": "yes",
+"hint": "damga izinin derinliği",
+"kind": "jog",
+"min": 0.0,
+"max": 50.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 5.0
+},
+{
+"k": "mumReng",
+"l": "Mum rengi",
+"g": null,
+"anim": "yes",
+"hint": "mum yüzey rengi",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#9A2638"
+}
+],
+"presets": [],
+"pad": {
+"k": "kenarTasm",
+"add": 6
+},
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 644,
+"ready": true
+},
+{
+"type": "sandcarve",
+"name": "Kum Kazıma",
+"en": "",
+"cat": 1,
+"kind": "pixel",
+"desc": "Kum yüzeyinde çizilen yolun derinliğini ve kenara biriken tanecikleri oluşturur; Kum Sanatı renkli tanecik resminden farklıdır.",
+"tags": [
+"Kum",
+"Kazıma"
+],
+"params": [
+{
+"k": "yol",
+"l": "Yol",
+"g": null,
+"anim": "no",
+"hint": "çizim yolu",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": ""
+},
+{
+"k": "kaziDeri",
+"l": "Kazı derinliği",
+"g": null,
+"anim": "yes",
+"hint": "kazıma izi derinliği",
+"kind": "jog",
+"min": 0.0,
+"max": 50.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 5.0
+},
+{
+"k": "kumTane",
+"l": "Kum tanesi",
+"g": null,
+"anim": "yes",
+"hint": "kum tanesi boyu",
+"kind": "jog",
+"min": 0.5,
+"max": 20.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 2.0
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 645,
+"ready": true
+},
+{
+"type": "lenticular",
+"name": "Lentiküler Baskı",
+"en": "",
+"cat": 13,
+"kind": "pixel",
+"desc": "İki veya daha çok görüntüyü ince mercek şeritleriyle birleştirip bakış açısına göre değiştirir.",
+"tags": [
+"Lentiküler",
+"Bakış"
+],
+"params": [
+{
+"k": "goruntul",
+"l": "Görüntüler",
+"g": null,
+"anim": "no",
+"hint": "şeritlere bağlanacak görseller",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": ""
+},
+{
+"k": "bakisAcis",
+"l": "Bakış açısı",
+"g": null,
+"anim": "yes",
+"hint": "sanal bakış açısı",
+"kind": "jog",
+"min": -60.0,
+"max": 60.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"def": 0.0
+},
+{
+"k": "seritSikl",
+"l": "Şerit sıklığı",
+"g": null,
+"anim": "yes",
+"hint": "mercek şeridi sıklığı",
+"kind": "jog",
+"min": 1.0,
+"max": 10.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 4.0
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 646,
+"ready": true
+},
+{
+"type": "moireprint",
+"name": "Hareli Baskı",
+"en": "",
+"cat": 1,
+"kind": "pixel",
+"desc": "Kontrollü baskı frekans ve açı farklarıyla dekoratif moiré görünümü üretir; girişim deseninden farklı olarak kaynak tonlarını modüle eder.",
+"tags": [
+"Hare",
+"Tram"
+],
+"params": [
+{
+"k": "tramFrek",
+"l": "Tram frekansı",
+"g": null,
+"anim": "yes",
+"hint": "tram sıklığı",
+"kind": "jog",
+"min": 0.01,
+"max": 0.5,
+"step": 0.01,
+"jog": 0.01,
+"unit": "px",
+"def": 0.15
+},
+{
+"k": "aciFark",
+"l": "Açı farkı",
+"g": null,
+"anim": "yes",
+"hint": "katmanlar arası açı",
+"kind": "jog",
+"min": 0.0,
+"max": 90.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"def": 8.0
+},
+{
+"k": "kontrast",
+"l": "Kontrast",
+"g": null,
+"anim": "yes",
+"hint": "desen kontrastı",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 40.0
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Hafif hare",
+"vals": {
+"kontrast": 20.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Belirgin baskı",
+"vals": {
+"kontrast": 60.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 647,
+"ready": true
+},
+{
+"type": "linedensity",
+"name": "Çizgi Yoğunluğu Resmi",
+"en": "",
+"cat": 1,
+"kind": "pixel",
+"desc": "Çizgi sayısını ve aralığını tonlara göre değiştirir; kalem taramasının elle çizilmiş darbeleri yerine sürekli topolojik çizgiler kullanır.",
+"tags": [
+"Çizgi",
+"Ton"
+],
+"params": [
+{
+"k": "cizgiSayi",
+"l": "Çizgi sayısı",
+"g": null,
+"anim": "yes",
+"hint": "başlangıç çizgisi sayısı",
+"kind": "jog",
+"min": 2.0,
+"max": 500.0,
+"step": 0.01,
+"jog": 0.01,
+"unit": "",
+"def": 80.0
+},
+{
+"k": "tonEtki",
+"l": "Ton etkisi",
+"g": null,
+"anim": "yes",
+"hint": "tonun çizgi yoğunluğuna etkisi",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 70.0
+},
+{
+"k": "kivrim",
+"l": "Kıvrım",
+"g": null,
+"anim": "yes",
+"hint": "eğri bükülmesi",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 20.0
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 648,
+"ready": true
+},
+{
+"type": "chipcollage",
+"name": "Renkli Kırpık Kolaj",
+"en": "",
+"cat": 1,
+"kind": "pixel",
+"desc": "Kaynak renklerinden küçük düzensiz fiziksel kırpık parçalar üretir; yırtık kâğıt kolajının bölgesel büyük parçalarından farklı, mod olma adayı.",
+"tags": [
+"Kolaj",
+"Parça"
+],
+"params": [
+{
+"k": "parcaBoyu",
+"l": "Parça boyu",
+"g": null,
+"anim": "yes",
+"hint": "parça boyutu",
+"kind": "jog",
+"min": 1.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 12.0
+},
+{
+"k": "bosluk",
+"l": "Boşluk",
+"g": null,
+"anim": "yes",
+"hint": "parçalar arası boşluk",
+"kind": "jog",
+"min": 0.0,
+"max": 30.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 2.0
+},
+{
+"k": "tohum",
+"l": "Tohum",
+"g": null,
+"anim": "yes",
+"hint": "parça düzeni tohumu",
+"kind": "jog",
+"min": 0.0,
+"max": 999999.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"reseed": true,
+"def": 1.0
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Büyük kırpık",
+"vals": {
+"bosluk": 3.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "İnce kolaj",
+"vals": {
+"bosluk": 1.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 649,
+"ready": true
+},
+{
+"type": "shadowtheater",
+"name": "Gölge Tiyatrosu",
+"en": "",
+"cat": 0,
+"kind": "pixel",
+"desc": "Siluetleri arkadan ışıklı bir perde üzerinde, uzaklıkla büyüyen ve yumuşayan gölgeler halinde gösterir.",
+"tags": [
+"Gölge",
+"Perde"
+],
+"params": [
+{
+"k": "perdeUzak",
+"l": "Perde uzaklığı",
+"g": null,
+"anim": "yes",
+"hint": "nesne-perde uzaklığı",
+"kind": "jog",
+"min": 0.0,
+"max": 2000.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 100.0
+},
+{
+"k": "isik",
+"l": "Işık",
+"g": null,
+"anim": "yes",
+"hint": "ışık konumu",
+"kind": "jog",
+"two": true,
+"three": false,
+"min": -100.0,
+"max": 200.0,
+"defY": 10.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 50.0
+},
+{
+"k": "golgeYumu",
+"l": "Gölge yumuşaklığı",
+"g": null,
+"anim": "yes",
+"hint": "gölge kenarı yumuşaklığı",
+"kind": "jog",
+"min": 0.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 12.0
+},
+{
+"k": "perdeReng",
+"l": "Perde rengi",
+"g": "Gelişmiş",
+"anim": "yes",
+"hint": "arkadan aydınlanan perde",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#E8D8B5"
+},
+{
+"k": "golgeReng",
+"l": "Gölge rengi",
+"g": "Gelişmiş",
+"anim": "yes",
+"hint": "siluet gölgesi",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#282320"
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 650,
+"ready": true
 }
 ],
 "featured": [

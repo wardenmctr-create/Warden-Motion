@@ -40,3 +40,18 @@ N8A([
  (624, "temporalfreq", "Zaman", "pixel", ["Zaman", "Analiz"], None), (625, "colortrail", "Zaman", "pixel", ["Zaman", "İz", "Renk"], {"box": 0.6}),
 ])
 HIDE8.update({"warpfield": ["kontrolEkle", "seciliKontSil"], "feedbackloop": ["onbellekSifi"]})
+N8A([
+ (626, "linocut", "Çizim ve Kenar", "pixel", ["Baskı", "Oyma"], None), (627, "risograph", "Çizim ve Kenar", "pixel", ["Baskı", "Tram"], None),
+ (628, "cyanotype", "Renk ve Işık", "pixel", ["Baskı", "Mavi"], None), (629, "chromolitho", "Çizim ve Kenar", "pixel", ["Baskı", "Plaka"], None),
+ (630, "drypastel", "Çizim ve Kenar", "pixel", ["Pastel", "Boya"], None), (631, "waxcrayon", "Çizim ve Kenar", "pixel", ["Mum boya", "Çocuk"], None),
+ (632, "inkwash", "Çizim ve Kenar", "pixel", ["Mürekkep", "Sulu"], {"k": "yayilma"}), (633, "paintdrip", "Çizim ve Kenar", "pixel", ["Boya", "Akış"], {"box": 0.5}),
+ (634, "marbling", "Prosedürel", "pixel", ["Ebru", "Desen"], None), (635, "batik", "Prosedürel", "pixel", ["Batik", "Kumaş"], None),
+ (636, "applique", "Çizim ve Kenar", "pixel", ["Kumaş", "Dikiş"], None), (637, "stainedglass", "Çizim ve Kenar", "pixel", ["Vitray", "Cam"], None),
+ (638, "ceramicglaze", "Çizim ve Kenar", "pixel", ["Seramik", "Sır"], None), (639, "mosaicgrout", "Çizim ve Kenar", "pixel", ["Mozaik", "Taş"], None),
+ (640, "sequins", "Çizim ve Kenar", "pixel", ["Pul", "Parıltı"], None), (641, "beadwork", "Çizim ve Kenar", "pixel", ["Boncuk"], None),
+ (642, "knitting", "Çizim ve Kenar", "pixel", ["Örgü", "İplik"], None), (643, "papiermache", "Çizim ve Kenar", "pixel", ["Kâğıt", "Kabartma"], None),
+ (644, "waxseal", "Çizim ve Kenar", "pixel", ["Mühür", "Mum"], {"k": "kenarTasm", "add": 6}), (645, "sandcarve", "Çizim ve Kenar", "pixel", ["Kum", "Kazıma"], None),
+ (646, "lenticular", "Geçiş", "pixel", ["Lentiküler", "Bakış"], None), (647, "moireprint", "Çizim ve Kenar", "pixel", ["Hare", "Tram"], None),
+ (648, "linedensity", "Çizim ve Kenar", "pixel", ["Çizgi", "Ton"], None), (649, "chipcollage", "Çizim ve Kenar", "pixel", ["Kolaj", "Parça"], None),
+ (650, "shadowtheater", "Renk ve Işık", "pixel", ["Gölge", "Perde"], None),
+])

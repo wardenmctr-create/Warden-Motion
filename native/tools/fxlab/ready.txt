@@ -6,6 +6,7 @@ ambientocc
 anaglyph
 anamorphic
 anisodiff
+applique
 arithmetic
 ascii
 aurora
@@ -15,6 +16,8 @@ avgcolor
 ballaction
 bandclean
 bandpassimg
+batik
+beadwork
 beam
 bender
 bendit
@@ -62,18 +65,21 @@ cbsticker
 cbsurprise
 cbsweat
 cellpattern
+ceramicglaze
 chain3d
 chanblur
 chanmix
 channelalign
 chanshift
 checker
+chipcollage
 choke
 chromaber
 chromadenoise
 chromakey
 chromasharpen
 chrome
+chromolitho
 chromvortex
 chromzoom
 cinematic
@@ -116,6 +122,7 @@ cubism
 curl
 curves
 cutback
+cyanotype
 cylinder
 darkaccum
 darkframe
@@ -145,6 +152,7 @@ dissolve
 dots
 drizzle
 droplets
+drypastel
 dustscratch
 edgeband
 edgedirmatte
@@ -240,6 +248,7 @@ icosa
 infmirror
 infrared
 inkdraw
+inkwash
 inkwipe
 innerblur
 innerbulge
@@ -254,6 +263,7 @@ jaws
 kaleido
 kernelfilter
 keylight
+knitting
 lathe3d
 leaffall
 lens
@@ -261,6 +271,7 @@ lensblur
 lensbreathe
 lensdirt
 lensflare
+lenticular
 levels
 lightglow
 lightleak
@@ -270,7 +281,9 @@ lightsweep
 lightwipe
 lightwrap
 lincolorkey
+linedensity
 linesweep
+linocut
 linrepeat
 linstreaks
 linwipe
@@ -288,6 +301,7 @@ lut
 magnify
 magnifybg
 mapproject
+marbling
 markerpen
 maskblur
 maskcombine
@@ -300,8 +314,10 @@ meteors
 minimax
 mirror
 mirrorrepeat
+moireprint
 morphimg
 mosaic
+mosaicgrout
 motioncomposite
 multiscale
 nebula
@@ -326,8 +342,10 @@ ornament
 pageturn
 paintbucket
 paintbynumber
+paintdrip
 palettemap
 paperrelief
+papiermache
 particles
 particleworld
 pencilhatch
@@ -371,11 +389,13 @@ ring3d
 ringplanet
 ripple
 ripplepulse
+risograph
 rollingfix
 ropephys
 roughen
 roundcorners
 sandart
+sandcarve
 sandstorm
 satlimit
 scalewipe
@@ -389,7 +409,9 @@ scratchart
 scribble
 selcolor
 sepia
+sequins
 shadow
+shadowtheater
 shakeparts
 shapemask
 sharpen
@@ -417,6 +439,7 @@ split
 spotcolor
 spotlight
 squeeze
+stainedglass
 star
 starfield
 starfilter
@@ -483,6 +506,8 @@ watercolor
 wave
 waveform
 waveworld
+waxcrayon
+waxseal
 wetsurface
 wireremove
 xray
