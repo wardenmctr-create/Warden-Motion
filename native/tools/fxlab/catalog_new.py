@@ -87,6 +87,14 @@ HIDE.update({"framerepair": ["gecerliKareIsar", "isaretiKald", "kareSeci", "enUz
   "puppetpin": ["agAyri", "agGeni", "pimEkle", "pimiKald"], "animchart": ["veriDuze"], "timeline": ["olayEkle"], "ikchain": ["eklemEkle"], "karaoke": ["altyaziDosy", "zamanIsarEkle"], "explodegroup": ["parcaSeci"], "organicgrow": ["baslangi"]})
 for _n in (496,):
     pass
+NEW.update({
+ 530: ("loftprofiles", "3B", "3d", ["3B", "Profil", "Yüzey"], {"box": 0.45}), 531: ("sweeppath", "3B", "3d", ["3B", "Yol", "Boru"], {"box": 0.5}),
+ 532: ("wireframe3d", "3B", "3d", ["3B", "Tel kafes"], {"box": 0.45}), 534: ("sectionview", "3B", "3d", ["3B", "Kesit"], {"box": 0.45}),
+ 535: ("csgcards", "3B", "3d", ["3B", "Birleştirme", "Boole"], {"box": 0.45}), 538: ("decal3d", "3B", "3d", ["3B", "Çıkartma"], {"box": 0.45}),
+})
+HIDE.update({"loftprofiles": ["profilEkle", "cevreOrne", "araDili"], "sweeppath": ["ozelKesi", "kesitOrne", "yolOrne"], "wireframe3d": ["model", "keskinliEsig", "gizliKenaGost", "gizliKenaOpak"], "sectionview": ["model", "duzlemKila"],
+  "csgcards": ["birinciMode", "girislerGoruTut", "normalDuze", "geometriDogr"], "decal3d": ["hedefMode", "yontem"]})
+TRIM.update({("sweeppath", "kesit"): 3})
 READY2 = set(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "ready2.txt")).read().split()) if os.path.exists(os.path.join(os.path.dirname(os.path.abspath(__file__)), "ready2.txt")) else set()
 _POS = _re.compile(r"(merkez|konum|ufuk|nokta|kök|başlangıç$|bitiş$|bağlantı|hedef)", _re.I)
 MATS = ["Beyaz kâğıt", "Renkli kâğıt", "Kraft kâğıt", "Karton", "Parşömen", "Keçe"]

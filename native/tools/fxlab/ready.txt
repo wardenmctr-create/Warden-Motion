@@ -130,6 +130,7 @@ cross3
 crossblur
 crossprocess
 crt
+csgcards
 cube
 cubeface
 cubism
@@ -148,6 +149,8 @@ deadpixel
 debandfix
 deblock
 deblur
+decal3d
+decimate
 dehalo
 dehaze
 deinterlace
@@ -331,6 +334,7 @@ liquify
 lissajous
 localcontrast
 localwb
+loftprofiles
 logconv
 lomo
 longshadow
@@ -398,6 +402,7 @@ pageturn2
 paintbucket
 paintbynumber
 paintdrip
+painttrail
 palettemap
 paperhole
 paperrelief
@@ -481,6 +486,7 @@ scatterplot
 scatterpx
 scratchart
 scribble
+sectionview
 selcolor
 selfavoid
 sepia
@@ -493,6 +499,7 @@ shapematchtrans
 sharpen
 shatter
 shear
+skelvolume
 sketch
 slant
 slices
@@ -537,7 +544,9 @@ stringart
 stripes
 strobelight
 stroke
+subdivide
 sunsurface
+sweeppath
 swirl
 swirlblur
 swishpan
@@ -568,6 +577,7 @@ tornpaper
 torus
 treemap
 treerings
+triangulate
 triprism
 tritone
 truchet
@@ -588,6 +598,7 @@ vibrance
 viewer360
 vignette
 vignettefix
+vol2surf
 volclouds
 volslices
 volumelight
@@ -605,6 +616,7 @@ waveworld
 waxcrayon
 waxseal
 wetsurface
+wireframe3d
 wireremove
 xray
 zoomblur

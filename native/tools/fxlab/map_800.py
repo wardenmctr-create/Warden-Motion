@@ -164,3 +164,9 @@ PFIX.update({
  "softlimit": lambda ps: _rep(_rep(ps, "altUstSini", [_J8("altSinir", "Alt sınır", 0, -10000, 10000), _J8("ustSinir", "Üst sınır", 1000, -10000, 10000)]), "hedefPara", [_ch8("hedefPara", "Hedef özellik", PROPS)]),
  "livetext": lambda ps: ps[:1] + [_ch8("ozellik", "Okunan özellik", PROPS)] + ps[1:],
 })
+N8A([
+ (726, "subdivide", "3B", "3d", ["3B", "Alt bölme", "Yumuşatma"], {"box": 0.45}), (727, "decimate", "3B", "3d", ["3B", "Sadeleştirme"], {"box": 0.45}),
+ (732, "skelvolume", "3B", "3d", ["3B", "İskelet", "Hacim"], {"box": 0.6}), (736, "triangulate", "3B", "3d", ["3B", "Üçgen"], {"box": 0.45}),
+ (746, "vol2surf", "3B", "3d", ["3B", "Hacim", "Yoğunluk"], {"box": 0.45}), (747, "painttrail", "3B", "3d", ["3B", "Boya", "İz"], {"box": 0.45}),
+])
+HIDE8.update({"decimate": ["uvKoru"], "triangulate": ["yonleriKoru"]})

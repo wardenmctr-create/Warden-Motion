@@ -223,3 +223,9 @@ softlimit
 livetext
 sankey
 bumpcard
+subdivide
+decimate
+skelvolume
+triangulate
+vol2surf
+painttrail

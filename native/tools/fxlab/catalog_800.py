@@ -10,7 +10,7 @@ def _c8(p):
     q = {k: v for k, v in p.items() if k not in ("code", "extra")}
     if q.get("two") and q.get("unit") in ("%", "") and _POS.search(q["l"]): q["unit"] = "box%"; q["min"], q["max"] = -100, 200
     if q["kind"] in ("button", "curve"): q["hideUi"] = True
-    if q["kind"] == "source" and q["k"] in ("uclar", "kopyaGrub", "katmanla", "parcalar", "kaynakla", "kamerala", "bolgeler", "seriler"): q["multi"] = True  # işlemi motorda otomatik yapılan düğmeler ve sabit eğri gösterilmez
+    if q["kind"] == "source" and q["k"] in ("uclar", "kopyaGrub", "katmanla", "parcalar", "iskelet", "kaynakla", "kamerala", "bolgeler", "seriler"): q["multi"] = True  # işlemi motorda otomatik yapılan düğmeler ve sabit eğri gösterilmez
     return q
 TRANS8 = set()
 PFIX = {}  # tür: ayar listesini düzelten işlev (birleşik kontrolleri ayırma, aralık düzeltme)
