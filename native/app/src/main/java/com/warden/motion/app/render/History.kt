@@ -26,6 +26,7 @@ object History {
             "movingmatte" -> { val g = v("gecmis").coerceAtLeast(1.0); val k = min(cap, 9); listOf(t) + (1 until k).map { t - it * g / (k - 1) * dt } }
             "motiondirmatte", "motionmagnify", "framerepair" -> listOf(t, t - dt, t + dt)
             "cinemagraph" -> listOf(l.start + v("sabitKareZama"))
+            "stabilize" -> listOf(if (v("bilincliKameKaym") >= 0.5) max(l.start, t - v("yumusatmSure")) else l.start)
             else -> null
         }
     }

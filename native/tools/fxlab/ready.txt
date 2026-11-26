@@ -24,6 +24,7 @@ beadwork
 beam
 bender
 bendit
+bendtocurve
 bevelalpha
 beveledges
 bezierwarp
@@ -45,6 +46,7 @@ bricon
 brightaccum
 broadcast
 brokenglass
+brushmask
 brushstrokes
 bubbles
 buildorder
@@ -386,6 +388,7 @@ noisealpha
 noisehls
 normalmap
 normalselect
+objectmatte
 ocean3d
 octahedron
 offset
@@ -413,6 +416,7 @@ particleworld
 peel
 pencilhatch
 penrose
+perspfix
 perspgrid
 phasescope
 photocopy
@@ -492,6 +496,7 @@ selfavoid
 sepia
 sequins
 shadow
+shadowcatcher
 shadowtheater
 shakeparts
 shapemask
@@ -528,6 +533,7 @@ split
 spotcolor
 spotlight
 squeeze
+stabilize
 stackarea
 stainedglass
 star
@@ -556,6 +562,7 @@ temporaldenoise
 temporalfreq
 temporalmedian
 tetra
+texsegment
 texsimilar
 texturize
 thicken3d

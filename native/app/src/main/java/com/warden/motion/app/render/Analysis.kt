@@ -10,13 +10,23 @@ import kotlin.math.*
  * histogram (256×1), dalga biçimi (128×64), vektör ölçer (64×64). Seyrek örnekleme ile hızlıdır.
  */
 object Analysis {
-    private val TYPES = setOf("histogram2", "waveform", "vectorscope", "compisolate")
+    private val TYPES = setOf("histogram2", "waveform", "vectorscope", "compisolate", "perspfix")
     fun sources(fx: List<Effect>, bmp: Bitmap, t: Double): Map<String, Bitmap> {
         fx.firstOrNull { it.type in Sims.TYPES }?.let { e -> return Sims.source(e, t)?.let { mapOf("anl" to it) } ?: emptyMap() }
         val e = fx.firstOrNull { it.type in TYPES } ?: return emptyMap()
         val w = bmp.width; val h = bmp.height; if (w < 2 || h < 2) return emptyMap()
         val step = max(1, sqrt(w.toDouble() * h / 60000.0).toInt()); val px = IntArray(w * h); bmp.getPixels(px, 0, w, 0, 0, w, h)
         return when (e.type) {
+            "perspfix" -> { // dikeye yakın kenarların eğimi x konumuna göre doğrusal: eğim = a + b·x  → (a, b) görüntü olarak
+                val W = 160; val H = max(16, 160 * h / max(1, w)); val sb = Bitmap.createScaledBitmap(bmp, W, H, true); val g = IntArray(W * H); sb.getPixels(g, 0, W, 0, 0, W, H)
+                fun L(x: Int, y: Int) = g[y * W + x].let { ((it shr 16) and 255) * 0.3 + ((it shr 8) and 255) * 0.59 + (it and 255) * 0.11 }
+                var sx = 0.0; var sy = 0.0; var sxx = 0.0; var sxy = 0.0; var n = 0.0
+                for (y in 1 until H - 1) for (x in 1 until W - 1) { val gx = L(x + 1, y) - L(x - 1, y); val gy = L(x, y + 1) - L(x, y - 1); val m = hypot(gx, gy); if (m < 40) continue
+                    val tilt = atan2(gy, gx); if (abs(abs(tilt) - 0.0) > 0.5 && abs(abs(tilt) - PI) > 0.5) continue; val lean = (if (gx < 0) -gy else gy) / max(abs(gx), 1e-3); val xn = x.toDouble() / W - 0.5
+                    sx += xn * m; sy += lean * m; sxx += xn * xn * m; sxy += xn * lean * m; n += m }
+                val b = if (n > 0) (n * sxy - sx * sy) / max(1e-9, n * sxx - sx * sx) else 0.0; val a = if (n > 0) (sy - b * sx) / n else 0.0
+                val out = Bitmap.createBitmap(2, 1, Bitmap.Config.ARGB_8888); fun enc(v: Double) = ((v.coerceIn(-1.0, 1.0) * 0.5 + 0.5) * 255).toInt().coerceIn(0, 255).let { (255 shl 24) or (it shl 16) }
+                out.setPixel(0, 0, enc(a)); out.setPixel(1, 0, enc(b)); mapOf("anl" to out) }
             "compisolate" -> { // alfa bağlı bileşenleri: etiketle, alana göre süz, sırala, seçileni maske yap
                 val k = max(1, sqrt(w.toDouble() * h / 250000.0).toInt()); val W = w / k; val H = h / k; val lab = IntArray(W * H) { -1 }; val comps = ArrayList<IntArray>() // [alan, minx, miny, sumx]
                 val stack = IntArray(W * H)

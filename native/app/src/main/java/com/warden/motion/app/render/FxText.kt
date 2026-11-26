@@ -19,6 +19,7 @@ import kotlin.math.min
 import kotlin.math.pow
 import kotlin.math.roundToInt
 import kotlin.math.sin
+import kotlin.math.sqrt
 
 /**
  * Metin efektleri (katalogda kind = "text"): yazı harf harf yerleştirilir, her harfe konum / açı / ölçek / opaklık / renk uygulanır.
@@ -90,6 +91,24 @@ object FxText {
             word++
         }
         val n = max(1, gl.size)
+        // 703 Metin Çevre Dolgusu / 704 Metin Engelden Akışı: sözcükler satır satır kullanılabilir aralıklara yeniden dizilir
+        val flowE = fx.find { it.type == "textinshape" || it.type == "textaround" }
+        val pr0 = project
+        if (flowE != null && pr0 != null) { val inShape = flowE.type == "textinshape"; val other = flowE.c?.get(if (inShape) "sekil" else "engel")?.let { id -> pr0.layers.find { it.id == id } }
+            val me = worldTransform(pr0, l, t); val gap = flowE.value(if (inShape) "icBosl" else "bosluk", t).toFloat()
+            var ox = 0f; var oy = 0f; var ow = l.w.toFloat(); var oh = l.h.toFloat(); var round = false
+            if (other != null) { val w = worldTransform(pr0, other, t); val sc = if (abs(me.scale) > 1e-6) me.scale else 1.0; ox = ((w.x - me.x) / sc).toFloat(); oy = ((w.y - me.y) / sc).toFloat(); ow = (other.w * w.scale / sc).toFloat(); oh = (other.h * w.scale / sc).toFloat(); round = (other.shape ?: other.type).let { it.contains("circle") || it.contains("ellipse") || it.contains("cb") || it == "ball" } }
+            val lhF = fp.textSize * (if (inShape) flowE.value("satirAral", t).toFloat() else 1.15f); val words = gl.groupBy { it.word }.values.map { ws -> ws.filter { it.s != " " } }.filter { it.isNotEmpty() }
+            fun segs(y: Float): List<Pair<Float, Float>> {
+                if (inShape) { val hy = oh / 2 - gap; val dy = y - oy; if (abs(dy) > hy) return emptyList(); val hw = (if (round) ow / 2 * sqrt(max(0f, 1 - (dy / max(hy, 1f)).let { it * it })) else ow / 2) - gap; return if (hw > 4) listOf(ox - hw to ox + hw) else emptyList() }
+                val L = -l.w.toFloat() / 2; val R = l.w.toFloat() / 2; if (other == null || abs(y - oy) > oh / 2 + gap) return listOf(L to R)
+                val hw = (if (round) ow / 2 * sqrt(max(0f, 1 - ((y - oy) / max(oh / 2 + gap, 1f)).let { it * it })) else ow / 2) + gap
+                val left = L to (ox - hw); val right = (ox + hw) to R; val ok = listOf(left, right).filter { it.second - it.first > fp.textSize }
+                return when (flowE.value("akisYonu", t).roundToInt()) { 0 -> ok.filter { it == left }; 1 -> ok.filter { it == right }; 2 -> ok; else -> listOfNotNull(ok.maxByOrNull { it.second - it.first }) } }
+            var wi = 0; var y = if (inShape) oy - oh / 2 + gap + lhF * 0.7f else -l.h.toFloat() / 2 + lhF * 0.8f; var row = 0; val yEnd = if (inShape) oy + oh / 2 else l.h.toFloat() / 2 + lhF * 20
+            while (wi < words.size && y < yEnd) { for ((x0, x1) in segs(y)) { var x = x0; while (wi < words.size) { val w = words[wi]; val ww = w.sumOf { it.w.toDouble() }.toFloat() + fp.measureText(" "); if (x + ww - fp.measureText(" ") > x1 && x > x0) break
+                        var cx = x; w.forEach { g -> g.x = cx; g.y = y + mid; cx += g.w }; x += ww; wi++ } }; y += lhF; row++ }
+            for (k in wi until words.size) words[k].forEach { it.a = 0f } }
         // 702 Dikey dizim: her satır bir sütun olur, harfler alt alta
         fx.find { it.type == "verticaltext" }?.let { e -> val up = e.value("dizim", t) >= 0.5; val colW = fp.textSize * e.value("satirAral", t).toFloat(); val rowH = fp.textSize * 1.05f
             val cols = gl.groupBy { it.line }; val nc = cols.size

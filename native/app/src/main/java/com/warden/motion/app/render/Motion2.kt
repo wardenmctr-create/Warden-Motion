@@ -77,6 +77,12 @@ object Motion2 {
                         val k = 5.0 + e.value("sertlik", tt) / 100 * 200; val d = e.value("sonum", tt) / 100 * 2 * sqrt(k); s[1] += (-k * s[0] - d * s[1] - ax * 0.05) * Physics.DT; s[0] += s[1] * Physics.DT }
                     val w = worldTransform(p, par, t); val ra = w.rot * PI / 180; val ox = v("bagNoktX"); val oy = v("bagNoktY"); val jx = w.x + (ox * cos(ra) - oy * sin(ra)) * w.scale; val jy = w.y + (ox * sin(ra) + oy * cos(ra)) * w.scale
                     val ang = st[0].coerceIn(-80.0, 80.0); val rr = ang * PI / 180; val dx = tr.x - jx; val dy = tr.y - jy; tr = tr.copy(x = jx + dx * cos(rr) - dy * sin(rr), y = jy + dx * sin(rr) + dy * cos(rr), rot = tr.rot + ang) }
+                "rhythmevents" -> { // sesin vuruşlarında sırayla olay: nabız, zıplama, dönme, sallanma
+                    val src = tgt(p, e, "ses") ?: continue; val th = v("esik") / 100 * 0.6; var beat = -1.0; var idx = 0; var prev = 0.0; var tt = l.start
+                    while (tt <= t) { val lv = AudioLevels.level(src, tt); if (lv > th && prev <= th) { beat = tt; idx++ }; prev = lv; tt += 1.0 / 60 }
+                    if (beat < 0) continue; val age = t - beat; if (age > 0.4) continue; val k = sin(age / 0.4 * PI) * exp(-age * 4)
+                    val ev = when (v("olaySira").roundToInt()) { 1 -> 0; 2 -> ((sin(idx * 12.9898) * 43758.5453).let { it - floor(it) } * 4).toInt(); else -> idx % 4 }
+                    tr = when (ev) { 0 -> tr.copy(scale = tr.scale * (1 + 0.15 * k)); 1 -> tr.copy(y = tr.y - 30 * k); 2 -> tr.copy(rot = tr.rot + 15 * k); else -> tr.copy(x = tr.x + 12 * k * sin(age * 60)) } }
                 "ikchain" -> { val ang = ik(p, l, e, t, tr) ?: continue; tr = tr.copy(rot = ang[0]) }
                 "paramlink" -> { val src = tgt(p, e, "kaynakPara") ?: continue; val w = worldTransform(p, src, t); val k = v("kaynakOzellik").roundToInt()
                     val sv = when (k) { 0 -> w.x; 1 -> w.y; 2 -> w.rot; 3 -> w.scale * 100; else -> w.opacity * 100 }; val out = sv * v("carpan") + v("ofset")

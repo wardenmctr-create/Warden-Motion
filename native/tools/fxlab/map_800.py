@@ -170,3 +170,13 @@ N8A([
  (746, "vol2surf", "3B", "3d", ["3B", "Hacim", "Yoğunluk"], {"box": 0.45}), (747, "painttrail", "3B", "3d", ["3B", "Boya", "İz"], {"box": 0.45}),
 ])
 HIDE8.update({"decimate": ["uvKoru"], "triangulate": ["yonleriKoru"]})
+N8A([
+ (586, "texsegment", "Maske ve Anahtar", "pixel", ["Doku", "Bölge"], None), (595, "shadowcatcher", "3B", "3d", ["3B", "Gölge"], {"box": 0.45}),
+ (598, "objectmatte", "Maske ve Anahtar", "pixel", ["Mat", "Nesne"], None), (690, "rhythmevents", "Taşı ve Dönüştür", "xform", ["Ritim", "Ses", "Olay"], None),
+ (743, "bendtocurve", "3B", "3d", ["3B", "Eğri", "Bükme"], {"box": 0.6}),
+])
+HIDE8.update({"objectmatte": ["ortulmeyHesaKat"]})
+N8A([(581, "brushmask", "Maske ve Anahtar", "pixel", ["Maske", "Fırça", "Yol"], None), (614, "perspfix", "Bükme ve Bozulma", "pixel", ["Perspektif", "Düzeltme"], None),
+     (703, "textinshape", "Metin", "text", ["Metin", "Şekil"], None), (704, "textaround", "Metin", "text", ["Metin", "Akış", "Engel"], None)])
+PFIX.update({"brushmask": lambda ps: [dict(k="fircaYolu", l="Fırça yolu (çizgi/yol katmanı)", kind="source", min=0, max=0, def_="", step=1, jog=1, anim="no")] + ps})
+HIDE8.update({"brushmask": ["cizSil"], "perspfix": ["kilavuzCiz"]})

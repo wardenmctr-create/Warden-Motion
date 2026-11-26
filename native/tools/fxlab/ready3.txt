@@ -229,3 +229,12 @@ skelvolume
 triangulate
 vol2surf
 painttrail
+texsegment
+shadowcatcher
+objectmatte
+rhythmevents
+bendtocurve
+brushmask
+perspfix
+textinshape
+textaround

@@ -226,11 +226,11 @@ class Renderer(private val ctx: Context, maxSide: Int = 2048, private val sync: 
     /** Canlı Bağlantı Çizgisi / Ölçü Oku: uçlara seçilen katmanların o anki konumu yazılır (katmanın kutusuna göre %) */
     private fun linkPoints(p: Project, l: Layer, e: Effect, t: Double, tr: TR): Effect {
         // Grafik/harita verisi: seçilen metin katmanındaki satırlar (virgül/boşlukla ayrılmış sayılar) → dv dizisi, dvR satır, dvC sütun
-        if (e.type == "sweeppath" || e.type == "skelvolume" || e.type == "painttrail") { // nokta listesi → dv (bu katmanın yerel birimi)
+        if (e.type == "sweeppath" || e.type == "skelvolume" || e.type == "painttrail" || e.type == "bendtocurve" || e.type == "brushmask") { // nokta listesi → dv (bu katmanın yerel birimi)
             fun loc(wx: Double, wy: Double): Pair<Double, Double> { val a = -tr.rot * PI / 180; val dx = wx - tr.x; val dy = wy - tr.y; val sc = if (kotlin.math.abs(tr.scale) > 1e-6) tr.scale else 1.0; return (dx * cos(a) - dy * sin(a)) / sc / tr.sx to (dx * sin(a) + dy * cos(a)) / sc / tr.sy }
             val pts = ArrayList<Pair<Double, Double>>()
             when (e.type) {
-                "sweeppath" -> { val o = e.c?.get("yolKatm")?.let { id -> p.layers.find { it.id == id } } ?: return e; val w = worldTransform(p, o, t); val ra = w.rot * PI / 180
+                "sweeppath", "bendtocurve", "brushmask" -> { val o = e.c?.get(when (e.type) { "sweeppath" -> "yolKatm"; "brushmask" -> "fircaYolu"; else -> "egri" })?.let { id -> p.layers.find { it.id == id } } ?: return e; val w = worldTransform(p, o, t); val ra = w.rot * PI / 180
                     val src = o.pts?.takeIf { it.size >= 2 }?.map { (it[0] - 0.5) * o.w to (it[1] - 0.5) * o.h } ?: (0..32).map { i -> val a = i / 32.0 * 2 * PI; cos(a) * o.w / 2 to sin(a) * o.h / 2 }
                     src.take(64).forEach { (x, y) -> pts += loc(w.x + (x * cos(ra) - y * sin(ra)) * w.scale, w.y + (x * sin(ra) + y * cos(ra)) * w.scale) } }
                 "skelvolume" -> e.c?.get("iskelet")?.split(',')?.filter { it.isNotBlank() }?.take(32)?.forEach { id -> p.layers.find { it.id == id }?.let { o -> val w = worldTransform(p, o, t); pts += loc(w.x, w.y) } }
@@ -369,7 +369,11 @@ class Renderer(private val ctx: Context, maxSide: Int = 2048, private val sync: 
         drawLayer(bc, l)
         if (gpu.isNotEmpty()) {
             val box = floatArrayOf((pad * q).toFloat(), (pad * q).toFloat(), (l.w * q).toFloat(), (l.h * q).toFloat())
-            val job = GlFx.Job(gpu.map { it to fxMeta(it.type) }, t, t - l.start, l.end - l.start, box, q.toFloat(), sourcesFor(p, l, gpu, t, q) + Analysis.sources(gpu, buf, t) + AudioVis.sources(p, gpu, t) + historySource(p, l, gpu, t, tr, bw, bh, q), tr.rot.toFloat(), exporting)
+            val hs = historySource(p, l, gpu, t, tr, bw, bh, q)
+            // 468 Kamera Sabitleme: bu kare ile referans kare arasındaki kayma (küçültülmüş gri görüntüde blok eşleme) → dv0, dv1
+            val gpu2 = gpu.map { e -> if (e.type != "stabilize") e else hs["hist"]?.let { ref -> val (sx, sy) = Stabilize.shift(buf, ref); val k = e.value("sabitlemGucu", t) / 100
+                e.copy(v = (e.v ?: emptyMap()) + ("dv0" to com.warden.motion.app.model.Anim(sx / q * k)) + ("dv1" to com.warden.motion.app.model.Anim(sy / q * k))) } ?: e }
+            val job = GlFx.Job(gpu2.map { it to fxMeta(it.type) }, t, t - l.start, l.end - l.start, box, q.toFloat(), sourcesFor(p, l, gpu, t, q) + Analysis.sources(gpu, buf, t) + AudioVis.sources(p, gpu, t) + hs, tr.rot.toFloat(), exporting)
             GlFx.apply(buf, job)?.let { buf.recycle(); buf = it }
         }
         val rect = RectF((-bw / q / 2).toFloat(), (-bh / q / 2).toFloat(), (bw / q / 2).toFloat(), (bh / q / 2).toFloat())

@@ -95,6 +95,8 @@ NEW.update({
 HIDE.update({"loftprofiles": ["profilEkle", "cevreOrne", "araDili"], "sweeppath": ["ozelKesi", "kesitOrne", "yolOrne"], "wireframe3d": ["model", "keskinliEsig", "gizliKenaGost", "gizliKenaOpak"], "sectionview": ["model", "duzlemKila"],
   "csgcards": ["birinciMode", "girislerGoruTut", "normalDuze", "geometriDogr"], "decal3d": ["hedefMode", "yontem"]})
 TRIM.update({("sweeppath", "kesit"): 3})
+NEW.update({468: ("stabilize", "Diğer", "pixel", ["Video", "Sabitleme", "Kamera"], {"box": 0.1})})
+HIDE.update({"stabilize": ["hareketMode", "izlemeMask", "hareketiAnalEt", "sahneKesiSifi"]})
 READY2 = set(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "ready2.txt")).read().split()) if os.path.exists(os.path.join(os.path.dirname(os.path.abspath(__file__)), "ready2.txt")) else set()
 _POS = _re.compile(r"(merkez|konum|ufuk|nokta|kök|başlangıç$|bitiş$|bağlantı|hedef)", _re.I)
 MATS = ["Beyaz kâğıt", "Renkli kâğıt", "Kraft kâğıt", "Karton", "Parşömen", "Keçe"]
