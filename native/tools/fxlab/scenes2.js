@@ -38,6 +38,6 @@ window.probe = async function (type) {
   const b = await frame(sc0, 0.3);
   return { same: a === b, blank: a.length < 3000 };
 };
-SC2.cutback = { subj: 'cb', w: 140, h: 140, v: () => ({}) };
+SC2.cutback = { subj: 'cb', w: 140, h: 140, v: (p) => ({ malzRenk: ['#C9A57A', '#F4F1EA', '#E30A17', '#2F7BF6'][Math.floor(p * 3.999)] }) };
 SC2.cardpuppet = { subj: 'cb', w: 140, h: 140, v: () => ({}), tr: (p) => ({ rot: Math.sin(p * Math.PI * 2) * 8 }) };
 SC2.texturize = { photo: 'istanbul', v: (p) => ({ dokuTuru: Math.floor(p * 5.999) * 2 % 13, dokuGucu: 85, kabartma: 6 }) };

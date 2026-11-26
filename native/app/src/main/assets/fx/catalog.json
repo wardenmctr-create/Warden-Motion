@@ -75372,7 +75372,7 @@
 "unit": "",
 "anim": "step",
 "g": "Dolgu",
-"def": 1
+"def": 0
 },
 {
 "k": "malzOpak",
@@ -75830,7 +75830,7 @@
 "jog": 1,
 "unit": "",
 "anim": "step",
-"g": "Gölge",
+"g": "İçerik Gölgesi (nesneden altlığa)",
 "def": 1
 },
 {
@@ -75843,7 +75843,7 @@
 "jog": 0.1,
 "unit": "°",
 "anim": "yes",
-"g": "Gölge",
+"g": "İçerik Gölgesi (nesneden altlığa)",
 "def": 135
 },
 {
@@ -75856,7 +75856,7 @@
 "jog": 0.1,
 "unit": "px",
 "anim": "yes",
-"g": "Gölge",
+"g": "İçerik Gölgesi (nesneden altlığa)",
 "def": 6
 },
 {
@@ -75869,7 +75869,7 @@
 "jog": 0.1,
 "unit": "px",
 "anim": "yes",
-"g": "Gölge",
+"g": "İçerik Gölgesi (nesneden altlığa)",
 "def": 10
 },
 {
@@ -75882,7 +75882,7 @@
 "jog": 0.1,
 "unit": "%",
 "anim": "yes",
-"g": "Gölge",
+"g": "İçerik Gölgesi (nesneden altlığa)",
 "def": 38
 },
 {
@@ -75895,8 +75895,86 @@
 "jog": 1,
 "unit": "",
 "anim": "yes",
-"g": "Gölge",
+"g": "İçerik Gölgesi (nesneden altlığa)",
 "def": "#3A302A"
+},
+{
+"k": "agAcik",
+"l": "Altlık gölgesi",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Altlık Gölgesi (altlıktan zemine)",
+"def": 1
+},
+{
+"k": "agAci",
+"l": "Gölge açısı",
+"kind": "jog",
+"min": 0,
+"max": 360,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"anim": "yes",
+"g": "Altlık Gölgesi (altlıktan zemine)",
+"def": 135
+},
+{
+"k": "agUzak",
+"l": "Gölge uzaklığı",
+"kind": "jog",
+"min": 0,
+"max": 80,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "Altlık Gölgesi (altlıktan zemine)",
+"def": 10
+},
+{
+"k": "agYumu",
+"l": "Gölge yumuşaklığı",
+"kind": "jog",
+"min": 0,
+"max": 50,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "Altlık Gölgesi (altlıktan zemine)",
+"def": 12
+},
+{
+"k": "agOpak",
+"l": "Gölge opaklığı",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Altlık Gölgesi (altlıktan zemine)",
+"def": 35
+},
+{
+"k": "agRenk",
+"l": "Gölge rengi",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "yes",
+"g": "Altlık Gölgesi (altlıktan zemine)",
+"def": "#000000"
 },
 {
 "k": "sekliTakip",
@@ -76053,10 +76131,11 @@
 "pad": {
 "sum": [
 "kalinlik",
-"golgeUzak"
+"agUzak",
+"agYumu"
 ],
-"mul": 1.2,
-"add": 12
+"mul": 1.1,
+"add": 14
 },
 "passes": null,
 "info": null,
@@ -76575,7 +76654,7 @@
 "jog": 1,
 "unit": "",
 "anim": "step",
-"g": "Gölge ve Derinlik",
+"g": "İçerik Gölgesi (nesneden altlığa)",
 "def": 1
 },
 {
@@ -76588,7 +76667,7 @@
 "jog": 0.1,
 "unit": "°",
 "anim": "yes",
-"g": "Gölge ve Derinlik",
+"g": "İçerik Gölgesi (nesneden altlığa)",
 "def": 135
 },
 {
@@ -76601,7 +76680,7 @@
 "jog": 0.1,
 "unit": "px",
 "anim": "yes",
-"g": "Gölge ve Derinlik",
+"g": "İçerik Gölgesi (nesneden altlığa)",
 "def": 5
 },
 {
@@ -76614,7 +76693,7 @@
 "jog": 0.1,
 "unit": "px",
 "anim": "yes",
-"g": "Gölge ve Derinlik",
+"g": "İçerik Gölgesi (nesneden altlığa)",
 "def": 9
 },
 {
@@ -76627,7 +76706,7 @@
 "jog": 0.1,
 "unit": "%",
 "anim": "yes",
-"g": "Gölge ve Derinlik",
+"g": "İçerik Gölgesi (nesneden altlığa)",
 "def": 36
 },
 {
@@ -76640,8 +76719,86 @@
 "jog": 1,
 "unit": "",
 "anim": "yes",
-"g": "Gölge ve Derinlik",
+"g": "İçerik Gölgesi (nesneden altlığa)",
 "def": "#3A302A"
+},
+{
+"k": "agAcik",
+"l": "Altlık gölgesi",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "step",
+"g": "Altlık Gölgesi (altlıktan zemine)",
+"def": 1
+},
+{
+"k": "agAci",
+"l": "Gölge açısı",
+"kind": "jog",
+"min": 0,
+"max": 360,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"anim": "yes",
+"g": "Altlık Gölgesi (altlıktan zemine)",
+"def": 135
+},
+{
+"k": "agUzak",
+"l": "Gölge uzaklığı",
+"kind": "jog",
+"min": 0,
+"max": 80,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "Altlık Gölgesi (altlıktan zemine)",
+"def": 8
+},
+{
+"k": "agYumu",
+"l": "Gölge yumuşaklığı",
+"kind": "jog",
+"min": 0,
+"max": 50,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"anim": "yes",
+"g": "Altlık Gölgesi (altlıktan zemine)",
+"def": 10
+},
+{
+"k": "agOpak",
+"l": "Gölge opaklığı",
+"kind": "jog",
+"min": 0,
+"max": 100,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"anim": "yes",
+"g": "Altlık Gölgesi (altlıktan zemine)",
+"def": 30
+},
+{
+"k": "agRenk",
+"l": "Gölge rengi",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"anim": "yes",
+"g": "Altlık Gölgesi (altlıktan zemine)",
+"def": "#000000"
 },
 {
 "k": "stopMotion",
@@ -76794,10 +76951,11 @@
 "pad": {
 "sum": [
 "kalinlik",
-"golgeUzak"
+"agUzak",
+"agYumu"
 ],
-"mul": 1.2,
-"add": 12
+"mul": 1.1,
+"add": 14
 },
 "passes": null,
 "info": null,

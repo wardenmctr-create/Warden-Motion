@@ -28,12 +28,15 @@ def matSpecific(key, g):
             PC("eskime", "Eskime", 50, g=g, vis=v("Eski parşömen")), PC("sararma", "Sararma", 60, g=g, vis=v("Eski parşömen")), PC("leke", "Leke yoğunluğu", 35, g=g, vis=v("Eski parşömen"))]
 def matCommon(key, g, defTex=35):
     return [PC("dokuGucu", "Doku gücü", defTex, g=g), PC("dokuOlcek", "Doku ölçeği", 100, 10, 500, g), DG("dokuAci", "Doku açısı", 0, 0, 360, g),
-            _u(XY("dokuKonum", "Doku konumu", 0, 0, -1000, 1000, 0.1), "px", g), CL("malzRenk", "Malzeme rengi", "#C9A57A", g), TG("dogalRenk", "Doğal rengi koru", 1, g),
+            _u(XY("dokuKonum", "Doku konumu", 0, 0, -1000, 1000, 0.1), "px", g), CL("malzRenk", "Malzeme rengi", "#C9A57A", g), TG("dogalRenk", "Doğal rengi koru", 0, g),
             PC("malzOpak", "Malzeme opaklığı", 100, g=g), PX("yuzeyYuks", "Yüzey yükseltisi", 4, 0, 50, g), PC("puruz", "Yüzey pürüzlülüğü", 40, g=g),
             PC("parlak", "Yüzey parlaklığı", 12, g=g), PC("lif", "Lif belirginliği", 30, g=g), PC("kenarAsin", "Kenar aşınması", 15, g=g),
             PX("malzKalin", "Malzeme kalınlığı", 3, 0, 50, g), TG("sekleSabit", "Dokuyu şekle sabitle", 1, g), SRC("ozelDoku", "Özel doku", g, {"k": key, "in": [MAT_FULL.index("Özel doku")]})]
 
 EDGE = ["Düzgün", "Yuvarlak", "Çokgen", "Makas Kesimi", "Yırtık", "El Kesimi"]
+def backShadow(g, dist, soft, op):
+    return [TG("agAcik", "Altlık gölgesi", 1, g), DG("agAci", "Gölge açısı", 135, 0, 360, g), PX("agUzak", "Gölge uzaklığı", dist, 0, 80, g),
+            PX("agYumu", "Gölge yumuşaklığı", soft, 0, 50, g), PC("agOpak", "Gölge opaklığı", op, g=g), CL("agRenk", "Gölge rengi", "#000000", g)]
 def shadowGroup(g, dist, soft, op):
     return [TG("golgeAcik", "İçerik gölgesi", 1, g), DG("golgeAci", "Gölge açısı", 135, 0, 360, g), PX("golgeUzak", "Gölge uzaklığı", dist, 0, 50, g),
             PX("golgeYumu", "Gölge yumuşaklığı", soft, 0, 50, g), PC("golgeOpak", "Gölge opaklığı", op, g=g), CL("golgeRenk", "Gölge rengi", "#3A302A", g)]
@@ -51,10 +54,10 @@ fx("cutback", "Kesim Altlığı", "Cutout Backing", 1, "pixel", "Katmanın silue
     PX("ofsX", "Ofset X", -8, -100, 100, G2), PX("ofsY", "Ofset Y", 8, -100, 100, G2), TG("birlikteDondur", "Katmanla birlikte döndür", 1, G2), TG("birlikteOlcek", "Katmanla birlikte ölçekle", 1, G2),
     CS("kenarStili", "Kenar stili", EDGE, 3, G3), PC("kenarSert", "Kenar sertliği", 55, g=G3), PC("koseYumu", "Köşe yumuşaklığı", 28, g=G3), PC("kenarGurultu", "Kenar gürültüsü", 18, g=G3), PC("cokgen", "Çokgenleşme", 20, g=G3),
     CS("dolguTuru", "Malzeme şablonu", MAT_FULL, 4, G4), CL("ikinciRenk", "İkinci renk", "#8A6A48", G4, {"k": "dolguTuru", "in": [1]})] + matCommon("dolguTuru", G4) + matSpecific("dolguTuru", G4)
-   + shadowGroup(G5, 6, 10, 38)
+   + shadowGroup("İçerik Gölgesi (nesneden altlığa)", 6, 10, 38) + backShadow("Altlık Gölgesi (altlıktan zemine)", 10, 12, 35)
    + [TG("sekliTakip", "Şekli takip et", 1, G6), TG("donusumTakip", "Dönüşümü takip et", 1, G6)] + dynGroup(G6, 18, 12, 82)
    + [IN("takipGecik", "Takip gecikmesi", 0, 0, 12, " kare", G6), PC("esneklik", "Altlık esnekliği", 0, g=G6), IN("kenarTohum", "Kenar tohumu", 1, 0, 9999, "", G6), TG("tohumCanl", "Tohumu canlandır", 1, G6)],
-   pad={"sum": ["kalinlik", "golgeUzak"], "mul": 1.2, "add": 12})
+   pad={"sum": ["kalinlik", "agUzak", "agYumu"], "mul": 1.1, "add": 14})
 E[-1]["n"] = 431
 
 # ---------- Karton Kukla ----------
@@ -72,7 +75,7 @@ fx("cardpuppet", "Karton Kukla", "Cardboard Puppet", 16, "pixel", "Katmanı kart
     SRC("altlikOzel", "Altlık özel doku", K2, {"k": "altlikDoku", "in": [6]}), TG("disaBuyut", "Sadece dışa büyüt", 1, K2),
     CS("kenarStili", "Kenar stili", EDGE, 3, K3), PC("kusursuz", "Kusursuzluk", 78, g=K3), PC("takipSadakat", "Takip sadakati", 88, g=K3), PC("kenarSert", "Kenar sertliği", 52, g=K3),
     PC("koseYumu", "Köşe yumuşaklığı", 22, g=K3)] + dynGroup(K3, 14, 10, 84) + [IN("kenarTohum", "Kenar tohumu", 1, 0, 9999, "", K3), TG("tohumCanl", "Tohumu canlandır", 1, K3)]
-   + shadowGroup(K4, 5, 9, 36)
+   + shadowGroup("İçerik Gölgesi (nesneden altlığa)", 5, 9, 36) + backShadow("Altlık Gölgesi (altlıktan zemine)", 8, 10, 30)
    + [TG("stopMotion", "Stop-motion hissi", 0, K5), IN("kuklaFps", "Kukla kare hızı", 12, 4, 24, " FPS", K5), PC("eklemSert", "Eklemlerde hafif sertlik", 28, g=K5), PC("mikroSallan", "Mikro sallanma", 8, g=K5)],
    [P("CB", "CB Karton"),
     P("OP", "Okul Projesi", {"dokuTuru": 5, "dokuGucu": 30, "altlikDoku": 5, "kalinlik": 10, "kenarStili": 5, "kusursuz": 60, "stopMotion": 1, "kuklaFps": 10}, cols={"altlikRenk": "#FFFFFF"}),
@@ -80,7 +83,7 @@ fx("cardpuppet", "Karton Kukla", "Cardboard Puppet", 16, "pixel", "Katmanı kart
     P("SM", "Sert Mukavva", {"dokuTuru": 3, "dokuGucu": 60, "altlikDoku": 3, "kalinlik": 20, "kabarti": 10, "kenarStili": 2, "kusursuz": 70}),
     P("YK", "Yumuşak Kağıt", {"dokuTuru": 4, "dokuGucu": 35, "altlikDoku": 4, "kalinlik": 12, "kenarStili": 1, "koseYumu": 60}),
     P("EK", "El Kesimi", {"kenarStili": 5, "kusursuz": 55, "kenarKarars": 25, "kenarDegis": 30, "stopMotion": 1, "kuklaFps": 8})],
-   pad={"sum": ["kalinlik", "golgeUzak"], "mul": 1.2, "add": 12})
+   pad={"sum": ["kalinlik", "agUzak", "agYumu"], "mul": 1.1, "add": 14})
 E[-1]["n"] = 432
 
 # ---------- Dokulandır (güncel; aynı kütüphane) ----------

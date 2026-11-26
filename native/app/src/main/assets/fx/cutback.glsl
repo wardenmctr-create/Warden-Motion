@@ -6,6 +6,8 @@ uniform float p_kalinlik, p_disaBuyut, p_alfaYorum, p_alfaEsik, p_kusursuz, p_ba
   p_olukGeni, p_olukDerin, p_olukYon, p_kirisBuyu, p_kirisDerin, p_kirisYogun, p_yirtikDerin, p_lifUzun, p_damarGeni, p_damarYon, p_tuyUzun, p_tuyYogun, p_yansimaGuc, p_metalik, p_eskime, p_sararma, p_leke,
   p_golgeAcik, p_golgeAci, p_golgeUzak, p_golgeYumu, p_golgeOpak, p_sekliTakip, p_donusumTakip, p_kenarDavr, p_yenilenme, p_kenarDegis, p_kenarKarars, p_bicimHafiza, p_takipGecik, p_esneklik, p_kenarTohum, p_tohumCanl;
 uniform vec2 p_dokuKonum; uniform vec3 c_malzRenk, c_ikinciRenk, c_golgeRenk;
+uniform float p_agAcik, p_agAci, p_agUzak, p_agYumu, p_agOpak; uniform vec3 c_agRenk;
+
 float silA(vec2 px) { float a = texPx(px).a; if (p_alfaYorum < 0.5) return step(0.5, a); if (p_alfaYorum < 1.5) return a; if (p_alfaYorum < 2.5) return smoothstep(0.08, 0.55, a); return step(p_alfaEsik / 100.0, a); }
 float edgeSeed() { float base = seedf(p_kenarTohum); if (p_kenarDavr < 0.5 || p_tohumCanl < 0.5) return base; float tick = floor(u_t * 30.0 / max(p_yenilenme, 1.0)); return base + tick * 7.13 * (1.0 - p_bicimHafiza / 100.0 * 0.85); }
 vec2 edgeWarp(vec2 q, float R) {
@@ -28,6 +30,9 @@ float backMask(vec2 px, float Rpx) {
   float soft = mix(0.5, 0.02, p_kenarSert / 100.0) + p_koseYumu / 100.0 * 0.2 + (p_kenarStili > 0.5 && p_kenarStili < 1.5 ? 0.25 : 0.0);
   return smoothstep(0.5 - soft, 0.5 + soft, m);
 }
+vec4 backShadowAt(vec2 bp, float R) { if (p_agAcik < 0.5) return vec4(0.0); float a = radians(p_agAci); vec2 so = vec2(cos(a), sin(a)) * p_agUzak * u_s;
+  float sm = backMask(bp - so, R + p_agYumu * u_s * 0.6); float core = backMask(bp - so, max(R - p_agYumu * u_s * 0.3, 0.0)); float k = mix(sm, core, 0.5);
+  return vec4(c_agRenk, 1.0) * k * p_agOpak / 100.0; }
 vec4 spFor(int id) {
   if (id == 4) return vec4(p_olukGeni / 40.0, p_olukDerin / 100.0, p_olukYon / 180.0, 0.0); if (id == 7) return vec4(p_kirisBuyu / 200.0, p_kirisDerin / 100.0, p_kirisYogun / 100.0, 0.0);
   if (id == 12) return vec4(p_damarGeni / 40.0, p_damarYon / 180.0, 0.0, 0.0); if (id == 10) return vec4(p_tuyUzun / 20.0, p_tuyYogun / 100.0, 0.0, 0.0);
@@ -37,7 +42,7 @@ void main() {
   const int MAP[19] = int[19](0, 22, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17); int id = MAP[int(clamp(p_dolguTuru, 0.0, 18.0))];
   vec2 ofs = vec2(p_ofsX, p_ofsY); if (p_birlikteDondur < 0.5 || p_donusumTakip < 0.5) ofs = rot2(-u_rot) * ofs;
   float R = p_kalinlik * u_s; vec2 bp = here() - ofs * u_s;
-  float m = backMask(bp, R); if (m <= 0.001 && p_malzKalin < 0.5) { o = s; return; }
+  float m = backMask(bp, R); vec4 bsh = backShadowAt(bp, R); if (m <= 0.001 && p_malzKalin < 0.5) { o = overPre(s, bsh); return; }
   // malzeme
   vec2 q = toUnit(bp); vec2 tp = rot2(-p_dokuAci) * (q - p_dokuKonum) / max(p_dokuOlcek / 100.0, 0.05); if (p_sekleSabit < 0.5) tp += vec2(u_t * 0.0);
   vec4 sp = spFor(id); float fib = p_lif / 100.0; vec3 base; float lit = 1.0;
@@ -60,5 +65,5 @@ void main() {
   vec4 back = pre(clamp(col, 0.0, 1.0), m * p_malzOpak / 100.0);
   // malzeme kalınlığı: altlığın yan yüzü
   if (p_malzKalin > 0.1) { float side = backMask(bp - vec2(0.0, p_malzKalin) * u_s * 0.7 - vec2(p_malzKalin) * u_s * 0.3, R); back = overPre(back, pre(base * 0.62, side * (1.0 - m) * p_malzOpak / 100.0)); }
-  o = overPre(s, back);
+  o = overPre(s, overPre(back, bsh));
 }

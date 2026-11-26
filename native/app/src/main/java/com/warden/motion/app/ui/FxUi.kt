@@ -513,9 +513,21 @@ private fun ParamRow(s: EditorState, layer: Layer, e: Effect, pr: FxParam, line:
                 }
             }
             "color" -> {
-                Label(); Spacer(Modifier.weight(1f))
-                Text((e.c?.get(pr.key) ?: pr.defStr ?: "").uppercase(), fontSize = 11.sp, color = C.dText2)
-                Box(Modifier.size(42.dp, 28.dp).clip(RoundedCornerShape(6.dp)).background(colorOf(e.c?.get(pr.key) ?: pr.defStr)).border(1.dp, C.dLine, RoundedCornerShape(6.dp)).tap { onColor(-1) })
+                Label()
+                val cur = (e.c?.get(pr.key) ?: pr.defStr ?: "#FFFFFF").uppercase()
+                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(5.dp)) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(cur, fontSize = 11.sp, color = C.dText2, modifier = Modifier.weight(1f))
+                        Text("Renk seç", fontSize = 11.sp, color = C.dText, modifier = Modifier.padding(end = 6.dp))
+                        Box(Modifier.size(42.dp, 28.dp).clip(RoundedCornerShape(6.dp)).background(colorOf(cur)).border(1.dp, C.dLine, RoundedCornerShape(6.dp)).tap { onColor(-1) })
+                    }
+                    // Hızlı renkler (malzeme, altlık ve gölge renkleri için uygun tonlar + uygulamanın renkleri)
+                    val quick = if (pr.label.contains("Gölge", true)) listOf("#000000", "#3A302A", "#1B2A55", "#4A3B5C", "#5C3A1E", "#7A7A7A")
+                        else listOf("#C9A57A", "#B88A5A", "#A88A68", "#F4F1EA", "#FFFFFF", "#111111", "#E30A17", "#2F7BF6", "#22D3C5", "#F2C230", "#8F7CF0", "#E84393")
+                    Row(Modifier.horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(5.dp)) {
+                        quick.forEach { hx -> Box(Modifier.size(24.dp).clip(CircleShape).background(colorOf(hx)).border(if (cur == hx) 2.dp else 1.dp, if (cur == hx) C.turq else C.dLine, CircleShape).tap { onSel(); setC(hx) }) }
+                    }
+                }
             }
             "gradient", "palette" -> {
                 Label()

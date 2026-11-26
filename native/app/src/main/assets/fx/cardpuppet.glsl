@@ -5,6 +5,8 @@ uniform float p_orijKoru, p_dokuTuru, p_dokuGucu, p_dokuOlcek, p_dokuAci, p_doku
   p_altlikAcik, p_kalinlik, p_ofsX, p_ofsY, p_altlikDoku, p_altlikDokuGuc, p_altlikKabarti, p_disaBuyut, p_kenarStili, p_kusursuz, p_takipSadakat, p_kenarSert, p_koseYumu,
   p_kenarDavr, p_yenilenme, p_kenarDegis, p_kenarKarars, p_bicimHafiza, p_kenarTohum, p_tohumCanl, p_golgeAcik, p_golgeAci, p_golgeUzak, p_golgeYumu, p_golgeOpak;
 uniform vec3 c_altlikRenk, c_golgeRenk;
+uniform float p_agAcik, p_agAci, p_agUzak, p_agYumu, p_agOpak; uniform vec3 c_agRenk;
+
 float edgeSeed() { float base = seedf(p_kenarTohum); if (p_kenarDavr < 0.5 || p_tohumCanl < 0.5) return base; float tick = floor(u_t * 30.0 / max(p_yenilenme, 1.0)); return base + tick * 7.13 * (1.0 - p_bicimHafiza / 100.0 * 0.85); }
 float backMask(vec2 px, float Rpx) {
   vec2 q = toUnit(px); float R = max(Rpx / u_s, 1.0); float imp = 1.0 - p_kusursuz / 100.0; float st = p_kenarStili;
@@ -20,6 +22,9 @@ float backMask(vec2 px, float Rpx) {
   float soft = mix(0.5, 0.02, p_kenarSert / 100.0) + p_koseYumu / 100.0 * 0.2 + (st > 0.5 && st < 1.5 ? 0.25 : 0.0);
   return smoothstep(0.5 - soft, 0.5 + soft, m);
 }
+vec4 backShadowAt(vec2 bp, float R) { if (p_agAcik < 0.5) return vec4(0.0); float a = radians(p_agAci); vec2 so = vec2(cos(a), sin(a)) * p_agUzak * u_s;
+  float sm = backMask(bp - so, R + p_agYumu * u_s * 0.6); float core = backMask(bp - so, max(R - p_agYumu * u_s * 0.3, 0.0)); float k = mix(sm, core, 0.5);
+  return vec4(c_agRenk, 1.0) * k * p_agOpak / 100.0; }
 void main() {
   vec4 s = texture(u_tex, v_uv); vec2 q = toUnit(here());
   // üst doku
@@ -36,7 +41,7 @@ void main() {
     obj = pre(clamp(mix(r, c, p_orijKoru / 100.0), 0.0, 1.0), s.a);
   }
   if (p_altlikAcik < 0.5) { o = obj; return; }
-  vec2 ofs = vec2(p_ofsX, p_ofsY); vec2 bp = here() - ofs * u_s; float m = backMask(bp, p_kalinlik * u_s); if (m <= 0.001) { o = obj; return; }
+  vec2 ofs = vec2(p_ofsX, p_ofsY); vec2 bp = here() - ofs * u_s; float m = backMask(bp, p_kalinlik * u_s); vec4 bsh = backShadowAt(bp, p_kalinlik * u_s); if (m <= 0.001) { o = overPre(obj, bsh); return; }
   const int BK[7] = int[7](3, 4, 6, 5, 7, 0, 17); int bid = BK[int(clamp(p_altlikDoku, 0.0, 6.0))]; vec2 bq = toUnit(bp) / max(p_dokuOlcek / 100.0, 0.05);
   vec3 bc; float bl = 1.0;
   if (bid == 0) bc = c_altlikRenk; else if (bid == 17) { vec4 t = p_altlikOzelOn > 0.5 ? texture(s_altlikOzel, fract(bq / 200.0)) : vec4(0.8); bc = unpre(t); }
@@ -45,5 +50,5 @@ void main() {
   if (p_golgeAcik > 0.5) { float a = radians(p_golgeAci); vec2 so = vec2(cos(a), sin(a)) * p_golgeUzak * u_s; float sh = 0.0; float rr = max(p_golgeYumu * u_s, 0.5);
     for (int i = 0; i < 12; i++) { float an = float(i) * TAU / 12.0; sh += texPx(here() - so + vec2(cos(an), sin(an)) * rr * (0.4 + 0.6 * fract(float(i) * 0.618))).a; } sh = sh / 12.0 * p_golgeOpak / 100.0;
     col = mix(col, col * c_golgeRenk * 1.4, sh); }
-  o = overPre(obj, pre(clamp(col, 0.0, 1.0), m));
+  o = overPre(obj, overPre(pre(clamp(col, 0.0, 1.0), m), bsh));
 }
