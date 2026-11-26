@@ -222,6 +222,19 @@ class Renderer(private val ctx: Context, maxSide: Int = 2048, private val sync: 
     private var echoMul = 1.0; private var echoBlend: BlendMode? = null; private var inEcho = false
     /** Canlı Bağlantı Çizgisi / Ölçü Oku: uçlara seçilen katmanların o anki konumu yazılır (katmanın kutusuna göre %) */
     private fun linkPoints(p: Project, l: Layer, e: Effect, t: Double, tr: TR): Effect {
+        // Grafik/harita verisi: seçilen metin katmanındaki satırlar (virgül/boşlukla ayrılmış sayılar) → dv dizisi, dvR satır, dvC sütun
+        val dataKey = listOf("veri", "zamanSeri", "baglanti", "noktaVeri").firstOrNull { k -> fxMeta(e.type).params.any { it.key == k } }
+        if (dataKey != null) { val src = e.c?.get(dataKey)?.let { id -> p.layers.find { it.id == id } }; val txt = src?.text ?: return e
+            val rows = txt.lines().map { ln -> Regex("-?\\d+(?:[.,]\\d+)?").findAll(ln).map { it.value.replace(',', '.').toDouble() }.toList() }.filter { it.isNotEmpty() }.take(64)
+            val cols = rows.maxOfOrNull { it.size }?.coerceAtMost(16) ?: 0; if (rows.isEmpty() || cols == 0) return e; var v = e.v ?: emptyMap(); var i = 0
+            for (r in rows) for (cI in 0 until cols) { if (i >= 256) break; v = v + ("dv$i" to com.warden.motion.app.model.Anim(r.getOrElse(cI) { 0.0 })); i++ }
+            v = v + ("dvR" to com.warden.motion.app.model.Anim(min(rows.size, 256 / cols).toDouble())) + ("dvC" to com.warden.motion.app.model.Anim(cols.toDouble())); return e.copy(v = v) }
+        if (e.type == "compass") { val m = e.c?.get("harita")?.let { id -> p.layers.find { it.id == id } } ?: return e
+            return e.copy(v = (e.v ?: emptyMap()) + ("dv0" to com.warden.motion.app.model.Anim(worldTransform(p, m, t).rot - tr.rot))) }
+        if (e.type == "minimap") { val m = e.c?.get("anaHari")?.let { id -> p.layers.find { it.id == id } } ?: return e; val w = worldTransform(p, m, t); val a = -w.rot * PI / 180; val sc = if (kotlin.math.abs(w.scale) > 1e-6) w.scale else 1.0
+            fun uv(x: Double, y: Double): Pair<Double, Double> { val dx = x - w.x; val dy = y - w.y; return ((dx * cos(a) - dy * sin(a)) / sc / m.w + 0.5) to ((dx * sin(a) + dy * cos(a)) / sc / m.h + 0.5) }
+            val (u0, v0) = uv(0.0, 0.0); val (u1, v1) = uv(p.width.toDouble(), p.height.toDouble())
+            return e.copy(v = (e.v ?: emptyMap()) + ("dv0" to com.warden.motion.app.model.Anim(min(u0, u1))) + ("dv1" to com.warden.motion.app.model.Anim(min(v0, v1))) + ("dv2" to com.warden.motion.app.model.Anim(max(u0, u1))) + ("dv3" to com.warden.motion.app.model.Anim(max(v0, v1)))) }
         if (e.type == "elasticline") { // iki uç katman: dv0..dv3 (katman birimi, kutu merkezine göre)
             val ids = e.c?.get("uclar")?.split(',')?.filter { it.isNotBlank() } ?: return e; if (ids.size < 2) return e; var v = e.v ?: emptyMap()
             ids.take(2).forEachIndexed { i, id -> val o = p.layers.find { it.id == id } ?: return e; val w = worldTransform(p, o, t); val a = -tr.rot * PI / 180; val dx = w.x - tr.x; val dy = w.y - tr.y; val sc = if (kotlin.math.abs(tr.scale) > 1e-6) tr.scale else 1.0

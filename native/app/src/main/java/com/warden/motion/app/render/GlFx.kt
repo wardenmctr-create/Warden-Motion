@@ -244,7 +244,7 @@ vec3 palc_$k(int i) { vec3 c[32] = vec3[32]($c); return c[clamp(i, 0, 31)]; }"""
             }
         }
         // Motorun yazdığı veri dizisi (grafik/ölçer verisi): v["dv0".."dvN"] → p_dv[i], dvN sayısı p_dvN
-        e.v?.let { vv -> var n = 0; for ((k, a) in vv) if (k.startsWith("dv") && k.length > 2 && k[2].isDigit()) { u["p_dv[" + k.substring(2) + "]"] = a.v.toFloat(); n++ }; if (n > 0) u["p_dvN"] = n.toFloat() }
+        e.v?.let { vv -> var n = 0; for ((k, a) in vv) if (k.startsWith("dv") && k.length > 2 && k[2].isDigit()) { u["p_dv[" + k.substring(2) + "]"] = a.v.toFloat(); n++ } else if (k == "dvR" || k == "dvC") u["p_$k"] = a.v.toFloat(); if (n > 0) u["p_dvN"] = n.toFloat() }
     }
 
     /** Geçiş durakları: "[[\"#RRGGBB\",konum%],...]" → p_kN, c_k0..7, p_kP0..7 */

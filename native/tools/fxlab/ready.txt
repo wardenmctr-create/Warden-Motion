@@ -17,6 +17,7 @@ avgcolor
 ballaction
 bandclean
 bandpassimg
+barrace
 batik
 beadwork
 beam
@@ -104,6 +105,7 @@ colorstab
 colortrail
 colortune
 comic
+compass
 compisolate
 complexmap
 compoundblur
@@ -113,6 +115,7 @@ confetti
 connector
 contourgrad
 contourlines
+contourmap
 contourstrips
 copybg
 cornerpin
@@ -216,6 +219,7 @@ galaxy
 gammagain
 gamutwarn
 gear3d
+geoheat
 glass
 glasswipe
 glitch
@@ -227,6 +231,7 @@ gradfade
 gradmap
 gradoverlay
 gradwipe
+graticule
 grayscale
 grid
 griddler
@@ -242,6 +247,7 @@ halftonelines
 hdrsdr
 heart3d
 heartrain
+heatmapchart
 hexarray
 hexcells
 hexprism
@@ -250,6 +256,7 @@ hexshift
 hextile
 highlightrecover
 highshadow
+hillshade
 histogram2
 hollowbox
 hologram
@@ -326,6 +333,7 @@ measurearrow
 median
 mercury
 meteors
+minimap
 minimax
 mirror
 mirrorrepeat
@@ -340,6 +348,7 @@ multiscale
 nebula
 neonedge
 neonsign
+netdiagram
 nightvision
 nlmeans
 noise
@@ -388,6 +397,7 @@ powervoronoi
 prismfx
 pyramid
 quilling
+radarchart
 radialshadow
 radiowaves
 radrepeat
@@ -422,12 +432,14 @@ sandart
 sandcarve
 sandstorm
 satlimit
+scalebar
 scalewipe
 scanlines
 scatter
 scatter3d
 scatterfield
 scatterize
+scatterplot
 scatterpx
 scratchart
 scribble
@@ -445,6 +457,7 @@ shear
 sketch
 slant
 slices
+slopemap
 smartfill
 smear
 smoke
@@ -465,6 +478,7 @@ split
 spotcolor
 spotlight
 squeeze
+stackarea
 stainedglass
 star
 starfield
@@ -504,6 +518,7 @@ tinyplanet
 tornado
 tornpaper
 torus
+treemap
 treerings
 triprism
 tritone

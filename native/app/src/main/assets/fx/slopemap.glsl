@@ -1,0 +1,5 @@
+// slopemap
+uniform sampler2D s_yuksekli; uniform float p_yuksekliOn, p_egimSini; uniform vec3 c_palet;
+void main() { float e = u_s; vec2 b = boxUV(here()); float hx = (p_yuksekliOn > 0.5 ? luma(unpre(texture(s_yuksekli, clamp(boxUV(here() + vec2(e, 0.0)), 0.0, 1.0)))) - luma(unpre(texture(s_yuksekli, clamp(boxUV(here() - vec2(e, 0.0)), 0.0, 1.0)))) : luma(unpre(texPx(here() + vec2(e, 0.0)))) - luma(unpre(texPx(here() - vec2(e, 0.0)))));
+  float hy = (p_yuksekliOn > 0.5 ? luma(unpre(texture(s_yuksekli, clamp(boxUV(here() + vec2(0.0, e)), 0.0, 1.0)))) - luma(unpre(texture(s_yuksekli, clamp(boxUV(here() - vec2(0.0, e)), 0.0, 1.0)))) : luma(unpre(texPx(here() + vec2(0.0, e)))) - luma(unpre(texPx(here() - vec2(0.0, e)))));
+  float slope = degrees(atan(length(vec2(hx, hy)) * 60.0)); float k = clamp(slope / max(p_egimSini, 1.0), 0.0, 1.0); vec3 c = mix(c_palet, vec3(0.75, 0.15, 0.1), k); c = mix(c, vec3(0.95, 0.85, 0.2), smoothstep(0.3, 0.6, k) * (1.0 - smoothstep(0.6, 0.9, k))); o = vec4(c, 1.0); }

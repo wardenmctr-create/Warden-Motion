@@ -84,3 +84,15 @@ N8A([
  (699, "lattice", "Bükme ve Bozulma", "pixel", ["Kafes", "Deformasyon"], None), (700, "snapcurve", "Taşı ve Dönüştür", "xform", ["Eğri", "Yapışma"], None),
 ])
 HIDE8.update({"lattice": ["kafesiSifi"]})
+N8A([
+ (701, "wordhighlight", "Metin", "text", ["Metin", "Vurgu"], None), (702, "verticaltext", "Metin", "text", ["Metin", "Dikey"], None),
+ (706, "linereveal", "Metin", "text", ["Metin", "Satır", "Giriş"], None), (707, "rollcounter", "Metin", "text", ["Metin", "Sayaç"], None),
+ (708, "stackarea", "Diğer", "gen", ["Grafik", "Alan"], None), (710, "treemap", "Diğer", "gen", ["Grafik", "Ağaç haritası"], None),
+ (711, "scatterplot", "Diğer", "gen", ["Grafik", "Dağılım"], None), (712, "radarchart", "Diğer", "gen", ["Grafik", "Radar"], None),
+ (713, "heatmapchart", "Diğer", "gen", ["Grafik", "Isı"], None), (714, "barrace", "Diğer", "gen", ["Grafik", "Sıralama", "Yarış"], None),
+ (715, "netdiagram", "Diğer", "gen", ["Grafik", "Ağ"], None), (716, "geoheat", "Countryball", "gen", ["Harita", "Isı"], None),
+ (718, "contourmap", "Countryball", "pixel", ["Harita", "Eş yükselti"], None), (719, "slopemap", "Countryball", "pixel", ["Harita", "Eğim"], None),
+ (720, "hillshade", "Countryball", "pixel", ["Harita", "Kabartma"], None), (721, "graticule", "Countryball", "pixel", ["Harita", "Izgara"], None),
+ (722, "scalebar", "Countryball", "gen", ["Harita", "Ölçek"], None), (723, "compass", "Countryball", "gen", ["Harita", "Pusula"], None),
+ (725, "minimap", "Countryball", "gen", ["Harita", "Küçük harita"], None),
+])

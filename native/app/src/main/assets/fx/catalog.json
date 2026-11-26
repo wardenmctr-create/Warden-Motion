@@ -128465,6 +128465,1413 @@
 "heavy": false,
 "n": 700,
 "ready": true
+},
+{
+"type": "wordhighlight",
+"name": "Sözcük Vurgusu",
+"en": "",
+"cat": 10,
+"kind": "text",
+"desc": "Seçilen kelime veya sözcük aralıklarına renk, ölçek ve arka kutu vurgusu verir; ses zamanlaması gerekmez.",
+"tags": [
+"Metin",
+"Vurgu"
+],
+"params": [
+{
+"k": "sozcukle",
+"l": "Sözcükler",
+"g": null,
+"anim": "no",
+"hint": "sözcük listesi veya indeks aralıkları",
+"kind": "text",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": ""
+},
+{
+"k": "renk",
+"l": "Renk",
+"g": null,
+"anim": "yes",
+"hint": "vurgulanan yazı rengi",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#F0C84B"
+},
+{
+"k": "vurguBuyu",
+"l": "Vurgu büyüklüğü",
+"g": null,
+"anim": "yes",
+"hint": "seçili sözcük ölçeği",
+"kind": "jog",
+"min": 25.0,
+"max": 300.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 110.0
+},
+{
+"k": "vurguArkaKutu",
+"l": "Vurgu arka kutusu",
+"g": "Gelişmiş",
+"anim": "step",
+"hint": "seçilen kelimelerin arkasında kutu oluşturur",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 0
+},
+{
+"k": "kutuReng",
+"l": "Kutu rengi",
+"g": "Gelişmiş",
+"anim": "yes",
+"hint": "arka kutunun rengi",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#173B69"
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 701,
+"ready": true
+},
+{
+"type": "verticaltext",
+"name": "Dikey Metin Dizimi",
+"en": "",
+"cat": 10,
+"kind": "text",
+"desc": "Metni dikey yazı düzenine göre yerleştirir; tek tek harf döndürmek yerine gerçek satır düzeni kullanır.",
+"tags": [
+"Metin",
+"Dikey"
+],
+"params": [
+{
+"k": "dizim",
+"l": "Dizim",
+"g": null,
+"anim": "step",
+"hint": "sütun akışı",
+"kind": "choice",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"opts": [
+"Üstten alta",
+"Alttan üste"
+],
+"def": 0
+},
+{
+"k": "satirAral",
+"l": "Satır aralığı",
+"g": null,
+"anim": "yes",
+"hint": "sütunlar arası mesafe",
+"kind": "jog",
+"min": 0.5,
+"max": 4.0,
+"step": 0.01,
+"jog": 0.01,
+"unit": "",
+"def": 1.2
+},
+{
+"k": "latinKaraDond",
+"l": "Latin karakteri döndür",
+"g": null,
+"anim": "step",
+"hint": "Latin gliflerini yana döndürür",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 0
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 702,
+"ready": true
+},
+{
+"type": "linereveal",
+"name": "Otomatik Satır Açılışı",
+"en": "",
+"cat": 10,
+"kind": "text",
+"desc": "Metin bloğunun satırlarını düzeni bozmadan ayrı ayrı maskeler ve zamanla açar; harf animasyonundan farklı satır bazlıdır.",
+"tags": [
+"Metin",
+"Satır",
+"Giriş"
+],
+"params": [
+{
+"k": "satirGeci",
+"l": "Satır gecikmesi",
+"g": null,
+"anim": "yes",
+"hint": "satır başına gecikme",
+"kind": "jog",
+"min": 0.0,
+"max": 10.0,
+"step": 0.01,
+"jog": 0.01,
+"unit": "sn",
+"def": 0.15
+},
+{
+"k": "acilisSure",
+"l": "Açılış süresi",
+"g": null,
+"anim": "yes",
+"hint": "satır açılış süresi",
+"kind": "jog",
+"min": 0.01,
+"max": 10.0,
+"step": 0.01,
+"jog": 0.01,
+"unit": "sn",
+"def": 0.3
+},
+{
+"k": "yon",
+"l": "Yön",
+"g": null,
+"anim": "step",
+"hint": "maskenin yönü",
+"kind": "choice",
+"min": 0,
+"max": 3,
+"step": 1,
+"jog": 1,
+"opts": [
+"Soldan sağa",
+"Sağdan sola",
+"Üstten",
+"Alttan"
+],
+"def": 0
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 706,
+"ready": true
+},
+{
+"type": "rollcounter",
+"name": "Dönen Sayaç Tamburu",
+"en": "",
+"cat": 10,
+"kind": "text",
+"desc": "Her rakamı fiziksel sayı tamburu gibi ayrı kaydırarak sayı değişimini gösterir.",
+"tags": [
+"Metin",
+"Sayaç"
+],
+"params": [
+{
+"k": "hiz",
+"l": "Hız",
+"g": null,
+"anim": "yes",
+"hint": "tambur dönüş hızı",
+"kind": "jog",
+"min": 0.1,
+"max": 60.0,
+"step": 0.01,
+"jog": 0.01,
+"unit": "",
+"def": 6.0
+},
+{
+"k": "tamburYari",
+"l": "Tambur yarıçapı",
+"g": null,
+"anim": "yes",
+"hint": "sanal tambur yarıçapı",
+"kind": "jog",
+"min": 1.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 30.0
+},
+{
+"k": "ondalik",
+"l": "Ondalık",
+"g": null,
+"anim": "yes",
+"hint": "ondalık basamak sayısı",
+"kind": "jog",
+"min": 0.0,
+"max": 6.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 0.0
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Skor",
+"vals": {
+"ondalik": 0.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Ölçüm",
+"vals": {
+"ondalik": 2.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 707,
+"ready": true
+},
+{
+"type": "stackarea",
+"name": "Yığılmış Alan Grafiği",
+"en": "",
+"cat": 11,
+"kind": "gen",
+"desc": "Veri serilerinin zaman boyunca birikimli alanlarını renkli katmanlar olarak gösterir; mevcut çizgi grafiğinden farklı alan semantiği.",
+"tags": [
+"Grafik",
+"Alan"
+],
+"params": [
+{
+"k": "veri",
+"l": "Veri",
+"g": null,
+"anim": "no",
+"hint": "zaman ve seri değerleri",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": ""
+},
+{
+"k": "seriler",
+"l": "Seriler",
+"g": null,
+"anim": "yes",
+"hint": "seri başına renk",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#FFFFFF"
+},
+{
+"k": "cizimIler",
+"l": "Çizim ilerlemesi",
+"g": null,
+"anim": "yes",
+"hint": "zaman ekseni çizim ilerlemesi",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 100.0
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 708,
+"ready": true
+},
+{
+"type": "treemap",
+"name": "Ağaç Haritası Grafiği",
+"en": "",
+"cat": 11,
+"kind": "gen",
+"desc": "Hiyerarşik değerleri iç içe alanı orantılı dikdörtgenlerle gösterir.",
+"tags": [
+"Grafik",
+"Ağaç haritası"
+],
+"params": [
+{
+"k": "veri",
+"l": "Veri",
+"g": null,
+"anim": "no",
+"hint": "ebeveyn/çocuk ve değer",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": ""
+},
+{
+"k": "bosluk",
+"l": "Boşluk",
+"g": null,
+"anim": "yes",
+"hint": "bölmeler arası boşluk",
+"kind": "jog",
+"min": 0.0,
+"max": 50.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 3.0
+},
+{
+"k": "renkPale",
+"l": "Renk paleti",
+"g": null,
+"anim": "yes",
+"hint": "kategori renkleri",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#FFFFFF"
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Sık düzen",
+"vals": {
+"bosluk": 1.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Kart görünümü",
+"vals": {
+"bosluk": 8.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 710,
+"ready": true
+},
+{
+"type": "scatterplot",
+"name": "Dağılım Grafiği",
+"en": "",
+"cat": 11,
+"kind": "gen",
+"desc": "İki sayısal eksende veri noktalarını ve isteğe bağlı üçüncü büyüklüğü gösterir.",
+"tags": [
+"Grafik",
+"Dağılım"
+],
+"params": [
+{
+"k": "veri",
+"l": "Veri",
+"g": null,
+"anim": "no",
+"hint": "X,Y ve isteğe bağlı büyüklük",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": ""
+},
+{
+"k": "eksen",
+"l": "Eksen",
+"g": null,
+"anim": "step",
+"hint": "eksen ölçeği",
+"kind": "choice",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"opts": [
+"Doğrusal",
+"Logaritmik"
+],
+"def": 0
+},
+{
+"k": "noktaBoyu",
+"l": "Nokta boyutu",
+"g": null,
+"anim": "yes",
+"hint": "varsayılan nokta çapı",
+"kind": "jog",
+"min": 1.0,
+"max": 50.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 6.0
+},
+{
+"k": "xYSutu",
+"l": "X/Y sütunları",
+"g": "Gelişmiş",
+"anim": "step",
+"hint": "veri başlıklarından elle seçilebilen eksen eşlemesi",
+"kind": "choice",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"opts": [
+"Otomatik"
+],
+"def": 0
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 711,
+"ready": true
+},
+{
+"type": "radarchart",
+"name": "Radar Grafiği",
+"en": "",
+"cat": 11,
+"kind": "gen",
+"desc": "Birden fazla ölçüyü radyal eksenler boyunca çokgenlerle karşılaştırır.",
+"tags": [
+"Grafik",
+"Radar"
+],
+"params": [
+{
+"k": "veri",
+"l": "Veri",
+"g": null,
+"anim": "no",
+"hint": "ölçü ve seri değerleri",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": ""
+},
+{
+"k": "eksen",
+"l": "Eksen",
+"g": null,
+"anim": "yes",
+"hint": "radyal eksen sayısı",
+"kind": "jog",
+"min": 3.0,
+"max": 24.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 6.0
+},
+{
+"k": "seriReng",
+"l": "Seri rengi",
+"g": null,
+"anim": "yes",
+"hint": "seçili seri rengi",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#328CFF"
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Beş özellik",
+"vals": {
+"eksen": 5.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Sekiz özellik",
+"vals": {
+"eksen": 8.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 712,
+"ready": true
+},
+{
+"type": "heatmapchart",
+"name": "Isı Haritası Grafiği",
+"en": "",
+"cat": 11,
+"kind": "gen",
+"desc": "Satır ve sütun değerlerini renk yoğunluğuyla gösterir; coğrafi ısı haritasından farklı tablo verisi kullanır.",
+"tags": [
+"Grafik",
+"Isı"
+],
+"params": [
+{
+"k": "veri",
+"l": "Veri",
+"g": null,
+"anim": "no",
+"hint": "satır/sütun değerleri",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": ""
+},
+{
+"k": "renkAral",
+"l": "Renk aralığı",
+"g": null,
+"anim": "yes",
+"hint": "düşük/yüksek değer paleti",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#173E78"
+},
+{
+"k": "hucreAral",
+"l": "Hücre aralığı",
+"g": null,
+"anim": "yes",
+"hint": "hücre arası boşluk",
+"kind": "jog",
+"min": 0.0,
+"max": 30.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 2.0
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 713,
+"ready": true
+},
+{
+"type": "barrace",
+"name": "Hareketli Sıralama Grafiği",
+"en": "",
+"cat": 11,
+"kind": "gen",
+"desc": "Zamana göre değişen değerlerle çubukların yerlerini yumuşakça yeniden sıralar; normal çubuk grafiğe gelişmiş mod olabilir.",
+"tags": [
+"Grafik",
+"Sıralama",
+"Yarış"
+],
+"params": [
+{
+"k": "zamanSeri",
+"l": "Zaman serisi",
+"g": null,
+"anim": "no",
+"hint": "zaman serileri",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": ""
+},
+{
+"k": "gorunenOge",
+"l": "Görünen öğe",
+"g": null,
+"anim": "yes",
+"hint": "görünür üst öğe sayısı",
+"kind": "jog",
+"min": 1.0,
+"max": 50.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 10.0
+},
+{
+"k": "gecis",
+"l": "Geçiş",
+"g": null,
+"anim": "yes",
+"hint": "yeniden sıralama geçiş süresi",
+"kind": "jog",
+"min": 0.0,
+"max": 5.0,
+"step": 0.01,
+"jog": 0.01,
+"unit": "sn",
+"def": 0.4
+},
+{
+"k": "degerEtik",
+"l": "Değer etiketleri",
+"g": "Gelişmiş",
+"anim": "step",
+"hint": "çubukların sayısal değerlerini gösterir",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "İlk 5",
+"vals": {
+"gecis": 0.5
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "İlk 20",
+"vals": {
+"gecis": 0.25
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 714,
+"ready": true
+},
+{
+"type": "netdiagram",
+"name": "Ağ Diyagramı",
+"en": "",
+"cat": 11,
+"kind": "gen",
+"desc": "Düğüm ve bağlantı verilerinden ilişkileri gösteren düzen üretir.",
+"tags": [
+"Grafik",
+"Ağ"
+],
+"params": [
+{
+"k": "baglanti",
+"l": "Bağlantılar",
+"g": null,
+"anim": "no",
+"hint": "düğümler ve bağlantılar",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": ""
+},
+{
+"k": "duzen",
+"l": "Düzen",
+"g": null,
+"anim": "step",
+"hint": "yerleşim algoritması",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Kuvvet",
+"Dairesel",
+"Hiyerarşik"
+],
+"def": 0
+},
+{
+"k": "bagUzak",
+"l": "Bağ uzaklığı",
+"g": null,
+"anim": "yes",
+"hint": "hedef bağlantı uzunluğu",
+"kind": "jog",
+"min": 10.0,
+"max": 1000.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 100.0
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Dairesel",
+"vals": {
+"duzen": 1
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "İlişki ağacı",
+"vals": {
+"duzen": 2
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 715,
+"ready": true
+},
+{
+"type": "geoheat",
+"name": "Coğrafi Isı Haritası",
+"en": "",
+"cat": 16,
+"kind": "gen",
+"desc": "Kullanıcının verdiği koordinat ve ağırlıkları harita üzerinde yumuşak yoğunluk alanına dönüştürür.",
+"tags": [
+"Harita",
+"Isı"
+],
+"params": [
+{
+"k": "noktaVeri",
+"l": "Nokta verisi",
+"g": null,
+"anim": "no",
+"hint": "koordinatlar ve ağırlıklar",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": ""
+},
+{
+"k": "yaricap",
+"l": "Yarıçap",
+"g": null,
+"anim": "yes",
+"hint": "yoğunluk çekirdeği yarıçapı",
+"kind": "jog",
+"min": 0.1,
+"max": 1000.0,
+"step": 0.01,
+"jog": 0.01,
+"unit": "",
+"def": 50.0
+},
+{
+"k": "renkPale",
+"l": "Renk paleti",
+"g": null,
+"anim": "yes",
+"hint": "düşük/yüksek yoğunluk renkleri",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#204C9C"
+},
+{
+"k": "agirligaGoreNorm",
+"l": "Ağırlığa göre normalleştir",
+"g": "Gelişmiş",
+"anim": "step",
+"hint": "ağırlıklı noktaların toplam yoğunluğunu ortak renk ölçeğine taşır",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Yerel yoğunluk",
+"vals": {
+"yaricap": 10.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 716,
+"ready": true
+},
+{
+"type": "contourmap",
+"name": "Yükselti Eğrisi Haritası",
+"en": "",
+"cat": 16,
+"kind": "pixel",
+"desc": "Gerçek yükseklik verisinden eş yükselti çizgileri çıkarır; parlaklıktan üretilen dekoratif kontur değildir.",
+"tags": [
+"Harita",
+"Eş yükselti"
+],
+"params": [
+{
+"k": "yuksekli",
+"l": "Yükseklik",
+"g": null,
+"anim": "no",
+"hint": "coğrafi yükseklik verisi",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": ""
+},
+{
+"k": "egriAral",
+"l": "Eğri aralığı",
+"g": null,
+"anim": "yes",
+"hint": "çizgiler arası yükseklik farkı",
+"kind": "jog",
+"min": 1.0,
+"max": 5000.0,
+"step": 0.01,
+"jog": 0.01,
+"unit": "",
+"def": 100.0
+},
+{
+"k": "anaCizgSikl",
+"l": "Ana çizgi sıklığı",
+"g": null,
+"anim": "yes",
+"hint": "her kaçıncı çizginin kalın olacağı",
+"kind": "jog",
+"min": 1.0,
+"max": 20.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 5.0
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 718,
+"ready": true
+},
+{
+"type": "slopemap",
+"name": "Arazi Eğim Haritası",
+"en": "",
+"cat": 16,
+"kind": "pixel",
+"desc": "Gerçek yükseklik verisinin eğimini renklerle gösterir.",
+"tags": [
+"Harita",
+"Eğim"
+],
+"params": [
+{
+"k": "yuksekli",
+"l": "Yükseklik",
+"g": null,
+"anim": "no",
+"hint": "yükseklik ve piksel ölçeği",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": ""
+},
+{
+"k": "egimSini",
+"l": "Eğim sınırı",
+"g": null,
+"anim": "yes",
+"hint": "yüksek renk sınırı",
+"kind": "jog",
+"min": 1.0,
+"max": 90.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"def": 45.0
+},
+{
+"k": "palet",
+"l": "Palet",
+"g": null,
+"anim": "yes",
+"hint": "düzden dik eğime palet",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#D9E9A2"
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 719,
+"ready": true
+},
+{
+"type": "hillshade",
+"name": "Harita Kabartma Gölgesi",
+"en": "",
+"cat": 16,
+"kind": "pixel",
+"desc": "Arazi yükselti gradyanına göre sanal güneş yönünden gri gölgelendirme üretir; 3B ağ gerektirmez.",
+"tags": [
+"Harita",
+"Kabartma"
+],
+"params": [
+{
+"k": "yuksekli",
+"l": "Yükseklik",
+"g": null,
+"anim": "no",
+"hint": "yükseklik kaynağı",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": ""
+},
+{
+"k": "isikAcis",
+"l": "Işık açısı",
+"g": null,
+"anim": "yes",
+"hint": "sanal ışık yönü",
+"kind": "jog",
+"min": 0.0,
+"max": 360.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"def": 315.0
+},
+{
+"k": "yuksekliAbar",
+"l": "Yükseklik abartısı",
+"g": null,
+"anim": "yes",
+"hint": "düşey yükselti abartısı",
+"kind": "jog",
+"min": 0.0,
+"max": 10.0,
+"step": 0.01,
+"jog": 0.01,
+"unit": "",
+"def": 1.0
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 720,
+"ready": true
+},
+{
+"type": "graticule",
+"name": "Enlem Boylam Izgarası",
+"en": "",
+"cat": 16,
+"kind": "pixel",
+"desc": "Haritanın coğrafi projeksiyonuna göre eğilen koordinat çizgilerini ve etiketlerini üretir.",
+"tags": [
+"Harita",
+"Izgara"
+],
+"params": [
+{
+"k": "projeksi",
+"l": "Projeksiyon",
+"g": null,
+"anim": "step",
+"hint": "harita projeksiyonu",
+"kind": "choice",
+"min": 0,
+"max": 3,
+"step": 1,
+"jog": 1,
+"opts": [
+"Eşdikdörtgen",
+"Mercator",
+"Robinson",
+"Ortografik"
+],
+"def": 0
+},
+{
+"k": "dereceAral",
+"l": "Derece aralığı",
+"g": null,
+"anim": "yes",
+"hint": "koordinat çizgi aralığı",
+"kind": "jog",
+"min": 1.0,
+"max": 90.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"def": 15.0
+},
+{
+"k": "etiketle",
+"l": "Etiketler",
+"g": null,
+"anim": "step",
+"hint": "derece etiketlerini gösterir",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 721,
+"ready": true
+},
+{
+"type": "scalebar",
+"name": "Ölçek Çubuğu",
+"en": "",
+"cat": 16,
+"kind": "gen",
+"desc": "Haritanın bilinen coğrafi ölçeğine göre yakınlaşmada güncellenen ölçek göstergesi üretir.",
+"tags": [
+"Harita",
+"Ölçek"
+],
+"params": [
+{
+"k": "harita",
+"l": "Harita",
+"g": null,
+"anim": "no",
+"hint": "coğrafi referanslı harita",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": ""
+},
+{
+"k": "birim",
+"l": "Birim",
+"g": null,
+"anim": "step",
+"hint": "mesafe gösterimi",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"m",
+"km",
+"mil"
+],
+"def": 1
+},
+{
+"k": "hedefGeni",
+"l": "Hedef genişlik",
+"g": null,
+"anim": "yes",
+"hint": "çubuğun yaklaşık ekran genişliği",
+"kind": "jog",
+"min": 30.0,
+"max": 500.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 150.0
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 722,
+"ready": true
+},
+{
+"type": "compass",
+"name": "Pusula Göstergesi",
+"en": "",
+"cat": 16,
+"kind": "gen",
+"desc": "Harita dönüşüne bağlı kuzey okunu ve yön işaretlerini günceller.",
+"tags": [
+"Harita",
+"Pusula"
+],
+"params": [
+{
+"k": "harita",
+"l": "Harita",
+"g": null,
+"anim": "no",
+"hint": "referans harita",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": ""
+},
+{
+"k": "buyukluk",
+"l": "Büyüklük",
+"g": null,
+"anim": "yes",
+"hint": "pusula çapı",
+"kind": "jog",
+"min": 10.0,
+"max": 500.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 80.0
+},
+{
+"k": "stil",
+"l": "Stil",
+"g": null,
+"anim": "step",
+"hint": "görsel stil",
+"kind": "choice",
+"min": 0,
+"max": 3,
+"step": 1,
+"jog": 1,
+"opts": [
+"Sade",
+"Klasik",
+"Dört yön",
+"Sekiz yön"
+],
+"def": 0
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 723,
+"ready": true
+},
+{
+"type": "minimap",
+"name": "Küçük Harita Penceresi",
+"en": "",
+"cat": 16,
+"kind": "gen",
+"desc": "Büyük haritanın görünür kadrajını küçük haritada bir çerçeve olarak gösterir; harita etiket sabitlemesi değildir.",
+"tags": [
+"Harita",
+"Küçük harita"
+],
+"params": [
+{
+"k": "anaHari",
+"l": "Ana harita",
+"g": null,
+"anim": "no",
+"hint": "ana harita ve kamera",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": ""
+},
+{
+"k": "pencereBoyu",
+"l": "Pencere boyutu",
+"g": null,
+"anim": "yes",
+"hint": "pencere boyutu",
+"kind": "jog",
+"two": true,
+"three": false,
+"min": 30.0,
+"max": 1000.0,
+"defY": 120.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 180.0
+},
+{
+"k": "kadrajReng",
+"l": "Kadraj rengi",
+"g": null,
+"anim": "yes",
+"hint": "kadraj çerçevesi rengi",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#FFB93C"
+},
+{
+"k": "kucukHariKayn",
+"l": "Küçük harita kaynağı",
+"g": "Gelişmiş",
+"anim": "no",
+"hint": "isteğe bağlı bağımsız harita",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": ""
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 725,
+"ready": true
 }
 ],
 "featured": [

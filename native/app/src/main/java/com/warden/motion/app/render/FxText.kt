@@ -66,6 +66,10 @@ object FxText {
                 }
             }
         }
+        var roll: Pair<Double, Int>? = null
+        fx.find { it.type == "rollcounter" }?.let { e -> val num = Regex("-?\\d+(?:[.,]\\d+)?").find(text)?.value?.replace(',', '.')?.toDoubleOrNull()
+            if (num != null) { val dec = e.value("ondalik", t).roundToInt().coerceIn(0, 6); val dur = max(0.1, abs(num).toString().length / max(0.1, e.value("hiz", t)) * 2); val p = (lt / dur).coerceIn(0.0, 1.0)
+                val cur = num * (1 - (1 - p).pow(3)); roll = cur to dec; text = Regex("-?\\d+(?:[.,]\\d+)?").replaceFirst(text, String.format(java.util.Locale.US, "%0${num.toLong().toString().length + if (dec > 0) dec + 1 else 0}.${dec}f", floor(cur * 10.0.pow(dec)) / 10.0.pow(dec))) } }
         // 2) Yerleşim
         val lines = text.split("\n"); val gl = ArrayList<G>()
         var spacing = 0f; var wordSp = 0f
@@ -79,6 +83,15 @@ object FxText {
             word++
         }
         val n = max(1, gl.size)
+        // 702 Dikey dizim: her satır bir sütun olur, harfler alt alta
+        fx.find { it.type == "verticaltext" }?.let { e -> val up = e.value("dizim", t) >= 0.5; val colW = fp.textSize * e.value("satirAral", t).toFloat(); val rowH = fp.textSize * 1.05f
+            val cols = gl.groupBy { it.line }; val nc = cols.size
+            cols.forEach { (li, gs) -> val x0 = (li - (nc - 1) / 2f) * colW; gs.forEachIndexed { i, g -> val k = if (up) gs.size - 1 - i else i; g.x = x0 - g.w / 2; g.y = (k - (gs.size - 1) / 2f) * rowH + mid
+                if (e.value("latinKaraDond", t) >= 0.5 && g.s.firstOrNull()?.let { it in 'A'..'z' } == true) g.rot += 90f } } }
+        // 707 Dönen sayaç: rakamlar bir alttakine doğru kayar (tambur)
+        roll?.let { (cur, dec) -> val digits = gl.filter { it.s.firstOrNull()?.isDigit() == true }; val nInt = digits.size - dec
+            digits.forEachIndexed { i, g -> val place = (nInt - 1 - i).toDouble(); val frac = ((abs(cur) / 10.0.pow(place)) % 1.0); val f = if (place == 0.0 - dec || i == digits.size - 1) frac else (frac - 0.9).coerceAtLeast(0.0) * 10
+                g.dy -= (f * lh * 0.9).toFloat(); if (f > 0.01) gl += G(((g.s.toInt() + 1) % 10).toString(), g.x, g.y + lh * 0.9f, g.w, g.line, g.idx, g.word).also { it.dy = g.dy } } }
         // 3) Harf efektleri
         for (e in fx) {
             fun v(k: String) = e.value(k, t)
@@ -115,6 +128,14 @@ object FxText {
                 }
                 "textglitch" -> gl.forEach { g -> val tk = floor(lt * max(0.1, v("frekans")) * 4); val r = h1(g.idx * 2.3 + tk + v("tohum"))
                     if (r < v("bozulma") / 100) { g.dx += ((h1(g.idx + tk * 1.7) - 0.5) * 2 * v("kayma")).toFloat(); g.col = if (h1(tk + g.idx * 9.0) > .5) Color.rgb(255, 60, 120) else Color.rgb(60, 220, 255) } }
+                "wordhighlight" -> { val words = (e.c?.get("sozcukle") ?: "").split(',', ' ', ';').map { it.trim().lowercase(java.util.Locale("tr")) }.filter { it.isNotEmpty() }
+                    val byWord = gl.groupBy { it.word }; val col = parseCol(e.c?.get("renk") ?: "#F0C84B"); val sc = (v("vurguBuyu") / 100).toFloat()
+                    byWord.forEach { (_, gs) -> val w = gs.joinToString("") { it.s }.trim().lowercase(java.util.Locale("tr")).trim(',', '.', '!', '?', ':', ';'); if (w.isEmpty() || w !in words) return@forEach
+                        if (v("vurguArkaKutu") >= 0.5) { val fm2 = fp.fontMetrics; val r = RectF(gs.minOf { it.x } - 6f, gs.minOf { it.y } + fm2.ascent - 3f, gs.maxOf { it.x + it.w } + 6f, gs.maxOf { it.y } + fm2.descent + 3f)
+                            c.drawRoundRect(r, 8f, 8f, Paint(Paint.ANTI_ALIAS_FLAG).apply { color = parseCol(e.c?.get("kutuReng") ?: "#173B69") }) }
+                        gs.forEach { it.col = col; it.sc *= sc } } }
+                "linereveal" -> { val dir = v("yon").roundToInt(); gl.forEach { g -> val st = g.line * v("satirGeci"); val k = ((lt - st) / max(0.01, v("acilisSure"))).coerceIn(0.0, 1.0); val e2 = (1 - (1 - k).pow(3)).toFloat()
+                    when (dir) { 0 -> g.dx -= (1 - e2) * fp.textSize; 1 -> g.dx += (1 - e2) * fp.textSize; 2 -> g.dy -= (1 - e2) * fp.textSize * 0.8f; else -> g.dy += (1 - e2) * fp.textSize * 0.8f }; g.a *= e2 } }
                 "textreveal" -> {
                     val p = if (v("otomatik") >= .5) (lt / max(0.01, v("sure"))).coerceIn(0.0, 1.0) else v("ilerleme") / 100; val del = v("harfGeci") / 100; val a = v("yon") * PI / 180
                     gl.forEach { g -> val k = ((p * (1 + del) - g.idx.toDouble() / n * del)).coerceIn(0.0, 1.0); val e2 = 1 - (1 - k).pow(3)
