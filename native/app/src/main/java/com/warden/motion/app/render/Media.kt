@@ -244,31 +244,37 @@ object Player {
     private val fx = ArrayList<LoudnessEnhancer>()
     private val h = Handler(Looper.getMainLooper())
 
-    /** t anından itibaren bütün sesleri çal */
+    /** t anından itibaren bütün sesleri çal (efektli ses katmanları arka planda işlenip önbellekten çalınır) */
     fun play(ctx: Context, p: Project, t: Double) {
         stop()
-        val store = Store.get(ctx)
+        val store = Store.get(ctx); val gen = ++playGen; val t0 = android.os.SystemClock.elapsedRealtime()
         for (l in p.layers) {
             if (!hasAudio(l) || l.end <= t) continue
-            val f = store.mediaFile(l.src!!.removePrefix("media:"))
-            if (!f.exists()) continue
-            val off = (l.srcIn ?: 0.0) + max(0.0, t - l.start); val wait = max(0.0, l.start - t)
-            runCatching {
-                val m = MediaPlayer()
-                m.setDataSource(f.absolutePath)
-                m.prepare()
-                if (off * 1000 >= m.duration) { m.release(); return@runCatching }
-                val vol = (l.volume ?: 1.0)
-                m.setVolume(min(1.0, vol).toFloat(), min(1.0, vol).toFloat())
-                if (vol > 1.0) runCatching { LoudnessEnhancer(m.audioSessionId).apply { setTargetGain(((vol - 1) * 1200).toInt()); enabled = true }.also { fx += it } }
-                if (Build.VERSION.SDK_INT >= 26) m.seekTo((off * 1000).toLong(), MediaPlayer.SEEK_CLOSEST) else m.seekTo((off * 1000).toInt())
-                players += m
-                val stopAt = ((l.end - max(t, l.start)) * 1000).toLong()
-                h.postDelayed({ if (m in players) { runCatching { m.start() }; h.postDelayed({ if (m in players) runCatching { m.pause() } }, stopAt) } }, (wait * 1000).toLong())
-            }
+            if (AudioFx.has(l)) { Thread { val f = AudioDecode.processedFile(ctx, p, l); if (f != null) h.post { if (gen == playGen) start(l, f, 0.0, t + (android.os.SystemClock.elapsedRealtime() - t0) / 1000.0) } }.start(); continue }
+            val f = store.mediaFile(l.src!!.removePrefix("media:")); if (!f.exists()) continue
+            start(l, f, l.srcIn ?: 0.0, t)
+        }
+    }
+    private var playGen = 0
+    private fun start(l: Layer, f: java.io.File, srcIn: Double, t: Double) {
+        if (l.end <= t) return
+        val off = srcIn + max(0.0, t - l.start); val wait = max(0.0, l.start - t)
+        runCatching {
+            val m = MediaPlayer()
+            m.setDataSource(f.absolutePath)
+            m.prepare()
+            if (off * 1000 >= m.duration) { m.release(); return@runCatching }
+            val vol = (l.volume ?: 1.0)
+            m.setVolume(min(1.0, vol).toFloat(), min(1.0, vol).toFloat())
+            if (vol > 1.0) runCatching { LoudnessEnhancer(m.audioSessionId).apply { setTargetGain(((vol - 1) * 1200).toInt()); enabled = true }.also { fx += it } }
+            if (Build.VERSION.SDK_INT >= 26) m.seekTo((off * 1000).toLong(), MediaPlayer.SEEK_CLOSEST) else m.seekTo((off * 1000).toInt())
+            players += m
+            val stopAt = ((l.end - max(t, l.start)) * 1000).toLong()
+            h.postDelayed({ if (m in players) { runCatching { m.start() }; h.postDelayed({ if (m in players) runCatching { m.pause() } }, stopAt) } }, (wait * 1000).toLong())
         }
     }
     fun stop() {
+        playGen++
         h.removeCallbacksAndMessages(null)
         players.forEach { runCatching { it.stop() }; runCatching { it.release() } }
         players.clear()
@@ -351,7 +357,33 @@ object AudioDecode {
         return out
     }
 
-    /** Bütün sesleri tek bir stereo sese karıştırır (dışa aktarma) */
+    /** Katmanın kendi sesi (katman başlangıcından sonuna, stereo), ses efektleri uygulanmış */
+    fun layerAudio(ctx: Context, p: Project, l: Layer, rate: Int, withFx: Boolean = true, depth: Int = 0): FloatArray? {
+        val pcm = decode(Store.get(ctx).mediaFile(l.src!!.removePrefix("media:"))) ?: return null
+        val n = max(0, ((l.end - l.start) * rate).roundToInt()); val out = FloatArray(n * 2); val k = pcm.rate.toDouble() / rate
+        for (i in 0 until n) { val src = i * k + (l.srcIn ?: 0.0) * pcm.rate; val j = src.toInt(); if (j + 1 >= pcm.frames) break; val f = (src - j).toFloat()
+            out[i * 2] = pcm.data[j * 2] * (1 - f) + pcm.data[j * 2 + 2] * f; out[i * 2 + 1] = pcm.data[j * 2 + 1] * (1 - f) + pcm.data[j * 2 + 3] * f }
+        if (withFx && AudioFx.has(l)) AudioFx.apply(l, out, rate) { id ->
+            // Otomatik Müzik Kısma: konuşma katmanının sesi, bu katmanın zamanına hizalanır
+            val o = p.layers.find { it.id == id && hasAudio(it) } ?: return@apply null; if (depth > 1) return@apply null
+            val a = layerAudio(ctx, p, o, rate, true, depth + 1) ?: return@apply null; val sh = ((o.start - l.start) * rate).roundToInt(); val r = FloatArray(n * 2)
+            for (i in 0 until n) { val j = i - sh; if (j >= 0 && j * 2 + 1 < a.size) { r[i * 2] = a[j * 2]; r[i * 2 + 1] = a[j * 2 + 1] } }; r }
+        return out
+    }
+
+    /** Efektli ses katmanı için önizlemede çalınacak işlenmiş WAV (önbellekte, ayarlar değişince yenilenir) */
+    fun processedFile(ctx: Context, p: Project, l: Layer): java.io.File? {
+        val key = (l.src + "|" + l.srcIn + "|" + (l.end - l.start) + "|" + AudioFx.signature(l)).hashCode().toUInt().toString(16)
+        val f = java.io.File(ctx.cacheDir, "sesfx_$key.wav"); if (f.exists()) return f
+        val rate = 44100; val a = layerAudio(ctx, p, l, rate) ?: return null
+        runCatching { java.io.DataOutputStream(java.io.BufferedOutputStream(java.io.FileOutputStream(f))).use { o ->
+            fun i32(v: Int) { o.write(v and 255); o.write((v shr 8) and 255); o.write((v shr 16) and 255); o.write((v shr 24) and 255) }; fun i16(v: Int) { o.write(v and 255); o.write((v shr 8) and 255) }
+            o.writeBytes("RIFF"); i32(36 + a.size * 2); o.writeBytes("WAVEfmt "); i32(16); i16(1); i16(2); i32(rate); i32(rate * 4); i16(4); i16(16); o.writeBytes("data"); i32(a.size * 2)
+            for (x in a) i16((x.coerceIn(-1f, 1f) * 32767).toInt()) } }.onFailure { f.delete(); return null }
+        return f
+    }
+
+    /** Bütün sesleri tek bir stereo sese karıştırır (dışa aktarma); ses efektleri katman başına uygulanır */
     fun mix(ctx: Context, p: Project, dur: Double, rate: Int = 44100): FloatArray? {
         val ls = p.layers.filter(::hasAudio)
         if (ls.isEmpty()) return null
@@ -359,17 +391,11 @@ object AudioDecode {
         val out = FloatArray(n * 2)
         var any = false
         for (l in ls) {
-            val pcm = decode(Store.get(ctx).mediaFile(l.src!!.removePrefix("media:"))) ?: continue
+            val a = layerAudio(ctx, p, l, rate) ?: continue
             any = true
             val vol = (l.volume ?: 1.0).toFloat()
-            val s0 = (l.start * rate).roundToInt(); val s1 = min(n, (l.end * rate).roundToInt())
-            val k = pcm.rate.toDouble() / rate
-            for (i in max(0, s0) until s1) {
-                val src = (i - s0) * k + (l.srcIn ?: 0.0) * pcm.rate; val j = src.toInt(); if (j + 1 >= pcm.frames) break
-                val f = (src - j).toFloat()
-                out[i * 2] += (pcm.data[j * 2] * (1 - f) + pcm.data[j * 2 + 2] * f) * vol
-                out[i * 2 + 1] += (pcm.data[j * 2 + 1] * (1 - f) + pcm.data[j * 2 + 3] * f) * vol
-            }
+            val s0 = (l.start * rate).roundToInt()
+            for (i in 0 until a.size / 2) { val o = s0 + i; if (o < 0) continue; if (o >= n) break; out[o * 2] += a[i * 2] * vol; out[o * 2 + 1] += a[i * 2 + 1] * vol }
         }
         if (!any) return null
         for (i in out.indices) out[i] = out[i].coerceIn(-1f, 1f)

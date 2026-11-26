@@ -134,7 +134,8 @@ fun searchFx(q: String): List<FxMeta> {
  */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun EffectBrowser(onClose: () -> Unit, onPick: (String, String?) -> Unit) {
+fun EffectBrowser(onClose: () -> Unit, allow: (FxMeta) -> Boolean = { true }, onPick: (String, String?) -> Unit) {
+    val FXL = remember { FX.filter(allow) }
     val ctx = LocalContext.current
     LaunchedEffect(Unit) { FxPrefs.load(ctx) }
     var q by remember { mutableStateOf("") }
@@ -162,7 +163,7 @@ fun EffectBrowser(onClose: () -> Unit, onPick: (String, String?) -> Unit) {
         }
         when {
             search -> {
-                val res = remember(q) { searchFx(q) }
+                val res = remember(q) { searchFx(q).filter(allow) }
                 LazyVerticalGrid(GridCells.Fixed(1), Modifier.fillMaxSize().navigationBarsPadding(), contentPadding = PaddingValues(10.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                     if (q.isNotBlank() && res.isEmpty()) item { Text("\"$q\" için efekt bulunamadı.", color = C.dText2, modifier = Modifier.padding(16.dp)) }
                     items(res, key = { it.type }) { m ->
@@ -177,7 +178,7 @@ fun EffectBrowser(onClose: () -> Unit, onPick: (String, String?) -> Unit) {
                 }
             }
             cat != null -> {
-                val list = remember(cat) { FX.filter { it.catIndex == cat } }
+                val list = remember(cat) { FXL.filter { it.catIndex == cat } }
                 LazyVerticalGrid(GridCells.Fixed(3), Modifier.fillMaxSize().navigationBarsPadding().pointerInput(cat) {
                     var acc = 0f
                     detectHorizontalDragGestures(onDragEnd = { val ci = order.indexOfFirst { it.second == cat }; if (acc < -120) cat = order[(ci + 1) % order.size].second else if (acc > 120) cat = order[(ci - 1 + order.size) % order.size].second; acc = 0f }) { _, d -> acc += d }
@@ -188,7 +189,7 @@ fun EffectBrowser(onClose: () -> Unit, onPick: (String, String?) -> Unit) {
             else -> Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).navigationBarsPadding().padding(bottom = 16.dp)) {
                 // Önerilenler
                 Text("Önerilenler", fontSize = 13.sp, fontWeight = FontWeight.Bold, color = C.dText2, modifier = Modifier.padding(start = 14.dp, top = 14.dp, bottom = 8.dp))
-                val feat = remember { FEATURED.map { fxMeta(it) }.filter { it.name.isNotEmpty() } }
+                val feat = remember { FEATURED.map { fxMeta(it) }.filter { it.name.isNotEmpty() && allow(it) } }
                 Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(horizontal = 12.dp), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                     feat.forEachIndexed { i, m ->
                         Column(Modifier.width(150.dp).target("fxb:${m.name}") { pick(m.type, null) }.tap { card = feat to i }, horizontalAlignment = Alignment.CenterHorizontally) {
@@ -197,7 +198,7 @@ fun EffectBrowser(onClose: () -> Unit, onPick: (String, String?) -> Unit) {
                     }
                 }
                 // Son kullanılanlar ve favoriler: 4x2 sayfalar
-                val rf = remember(FxPrefs.favs, FxPrefs.recent) { (FxPrefs.favs + FxPrefs.recent).distinct().take(32) }
+                val rf = remember(FxPrefs.favs, FxPrefs.recent) { (FxPrefs.favs + FxPrefs.recent).distinct().filter { allow(fxMeta(it.substringBefore(':'))) }.take(32) }
                 Text("Son Kullanılanlar ve Favoriler", fontSize = 13.sp, fontWeight = FontWeight.Bold, color = C.dText2, modifier = Modifier.padding(start = 14.dp, top = 18.dp, bottom = 8.dp))
                 if (rf.isEmpty()) Text("Kullandığın ve ⭐ verdiğin efektler burada görünür.", fontSize = 12.5.sp, color = C.dDim, modifier = Modifier.padding(horizontal = 14.dp))
                 else {
@@ -231,8 +232,8 @@ fun EffectBrowser(onClose: () -> Unit, onPick: (String, String?) -> Unit) {
                     order.chunked(2).forEach { row ->
                         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             row.forEach { (name, ci) ->
-                                val cover = remember(ci) { FX.firstOrNull { it.catIndex == ci && it.type in FEATURED } ?: FX.firstOrNull { it.catIndex == ci } }
-                                val n = remember(ci) { FX.count { it.catIndex == ci } }
+                                val cover = remember(ci) { FXL.firstOrNull { it.catIndex == ci && it.type in FEATURED } ?: FXL.firstOrNull { it.catIndex == ci } }
+                                val n = remember(ci) { FXL.count { it.catIndex == ci } }
                                 Box(Modifier.weight(1f).height(96.dp).clip(RoundedCornerShape(10.dp)).target("fxcat:$name") { cat = ci }.tap { cat = ci }) {
                                     if (cover != null) FxThumb(cover.type, Modifier.matchParentSize(), 10)
                                     Box(Modifier.matchParentSize().background(Brush.verticalGradient(listOf(Color(0x330B1430), Color(0xCC0B1430)))))
@@ -447,7 +448,7 @@ fun EffectsPanel(s: EditorState, layer: Layer, onClose: () -> Unit) {
         }
     }
     if (browse) Overlay {
-        EffectBrowser(onClose = { browse = false }) { ty, code ->
+        EffectBrowser(onClose = { browse = false }, allow = { m -> if (layer.type == "audio") m.kind == "audio-fx" else m.kind != "audio-fx" || layer.type == "video" }) { ty, code ->
             var ne = makeEffect(ty)
             val m = fxMeta(ty)
             code?.let { c -> m.presets.find { it.code == c } }?.let { pr ->

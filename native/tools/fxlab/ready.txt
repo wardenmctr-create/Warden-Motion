@@ -66,6 +66,7 @@ chromvortex
 chromzoom
 cinematic
 circlefx
+clothphys
 clouds
 coderain
 coin3d
@@ -82,6 +83,7 @@ comic
 compoundblur
 cone
 confetti
+connector
 contourgrad
 contourlines
 contourstrips
@@ -141,12 +143,14 @@ flip3d
 flomotion
 floorreflect
 floorshadow
+flowfield
 foam
 fog
 fold3d
 fourcolor
 fractal
 fractalnoise
+fractalpath
 fractalset
 frame
 freqsep
@@ -173,6 +177,7 @@ gridrepeat
 gridwipe
 growparts
 grunge
+guilloche
 hair
 halation
 halftone
@@ -201,12 +206,14 @@ innerblur
 innerbulge
 innerglow
 innershadow
+interference
 invert
 iridescence
 iris
 jaws
 kaleido
 keylight
+lathe3d
 leaffall
 lens
 lensblur
@@ -235,14 +242,18 @@ lumetri
 lut
 magnify
 magnifybg
+mapproject
 markerpen
 maskblur
+maze
+measurearrow
 median
 mercury
 meteors
 minimax
 mirror
 mirrorrepeat
+morphimg
 mosaic
 nebula
 neonedge
@@ -260,6 +271,7 @@ ominodiff
 ominoglass
 opticscomp
 origami
+ornament
 pageturn
 paintbucket
 paintbynumber
@@ -276,8 +288,10 @@ pixelate
 pixelpolly
 pixelsort
 planet3d
+plantgrow
 plasma
 plastic
+pointcloud
 polar
 polardisp
 posterize
@@ -291,6 +305,7 @@ radwipe
 rain
 rays
 reflect
+reliefmap
 relight
 remaphsv
 reorient360
@@ -305,6 +320,7 @@ ringplanet
 ripple
 ripplepulse
 rollingfix
+ropephys
 roughen
 roundcorners
 sandart
@@ -312,6 +328,7 @@ sandstorm
 scalewipe
 scanlines
 scatter
+scatter3d
 scatterfield
 scatterize
 scatterpx
@@ -333,6 +350,7 @@ smear
 smoke
 smoothedges
 snow
+snowflake
 softglow
 solidcolor
 solidmatte
@@ -377,6 +395,7 @@ tornpaper
 torus
 triprism
 tritone
+truchet
 tunnel
 twister
 underwater
@@ -390,6 +409,7 @@ vibrance
 viewer360
 vignette
 volclouds
+volslices
 volumelight
 vrcombined
 warpblur

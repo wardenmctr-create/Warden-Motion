@@ -45,6 +45,30 @@ HIDE = {"deinterlace": ["cikisHizi", "sahneKesiKoru"], "deadpixel": ["zamansalDo
         "exposurefuse": ["otomatikHiza", "hayaletGoruAzal"], "datacorrupt": ["oncekiKareTasi", "kareHafi", "sahneDegiHafi"], "globe3d": [], "flagpole3d": [], "gear3d": ["baskaDislBagl", "baglantiDisl", "donusHiziDis"],
         "depthparallax": [], "volumelight": []}
 TRIM = {("smartfill", "yontem"): 2, ("deinterlace", "alanSira"): 3}
+NEW.update({
+ 508: ("maze", "Prosedürel", "gen", ["Desen", "Labirent"], None), 509: ("truchet", "Prosedürel", "pixel", ["Desen", "Karo"], None),
+ 510: ("plantgrow", "Prosedürel", "gen", ["Bitki", "Büyüme", "Dal"], {"box": 0.5}), 511: ("guilloche", "Prosedürel", "gen", ["Desen", "Banknot", "Eğri"], {"box": 0.3}),
+ 512: ("interference", "Prosedürel", "pixel", ["Desen", "Dalga"], None), 513: ("flowfield", "Prosedürel", "gen", ["Akış", "Parçacık", "Desen"], None),
+ 515: ("snowflake", "Prosedürel", "gen", ["Kar", "Kristal", "Simetri"], {"box": 0.3}), 516: ("ornament", "Prosedürel", "pixel", ["Desen", "Süsleme", "Geometri"], None),
+ 517: ("fractalpath", "Prosedürel", "gen", ["Fraktal", "Eğri", "Çizim"], None),
+ 520: ("connector", "Diğer", "gen", ["Çizgi", "Bağlantı", "Ok"], {"box": 1.0}), 521: ("measurearrow", "Diğer", "gen", ["Ölçü", "Ok", "Sayı"], {"box": 0.5}),
+ 524: ("reliefmap", "Renk ve Işık", "pixel", ["Harita", "Kabartma", "Yükseklik"], None), 525: ("mapproject", "Bükme ve Bozulma", "pixel", ["Harita", "Projeksiyon"], None),
+ 528: ("morphimg", "Geçiş", "pixel", ["Dönüşüm", "Biçim", "Geçiş"], None),
+ 529: ("lathe3d", "3B", "3d", ["3B", "Döndürme", "Model"], {"box": 0.45}), 533: ("pointcloud", "3B", "3d", ["3B", "Nokta", "Derinlik"], {"box": 0.45}),
+ 537: ("volslices", "Tekrar", "repeat", ["Dilim", "Derinlik", "Katman"], {"box": 0.3}), 539: ("scatter3d", "Tekrar", "repeat", ["Saçılım", "3B", "Kopya"], {"box": 1.0}),
+ 502: ("ropephys", "Simülasyon", "gen", ["İp", "Fizik", "Sarkma"], {"box": 0.6}), 503: ("clothphys", "Simülasyon", "pixel", ["Kumaş", "Fizik", "Rüzgâr"], {"box": 0.25}),
+})
+HIDE.update({"lathe3d": ["profilKayn", "profiliDuze", "acisalDili", "profilOrne", "uclariKapa", "yuzeyiYumu"], "pointcloud": ["kaynakTuru", "derinlikTest"], "morphimg": ["esNoktEkle", "esNoktKald", "agAyri", "agiGost"],
+  "mapproject": [], "reliefmap": ["cikti", "agAyri"], "fractalpath": ["koseYumu"], "flowfield": [], "maze": ["cozumYoluGost"], "scatter3d": ["kopyalanNesn", "yuzeyMode"],
+  "volslices": [], "clothphys": ["sabitPimEkle"], "ropephys": ["baslangiKatm", "bitisKatm"], "measurearrow": ["birimEtik"], "connector": [], "plantgrow": []})
+TRIM.update({("fractalpath", "yolTuru"): 1, ("mapproject", "kaynakProj"): 2, ("reliefmap", "cikti"): 1, ("clothphys", "sabitKena"): 4, ("pointcloud", "kaynakTuru"): 2})
+NEW.update({
+ 540: ("compressor", "Ses", "audio-fx", ["Ses", "Dinamik"], None), 541: ("limiter", "Ses", "audio-fx", ["Ses", "Dinamik"], None), 542: ("noisegate", "Ses", "audio-fx", ["Ses", "Gürültü"], None),
+ 543: ("deesser", "Ses", "audio-fx", ["Ses", "Konuşma"], None), 544: ("pitchshift", "Ses", "audio-fx", ["Ses", "Perde"], None), 545: ("voicechar", "Ses", "audio-fx", ["Ses", "Formant", "Karakter"], None),
+ 546: ("denoise", "Ses", "audio-fx", ["Ses", "Gürültü", "Temizlik"], None), 547: ("ducking", "Ses", "audio-fx", ["Ses", "Müzik", "Konuşma"], None), 548: ("stereowide", "Ses", "audio-fx", ["Ses", "Stereo"], None),
+ 549: ("robotvoice", "Ses", "audio-fx", ["Ses", "Robot", "Vocoder"], None), 550: ("audiodistort", "Ses", "audio-fx", ["Ses", "Bozulma"], None),
+})
+HIDE.update({"limiter": ["gercekTepe", "stereoBagl", "otomatikGeciTela"], "denoise": ["profilYont"], "ducking": ["otomatikGeciTela"], "pitchshift": ["sesKaraKoru", "kaynakTuru"], "voicechar": ["kalite"]})
 READY2 = set(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "ready2.txt")).read().split()) if os.path.exists(os.path.join(os.path.dirname(os.path.abspath(__file__)), "ready2.txt")) else set()
 _POS = _re.compile(r"(merkez|konum|ufuk|nokta|kök|başlangıç$|bitiş$|bağlantı|hedef)", _re.I)
 MATS = ["Beyaz kâğıt", "Renkli kâğıt", "Kraft kâğıt", "Karton", "Parşömen", "Keçe"]
@@ -57,6 +81,8 @@ def _conv(p):
     if q["kind"] == "button" and not q.get("reset"): q["hideUi"] = True
     if q["kind"] == "info" and p.get("code") == "Ş": q.update(kind="choice", min=0, max=len(MATS) - 1, def_=0, opts=list(MATS), anim="step")  # işlevi tanımlı olmayan eylem düğmeleri gösterilmez
     return q
+for _t in ("reverse", "basstreble", "delay", "flanger", "filter", "modulator", "parameq", "reverb", "stereo", "tone"):
+    _BY[_t]["ready"] = True  # telefon ses motoru (AudioFx.kt)
 for n, (t, cat, kind, tags, pad) in NEW.items():
     s = _SP2[str(n)]
     if t in _BY:  # aynı tür daha önce tanımlıysa (ör. motorun beklediği kara delik) yeni tanım onun yerine geçer
