@@ -28,6 +28,10 @@ data class Effect(
     val closed: Boolean? = null,
     /** Renk ayarları (anahtar → #RRGGBB) */
     val c: Map<String, String>? = null,
+    /** Efekt gözü: false ise efekt geçici olarak kapalı */
+    val on: Boolean? = null,
+    /** Seçilen hazır ayarın kodu (bilgi için) */
+    val preset: String? = null,
 )
 
 @Serializable

@@ -16,7 +16,9 @@ class Engine {
   async load(catalogUrl) {
     this.common = await (await fetch(FX + 'common.glsl')).text();
     this.cat = await (await fetch(catalogUrl)).json();
-    this.meta = {}; for (const e of this.cat.effects) this.meta[e.type] = e;
+    let leg = {}; try { leg = await (await fetch(window.LEGACY || 'legacy.json')).json(); } catch (e) {}
+    // Shader'ı henüz rehbere göre yazılmamış efektler eski ayarlarıyla çalışır
+    this.meta = {}; for (const e of this.cat.effects) this.meta[e.type] = (!e.ready && leg[e.type]) ? { ...e, ...leg[e.type] } : e;
   }
   async shaderSrc(name) { if (!this.src[name]) this.src[name] = await (await fetch(FX + name + '.glsl')).text(); return this.src[name]; }
   async prog(name) {
@@ -58,12 +60,20 @@ class Engine {
 
 // Efektin ayar değerleri → uniform
 function hexToRgb(h) { const n = parseInt(h.slice(1), 16); return [(n >> 16 & 255) / 255, (n >> 8 & 255) / 255, (n & 255) / 255]; }
-function fxUniforms(meta, vals) {
+function fxUniforms(meta, vals, box, s) {
   const u = {};
   for (const pr of meta.params || []) {
     if (pr.kind === 'color') u['c_' + pr.k] = hexToRgb(vals[pr.k] ?? pr.def);
-    else if (pr.two) u['p_' + pr.k] = [vals[pr.k + 'X'] ?? pr.def, vals[pr.k + 'Y'] ?? (pr.defY ?? pr.def)];
-    else u['p_' + pr.k] = vals[pr.k] ?? pr.def;
+    else if (pr.two) {
+      let v = [vals[pr.k + 'X'] ?? pr.def, vals[pr.k + 'Y'] ?? (pr.defY ?? pr.def)];
+      // Kutu yüzdesi (0..100, 50 = merkez) → merkezden px (katman birimi)
+      if (pr.unit === 'box%' && box) v = [(v[0] / 100 - 0.5) * box[2] / s, (v[1] / 100 - 0.5) * box[3] / s];
+      u['p_' + pr.k] = v;
+    } else if (pr.three) u['p_' + pr.k] = [vals[pr.k + 'X'] ?? pr.def, vals[pr.k + 'Y'] ?? pr.defY, vals[pr.k + 'Z'] ?? pr.defZ];
+    else if (pr.kind === 'gradient' || pr.kind === 'palette') {
+      const st = vals[pr.k] ?? pr.def; const n = Math.min(8, st.length); u['p_' + pr.k + 'N'] = n;
+      for (let i = 0; i < 8; i++) { const q = st[Math.min(i, n - 1)]; u['c_' + pr.k + i] = hexToRgb(q[0]); u['p_' + pr.k + 'P' + i] = (q[1] ?? 0) / 100; }
+    } else if (typeof (vals[pr.k] ?? pr.def) === 'number') u['p_' + pr.k] = vals[pr.k] ?? pr.def;
   }
   return u;
 }
@@ -74,7 +84,7 @@ async function applyEffects(E, base, box, s, effects, t, dur, extra = {}) {
   let cur = base;
   for (const ef of effects) {
     const meta = E.meta[ef.type]; if (!meta || !['pixel', 'gen', 'repeat', '3d'].includes(meta.kind)) continue;
-    const common = { u_res: [cur.w, cur.h], u_box: box, u_t: t, u_s: s, u_dur: dur, ...fxUniforms(meta, ef.v || {}) };
+    const common = { u_res: [cur.w, cur.h], u_box: box, u_t: t, u_s: s, u_dur: dur, ...fxUniforms(meta, ef.v || {}, box, s) };
     const bufs = { src: cur };
     const passes = meta.passes || [{ fs: ef.type }];
     let last = cur;

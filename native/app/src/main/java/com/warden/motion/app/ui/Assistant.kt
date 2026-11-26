@@ -235,6 +235,7 @@ private fun TUT_CB1(): List<Step> {
 }
 
 fun buildTut(id: String, pid: String): Script? {
+    if (id.startsWith("fx:")) return fxTeachScript(id.removePrefix("fx:"), pid)
     val tu = TUTORIALS.find { it.id == id } ?: return null
     return when (id) {
         "g1" -> Script("tut:g1", tu.title, TUT_G1() + tips(tu.tips) + tutEnd("g1", "Öğretici bitti! Anladın mı? Anlamadıysan bütün projeyi ben baştan yapıp anlatayım."), pid)
@@ -526,4 +527,68 @@ fun AssistantLayer() {
             }
         }
     }
+}
+
+
+// ---------------------------------------------------------------------------------------------
+// "WardenCB ile Öğret": açık projeye dokunmadan, efekte uygun malzemeli küçük bir deneme projesi açar ve adım adım anlatır
+// ---------------------------------------------------------------------------------------------
+fun fxTeach(type: String) {
+    val m = fxMeta(type)
+    Assistant.stop()
+    var p = newProject("${m.name} · WardenCB Öğretiyor", 720, 720, 30, "#16224A").copy(tutorial = "fx:$type")
+    val dur = 4.0
+    val bg = makeLayer(p, 0.0, dur, "shape", "Zemin") { it.copy(shape = "rect", w = 720.0, h = 720.0, fill = "#1F3270", fill2 = "#0B1430", grad = Grad(0.5, 0.0, 0.5, 1.0)) }
+    val layers = ArrayList<Layer>(); layers += bg
+    var target: String
+    when {
+        m.kind == "text" || m.catIndex == 10 -> {
+            val tx = makeLayer(p, 0.0, dur, "text", "Yazı") { it.copy(text = "MERHABA", fill = "#F7F8FA", fontSize = 110.0, w = 600.0, h = 143.0) }
+            layers += tx; target = tx.id
+        }
+        m.kind == "audio-fx" -> {
+            val tx = makeLayer(p, 0.0, dur, "text", "Not") { it.copy(text = "Ses efekti: bir ses\nkatmanı ekleyip dene", fill = "#F7F8FA", fontSize = 44.0, w = 620.0, h = 120.0) }
+            layers += tx; target = tx.id
+        }
+        else -> {
+            val (cb, lineId) = cbBodyLayers(p, 0.0, dur, "yumusak-top", "flags/tr.svg", "Türkiye", 380.0)
+            layers += cb; target = lineId
+            // Görüntü efektleri bütün CB'ye (çizgiye) uygulanır; gerekirse ikinci katman: altta yazı
+            if (m.kind in setOf("pixel", "gen", "3d", "repeat")) {
+                val tx = makeLayer(p, 0.0, dur, "text", "Yazı") { it.copy(text = "WARDEN MOTION", fill = "#22D3C5", fontSize = 54.0, w = 560.0, h = 70.0, y = Anim(640.0)) }
+                layers += tx
+            }
+        }
+    }
+    val anim = m.presets.find { it.code == "AN" } ?: m.presets.firstOrNull { it.alias == null }
+    var fx = makeEffect(type)
+    if (anim != null) fx = applyPreset(fx, anim, 0.0, dur).copy(preset = anim.code)
+    p = p.copy(layers = layers.map { if (it.id == target) it.copy(effects = it.effects + fx) else it })
+    Assistant.pendingDemo = p.id
+    UiState.openNew(p)
+}
+
+private fun unitWord(pr: FxParam) = when (pr.unit) {
+    "%" -> "yüzde olarak"; "px" -> "piksel cinsinden"; "°" -> "derece olarak"; "Hz" -> "saniyedeki tekrar sayısıyla"; "s" -> "saniye cinsinden"; "box%" -> "katmanın üstünde bir nokta olarak"; "dB" -> "desibel olarak"; else -> ""
+}
+
+fun fxTeachScript(type: String, pid: String): Script {
+    val m = fxMeta(type)
+    val st = ArrayList<Step>()
+    st += Step("Bu, ${m.name} efekti! ${m.desc}", "wave")
+    st += Step("Senin projene dokunmadım: bu küçük deneme projesini senin için kurdum ve efekti ekledim. Önce ▶ ile oynatıp izle.", "happy", target = { "play" }, done = { ed?.playing == true })
+    m.teach?.split(Regex("(?<=[.;])\\s+"))?.filter { it.length > 8 }?.take(4)?.forEach { st += Step(it.replaceFirstChar { c -> c.uppercase() }, "point") }
+    val main = m.params.filter { it.isNumeric() && it.kind != "toggle" }.take(4)
+    if (main.isNotEmpty()) st += Step("Şimdi ayarlara bakalım. Katmanı seçip alttan \"Efektler\"e dokun; ${m.name} panelinde bütün ayarlar var.", "point", target = { "tbig:Efektler" }, done = { UiState.panel == "Efektler" })
+    main.forEachIndexed { i, pr ->
+        val what = when (pr.kind) {
+            "choice" -> "farklı biçimler arasında seçim yapar: ${pr.opts?.take(4)?.joinToString(", ")}"
+            else -> "değeri ${unitWord(pr)} belirler (${fmtV(pr.min, pr)} ile ${fmtV(pr.max, pr)} arası)"
+        }
+        st += Step("${i + 1}. ayar \"${pr.label}\": $what. Cetveli parmağınla sağa sola kaydır, değişimi önizlemede gör.", if (i % 2 == 0) "point" else "curious")
+    }
+    st += Step("İpucu: Bir ayarın adına dokunup soldaki ◆ ile keyframe koyarsan, değer zamanla değişir. Değerin üstüne dokunursan sayıyı elle yazabilirsin.", "smug")
+    if (m.presets.any { it.alias == null }) st += Step("Hazır ayarlar da var: ${m.presets.filter { it.alias == null }.take(4).joinToString(", ") { it.name }}. Panelin üstündeki düğmelerle tek dokunuşta dene.", "excited")
+    st += Step("${m.name} bu kadar! Beğendiğin efektleri Efekt Ekle'de ⭐ ile favorilerine ekleyebilirsin.", "proud", btn = "Bitir", end = true)
+    return Script("fx:$type", m.name, st, pid)
 }

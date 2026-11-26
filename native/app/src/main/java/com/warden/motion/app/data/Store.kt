@@ -120,7 +120,7 @@ class Store(private val ctx: Context) {
 
     suspend fun load() = withContext(Dispatchers.IO) {
         val list = projDir.listFiles { f -> f.extension == "json" }.orEmpty().mapNotNull { f ->
-            runCatching { JSON.decodeFromString(Project.serializer(), f.readText()) }.getOrNull()
+            runCatching { migrateProject(JSON.decodeFromString(Project.serializer(), f.readText())) }.getOrNull()
         }
         _projects.value = list.sortedByDescending { it.updatedAt }
     }
@@ -166,10 +166,13 @@ class Store(private val ctx: Context) {
             }
         }
         val have = _projects.value.map { it.id }.toSet()
-        for (p in b.projects) save(if (p.id in have) p.copy(id = uid(), name = "${p.name} (dosyadan)".take(40)) else p, touch = false)
+        for (p0 in b.projects) { val p = migrateProject(p0); save(if (p.id in have) p.copy(id = uid(), name = "${p.name} (dosyadan)".take(40)) else p, touch = false) }
         runCatching { b.profile?.let { pr -> val n = (pr as kotlinx.serialization.json.JsonObject)["name"]?.toString()?.trim('"'); if (!n.isNullOrBlank() && _profile.value.name.isBlank()) setProfile(_profile.value.copy(name = n)) } }
         ImportResult(b.projects.size, media, b.projects.map { it.name })
     }
+
+    /** Eski efekt ayarlarını yeni kataloğa çevirir */
+    private fun migrateProject(p: Project): Project { com.warden.motion.app.model.FxCatalog.init(ctx); return p.copy(layers = p.layers.map { l -> if (l.effects.isEmpty()) l else l.copy(effects = l.effects.map { com.warden.motion.app.model.migrateEffect(it) }) }) }
 
     companion object {
         @Volatile private var inst: Store? = null

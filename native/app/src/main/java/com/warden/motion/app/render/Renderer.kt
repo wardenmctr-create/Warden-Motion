@@ -15,7 +15,9 @@ import android.graphics.Typeface
 import android.os.Build
 import android.util.LruCache
 import com.warden.motion.app.data.Store
+import com.warden.motion.app.model.Effect
 import com.warden.motion.app.model.Layer
+import com.warden.motion.app.model.fxMeta
 import com.warden.motion.app.model.Project
 import com.warden.motion.app.model.at
 import com.warden.motion.app.model.fillShape
@@ -37,22 +39,13 @@ import kotlin.math.sin
 import kotlin.math.roundToInt
 
 /** Katmanın sahnedeki dönüşümü */
-data class TR(val x: Double, val y: Double, val rot: Double, val scale: Double, val opacity: Double)
+data class TR(val x: Double, val y: Double, val rot: Double, val scale: Double, val opacity: Double, val sx: Double = 1.0, val sy: Double = 1.0, val skew: Double = 0.0)
 
 private fun noise(t: Double, seed: Int) = sin(t * 12.9898 + seed * 78.233) * 0.5 + sin(t * 4.1 + seed) * 0.5
 
 fun layerTransform(l: Layer, t: Double): TR {
-    var x = l.x.at(t); var y = l.y.at(t); var rot = l.rotation.at(t)
-    val local = t - l.start
-    for (e in l.effects) {
-        if (e.type == "sway") rot += sin(local * e.value("speed", t) * PI * 2) * e.value("amount", t)
-        if (e.type == "shake") {
-            val sp = e.value("speed", t); val am = e.value("amount", t)
-            val tt = floor(local * sp * 10) / (if (sp == 0.0) 1.0 else sp * 10)
-            x += noise(tt, 1) * am; y += noise(tt, 2) * am
-        }
-    }
-    return TR(x, y, rot, l.scale.at(t), l.opacity.at(t))
+    val tr = TR(l.x.at(t), l.y.at(t), l.rotation.at(t), l.scale.at(t), l.opacity.at(t))
+    return if (l.effects.isEmpty()) tr else applyMotionFx(l, t, tr)
 }
 
 /** Takip zinciri (ebeveyn) dahil gerçek dönüşüm */
@@ -65,7 +58,7 @@ fun worldTransform(p: Project, l: Layer, t: Double, depth: Int = 0): TR {
     return TR(
         pw.x + (loc.x * cos(a) - loc.y * sin(a)) * pw.scale,
         pw.y + (loc.x * sin(a) + loc.y * cos(a)) * pw.scale,
-        pw.rot + loc.rot, pw.scale * loc.scale, loc.opacity,
+        pw.rot + loc.rot, pw.scale * loc.scale, loc.opacity, loc.sx, loc.sy, loc.skew,
     )
 }
 
@@ -183,14 +176,13 @@ class Renderer(private val ctx: Context, maxSide: Int = 2048, private val sync: 
     private var curQ = 1f
     private fun lim(k: String) = if (exporting) 9.0 else (limits[k] ?: 9.0)
 
-    private fun drawTransformed(c: Canvas, l: Layer, tr: TR, cm: android.graphics.ColorMatrix?) {
+    private fun drawTransformed(c: Canvas, l: Layer, tr: TR, fx: Bitmap? = null, fxRect: RectF? = null) {
         c.save()
-        c.translate(tr.x.toFloat(), tr.y.toFloat()); c.rotate(tr.rot.toFloat()); c.scale(tr.scale.toFloat(), tr.scale.toFloat())
-        if (l.effects.any { it.type == "mirror" }) c.scale(-1f, 1f)
+        c.translate(tr.x.toFloat(), tr.y.toFloat()); c.rotate(tr.rot.toFloat()); c.scale(tr.scale.toFloat() * tr.sx.toFloat(), tr.scale.toFloat() * tr.sy.toFloat())
+        if (tr.skew != 0.0) c.skew(kotlin.math.tan(tr.skew * PI / 180).toFloat(), 0f)
         if (l.flipX == true || l.flipY == true) c.scale(if (l.flipX == true) -1f else 1f, if (l.flipY == true) -1f else 1f)
-        if (cm != null) { val r = (hypot(l.w, l.h) * 0.75).toFloat() + 4f; c.saveLayer(-r, -r, r, r, Paint().apply { colorFilter = android.graphics.ColorMatrixColorFilter(cm) }) }
-        drawLayer(c, l)
-        if (cm != null) c.restore()
+        if (fx != null && fxRect != null) c.drawBitmap(fx, null, fxRect, Paint(Paint.FILTER_BITMAP_FLAG))
+        else drawLayer(c, l)
         c.restore()
     }
 
@@ -199,103 +191,109 @@ class Renderer(private val ctx: Context, maxSide: Int = 2048, private val sync: 
         val alpha = (tr.opacity.coerceIn(0.0, 1.0) * 255).toInt()
         if (alpha <= 0) return
         val blend = blendOf(l.blend)
-        val cm = if (lim("color") > 0) colorMatrix(l.effects, t) else null
-        val blurE = if (lim("blur") > 0) l.effects.find { it.type == "blur" && it.value("amount", t) > 0.3 } else null
-        val lights = if (lim("light") > 0) l.effects.filter { it.type in LIGHT_FX && it.value("amount", t) > 0.3 } else emptyList()
-        val mb = if (lim("blur") > 0) l.effects.find { it.type == "motionblur" } else null
-        val warps = if (lim("warp") > 0) l.effects.filter { it.type == "fractal" && it.value("mag", t) > 0 } else emptyList()
-        if (blurE == null && lights.isEmpty() && mb == null && warps.isEmpty()) {
+        val gpu = if (lim("warp") > 0 && !GlFx.failed) l.effects.filter { e -> e.on != false && fxMeta(e.type).kind in GlFx.GPU_KINDS } else emptyList()
+        val mb = if (lim("blur") > 0) l.effects.find { it.type == "motionblur" && it.on != false } else null
+        if (gpu.isEmpty() && mb == null) {
             val needLayer = alpha < 255 || blend != null
             if (needLayer) {
-                // Opaklık / karıştırma: katmanın kutusu kadar ara katman (sahne biriminde)
-                val rr = (hypot(l.w, l.h) / 2 * kotlin.math.abs(tr.scale)).toFloat() + 4f
+                val rr = (hypot(l.w, l.h) / 2 * kotlin.math.abs(tr.scale) * max(tr.sx, tr.sy)).toFloat() + 4f
                 c.saveLayer(tr.x.toFloat() - rr, tr.y.toFloat() - rr, tr.x.toFloat() + rr, tr.y.toFloat() + rr, Paint().apply { this.alpha = alpha; if (blend != null && Build.VERSION.SDK_INT >= 29) blendMode = blend })
-                drawTransformed(c, l, tr, cm)
+                drawTransformed(c, l, tr)
                 c.restore()
-            } else drawTransformed(c, l, tr, cm)
+            } else drawTransformed(c, l, tr)
             return
         }
-        paintBuffered(c, p, l, t, tr, alpha, blend, cm, blurE, lights, mb, warps)
+        paintBuffered(c, p, l, t, tr, alpha, blend, gpu, mb)
     }
 
-    /** Ağır efektler: katman ara resme çizilir, efektler uygulanır, sahneye konur */
-    private fun paintBuffered(c: Canvas, p: Project, l: Layer, t: Double, tr: TR, alpha: Int, blend: BlendMode?, cm: android.graphics.ColorMatrix?,
-                              blurE: com.warden.motion.app.model.Effect?, lights: List<com.warden.motion.app.model.Effect>,
-                              mb: com.warden.motion.app.model.Effect?, warps: List<com.warden.motion.app.model.Effect>) {
-        val q = curQ.toDouble()
-        // Hareket bulanıklığı: anın etrafındaki ara anlar
+    /** Efektin katman çevresinde istediği boşluk (katman birimi) */
+    private fun padOf(e: Effect, m: com.warden.motion.app.model.FxMeta, t: Double): Double {
+        val pd = m.pad ?: return 0.0
+        if (pd.max != null) return pd.max.maxOf { k -> max(0.0, e.value(k, t)) }
+        return max(0.0, pd.add + (pd.k?.let { e.value(it, t) } ?: 0.0) * pd.mul)
+    }
+
+    /**
+     * Efektli katman: katman kendi düzleminde (dönüşümsüz, pad dahil) ara resme çizilir,
+     * GPU efekt zinciri uygulanır, sonuç dönüşümle sahneye konur. Hareket bulanıklığında ara anlar toplanır.
+     */
+    private fun paintBuffered(c: Canvas, p: Project, l: Layer, t: Double, tr: TR, alpha: Int, blend: BlendMode?, gpu: List<Effect>, mb: Effect?) {
+        // Ara resim çözünürlüğü: sahnedeki ölçeğe göre (önizlemede oynarken daha düşük)
+        val world = kotlin.math.abs(tr.scale) * max(tr.sx, tr.sy)
+        var q = curQ.toDouble() * max(0.05, world)
+        if (!exporting && playing) q *= 0.7
+        var pad = 2.0
+        for (e in gpu) pad += padOf(e, fxMeta(e.type), t)
+        val maxSide = if (exporting) 4096.0 else 1600.0
+        q = min(q, maxSide / max(l.w + 2 * pad, l.h + 2 * pad))
+        val bw = kotlin.math.ceil((l.w + 2 * pad) * q).toInt(); val bh = kotlin.math.ceil((l.h + 2 * pad) * q).toInt()
+        if (bw <= 0 || bh <= 0) return
+        var buf = Bitmap.createBitmap(bw, bh, Bitmap.Config.ARGB_8888)
+        val bc = Canvas(buf); bc.translate(bw / 2f, bh / 2f); bc.scale(q.toFloat(), q.toFloat())
+        if (l.flipX == true || l.flipY == true) bc.scale(if (l.flipX == true) -1f else 1f, if (l.flipY == true) -1f else 1f)
+        drawLayer(bc, l)
+        if (gpu.isNotEmpty()) {
+            val box = floatArrayOf((pad * q).toFloat(), (pad * q).toFloat(), (l.w * q).toFloat(), (l.h * q).toFloat())
+            val job = GlFx.Job(gpu.map { it to fxMeta(it.type) }, t, t - l.start, l.end - l.start, box, q.toFloat(), sourcesFor(p, l, gpu, t, q))
+            GlFx.apply(buf, job)?.let { buf.recycle(); buf = it }
+        }
+        val rect = RectF((-bw / q / 2).toFloat(), (-bh / q / 2).toFloat(), (bw / q / 2).toFloat(), (bh / q / 2).toFloat())
+        val lf = l.copy(flipX = null, flipY = null)
         val samples = ArrayList<TR>()
         if (mb != null) {
-            val span = mb.value("tune", t) / p.fps * 2
-            val usePos = mb.value("pos", t) >= .5; val useScl = mb.value("scl", t) >= .5; val useAng = mb.value("ang", t) >= .5
-            fun trAt(u: Double): TR { val tt = (t + span * (u - 0.5)).coerceIn(l.start, l.end - 1e-4); val w = worldTransform(p, l, tt); return tr.copy(x = if (usePos) w.x else tr.x, y = if (usePos) w.y else tr.y, scale = if (useScl) w.scale else tr.scale, rot = if (useAng) w.rot else tr.rot) }
+            val span = max(0.0, mb.value("deklansoAcis", t)) / 360.0 / p.fps * 2
+            val phase = mb.value("deklansoFazi", t) / 360.0
+            val usePos = mb.value("konumuIzle", t) >= .5; val useScl = mb.value("olcegiIzle", t) >= .5; val useAng = mb.value("donmeyiIzle", t) >= .5
+            fun trAt(u: Double): TR { val tt = (t + span * (u - 0.5 + phase)).coerceIn(l.start, l.end - 1e-4); val w = worldTransform(p, l, tt); return tr.copy(x = if (usePos) w.x else tr.x, y = if (usePos) w.y else tr.y, scale = if (useScl) w.scale else tr.scale, rot = if (useAng) w.rot else tr.rot) }
             val a0 = trAt(0.0); val a1 = trAt(1.0); val rr = hypot(l.w, l.h) / 2
-            val dist = (hypot(a1.x - a0.x, a1.y - a0.y) + kotlin.math.abs(a1.scale - a0.scale) * rr + kotlin.math.abs(a1.rot - a0.rot) * PI / 180 * rr * tr.scale) * q
-            val n = if (dist < 1 || span <= 0) 1 else if (exporting) max(6, min((12 + fxQuality * 148).roundToInt(), kotlin.math.ceil(dist / (1.6 - fxQuality)).toInt()))
-                else when (lim("blur").toInt()) { 1 -> 4; 2 -> if (playing) 5 else 6; else -> if (playing) 6 else min(16, max(8, (dist / 4).toInt())) }
+            val dist = (hypot(a1.x - a0.x, a1.y - a0.y) + kotlin.math.abs(a1.scale - a0.scale) * rr + kotlin.math.abs(a1.rot - a0.rot) * PI / 180 * rr * tr.scale) * curQ
+            val want = mb.value("ornekSayi", t).roundToInt().coerceIn(2, 256)
+            val n = if (dist < 1 || span <= 0) 1 else if (exporting) max(6, min(want, kotlin.math.ceil(dist / (1.6 - fxQuality)).toInt()))
+                else min(if (playing) 6 else 16, max(4, min(want, (dist / 4).toInt())))
             if (n <= 1) samples += tr else for (i in 0 until n) samples += trAt(i / (n - 1.0))
         } else samples += tr
-        // Kutu (sahne birimi)
-        var pad = 4.0
-        blurE?.let { pad += it.value("amount", t) * 3 }
-        lights.forEach { pad += it.value("amount", t) * 3 }
-        warps.forEach { pad += it.value("mag", t) * 260 }
+        val pt = Paint().apply { this.alpha = alpha; if (blend != null && Build.VERSION.SDK_INT >= 29) blendMode = blend }
+        if (samples.size == 1) {
+            if (alpha < 255 || blend != null) {
+                val rr = (hypot(bw / q, bh / q) / 2 * world).toFloat() + 4f
+                c.saveLayer(tr.x.toFloat() - rr, tr.y.toFloat() - rr, tr.x.toFloat() + rr, tr.y.toFloat() + rr, pt)
+                drawTransformed(c, lf, tr, buf, rect); c.restore()
+            } else drawTransformed(c, lf, tr, buf, rect)
+            buf.recycle(); return
+        }
+        // Hareket bulanıklığı: ara anları sahne biriminde topla (ortalama)
+        val sq = curQ.toDouble()
         var x0 = Double.MAX_VALUE; var y0 = Double.MAX_VALUE; var x1 = -Double.MAX_VALUE; var y1 = -Double.MAX_VALUE
-        for (s in samples) { val rr = hypot(l.w, l.h) / 2 * kotlin.math.abs(s.scale) + pad; x0 = min(x0, s.x - rr); y0 = min(y0, s.y - rr); x1 = max(x1, s.x + rr); y1 = max(y1, s.y + rr) }
+        for (s in samples) { val rr = hypot(bw / q, bh / q) / 2 * kotlin.math.abs(s.scale) * max(s.sx, s.sy); x0 = min(x0, s.x - rr); y0 = min(y0, s.y - rr); x1 = max(x1, s.x + rr); y1 = max(y1, s.y + rr) }
         x0 = max(x0, -pad); y0 = max(y0, -pad); x1 = min(x1, p.width + pad); y1 = min(y1, p.height + pad)
-        val bw = kotlin.math.ceil((x1 - x0) * q).toInt(); val bh = kotlin.math.ceil((y1 - y0) * q).toInt()
-        if (bw <= 0 || bh <= 0 || bw > 8192 || bh > 8192) return
-        val buf = Bitmap.createBitmap(bw, bh, Bitmap.Config.ARGB_8888)
-        val bc = Canvas(buf); bc.scale(q.toFloat(), q.toFloat()); bc.translate(-x0.toFloat(), -y0.toFloat())
-        if (samples.size == 1) drawTransformed(bc, l, samples[0], cm)
-        else {
-            // Ara anları eşit ağırlıkla topla (ortalama)
-            val acc = IntArray(bw * bh * 4); val px = IntArray(bw * bh)
-            val tmp = Bitmap.createBitmap(bw, bh, Bitmap.Config.ARGB_8888); val tc = Canvas(tmp); tc.scale(q.toFloat(), q.toFloat()); tc.translate(-x0.toFloat(), -y0.toFloat())
-            for (s in samples) {
-                tmp.eraseColor(0); drawTransformed(tc, l, s, cm); tmp.getPixels(px, 0, bw, 0, 0, bw, bh); premul(px)
-                for (i in px.indices) { val v = px[i]; if (v == 0) continue; val k = i * 4; acc[k] += v ushr 24; acc[k + 1] += (v shr 16) and 255; acc[k + 2] += (v shr 8) and 255; acc[k + 3] += v and 255 }
-            }
-            val n = samples.size
-            for (i in px.indices) { val k = i * 4; px[i] = ((acc[k] / n) shl 24) or ((acc[k + 1] / n) shl 16) or ((acc[k + 2] / n) shl 8) or (acc[k + 3] / n) }
-            unpremul(px)
-            buf.setPixels(px, 0, bw, 0, 0, bw, bh); tmp.recycle()
+        val aw = kotlin.math.ceil((x1 - x0) * sq).toInt(); val ah = kotlin.math.ceil((y1 - y0) * sq).toInt()
+        if (aw <= 0 || ah <= 0 || aw > 8192 || ah > 8192) { buf.recycle(); return }
+        val acc = IntArray(aw * ah * 4); val px = IntArray(aw * ah)
+        val tmp = Bitmap.createBitmap(aw, ah, Bitmap.Config.ARGB_8888); val tc = Canvas(tmp); tc.scale(sq.toFloat(), sq.toFloat()); tc.translate(-x0.toFloat(), -y0.toFloat())
+        for (s in samples) {
+            tmp.eraseColor(0); drawTransformed(tc, lf, s, buf, rect); tmp.getPixels(px, 0, aw, 0, 0, aw, ah); premul(px)
+            for (i in px.indices) { val v = px[i]; if (v == 0) continue; val k = i * 4; acc[k] += v ushr 24; acc[k + 1] += (v shr 16) and 255; acc[k + 2] += (v shr 8) and 255; acc[k + 3] += v and 255 }
         }
-        // Gauss bulanıklığı (önizlemede küçültülerek)
-        blurE?.let { e -> blurScaled(buf, (e.value("amount", t) * q).toFloat()) }
-        for (e in warps) fractalWarp(buf, e, t, q, (x0 * q).toInt(), (y0 * q).toInt(), if (exporting) fxQuality else if (lim("warp") <= 1) 0.15 else 0.3)
-        // Parlama / gölge: katmanın siluetinden, renkli ve bulanık, altına
-        var out = buf
-        if (lights.isNotEmpty()) {
-            val o = Bitmap.createBitmap(bw, bh, Bitmap.Config.ARGB_8888); val oc = Canvas(o)
-            for (e in lights) {
-                val a = e.value("amount", t)
-                val g = Bitmap.createBitmap(bw, bh, Bitmap.Config.ARGB_8888)
-                Canvas(g).drawBitmap(buf, 0f, 0f, Paint().apply { colorFilter = android.graphics.PorterDuffColorFilter(parseCol(e.color ?: if (e.type == "glow") "#3FD0F0" else "#0D1631"), android.graphics.PorterDuff.Mode.SRC_IN) })
-                if (e.type == "glow") { blurScaled(g, (a * q).toFloat()); oc.drawBitmap(g, 0f, 0f, null); oc.drawBitmap(g, 0f, 0f, null) }
-                else { blurScaled(g, (a * 0.5 * q).toFloat()); oc.drawBitmap(g, (a * 0.4 * q).toFloat(), (a * 0.5 * q).toFloat(), null) }
-                g.recycle()
-            }
-            oc.drawBitmap(buf, 0f, 0f, null)
-            buf.recycle(); out = o
-        }
-        val pt = Paint(Paint.FILTER_BITMAP_FLAG).apply { this.alpha = alpha; if (blend != null && Build.VERSION.SDK_INT >= 29) blendMode = blend }
-        c.drawBitmap(out, null, RectF(x0.toFloat(), y0.toFloat(), (x0 + bw / q).toFloat(), (y0 + bh / q).toFloat()), pt)
-        out.recycle()
+        val n = samples.size
+        for (i in px.indices) { val k = i * 4; px[i] = ((acc[k] / n) shl 24) or ((acc[k + 1] / n) shl 16) or ((acc[k + 2] / n) shl 8) or (acc[k + 3] / n) }
+        unpremul(px); tmp.setPixels(px, 0, aw, 0, 0, aw, ah)
+        c.drawBitmap(tmp, null, RectF(x0.toFloat(), y0.toFloat(), (x0 + aw / sq).toFloat(), (y0 + ah / sq).toFloat()), Paint(Paint.FILTER_BITMAP_FLAG).apply { this.alpha = alpha; if (blend != null && Build.VERSION.SDK_INT >= 29) blendMode = blend })
+        tmp.recycle(); buf.recycle()
     }
 
-    /** Bulanıklık: büyük yarıçapta önce küçült (önizlemede daha çok) */
-    private fun blurScaled(b: Bitmap, r: Float) {
-        if (r < 0.5f) return
-        val div = if (exporting) 3f else floatArrayOf(2f, 2f, 3f, 4f)[lim("blur").toInt().coerceIn(0, 3)] * (if (playing) 1.5f else 1f)
-        val k = if (r > 4) min(8f, max(1f, r / div)) else 1f
-        if (k <= 1.01f) { blurBitmap(b, r); return }
-        val sw = max(1, (b.width / k).toInt()); val sh = max(1, (b.height / k).toInt())
-        val small = Bitmap.createScaledBitmap(b, sw, sh, true)
-        blurBitmap(small, r / k)
-        b.eraseColor(0)
-        Canvas(b).drawBitmap(small, null, RectF(0f, 0f, b.width.toFloat(), b.height.toFloat()), Paint(Paint.FILTER_BITMAP_FLAG))
-        small.recycle()
+    /** Efektlerin "Kaynak seçici" ayarlarındaki katmanlar (harita, doku…): kendi düzleminde, aynı boyutta çizilir */
+    private fun sourcesFor(p: Project, l: Layer, fx: List<Effect>, t: Double, q: Double): Map<String, Bitmap> {
+        val out = HashMap<String, Bitmap>()
+        for (e in fx) for (pr in fxMeta(e.type).params) if (pr.kind == "source") {
+            val id = e.c?.get(pr.key) ?: continue
+            val src = p.layers.find { it.id == id } ?: continue
+            if (src.id == l.id) continue
+            val w = kotlin.math.ceil(src.w * q).toInt().coerceIn(1, 2048); val h = kotlin.math.ceil(src.h * q).toInt().coerceIn(1, 2048)
+            val b = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
+            val cc = Canvas(b); cc.translate(w / 2f, h / 2f); cc.scale(q.toFloat(), q.toFloat()); drawLayer(cc, src)
+            out[pr.key] = b
+        }
+        return out
     }
 
     private fun blendOf(b: String?): BlendMode? = if (Build.VERSION.SDK_INT < 29) null else when (b) {
@@ -338,7 +336,7 @@ class Renderer(private val ctx: Context, maxSide: Int = 2048, private val sync: 
             "image" -> l.src?.let { s -> image(s)?.let { drawBitmap(c, it, RectF(-w / 2, -h / 2, w / 2, h / 2)) } }
             "video" -> {
                 val v = l.src?.let { video(it) }
-                val fr = v?.let { if (sync) it.frameSync(curT - l.start + (l.srcIn ?: 0.0)) else it.frame(curT - l.start + (l.srcIn ?: 0.0), playing) }
+                val fr = v?.let { if (sync) it.frameSync(fxLocalTime(l, curT) + (l.srcIn ?: 0.0)) else it.frame(fxLocalTime(l, curT) + (l.srcIn ?: 0.0), playing) }
                 if (fr != null) drawBitmap(c, fr, RectF(-w / 2, -h / 2, w / 2, h / 2))
                 else { paint.reset(); paint.color = 0xFF26386C.toInt(); c.drawRect(-w / 2, -h / 2, w / 2, h / 2, paint) }
             }

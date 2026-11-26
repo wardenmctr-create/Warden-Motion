@@ -1,59 +1,78 @@
 package com.warden.motion.app.model
 
-/** kind: jog (kaydırma cetveli) | slider | toggle */
+/**
+ * Efekt ayarı. kind: jog (kaydırma cetveli) | slider | toggle | choice | color | gradient | palette | curve | source | text | info | button | editor
+ * unit: "%", "px", "°", "Hz", "s", "dB", "box%" (katman kutusunun yüzdesi; 50 = merkez) …
+ */
 data class FxParam(val key: String, val label: String, val min: Double, val max: Double, val def: Double, val step: Double = 1.0, val jog: Double = step,
-                   val kind: String = "jog", val two: Boolean = false, val defY: Double? = null)
-data class FxMeta(val type: String, val name: String, val cat: String, val params: List<FxParam>, val color: String? = null, val info: String? = null)
+                   val kind: String = "jog", val two: Boolean = false, val defY: Double? = null, val three: Boolean = false, val defZ: Double? = null,
+                   val unit: String = "", val opts: List<String>? = null, val anim: String = "yes", val defStr: String? = null, val int: Boolean = false,
+                   val reseed: Boolean = false, val hint: String? = null, val multi: Boolean = false)
+data class FxMeta(val type: String, val name: String, val cat: String, val params: List<FxParam>, val color: String? = null, val info: String? = null,
+                  val en: String = "", val catIndex: Int = 0, val kind: String = "pixel", val desc: String = "", val tags: List<String> = emptyList(),
+                  val presets: List<FxPreset> = emptyList(), val pad: FxPad? = null, val passes: List<FxPass>? = null, val heavy: Boolean = false,
+                  val hidden: Boolean = false, val mergedInto: String? = null, val teach: String? = null, val n: Int = 0, val ready: Boolean = false)
 
-private fun P(key: String, label: String, min: Double, max: Double, def: Double, step: Double = 1.0, jog: Double = step) = FxParam(key, label, min, max, def, step, jog)
+/** Tarayıcıda görünen efektler (birleşmiş olanlar hariç), katalog sırasıyla */
+val FX: List<FxMeta> get() { FxCatalog.ensure(); return FxCatalog.all.values.filter { !it.hidden } }
+val FX_CATS: List<Pair<String, Int>> get() { FxCatalog.ensure(); return FxCatalog.catOrder.map { FxCatalog.cats[it] to it } }
+val FEATURED: List<String> get() { FxCatalog.ensure(); return FxCatalog.featured }
 
-val FX = listOf(
-    FxMeta("fractal", "Fraktal Bükme", "Bozulma", listOf(
-        FxParam("pos", "Konum", -1e5, 1e5, 0.0, two = true, defY = 0.0),
-        FxParam("par", "Paralaks", -1e5, 1e5, 0.0, two = true, defY = 0.0),
-        P("mag", "Büyüklük", 0.0, 3.0, 0.2, 0.005, 0.005),
-        P("det", "Ayrıntı", 0.0, 6.0, 1.0, 0.01, 0.02),
-        P("scl", "Ölçek", 0.1, 10.0, 1.0, 0.01, 0.01),
-    )),
-    FxMeta("motionblur", "Hareket Bulanıklığı", "Bulanıklık", listOf(
-        FxParam("tune", "Ayar", 0.0, 4.0, 1.0, 0.01, 0.01, kind = "slider"),
-        FxParam("pos", "Konum", 0.0, 1.0, 1.0, kind = "toggle"),
-        FxParam("scl", "Ölçek", 0.0, 1.0, 1.0, kind = "toggle"),
-        FxParam("ang", "Açı", 0.0, 1.0, 1.0, kind = "toggle"),
-    ), info = "Kullanmak için katmanı Taşı ve Çevir ile canlandır (bulanıklık kendiliğinden uygulanır)."),
-    FxMeta("blur", "Gauss Bulanıklığı", "Bulanıklık", listOf(P("amount", "Miktar", 0.0, 60.0, 8.0, 0.5, 0.2))),
-    FxMeta("sway", "Oto-Sallanma", "Hareket", listOf(P("amount", "Açı", 0.0, 45.0, 6.0, 0.5, 0.2), P("speed", "Hız", 0.1, 5.0, 0.8, 0.05, 0.02))),
-    FxMeta("shake", "Rastgele Titreşim", "Hareket", listOf(P("amount", "Mesafe", 0.0, 60.0, 8.0, 0.5, 0.2), P("speed", "Hız", 0.1, 5.0, 1.5, 0.05, 0.02))),
-    FxMeta("glow", "Parlama", "Işık ve Gölge", listOf(P("amount", "Miktar", 0.0, 60.0, 16.0, 0.5, 0.2)), color = "#3FD0F0"),
-    FxMeta("shadow", "Gölge", "Işık ve Gölge", listOf(P("amount", "Miktar", 0.0, 60.0, 14.0, 0.5, 0.2)), color = "#0D1631"),
-    FxMeta("brightness", "Parlaklık", "Renk ve Işık", listOf(P("amount", "Yüzde", 0.0, 300.0, 140.0, 1.0, 0.5))),
-    FxMeta("contrast", "Kontrast", "Renk ve Işık", listOf(P("amount", "Yüzde", 0.0, 300.0, 150.0, 1.0, 0.5))),
-    FxMeta("saturate", "Doygunluk", "Renk ve Işık", listOf(P("amount", "Yüzde", 0.0, 300.0, 180.0, 1.0, 0.5))),
-    FxMeta("hue", "Ton Kaydırma", "Renk ve Işık", listOf(P("amount", "Derece", -180.0, 180.0, 90.0, 1.0, 0.5))),
-    FxMeta("grayscale", "Siyah Beyaz", "Renk ve Işık", listOf(P("amount", "Yüzde", 0.0, 100.0, 100.0, 1.0, 0.5))),
-    FxMeta("sepia", "Eski Fotoğraf", "Renk ve Işık", listOf(P("amount", "Yüzde", 0.0, 100.0, 100.0, 1.0, 0.5))),
-    FxMeta("invert", "Ters Çevir", "Renk ve Işık", listOf(P("amount", "Yüzde", 0.0, 100.0, 100.0, 1.0, 0.5))),
-    FxMeta("mirror", "Ayna", "Bozulma", emptyList()),
-)
-
-/** Kategori kartlarının renkleri (eski uygulamadaki geçişlerin yaklaşığı) */
-val FX_CATS = listOf(
-    "Renk ve Işık" to listOf(0xFF1B3A7A, 0xFF6B3FA0, 0xFFE84393),
-    "Işık ve Gölge" to listOf(0xFF0B1430, 0xFF1F3270, 0xFF3FD0F0),
-    "Bulanıklık" to listOf(0xFF8FA6D6, 0xFF2A3A72),
-    "Hareket" to listOf(0xFF0E5A63, 0xFF22D3C5),
-    "Bozulma" to listOf(0xFF1B3A7A, 0xFF2459B8),
-)
-val FEATURED = listOf("motionblur", "fractal", "blur")
-
-fun fxMeta(t: String): FxMeta = FX.find { it.type == t } ?: FxMeta(t, t, "Bozulma", emptyList())
-fun paramKeys(pr: FxParam) = if (pr.two) listOf(pr.key + "X", pr.key + "Y") else listOf(pr.key)
+fun fxMeta(t: String): FxMeta { FxCatalog.ensure(); return FxCatalog.all[t] ?: FxMeta(t, t, "", emptyList()) }
+fun paramKeys(pr: FxParam) = when { pr.three -> listOf(pr.key + "X", pr.key + "Y", pr.key + "Z"); pr.two -> listOf(pr.key + "X", pr.key + "Y"); else -> listOf(pr.key) }
+fun FxParam.isNumeric() = kind == "jog" || kind == "slider" || kind == "toggle" || kind == "choice"
 
 fun makeEffect(t: String): Effect {
     val m = fxMeta(t)
-    val v = HashMap<String, Anim>()
-    for (pr in m.params) { if (pr.two) { v[pr.key + "X"] = Anim(pr.def); v[pr.key + "Y"] = Anim(pr.defY ?: pr.def) } else v[pr.key] = Anim(pr.def) }
-    return Effect(uid(), t, v["amount"]?.v ?: 0.0, v = v, color = m.color)
+    val v = HashMap<String, Anim>(); val c = HashMap<String, String>()
+    for (pr in m.params) {
+        when {
+            pr.three -> { v[pr.key + "X"] = Anim(pr.def); v[pr.key + "Y"] = Anim(pr.defY ?: 0.0); v[pr.key + "Z"] = Anim(pr.defZ ?: 0.0) }
+            pr.two -> { v[pr.key + "X"] = Anim(pr.def); v[pr.key + "Y"] = Anim(pr.defY ?: pr.def) }
+            pr.isNumeric() -> v[pr.key] = Anim(pr.def)
+            pr.defStr != null -> c[pr.key] = pr.defStr
+        }
+    }
+    return Effect(uid(), t, 0.0, v = v, c = c.ifEmpty { null })
+}
+
+/** Hazır ayarı uygular (t0: katman başı, t1: katman sonu; keyframe zamanları buna göre) */
+fun applyPreset(e: Effect, p: FxPreset, t0: Double, t1: Double): Effect {
+    val m = fxMeta(e.type)
+    val v = (e.v ?: emptyMap()).toMutableMap(); val c = (e.c ?: emptyMap()).toMutableMap()
+    for ((k, x) in p.vals) v[k] = Anim(x)
+    for ((k, ks) in p.keys) v[k] = Anim(ks.firstOrNull()?.second ?: 0.0, ks.map { (tt, x) -> Key(if (p.atEnd) t1 + tt else t0 + tt, x, listOf(0.42, 0.0, 0.58, 1.0)) })
+    for ((k, x) in p.cols) c[k] = x
+    if (m.params.isEmpty()) return e
+    return e.copy(v = v, c = c.ifEmpty { null })
+}
+
+/** Eski sürümlerin efektlerini (tek "amount" ayarlı) yeni katalog ayarlarına çevirir */
+fun migrateEffect(e: Effect): Effect {
+    val m = fxMeta(e.type)
+    val keys = m.params.flatMap { paramKeys(it) }.toSet()
+    val old = e.v ?: emptyMap()
+    if (old.keys.all { it in keys } && (old.isNotEmpty() || m.params.isEmpty())) return e
+    fun a(k: String, def: Double) = old[k] ?: Anim(if (k == "amount") e.amount else def)
+    fun sc(x: Anim, f: (Double) -> Double) = Anim(f(x.v), x.k?.map { it.copy(v = f(it.v)) })
+    val base = makeEffect(when (e.type) { "brightness", "contrast" -> "bricon"; "saturate" -> "vibrance"; else -> e.type })
+    val nv = (base.v ?: emptyMap()).toMutableMap(); val nc = (base.c ?: emptyMap()).toMutableMap()
+    fun put(k: String, x: Anim) { if (nv.containsKey(k)) nv[k] = x }
+    when (e.type) {
+        "blur" -> put("yaricap", a("amount", 8.0))
+        "glow" -> { put("yaricap", a("amount", 16.0)); e.color?.let { nc["renk"] = it } }
+        "shadow" -> { put("bulanikl", a("amount", 14.0)); e.color?.let { nc["renk"] = it } }
+        "brightness" -> put("parlakli", sc(a("amount", 100.0)) { (it - 100).coerceIn(-100.0, 100.0) })
+        "contrast" -> put("kontrast", sc(a("amount", 100.0)) { (it - 100).coerceIn(-100.0, 100.0) })
+        "saturate" -> put("doygunlu", sc(a("amount", 100.0)) { (it - 100).coerceIn(-100.0, 100.0) })
+        "hue" -> put("tonAcis", a("amount", 0.0))
+        "grayscale", "sepia", "invert" -> put("guc", a("amount", 100.0))
+        "fractal" -> { put("bukmeMikt", sc(a("mag", 0.2)) { it * 130 }); put("ayrinti", sc(a("det", 1.0)) { it + 1 }); put("olcek", sc(a("scl", 1.0)) { it * 120 }) }
+        "motionblur" -> put("deklansoAcis", sc(a("tune", 1.0)) { it * 180 })
+        "sway" -> { put("salinimAcis", a("amount", 6.0)); put("frekans", a("speed", 0.8)) }
+        "shake" -> { put("konumSidd", a("amount", 8.0)); put("frekans", sc(a("speed", 1.5)) { it * 4 }) }
+    }
+    return base.copy(id = e.id, v = nv, c = nc.ifEmpty { null }, closed = e.closed)
 }
 
 // ---------- Hareket işaretleyicileri (keyframe işaretleri) ----------
@@ -123,6 +142,6 @@ fun groupLabel(l: Layer, g: String): String {
 /** Projede dışa aktarmayı yavaşlatan efektler */
 fun heavyEffects(p: Project): List<String> {
     val s = LinkedHashSet<String>()
-    for (l in p.layers) for (e in l.effects) when (e.type) { "motionblur" -> s += "hareket bulanıklığı"; "fractal" -> s += "fraktal bükme"; "blur" -> s += "bulanıklık" }
+    for (l in p.layers) for (e in l.effects) { val m = fxMeta(e.type); if (m.heavy || e.type == "motionblur") s += m.name.lowercase(java.util.Locale("tr")) }
     return s.toList()
 }

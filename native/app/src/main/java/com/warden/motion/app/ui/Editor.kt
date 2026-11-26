@@ -431,6 +431,7 @@ private fun Stage(s: EditorState, panel: Panel?, perf: Map<String, Double>, ver:
                 if (sel != null) {
                     if (panel == Panel.MOVE) drawMotionPath(nc, pr, sel, q)
                     if (s.time >= sel.start && s.time < sel.end && sel.hidden != true && sel.type != "audio") drawSelection(nc, sel, worldTransform(pr, sel, s.time), q, panel == Panel.COLOR)
+                    fxSel?.let { (e, prm) -> if (prm.unit == "box%") drawFxTarget(nc, sel, worldTransform(pr, sel, s.time), e.value(prm.key + "X", s.time), e.value(prm.key + "Y", s.time), q) }
                 }
             }
         }
@@ -539,12 +540,17 @@ private suspend fun androidx.compose.ui.input.pointer.PointerInputScope.stageGes
             when (mode) {
                 "fx" -> {
                     val (e, pr) = fs!!
-                    val dx = (c.position.x - down.position.x) / density * 2; val dy = (c.position.y - down.position.y) / density * 2
+                    val lw = s.sel?.let { worldTransform(s.project, it, s.time) }
+                    val sc = max(0.01, lw?.let { kotlin.math.abs(it.scale) } ?: 1.0)
+                    val ux = if (pr.unit == "box%") 100.0 / max(1.0, (s.sel?.w ?: 100.0) * sc) else 1.0 / sc
+                    val uy = if (pr.unit == "box%") 100.0 / max(1.0, (s.sel?.h ?: 100.0) * sc) else 1.0 / sc
+                    val dx = (c.position.x - down.position.x) / k * ux; val dy = (c.position.y - down.position.y) / k * uy
+                    fun rnd(x: Double) = (Math.round(x / pr.step) * pr.step).coerceIn(pr.min, pr.max)
                     s.updateLayer(s.selectedId!!, false) { l -> l.copy(effects = l.effects.map { x ->
                         if (x.id != e.id) x else {
                             val v = (x.v ?: emptyMap()).toMutableMap()
-                            v[pr.key + "X"] = (v[pr.key + "X"] ?: Anim(fx0.first)).set(s.time, (fx0.first + dx).roundToInt().toDouble())
-                            v[pr.key + "Y"] = (v[pr.key + "Y"] ?: Anim(fx0.second)).set(s.time, (fx0.second + dy).roundToInt().toDouble())
+                            v[pr.key + "X"] = (v[pr.key + "X"] ?: Anim(fx0.first)).set(s.time, rnd(fx0.first + dx))
+                            v[pr.key + "Y"] = (v[pr.key + "Y"] ?: Anim(fx0.second)).set(s.time, rnd(fx0.second + dy))
                             x.copy(v = v)
                         }
                     }) }
@@ -1029,3 +1035,19 @@ fun DBtn(label: String, ghost: Boolean = false, icon: String? = null, enabled: B
     }
 }
 
+
+
+/** Efektin X/Y noktası: sahnede nişangah (katman kutusunun yüzdesi) */
+fun drawFxTarget(c: android.graphics.Canvas, l: Layer, w: TR, px: Double, py: Double, q: Float) {
+    val lx = (px / 100 - 0.5) * l.w; val ly = (py / 100 - 0.5) * l.h
+    val a = w.rot * PI / 180
+    val x = (w.x + (lx * cos(a) - ly * sin(a)) * w.scale) * q; val y = (w.y + (lx * sin(a) + ly * cos(a)) * w.scale) * q
+    val p = android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG).apply { style = android.graphics.Paint.Style.STROKE; strokeWidth = 3f; color = 0xFF0B1430.toInt() }
+    val r = 18f
+    for (pass in 0..1) {
+        if (pass == 1) { p.strokeWidth = 1.6f; p.color = 0xFF22D3C5.toInt() }
+        c.drawCircle(x.toFloat(), y.toFloat(), r, p)
+        c.drawLine(x.toFloat() - r * 1.6f, y.toFloat(), x.toFloat() - r * 0.5f, y.toFloat(), p); c.drawLine(x.toFloat() + r * 0.5f, y.toFloat(), x.toFloat() + r * 1.6f, y.toFloat(), p)
+        c.drawLine(x.toFloat(), y.toFloat() - r * 1.6f, x.toFloat(), y.toFloat() - r * 0.5f, p); c.drawLine(x.toFloat(), y.toFloat() + r * 0.5f, x.toFloat(), y.toFloat() + r * 1.6f, p)
+    }
+}

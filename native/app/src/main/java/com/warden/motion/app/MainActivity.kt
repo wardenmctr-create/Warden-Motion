@@ -24,6 +24,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        com.warden.motion.app.model.FxCatalog.init(this)
         val store = Store.get(this)
         val renderer = Renderer(this)
         setContent {

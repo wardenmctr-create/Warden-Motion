@@ -344,11 +344,14 @@ exec(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'catalog_ae.p
 exec(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'catalog_ae2.py')).read())
 exec(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'catalog_ae3.py')).read())
 exec(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'catalog_am.py')).read())
-order_kinds = {}
-for e in E:
-    for p in e["params"]:
-        p["def"] = p.pop("def_")
-out = dict(version=1, cats=CATS, effects=E, featured=["tiles", "chromakey", "hexarray", "glow", "cube", "fractal"])
+exec(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'catalog_spec.py')).read())
+def _fixdef(ps):
+    for p in ps:
+        if "def_" in p: p["def"] = p.pop("def_")
+for e in E: _fixdef(e["params"])
+for v in LEGACY.values(): _fixdef(v["params"])
+json.dump(LEGACY, open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "legacy.json"), "w"), ensure_ascii=False)
+out = dict(version=2, cats=CATS, catOrder=CAT_ORDER, effects=E, featured=["tiles", "chromakey", "hexarray", "glow", "cube", "fractal"])
 dst = os.path.join(os.path.dirname(__file__), "../../app/src/main/assets/fx/catalog.json")
 json.dump(out, open(dst, "w"), ensure_ascii=False, indent=0)
 from collections import Counter
