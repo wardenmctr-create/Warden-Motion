@@ -75,6 +75,7 @@ NEW.update({
  506: ("flock", "Tekrar", "special", ["Sürü", "Kopya", "Fizik"], None), 518: ("lipsync", "Countryball", "rig", ["Ağız", "Ses", "Konuşma"], None),
 })
 HIDE.update({"softbody": ["agAyri"], "lipsync": ["eslemeModu"], "motionpath": ["koordina"]})
+NEW.update({507: ("reactdiff", "Prosedürel", "pixel", ["Desen", "Benzetim", "Turing"], None)})
 READY2 = set(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "ready2.txt")).read().split()) if os.path.exists(os.path.join(os.path.dirname(os.path.abspath(__file__)), "ready2.txt")) else set()
 _POS = _re.compile(r"(merkez|konum|ufuk|nokta|kök|başlangıç$|bitiş$|bağlantı|hedef)", _re.I)
 MATS = ["Beyaz kâğıt", "Renkli kâğıt", "Kraft kâğıt", "Karton", "Parşömen", "Keçe"]

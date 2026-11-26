@@ -6,6 +6,7 @@ ambientocc
 anaglyph
 anamorphic
 anisodiff
+apollonian
 applique
 arithmetic
 ascii
@@ -64,6 +65,7 @@ cbspeed
 cbsticker
 cbsurprise
 cbsweat
+cellauto
 cellpattern
 ceramicglaze
 chain3d
@@ -103,6 +105,7 @@ colortrail
 colortune
 comic
 compisolate
+complexmap
 compoundblur
 condblend
 cone
@@ -113,6 +116,7 @@ contourlines
 contourstrips
 copybg
 cornerpin
+crescents
 cross3
 crossblur
 crossprocess
@@ -123,6 +127,7 @@ curl
 curves
 cutback
 cyanotype
+cycloid
 cylinder
 darkaccum
 darkframe
@@ -135,6 +140,7 @@ deblur
 dehalo
 dehaze
 deinterlace
+delaunay
 demoire
 denoise
 depthblur
@@ -149,10 +155,12 @@ dirblur
 displace
 dispmap
 dissolve
+dla
 dots
 drizzle
 droplets
 drypastel
+duneripples
 dustscratch
 edgeband
 edgedirmatte
@@ -181,9 +189,11 @@ flip3d
 flomotion
 floorreflect
 floorshadow
+flowerrosette
 flowfield
 flowwarp
 foam
+foamcells
 focusmap
 fog
 fold3d
@@ -245,6 +255,7 @@ hotcolor
 hue
 huesat
 icosa
+illusiongrid
 infmirror
 infrared
 inkdraw
@@ -288,6 +299,7 @@ linrepeat
 linstreaks
 linwipe
 liquify
+lissajous
 localcontrast
 localwb
 logconv
@@ -318,7 +330,9 @@ moireprint
 morphimg
 mosaic
 mosaicgrout
+mossgrow
 motioncomposite
+mudcrack
 multiscale
 nebula
 neonedge
@@ -349,6 +363,7 @@ papiermache
 particles
 particleworld
 pencilhatch
+penrose
 perspgrid
 photocopy
 photofilter
@@ -361,9 +376,11 @@ plantgrow
 plasma
 plastic
 pointcloud
+poissondots
 polar
 polardisp
 posterize
+powervoronoi
 prismfx
 pyramid
 quilling
@@ -374,6 +391,7 @@ radscalewipe
 radwipe
 rain
 rays
+reactdiff
 reflect
 reliefmap
 relight
@@ -384,6 +402,7 @@ repetile
 replacecolor
 rgbsplit
 ribbon
+ribbonflow
 ridges
 ring3d
 ringplanet
@@ -391,6 +410,7 @@ ripple
 ripplepulse
 risograph
 rollingfix
+rootnet
 ropephys
 roughen
 roundcorners
@@ -408,6 +428,7 @@ scatterpx
 scratchart
 scribble
 selcolor
+selfavoid
 sepia
 sequins
 shadow
@@ -435,6 +456,7 @@ spill
 spinblur
 spinstreaks
 spiral
+spirograph
 split
 spotcolor
 spotlight
@@ -446,6 +468,7 @@ starfilter
 starpoly
 starprism
 stipple
+strata
 streaks
 streakstrips
 stretchseg
@@ -477,10 +500,12 @@ tinyplanet
 tornado
 tornpaper
 torus
+treerings
 triprism
 tritone
 truchet
 tunnel
+turingmaze
 twister
 underwater
 unsharp
@@ -498,6 +523,7 @@ volclouds
 volslices
 volumelight
 vrcombined
+wangtiles
 warpblur
 warpfield
 warpomatic

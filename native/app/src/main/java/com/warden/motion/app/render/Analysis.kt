@@ -12,6 +12,7 @@ import kotlin.math.*
 object Analysis {
     private val TYPES = setOf("histogram2", "waveform", "vectorscope", "compisolate")
     fun sources(fx: List<Effect>, bmp: Bitmap, t: Double): Map<String, Bitmap> {
+        fx.firstOrNull { it.type in Sims.TYPES }?.let { e -> return Sims.source(e, t)?.let { mapOf("anl" to it) } ?: emptyMap() }
         val e = fx.firstOrNull { it.type in TYPES } ?: return emptyMap()
         val w = bmp.width; val h = bmp.height; if (w < 2 || h < 2) return emptyMap()
         val step = max(1, sqrt(w.toDouble() * h / 60000.0).toInt()); val px = IntArray(w * h); bmp.getPixels(px, 0, w, 0, 0, w, h)

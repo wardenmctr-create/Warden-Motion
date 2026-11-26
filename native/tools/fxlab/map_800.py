@@ -55,3 +55,18 @@ N8A([
  (648, "linedensity", "Çizim ve Kenar", "pixel", ["Çizgi", "Ton"], None), (649, "chipcollage", "Çizim ve Kenar", "pixel", ["Kolaj", "Parça"], None),
  (650, "shadowtheater", "Renk ve Işık", "pixel", ["Gölge", "Perde"], None),
 ])
+N8A([
+ (651, "spirograph", "Prosedürel", "gen", ["Eğri", "Spirograf"], None), (652, "lissajous", "Prosedürel", "gen", ["Eğri", "Lissajous"], None),
+ (653, "cycloid", "Prosedürel", "gen", ["Eğri", "Sikloid"], None), (654, "complexmap", "Prosedürel", "pixel", ["Matematik", "Karmaşık"], None),
+ (655, "apollonian", "Prosedürel", "pixel", ["Fraktal", "Çember"], None), (656, "penrose", "Prosedürel", "pixel", ["Döşeme", "Penrose"], None),
+ (657, "wangtiles", "Prosedürel", "pixel", ["Karo", "Desen"], None), (658, "powervoronoi", "Prosedürel", "pixel", ["Hücre", "Ağırlık"], None),
+ (659, "delaunay", "Prosedürel", "gen", ["Ağ", "Üçgen"], None), (660, "poissondots", "Prosedürel", "gen", ["Nokta", "Dağılım"], None),
+ (661, "crescents", "Prosedürel", "pixel", ["Hilal", "Döşeme"], None), (662, "illusiongrid", "Prosedürel", "pixel", ["Yanılsama", "Izgara"], None),
+ (663, "ribbonflow", "Prosedürel", "pixel", ["Şerit", "Akış"], None), (664, "turingmaze", "Prosedürel", "pixel", ["Turing", "Labirent"], None),
+ (665, "cellauto", "Prosedürel", "pixel", ["Hücresel", "Otomat"], None), (666, "selfavoid", "Prosedürel", "gen", ["Yol", "Rastgele"], None),
+ (667, "dla", "Prosedürel", "gen", ["Büyüme", "Dallanma"], None), (668, "rootnet", "Prosedürel", "gen", ["Kök", "Dal"], None),
+ (669, "mossgrow", "Prosedürel", "pixel", ["Yosun", "Büyüme"], None), (670, "duneripples", "Prosedürel", "pixel", ["Kum", "Dalga"], None),
+ (671, "mudcrack", "Prosedürel", "pixel", ["Çamur", "Çatlak"], None), (672, "strata", "Prosedürel", "pixel", ["Taş", "Katman"], None),
+ (673, "treerings", "Prosedürel", "pixel", ["Ağaç", "Halka"], None), (674, "foamcells", "Prosedürel", "gen", ["Köpük", "Hücre"], None),
+ (675, "flowerrosette", "Prosedürel", "gen", ["Çiçek", "Rozet"], {"box": 0.3}),
+])

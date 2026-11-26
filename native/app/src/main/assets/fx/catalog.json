@@ -117228,6 +117228,170 @@
 "hidden": false
 },
 {
+"type": "reactdiff",
+"name": "Reaksiyon ve Difüzyon",
+"en": "",
+"cat": 4,
+"kind": "pixel",
+"desc": "Zamanla gelişen biyolojik benzeri lekeler ve labirent desenleri üretir.",
+"tags": [
+"Desen",
+"Benzetim",
+"Turing"
+],
+"params": [
+{
+"k": "besleme",
+"l": "Besleme",
+"anim": "yes",
+"hint": "Desen oluşum hızını etkiler.",
+"kind": "jog",
+"min": 0.0,
+"max": 0.1,
+"step": 0.01,
+"jog": 0.01,
+"unit": "",
+"g": "Simülasyon",
+"def": 0.035
+},
+{
+"k": "tuketim",
+"l": "Tüketim",
+"anim": "yes",
+"hint": "Desen türünü etkiler.",
+"kind": "jog",
+"min": 0.0,
+"max": 0.1,
+"step": 0.01,
+"jog": 0.01,
+"unit": "",
+"g": "Simülasyon",
+"def": 0.062
+},
+{
+"k": "yayilmaA",
+"l": "Yayılma A",
+"anim": "yes",
+"hint": "Birinci alanın yayılımı.",
+"kind": "jog",
+"min": 0.0,
+"max": 2.0,
+"step": 0.01,
+"jog": 0.01,
+"unit": "",
+"g": "Simülasyon",
+"def": 1.0
+},
+{
+"k": "yayilmaB",
+"l": "Yayılma B",
+"anim": "yes",
+"hint": "İkinci alanın yayılımı.",
+"kind": "jog",
+"min": 0.0,
+"max": 2.0,
+"step": 0.01,
+"jog": 0.01,
+"unit": "",
+"g": "Simülasyon",
+"def": 0.5
+},
+{
+"k": "adimSayi",
+"l": "Adım sayısı",
+"anim": "yes",
+"hint": "Gelişim süresi.",
+"kind": "jog",
+"min": 0.0,
+"max": 5000.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"g": "Simülasyon",
+"def": 500.0
+},
+{
+"k": "tohum",
+"l": "Tohum",
+"anim": "yes",
+"hint": "Başlangıç lekeleri.",
+"kind": "jog",
+"min": 0.0,
+"max": 999999.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"reseed": true,
+"g": "Simülasyon",
+"def": 1.0
+},
+{
+"k": "zamanlaGeli",
+"l": "Zamanla geliştir",
+"anim": "step",
+"hint": "Adımlar zamanla artar.",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"g": "Simülasyon",
+"def": 0
+},
+{
+"k": "birinciRenk",
+"l": "Birinci renk",
+"anim": "yes",
+"hint": "Koyu alan.",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"g": "Görünüm",
+"def": "#142440"
+},
+{
+"k": "ikinciRenk",
+"l": "İkinci renk",
+"anim": "yes",
+"hint": "Açık alan.",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"g": "Görünüm",
+"def": "#43A8FF"
+},
+{
+"k": "olcek",
+"l": "Ölçek",
+"anim": "yes",
+"hint": "Desen boyutu.",
+"kind": "jog",
+"min": 10.0,
+"max": 1000.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"g": "Görünüm",
+"def": 100.0
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 507,
+"teach": "Besleme değişince desenin farklılaşmasını göster.",
+"ready": true,
+"hidden": false
+},
+{
 "type": "localcontrast",
 "name": "Yerel Kontrast",
 "en": "",
@@ -124399,6 +124563,2130 @@
 "info": null,
 "heavy": false,
 "n": 650,
+"ready": true
+},
+{
+"type": "spirograph",
+"name": "Spirograf",
+"en": "",
+"cat": 4,
+"kind": "gen",
+"desc": "Birbirinin üzerinde dönen çemberlerin izinden sürekli dekoratif eğri çizer.",
+"tags": [
+"Eğri",
+"Spirograf"
+],
+"params": [
+{
+"k": "icDisYari",
+"l": "İç/dış yarıçap",
+"g": null,
+"anim": "yes",
+"hint": "sabit ve yuvarlanan çember yarıçapı",
+"kind": "jog",
+"min": 1.0,
+"max": 1000.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 120.0
+},
+{
+"k": "kalemUzak",
+"l": "Kalem uzaklığı",
+"g": null,
+"anim": "yes",
+"hint": "kalemin çember merkezine uzaklığı",
+"kind": "jog",
+"min": 0.0,
+"max": 1000.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 35.0
+},
+{
+"k": "cizimIler",
+"l": "Çizim ilerlemesi",
+"g": null,
+"anim": "yes",
+"hint": "çizilen yol oranı",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 100.0
+},
+{
+"k": "cizgiKali",
+"l": "Çizgi kalınlığı",
+"g": "Gelişmiş",
+"anim": "yes",
+"hint": "çizilen eğrinin genişliği",
+"kind": "jog",
+"min": 0.5,
+"max": 50.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 2.0
+},
+{
+"k": "cizgiReng",
+"l": "Çizgi rengi",
+"g": "Gelişmiş",
+"anim": "yes",
+"hint": "eğri rengi",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#328CFF"
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 651,
+"ready": true
+},
+{
+"type": "lissajous",
+"name": "Lissajous Eğrisi",
+"en": "",
+"cat": 4,
+"kind": "gen",
+"desc": "İki eksende farklı frekanslı salınımlar kullanarak kapalı veya açık ışıklı desenler çizer.",
+"tags": [
+"Eğri",
+"Lissajous"
+],
+"params": [
+{
+"k": "frekansl",
+"l": "Frekanslar",
+"g": null,
+"anim": "yes",
+"hint": "iki eksenin frekansı",
+"kind": "jog",
+"two": true,
+"three": false,
+"min": 0.01,
+"max": 30.0,
+"defY": 2.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "Hz",
+"def": 3.0
+},
+{
+"k": "faz",
+"l": "Faz",
+"g": null,
+"anim": "yes",
+"hint": "faz farkı",
+"kind": "jog",
+"min": 0.0,
+"max": 360.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"def": 90.0
+},
+{
+"k": "cizgiKali",
+"l": "Çizgi kalınlığı",
+"g": null,
+"anim": "yes",
+"hint": "çizgi kalınlığı",
+"kind": "jog",
+"min": 0.5,
+"max": 50.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 2.0
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Üç iki",
+"vals": {
+"faz": 90.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Simetrik",
+"vals": {
+"faz": 45.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 652,
+"ready": true
+},
+{
+"type": "cycloid",
+"name": "Sikloid İzleri",
+"en": "",
+"cat": 4,
+"kind": "gen",
+"desc": "Yuvarlanan çember üzerindeki bir noktanın bıraktığı eğrileri üretir.",
+"tags": [
+"Eğri",
+"Sikloid"
+],
+"params": [
+{
+"k": "yaricap",
+"l": "Yarıçap",
+"g": null,
+"anim": "yes",
+"hint": "yuvarlanan çember yarıçapı",
+"kind": "jog",
+"min": 1.0,
+"max": 1000.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 50.0
+},
+{
+"k": "noktaUzak",
+"l": "Nokta uzaklığı",
+"g": null,
+"anim": "yes",
+"hint": "noktanın merkezden uzaklığı",
+"kind": "jog",
+"min": 0.0,
+"max": 2000.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 50.0
+},
+{
+"k": "donusSayi",
+"l": "Dönüş sayısı",
+"g": null,
+"anim": "yes",
+"hint": "çizilen dönme sayısı",
+"kind": "jog",
+"min": 0.1,
+"max": 100.0,
+"step": 0.01,
+"jog": 0.01,
+"unit": "",
+"def": 4.0
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Klasik sikloid",
+"vals": {
+"yaricap": 50.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Uzamış sikloid",
+"vals": {
+"yaricap": 50.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 653,
+"ready": true
+},
+{
+"type": "complexmap",
+"name": "Karmaşık Düzlem Haritası",
+"en": "",
+"cat": 4,
+"kind": "pixel",
+"desc": "Karmaşık fonksiyonların açı ve büyüklüğünü renkli düzlem olarak gösterir; Mandelbrot kümesi değildir.",
+"tags": [
+"Matematik",
+"Karmaşık"
+],
+"params": [
+{
+"k": "fonksiyo",
+"l": "Fonksiyon",
+"g": null,
+"anim": "step",
+"hint": "örneklenecek fonksiyon",
+"kind": "choice",
+"min": 0,
+"max": 3,
+"step": 1,
+"jog": 1,
+"opts": [
+"z²",
+"1/z",
+"sin(z)",
+"exp(z)"
+],
+"def": 0
+},
+{
+"k": "olcek",
+"l": "Ölçek",
+"g": null,
+"anim": "yes",
+"hint": "karmaşık düzlem yakınlaştırması",
+"kind": "jog",
+"min": 1.0,
+"max": 10000.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 100.0
+},
+{
+"k": "renkCevr",
+"l": "Renk çevrimi",
+"g": null,
+"anim": "yes",
+"hint": "renk çemberi fazı",
+"kind": "jog",
+"min": 0.0,
+"max": 360.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"def": 0.0
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Kare fonksiyon",
+"vals": {
+"olcek": 100.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Sinüs haritası",
+"vals": {
+"olcek": 200.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 654,
+"ready": true
+},
+{
+"type": "apollonian",
+"name": "Apollon Çemberleri",
+"en": "",
+"cat": 4,
+"kind": "pixel",
+"desc": "Boşluklara birbirine teğet farklı yarıçaplı çemberler yerleştirir.",
+"tags": [
+"Fraktal",
+"Çember"
+],
+"params": [
+{
+"k": "derinlik",
+"l": "Derinlik",
+"g": null,
+"anim": "yes",
+"hint": "iç içe doldurma seviyesi",
+"kind": "jog",
+"min": 1.0,
+"max": 10.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 5.0
+},
+{
+"k": "enKucuCap",
+"l": "En küçük çap",
+"g": null,
+"anim": "yes",
+"hint": "en küçük çizilecek çap",
+"kind": "jog",
+"min": 0.5,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 3.0
+},
+{
+"k": "palet",
+"l": "Palet",
+"g": null,
+"anim": "yes",
+"hint": "çember paleti",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#204F90"
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Sade",
+"vals": {
+"derinlik": 3.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Ayrıntılı",
+"vals": {
+"derinlik": 7.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 655,
+"ready": true
+},
+{
+"type": "penrose",
+"name": "Penrose Döşeme",
+"en": "",
+"cat": 4,
+"kind": "pixel",
+"desc": "Periyodik olmayan beşli simetrili geometrik döşeme oluşturur.",
+"tags": [
+"Döşeme",
+"Penrose"
+],
+"params": [
+{
+"k": "yineleme",
+"l": "Yineleme",
+"g": null,
+"anim": "yes",
+"hint": "alt bölme yinelemesi",
+"kind": "jog",
+"min": 0.0,
+"max": 8.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 4.0
+},
+{
+"k": "karoOlce",
+"l": "Karo ölçeği",
+"g": null,
+"anim": "yes",
+"hint": "karo boyutu",
+"kind": "jog",
+"min": 10.0,
+"max": 1000.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 100.0
+},
+{
+"k": "palet",
+"l": "Palet",
+"g": null,
+"anim": "yes",
+"hint": "karo paleti",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#163B73"
+},
+{
+"k": "karoAile",
+"l": "Karo ailesi",
+"g": "Gelişmiş",
+"anim": "step",
+"hint": "Penrose döşeme türü",
+"kind": "choice",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"opts": [
+"Eşkenar dörtgen",
+"Uçurtma-ok"
+],
+"def": 0
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Büyük karolar",
+"vals": {
+"yineleme": 2.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "İnce desen",
+"vals": {
+"yineleme": 6.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 656,
+"ready": true
+},
+{
+"type": "wangtiles",
+"name": "Wang Karoları",
+"en": "",
+"cat": 4,
+"kind": "pixel",
+"desc": "Kenar renkleri eşleşen karolarla dikişsiz büyük desen oluşturur.",
+"tags": [
+"Karo",
+"Desen"
+],
+"params": [
+{
+"k": "karoTuru",
+"l": "Karo türü",
+"g": null,
+"anim": "yes",
+"hint": "kullanılabilir karo türü",
+"kind": "jog",
+"min": 2.0,
+"max": 32.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 8.0
+},
+{
+"k": "boyut",
+"l": "Boyut",
+"g": null,
+"anim": "yes",
+"hint": "karo boyu",
+"kind": "jog",
+"min": 2.0,
+"max": 500.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 48.0
+},
+{
+"k": "tohum",
+"l": "Tohum",
+"g": null,
+"anim": "yes",
+"hint": "dizilim tohumu",
+"kind": "jog",
+"min": 0.0,
+"max": 999999.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"reseed": true,
+"def": 1.0
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 657,
+"ready": true
+},
+{
+"type": "powervoronoi",
+"name": "Ağırlıklı Hücre Bölme",
+"en": "",
+"cat": 4,
+"kind": "pixel",
+"desc": "Merkezlerin ağırlıklarına göre farklı büyüklükte güç diyagramı hücreleri üretir; Hücre Deseni modu adayı.",
+"tags": [
+"Hücre",
+"Ağırlık"
+],
+"params": [
+{
+"k": "merkez",
+"l": "Merkez",
+"g": null,
+"anim": "yes",
+"hint": "merkez sayısı",
+"kind": "jog",
+"min": 2.0,
+"max": 2000.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 60.0
+},
+{
+"k": "agirlikDagi",
+"l": "Ağırlık dağılımı",
+"g": null,
+"anim": "yes",
+"hint": "merkez ağırlığı değişkenliği",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 40.0
+},
+{
+"k": "sinir",
+"l": "Sınır",
+"g": null,
+"anim": "yes",
+"hint": "hücre sınırı genişliği",
+"kind": "jog",
+"min": 0.0,
+"max": 30.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 2.0
+}
+],
+"presets": [
+{
+"code": "S2",
+"name": "Ağırlıklı",
+"vals": {
+"merkez": 90.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 658,
+"ready": true
+},
+{
+"type": "delaunay",
+"name": "Delaunay Ağ Çizimi",
+"en": "",
+"cat": 4,
+"kind": "gen",
+"desc": "Dağınık noktalar arasında geometrik üçgen bağlantılar kurar; kaynak resmi renklendirme yerine çizgi ağı üretir.",
+"tags": [
+"Ağ",
+"Üçgen"
+],
+"params": [
+{
+"k": "nokta",
+"l": "Nokta",
+"g": null,
+"anim": "yes",
+"hint": "kaynak nokta sayısı",
+"kind": "jog",
+"min": 3.0,
+"max": 2000.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 100.0
+},
+{
+"k": "baglantiKali",
+"l": "Bağlantı kalınlığı",
+"g": null,
+"anim": "yes",
+"hint": "bağlantı çizgisi",
+"kind": "jog",
+"min": 0.5,
+"max": 30.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 1.0
+},
+{
+"k": "hareket",
+"l": "Hareket",
+"g": null,
+"anim": "step",
+"hint": "noktaları deterministik zaman fonksiyonuyla hareket ettirir",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 0
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Geniş ağ",
+"vals": {
+"nokta": 30.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "İnce ağ",
+"vals": {
+"nokta": 300.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 659,
+"ready": true
+},
+{
+"type": "poissondots",
+"name": "Poisson Nokta Dağılımı",
+"en": "",
+"cat": 4,
+"kind": "gen",
+"desc": "Noktaların birbirine belirli mesafeden fazla yaklaşmamasını sağlayan doğal dağılım oluşturur.",
+"tags": [
+"Nokta",
+"Dağılım"
+],
+"params": [
+{
+"k": "enAzUzak",
+"l": "En az uzaklık",
+"g": null,
+"anim": "yes",
+"hint": "noktalar arası asgari uzaklık",
+"kind": "jog",
+"min": 1.0,
+"max": 500.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 20.0
+},
+{
+"k": "azamiNokt",
+"l": "Azami nokta",
+"g": null,
+"anim": "yes",
+"hint": "üst nokta bütçesi",
+"kind": "jog",
+"min": 1.0,
+"max": 10000.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 500.0
+},
+{
+"k": "tohum",
+"l": "Tohum",
+"g": null,
+"anim": "yes",
+"hint": "dağılım tohumu",
+"kind": "jog",
+"min": 0.0,
+"max": 999999.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"reseed": true,
+"def": 1.0
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 660,
+"ready": true
+},
+{
+"type": "crescents",
+"name": "Hilal Döşeme",
+"en": "",
+"cat": 4,
+"kind": "pixel",
+"desc": "Kesişen çemberlerden geometrik hilal motifleri üretir.",
+"tags": [
+"Hilal",
+"Döşeme"
+],
+"params": [
+{
+"k": "cap",
+"l": "Çap",
+"g": null,
+"anim": "yes",
+"hint": "çember çapı",
+"kind": "jog",
+"min": 2.0,
+"max": 1000.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 80.0
+},
+{
+"k": "kesisimOran",
+"l": "Kesişim oranı",
+"g": null,
+"anim": "yes",
+"hint": "iki çemberin örtüşme oranı",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 60.0
+},
+{
+"k": "aci",
+"l": "Açı",
+"g": null,
+"anim": "yes",
+"hint": "motif yönü",
+"kind": "jog",
+"min": 0.0,
+"max": 360.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"def": 0.0
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 661,
+"ready": true
+},
+{
+"type": "illusiongrid",
+"name": "Optik Yanılsama Izgarası",
+"en": "",
+"cat": 4,
+"kind": "pixel",
+"desc": "Yerel çizgi kaymaları ile durağan görüntüde hareket yanılsaması oluşturur; parlaklık titreşimi varsayılan kapalıdır.",
+"tags": [
+"Yanılsama",
+"Izgara"
+],
+"params": [
+{
+"k": "frekans",
+"l": "Frekans",
+"g": null,
+"anim": "yes",
+"hint": "çizgi sıklığı",
+"kind": "jog",
+"min": 0.005,
+"max": 0.25,
+"step": 0.01,
+"jog": 0.01,
+"unit": "px",
+"def": 0.08
+},
+{
+"k": "kayma",
+"l": "Kayma",
+"g": null,
+"anim": "yes",
+"hint": "yerel faz kayması",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 25.0
+},
+{
+"k": "kontrast",
+"l": "Kontrast",
+"g": null,
+"anim": "yes",
+"hint": "desen kontrastı",
+"kind": "jog",
+"min": 0.0,
+"max": 70.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 30.0
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Yumuşak optik",
+"vals": {
+"kontrast": 15.0,
+"kayma": 20.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Dekoratif",
+"vals": {
+"kontrast": 40.0,
+"frekans": 0.05
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 662,
+"ready": true
+},
+{
+"type": "ribbonflow",
+"name": "Renk Akış Diyagramı",
+"en": "",
+"cat": 4,
+"kind": "pixel",
+"desc": "Bir paletin renklerini yavaşça birleşen ve ayrılan organik şeritler olarak oluşturur.",
+"tags": [
+"Şerit",
+"Akış"
+],
+"params": [
+{
+"k": "serit",
+"l": "Şerit",
+"g": null,
+"anim": "yes",
+"hint": "şerit sayısı",
+"kind": "jog",
+"min": 2.0,
+"max": 50.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 8.0
+},
+{
+"k": "akis",
+"l": "Akış",
+"g": null,
+"anim": "yes",
+"hint": "kıvrımlı akış miktarı",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 30.0
+},
+{
+"k": "palet",
+"l": "Palet",
+"g": null,
+"anim": "yes",
+"hint": "şerit renkleri",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#1756A0"
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Sade akış",
+"vals": {
+"serit": 3.0,
+"akis": 20.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Renkli akış",
+"vals": {
+"serit": 15.0,
+"akis": 60.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 663,
+"ready": true
+},
+{
+"type": "turingmaze",
+"name": "Turing Çizgi Labirenti",
+"en": "",
+"cat": 4,
+"kind": "pixel",
+"desc": "Hücresel kurallarla büyüyen kesintisiz organik çizgi ağları üretir; reaksiyon-difüzyonun alternatif modu olma adayı.",
+"tags": [
+"Turing",
+"Labirent"
+],
+"params": [
+{
+"k": "adim",
+"l": "Adım",
+"g": null,
+"anim": "yes",
+"hint": "simülasyon adımı",
+"kind": "jog",
+"min": 1.0,
+"max": 2000.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 100.0
+},
+{
+"k": "dalKali",
+"l": "Dal kalınlığı",
+"g": null,
+"anim": "yes",
+"hint": "ağ çizgisi genişliği",
+"kind": "jog",
+"min": 0.5,
+"max": 30.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 3.0
+},
+{
+"k": "tohum",
+"l": "Tohum",
+"g": null,
+"anim": "yes",
+"hint": "ilk dağılım tohumu",
+"kind": "jog",
+"min": 0.0,
+"max": 999999.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"reseed": true,
+"def": 1.0
+},
+{
+"k": "gelisimIler",
+"l": "Gelişim ilerlemesi",
+"g": "Gelişmiş",
+"anim": "yes",
+"hint": "hesaplanmış desen adımlarının görünür oranı",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 100.0
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Genç ağ",
+"vals": {
+"adim": 30.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Gelişmiş ağ",
+"vals": {
+"adim": 250.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 664,
+"ready": true
+},
+{
+"type": "cellauto",
+"name": "Hücresel Otomat",
+"en": "",
+"cat": 4,
+"kind": "pixel",
+"desc": "Komşuluk kurallarına göre kare hücrelerin nesiller boyunca doğup kaybolduğu desen üretir.",
+"tags": [
+"Hücresel",
+"Otomat"
+],
+"params": [
+{
+"k": "izgara",
+"l": "Izgara",
+"g": null,
+"anim": "yes",
+"hint": "hücre ızgarası (her eksen)",
+"kind": "jog",
+"min": 8.0,
+"max": 512.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 128.0
+},
+{
+"k": "kural",
+"l": "Kural",
+"g": null,
+"anim": "step",
+"hint": "doğum/ölüm kuralı",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Yaşam Oyunu",
+"Seeds",
+"HighLife"
+],
+"def": 0
+},
+{
+"k": "nesil",
+"l": "Nesil",
+"g": null,
+"anim": "yes",
+"hint": "gösterilen nesil",
+"kind": "jog",
+"min": 0.0,
+"max": 2000.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 20.0
+},
+{
+"k": "tohum",
+"l": "Tohum",
+"g": null,
+"anim": "yes",
+"hint": "başlangıç tohumu",
+"kind": "jog",
+"min": 0.0,
+"max": 999999.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"reseed": true,
+"def": 1.0
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Klasik yaşam",
+"vals": {
+"nesil": 20.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Yoğun desen",
+"vals": {
+"nesil": 80.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 665,
+"ready": true
+},
+{
+"type": "selfavoid",
+"name": "Kendini Kaçınan Yol",
+"en": "",
+"cat": 4,
+"kind": "gen",
+"desc": "Kendi izinden mümkün olduğunca kaçınan uzun kıvrımlı çizgi üretir.",
+"tags": [
+"Yol",
+"Rastgele"
+],
+"params": [
+{
+"k": "adim",
+"l": "Adım",
+"g": null,
+"anim": "yes",
+"hint": "adım uzunluğu",
+"kind": "jog",
+"min": 1.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 8.0
+},
+{
+"k": "uzunluk",
+"l": "Uzunluk",
+"g": null,
+"anim": "yes",
+"hint": "azami adım sayısı",
+"kind": "jog",
+"min": 1.0,
+"max": 10000.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 500.0
+},
+{
+"k": "enAzMesa",
+"l": "En az mesafe",
+"g": null,
+"anim": "yes",
+"hint": "önceki çizgiye minimum uzaklık",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 5.0
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Kısa yol",
+"vals": {
+"adim": 100.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Uzun yol",
+"vals": {
+"adim": 100.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 666,
+"ready": true
+},
+{
+"type": "dla",
+"name": "Dallanarak Birikme",
+"en": "",
+"cat": 4,
+"kind": "gen",
+"desc": "Rastgele hareket eden noktalar birbirine tutunarak kristalimsi desenler oluşturur.",
+"tags": [
+"Büyüme",
+"Dallanma"
+],
+"params": [
+{
+"k": "parcacik",
+"l": "Parçacık",
+"g": null,
+"anim": "yes",
+"hint": "birikecek parçacık bütçesi",
+"kind": "jog",
+"min": 10.0,
+"max": 20000.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 1500.0
+},
+{
+"k": "adim",
+"l": "Adım",
+"g": null,
+"anim": "yes",
+"hint": "rastgele hareket adımı",
+"kind": "jog",
+"min": 0.5,
+"max": 20.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 2.0
+},
+{
+"k": "tohum",
+"l": "Tohum",
+"g": null,
+"anim": "yes",
+"hint": "simülasyon tohumu",
+"kind": "jog",
+"min": 0.0,
+"max": 999999.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"reseed": true,
+"def": 1.0
+},
+{
+"k": "buyumeIler",
+"l": "Büyüme ilerlemesi",
+"g": "Gelişmiş",
+"anim": "yes",
+"hint": "gösterilen birikim oranı",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 100.0
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Sade kristal",
+"vals": {
+"parcacik": 300.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Geniş birikim",
+"vals": {
+"parcacik": 5000.0,
+"adim": 2.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 667,
+"ready": true
+},
+{
+"type": "rootnet",
+"name": "Kök Ağı",
+"en": "",
+"cat": 4,
+"kind": "gen",
+"desc": "Bir veya daha çok merkezden kaynaklara doğru gelişen dallanmış organik kökler üretir.",
+"tags": [
+"Kök",
+"Dal"
+],
+"params": [
+{
+"k": "hedef",
+"l": "Hedef",
+"g": null,
+"anim": "yes",
+"hint": "büyüme hedefi sayısı",
+"kind": "jog",
+"min": 1.0,
+"max": 200.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 20.0
+},
+{
+"k": "dalEgim",
+"l": "Dal eğimi",
+"g": null,
+"anim": "yes",
+"hint": "dal yönü sapması",
+"kind": "jog",
+"min": 0.0,
+"max": 120.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"def": 35.0
+},
+{
+"k": "buyume",
+"l": "Büyüme",
+"g": null,
+"anim": "yes",
+"hint": "tamamlanan kök uzunluğu",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 100.0
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Az dal",
+"vals": {
+"hedef": 6.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Yoğun kök",
+"vals": {
+"hedef": 60.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 668,
+"ready": true
+},
+{
+"type": "mossgrow",
+"name": "Yosun Kaplama",
+"en": "",
+"cat": 4,
+"kind": "pixel",
+"desc": "Yüzeyin seçilen bölgelerinden büyüyen küçük yaprak ve lif kolonileri üretir.",
+"tags": [
+"Yosun",
+"Büyüme"
+],
+"params": [
+{
+"k": "koloniYogu",
+"l": "Koloni yoğunluğu",
+"g": null,
+"anim": "yes",
+"hint": "yüzey koloni kaplama oranı",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 40.0
+},
+{
+"k": "buyume",
+"l": "Büyüme",
+"g": null,
+"anim": "yes",
+"hint": "gelişim ilerlemesi",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 100.0
+},
+{
+"k": "palet",
+"l": "Palet",
+"g": null,
+"anim": "yes",
+"hint": "yosun paleti",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#2D6B38"
+},
+{
+"k": "yuzeyMask",
+"l": "Yüzey maskesi",
+"g": "Gelişmiş",
+"anim": "no",
+"hint": "yosun büyümesinin sınırları",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": ""
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 669,
+"ready": true
+},
+{
+"type": "duneripples",
+"name": "Kum Tepesi Dalgaları",
+"en": "",
+"cat": 4,
+"kind": "pixel",
+"desc": "Yönlü rüzgâr etkisiyle kum yüzeyinde paralel birikme sırtları üretir.",
+"tags": [
+"Kum",
+"Dalga"
+],
+"params": [
+{
+"k": "ruzgarYonu",
+"l": "Rüzgâr yönü",
+"g": null,
+"anim": "yes",
+"hint": "rüzgâr yönü",
+"kind": "jog",
+"min": 0.0,
+"max": 360.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"def": 0.0
+},
+{
+"k": "sirtAral",
+"l": "Sırt aralığı",
+"g": null,
+"anim": "yes",
+"hint": "sırtlar arası uzaklık",
+"kind": "jog",
+"min": 2.0,
+"max": 500.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 40.0
+},
+{
+"k": "yuksekli",
+"l": "Yükseklik",
+"g": null,
+"anim": "yes",
+"hint": "yüzey kabartısı",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 6.0
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "İnce sırt",
+"vals": {
+"yuksekli": 2.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Geniş kum",
+"vals": {
+"yuksekli": 12.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 670,
+"ready": true
+},
+{
+"type": "mudcrack",
+"name": "Çamur Kuruması",
+"en": "",
+"cat": 4,
+"kind": "pixel",
+"desc": "Yüzeydeki çatlakların zamanla dallanıp genişlediği bir desen üretir; Kırık Cam'dan farklı malzeme ve gelişim.",
+"tags": [
+"Çamur",
+"Çatlak"
+],
+"params": [
+{
+"k": "kuruma",
+"l": "Kuruma",
+"g": null,
+"anim": "yes",
+"hint": "kuruma ilerlemesi",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 60.0
+},
+{
+"k": "catlakKali",
+"l": "Çatlak kalınlığı",
+"g": null,
+"anim": "yes",
+"hint": "tam kurumadaki çatlak genişliği",
+"kind": "jog",
+"min": 0.0,
+"max": 50.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 3.0
+},
+{
+"k": "tohum",
+"l": "Tohum",
+"g": null,
+"anim": "yes",
+"hint": "hücre tohumu",
+"kind": "jog",
+"min": 0.0,
+"max": 999999.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"reseed": true,
+"def": 1.0
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 671,
+"ready": true
+},
+{
+"type": "strata",
+"name": "Taş Katmanları",
+"en": "",
+"cat": 4,
+"kind": "pixel",
+"desc": "Kıvrılmış farklı mineral katmanlarından kesintisiz kesit deseni üretir.",
+"tags": [
+"Taş",
+"Katman"
+],
+"params": [
+{
+"k": "katman",
+"l": "Katman",
+"g": null,
+"anim": "yes",
+"hint": "mineral katmanı sayısı",
+"kind": "jog",
+"min": 2.0,
+"max": 100.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 12.0
+},
+{
+"k": "kivrim",
+"l": "Kıvrım",
+"g": null,
+"anim": "yes",
+"hint": "şeritlerin kıvrımı",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 35.0
+},
+{
+"k": "mineralPale",
+"l": "Mineral paleti",
+"g": null,
+"anim": "yes",
+"hint": "mineral renkleri",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#76614D"
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Sade kaya",
+"vals": {
+"katman": 5.0,
+"kivrim": 15.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Kıvrımlı kesit",
+"vals": {
+"katman": 25.0,
+"kivrim": 70.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 672,
+"ready": true
+},
+{
+"type": "treerings",
+"name": "Ağaç Halkası Üretimi",
+"en": "",
+"cat": 4,
+"kind": "pixel",
+"desc": "Düzensiz eş merkezli yıllık büyüme çizgileri üretir; standart ahşap hazır dokusundan farklı düzenlenebilir kesit.",
+"tags": [
+"Ağaç",
+"Halka"
+],
+"params": [
+{
+"k": "merkez",
+"l": "Merkez",
+"g": null,
+"anim": "yes",
+"hint": "ağaç kesiti merkezi",
+"kind": "jog",
+"two": true,
+"three": false,
+"min": -100,
+"max": 200,
+"defY": 50.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "box%",
+"def": 50.0
+},
+{
+"k": "halkaAral",
+"l": "Halka aralığı",
+"g": null,
+"anim": "yes",
+"hint": "ortalama halka mesafesi",
+"kind": "jog",
+"min": 1.0,
+"max": 150.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 12.0
+},
+{
+"k": "duzensiz",
+"l": "Düzensizlik",
+"g": null,
+"anim": "yes",
+"hint": "halka düzensizliği",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 20.0
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "İnce halkalar",
+"vals": {
+"duzensiz": 10.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Yaşlı ağaç",
+"vals": {
+"duzensiz": 45.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 673,
+"ready": true
+},
+{
+"type": "foamcells",
+"name": "Köpük Hücresi Büyümesi",
+"en": "",
+"cat": 4,
+"kind": "gen",
+"desc": "2B yüzeyde hücrelerin büyümesini ve birbirine sıkışmasını simüle eder; serbestçe yükselen Köpük'ten farklıdır.",
+"tags": [
+"Köpük",
+"Hücre"
+],
+"params": [
+{
+"k": "hucre",
+"l": "Hücre",
+"g": null,
+"anim": "yes",
+"hint": "hücre sayısı",
+"kind": "jog",
+"min": 2.0,
+"max": 1000.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 80.0
+},
+{
+"k": "buyume",
+"l": "Büyüme",
+"g": null,
+"anim": "yes",
+"hint": "hücre büyüme ilerlemesi",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 70.0
+},
+{
+"k": "filmCizg",
+"l": "Film çizgisi",
+"g": null,
+"anim": "yes",
+"hint": "film çizgisi genişliği",
+"kind": "jog",
+"min": 0.5,
+"max": 30.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 2.0
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Seyrek köpük",
+"vals": {
+"hucre": 25.0,
+"buyume": 50.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Sık köpük",
+"vals": {
+"hucre": 200.0,
+"buyume": 100.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 674,
+"ready": true
+},
+{
+"type": "flowerrosette",
+"name": "Çiçek Rozeti",
+"en": "",
+"cat": 4,
+"kind": "gen",
+"desc": "Yaprakların altın açı veya kullanıcı açısıyla katmanlı rozet oluşturmasını sağlar.",
+"tags": [
+"Çiçek",
+"Rozet"
+],
+"params": [
+{
+"k": "yaprak",
+"l": "Yaprak",
+"g": null,
+"anim": "yes",
+"hint": "yaprak sayısı",
+"kind": "jog",
+"min": 1.0,
+"max": 500.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 50.0
+},
+{
+"k": "aci",
+"l": "Açı",
+"g": null,
+"anim": "yes",
+"hint": "yapraklar arası açı",
+"kind": "jog",
+"min": 0.0,
+"max": 360.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"def": 137.5
+},
+{
+"k": "yaprakUzun",
+"l": "Yaprak uzunluğu",
+"g": null,
+"anim": "yes",
+"hint": "yaprak uzunluğu",
+"kind": "jog",
+"min": 1.0,
+"max": 300.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 25.0
+},
+{
+"k": "palet",
+"l": "Palet",
+"g": null,
+"anim": "yes",
+"hint": "rozet paleti",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#EACB60"
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Az yaprak",
+"vals": {
+"aci": 30.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Altın açı",
+"vals": {
+"yaprak": 80.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": {
+"box": 0.3
+},
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 675,
 "ready": true
 }
 ],
