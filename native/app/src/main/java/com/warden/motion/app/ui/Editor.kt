@@ -141,6 +141,7 @@ fun EditorScreen(initial: Project, onClose: () -> Unit) {
     LaunchedEffect(perf["vid"]) { r.videoSide = (perf["vid"] ?: 0.0).toInt() }
     LaunchedEffect(perf["img"]) { r.maxSide = (perf["img"] ?: 2048.0).toInt().coerceIn(256, 4096) }
     LaunchedEffect(perf) { r.limits = perf.filterKeys { it in setOf("blur", "warp", "light", "color") } }
+    LaunchedEffect(lite) { r.lite = lite } // Lite: efekt önizlemesi daha düşük çözünürlükte (dışa aktarma etkilenmez)
     DisposableEffect(Unit) { onDispose { com.warden.motion.app.render.Player.stop(); r.playing = false } }
     LaunchedEffect(s.playing) {
         r.playing = s.playing

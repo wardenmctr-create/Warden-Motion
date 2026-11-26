@@ -1,5 +1,7 @@
 package com.warden.motion.app.ui
 
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.decodeFromString
 import android.content.Context
 import android.graphics.ImageDecoder
 import android.graphics.drawable.AnimatedImageDrawable
@@ -77,6 +79,14 @@ object FxPrefs {
         recent = p(c).getString("recent", "")!!.split('|').filter { it.isNotBlank() }
     }
     fun toggleFav(c: Context, id: String) { favs = if (id in favs) favs - id else listOf(id) + favs; p(c).edit().putString("fav", favs.joinToString("|")).apply() }
+    /** Kullanıcı şablonları: efekt türü başına ad → ayarlar (yalnız efektin değerleri; katman ayarlarına dokunmaz) */
+    var user by mutableStateOf<Map<String, List<Pair<String, com.warden.motion.app.model.Effect>>>>(emptyMap()); private set
+    private val js = kotlinx.serialization.json.Json { ignoreUnknownKeys = true }
+    fun loadUser(c: Context) { if (user.isNotEmpty()) return; user = runCatching { js.decodeFromString<Map<String, List<Map<String, String>>>>(p(c).getString("user", "{}")!!)
+        .mapValues { (_, l) -> l.mapNotNull { m -> runCatching { m["n"]!! to js.decodeFromString<com.warden.motion.app.model.Effect>(m["e"]!!) }.getOrNull() } } }.getOrDefault(emptyMap()) }
+    private fun saveUser(c: Context) { p(c).edit().putString("user", js.encodeToString(user.mapValues { (_, l) -> l.map { (n, e) -> mapOf("n" to n, "e" to js.encodeToString(e)) } })).apply() }
+    fun addUser(c: Context, e: com.warden.motion.app.model.Effect, name: String) { user = user + (e.type to ((user[e.type] ?: emptyList()).filter { it.first != name } + (name to e.copy(id = "t", preset = null)))); saveUser(c) }
+    fun delUser(c: Context, type: String, name: String) { user = user + (type to (user[type] ?: emptyList()).filter { it.first != name }); saveUser(c) }
     fun used(c: Context, id: String) { recent = (listOf(id) + recent.filter { it != id }).take(24); p(c).edit().putString("recent", recent.joinToString("|")).apply() }
 }
 
@@ -401,6 +411,16 @@ fun EffectsPanel(s: EditorState, layer: Layer, onClose: () -> Unit) {
                                     .tap { upd(e) { applyPreset(makeEffect(e.type).copy(id = e.id), pr, layer.start, layer.end).copy(preset = pr.code) } }.padding(horizontal = 10.dp, vertical = 5.dp))
                             }
                         }
+                        // Kullanıcı şablonları: dokun = uygula, uzun bas = sil; "+ Şablon kaydet" mevcut ayarları saklar
+                        val ctxU = LocalContext.current; LaunchedEffect(Unit) { FxPrefs.loadUser(ctxU) }
+                        Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(horizontal = 6.dp, vertical = 2.dp), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                            (FxPrefs.user[e.type] ?: emptyList()).forEach { (nm, te) ->
+                                Text("★ $nm", fontSize = 11.5.sp, color = C.dText, modifier = Modifier.clip(RoundedCornerShape(12.dp)).background(Color(0xFF3A2F6A))
+                                    .combinedClickableCompat(onClick = { upd(e) { te.copy(id = e.id, on = e.on, closed = e.closed) } }, onLong = { FxPrefs.delUser(ctxU, e.type, nm) }).padding(horizontal = 10.dp, vertical = 5.dp))
+                            }
+                            Text("+ Şablon kaydet", fontSize = 11.5.sp, color = C.turq, modifier = Modifier.clip(RoundedCornerShape(12.dp)).background(Color(0xFF223060))
+                                .tap { FxPrefs.addUser(ctxU, e, "Şablonum ${(FxPrefs.user[e.type]?.size ?: 0) + 1}") }.padding(horizontal = 10.dp, vertical = 5.dp))
+                        }
                         val params = (if (m.kind in GlFx.GPU_KINDS) listOf(MIX_P) else emptyList()) + m.params.filter { it.kind != "info" && !it.hideUi && (it.visKey == null || (e.value(it.visKey, t).roundToInt() in (it.visIn ?: emptyList()))) }
                         var lastG: String? = null
                         params.forEachIndexed { pi, pr ->
@@ -573,7 +593,8 @@ private fun ParamRow(s: EditorState, layer: Layer, e: Effect, pr: FxParam, line:
                 val sel = id?.split(',')?.filter { it.isNotBlank() } ?: emptyList()
                 Box(Modifier.weight(1f)) {
                     Row(Modifier.fillMaxWidth().height(34.dp).clip(RoundedCornerShape(6.dp)).background(Color(0xFF34417A)).tap { open = true }.padding(horizontal = 10.dp), verticalAlignment = Alignment.CenterVertically) {
-                        Text(if (pr.multi && sel.size > 1) "${sel.size} katman" else others.find { it.id == sel.firstOrNull() }?.name ?: "Seçilmedi", fontSize = 12.5.sp, color = if (id == null) C.dText2 else C.dText, modifier = Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis); Ico("chevD", C.dText2, 16.dp)
+                        val missing = sel.isNotEmpty() && sel.none { id2 -> s.project.layers.any { it.id == id2 } }
+                        Text(if (missing) "⚠ Kaynak katman silinmiş" else if (pr.multi && sel.size > 1) "${sel.size} katman" else others.find { it.id == sel.firstOrNull() }?.name ?: "Seçilmedi", fontSize = 12.5.sp, color = if (missing) Color(0xFFF2C230) else if (id == null) C.dText2 else C.dText, modifier = Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis); Ico("chevD", C.dText2, 16.dp)
                     }
                     androidx.compose.material3.DropdownMenu(open, { open = false }, Modifier.background(C.dPanel)) {
                         androidx.compose.material3.DropdownMenuItem(text = { Text("Seçilmedi", color = C.dText2) }, onClick = { s.updateLayer(layer.id) { l -> l.copy(effects = l.effects.map { if (it.id == e.id) it.copy(c = (it.c ?: emptyMap()) - pr.key) else it }) }; open = false })

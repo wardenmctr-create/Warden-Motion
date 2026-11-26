@@ -192,6 +192,8 @@ class Renderer(private val ctx: Context, maxSide: Int = 2048, private val sync: 
     var exporting = false
     /** Dışa aktarma kalitesi 0..1 (ağır efektlerde) */
     var fxQuality = 0.5
+    /** Lite: yalnız önizlemede efekt ara resmi küçültülür, sürü/örnek sayıları azaltılır; dışa aktarmada gerçek değerler */
+    var lite = false
     private var curQ = 1f
     private fun lim(k: String) = if (exporting) 9.0 else (limits[k] ?: 9.0)
 
@@ -287,6 +289,7 @@ class Renderer(private val ctx: Context, maxSide: Int = 2048, private val sync: 
         val world = kotlin.math.abs(tr.scale) * max(tr.sx, tr.sy)
         var q = curQ.toDouble() * max(0.05, world)
         if (!exporting && playing) q *= 0.7
+        if (!exporting && lite) q *= 0.6
         var pad = 2.0
         for (e in gpu) pad += padOf(e, fxMeta(e.type), t, l)
         val maxSide = if (exporting) 4096.0 else 1600.0
