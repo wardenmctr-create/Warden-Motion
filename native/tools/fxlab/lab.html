@@ -4,6 +4,7 @@
 <script src="engine.js"></script>
 <script src="subjects.js"></script>
 <script src="scenes.js"></script>
+<script src="scenes2.js"></script>
 <script>
 const IMG = {};
 function loadImg(k, url) { return new Promise((res) => { const i = new Image(); i.onload = () => { IMG[k] = i; res(); }; i.onerror = () => res(); i.src = url; }); }
@@ -37,7 +38,7 @@ async function frame(scene, p) {
     const L = typeof L0 === 'function' ? L0(p) : L0;
     const fx = (L.fx || []).map((e) => ({ type: e.type, v: typeof e.v === 'function' ? e.v(p, t) : (e.v || {}) }));
     let pad = L.pad ?? 0;
-    for (const e of fx) { const m = E.meta[e.type]; if (m && m.pad) pad += linearOf(m.pad, e.v, m); }
+    for (const e of fx) { const m = E.meta[e.type]; if (m && m.pad) pad += linearOf(m.pad, typeof e.v === 'function' ? e.v(p, t) : e.v, m, L); }
     const lc = layerCanvas(L, pad, s);
     const base = E.upload(lc.c);
     const extra = {}; if (L.depth) extra.u_depth = E.upload(layerCanvas({ ...L, draw: L.depth }, pad, s).c);
@@ -72,6 +73,6 @@ async function frame(scene, p) {
   gl.disable(gl.BLEND);
   return document.getElementById('gl').toDataURL('image/png');
 }
-async function render(name) { const sc = SCENES[name] || window.TEST_SCENES?.[name]; const n = Math.round(sc.dur * sc.fps); const out = []; for (let i = 0; i < n; i++) out.push(await frame(sc, i / n)); return out; }
+async function render(name) { const sc = (E.meta[name] && E.meta[name].ready) ? autoScene(name) : (SCENES[name] || window.TEST_SCENES?.[name] || autoScene(name)); const n = Math.round(sc.dur * sc.fps); const out = []; for (let i = 0; i < n; i++) out.push(await frame(sc, i / n)); return out; }
 boot().catch((e) => { window.bootErr = String(e); });
 </script></body></html>

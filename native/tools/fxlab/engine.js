@@ -5,6 +5,16 @@ const VS = `#version 300 es
 in vec2 a_pos; out vec2 v_uv; uniform mat3 u_m;
 void main(){ v_uv = a_pos; vec3 p = u_m * vec3(a_pos, 1.0); gl_Position = vec4(p.xy, 0.0, 1.0); }`;
 
+function gradientExpand(src) {
+  return src.replace(/^GRADIENT\((\w+)\)\s*$/mg, (m, k) => {
+    const c = [0, 1, 2, 3, 4, 5, 6, 7].map((i) => `c_${k}${i}`).join(', '), q = [0, 1, 2, 3, 4, 5, 6, 7].map((i) => `p_${k}P${i}`).join(', ');
+    return `uniform float p_${k}N; uniform vec3 ${c}; uniform float ${q};
+vec3 grad_${k}(float x) { vec3 c[8] = vec3[8](${c}); float q[8] = float[8](${q}); int n = int(max(1.0, p_${k}N));
+  vec3 r = c[0]; if (x <= q[0]) return c[0]; for (int i = 1; i < 8; i++) { if (i >= n) break; if (x <= q[i]) return mix(c[i - 1], c[i], clamp((x - q[i - 1]) / max(1e-4, q[i] - q[i - 1]), 0.0, 1.0)); r = c[i]; } return r; }
+int paln_${k}() { return int(clamp(p_${k}N, 1.0, 8.0)); }
+vec3 palc_${k}(int i) { vec3 c[8] = vec3[8](${c}); return c[clamp(i, 0, 7)]; }`;
+  });
+}
 class Engine {
   constructor(canvas) {
     this.c = canvas; const gl = this.gl = canvas.getContext('webgl2', { premultipliedAlpha: true, preserveDrawingBuffer: true, alpha: true });
@@ -23,7 +33,7 @@ class Engine {
   async shaderSrc(name) { if (!this.src[name]) this.src[name] = await (await fetch(FX + name + '.glsl')).text(); return this.src[name]; }
   async prog(name) {
     if (this.progs[name]) return this.progs[name];
-    const gl = this.gl; const fsrc = '#version 300 es\n' + this.common + '\n' + await this.shaderSrc(name);
+    const gl = this.gl; const fsrc = '#version 300 es\n' + this.common + '\n' + gradientExpand(await this.shaderSrc(name));
     const mk = (t, s) => { const sh = gl.createShader(t); gl.shaderSource(sh, s); gl.compileShader(sh); if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS)) throw new Error(name + ': ' + gl.getShaderInfoLog(sh)); return sh; };
     const p = gl.createProgram(); gl.attachShader(p, mk(gl.VERTEX_SHADER, VS)); gl.attachShader(p, mk(gl.FRAGMENT_SHADER, fsrc)); gl.linkProgram(p);
     if (!gl.getProgramParameter(p, gl.LINK_STATUS)) throw new Error(name + ' link: ' + gl.getProgramInfoLog(p));
@@ -77,7 +87,7 @@ function fxUniforms(meta, vals, box, s) {
   }
   return u;
 }
-function linearOf(spec, vals, meta) { if (!spec) return 0; if (spec.max) return Math.max(0, ...spec.max.map((k) => vals[k] ?? (meta.params || []).find((p) => p.k === k)?.def ?? 0)); let v = spec.add || 0; if (spec.k) { const pr = (meta.params || []).find((p) => p.k === spec.k); v += (vals[spec.k] ?? pr?.def ?? 0) * (spec.mul ?? 1); } return Math.max(0, v); }
+function linearOf(spec, vals, meta, L) { if (!spec) return 0; if (spec.box) return spec.box * Math.max(L ? L.w : 0, L ? L.h : 0) + (spec.add || 0); if (spec.max) return Math.max(0, ...spec.max.map((k) => vals[k] ?? (meta.params || []).find((p) => p.k === k)?.def ?? 0)); let v = spec.add || 0; if (spec.k) { const pr = (meta.params || []).find((p) => p.k === spec.k); v += (vals[spec.k] ?? pr?.def ?? 0) * (spec.mul ?? 1); } return Math.max(0, v); }
 
 // Katmana efekt zincirini uygula: base (önceden çarpılmış doku, kutu + pad), sonuç doku
 async function applyEffects(E, base, box, s, effects, t, dur, extra = {}) {
@@ -102,6 +112,9 @@ async function applyEffects(E, base, box, s, effects, t, dur, extra = {}) {
       await E.pass(ps.fs, out, ins, { ...common, ...(ps.set || {}) });
       bufs[ps.out || '_last'] = out; bufs._last = out; last = out;
     }
+    // Ortak Karışım
+    const mx = (ef.v || {})._mix;
+    if (mx !== undefined && mx < 99.9) { const o = E.tex(cur.w, cur.h); await E.pass('_mix', o, { u_tex: last, u_src: cur }, { u_mix: mx / 100 }); last = o; }
     cur = last;
   }
   return cur;

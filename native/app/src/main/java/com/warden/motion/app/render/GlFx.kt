@@ -83,13 +83,24 @@ void main(){ v_uv = a_pos; vec3 p = u_m * vec3(a_pos, 1.0); gl_Position = vec4(p
         progs[name]?.let { return it }
         if (name in bad) return 0
         val src = asset("fx/$name.glsl") ?: run { bad += name; return 0 }
-        val vs = shader(GLES30.GL_VERTEX_SHADER, VS); val fs = shader(GLES30.GL_FRAGMENT_SHADER, "#version 300 es\n$common\n$src")
+        val vs = shader(GLES30.GL_VERTEX_SHADER, VS); val fs = shader(GLES30.GL_FRAGMENT_SHADER, "#version 300 es\n$common\n${gradientExpand(src)}")
         if (vs == 0 || fs == 0) { bad += name; return 0 }
         val p = GLES30.glCreateProgram(); GLES30.glAttachShader(p, vs); GLES30.glAttachShader(p, fs)
         GLES30.glBindAttribLocation(p, 0, "a_pos"); GLES30.glLinkProgram(p)
         val ok = IntArray(1); GLES30.glGetProgramiv(p, GLES30.GL_LINK_STATUS, ok, 0)
         if (ok[0] == 0) { Log.w("GlFx", "$name: " + GLES30.glGetProgramInfoLog(p)); bad += name; return 0 }
         progs[name] = p; return p
+    }
+
+    /** "GRADIENT(k)" satırı → renk geçişi uniform'ları ve grad_k / paln_k / palc_k (GLSL ES'te ## yok) */
+    fun gradientExpand(src: String): String = Regex("^GRADIENT\\((\\w+)\\)\\s*$", RegexOption.MULTILINE).replace(src) { m ->
+        val k = m.groupValues[1]
+        val c = (0..7).joinToString(", ") { "c_$k$it" }; val q = (0..7).joinToString(", ") { "p_${k}P$it" }
+        """uniform float p_${k}N; uniform vec3 $c; uniform float $q;
+vec3 grad_$k(float x) { vec3 c[8] = vec3[8]($c); float q[8] = float[8]($q); int n = int(max(1.0, p_${k}N));
+  vec3 r = c[0]; if (x <= q[0]) return c[0]; for (int i = 1; i < 8; i++) { if (i >= n) break; if (x <= q[i]) return mix(c[i - 1], c[i], clamp((x - q[i - 1]) / max(1e-4, q[i] - q[i - 1]), 0.0, 1.0)); r = c[i]; } return r; }
+int paln_$k() { return int(clamp(p_${k}N, 1.0, 8.0)); }
+vec3 palc_$k(int i) { vec3 c[8] = vec3[8]($c); return c[clamp(i, 0, 7)]; }"""
     }
 
     private class Tex(val t: Int, val fb: Int, val w: Int, val h: Int)

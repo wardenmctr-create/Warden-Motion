@@ -54,6 +54,9 @@ def auto_presets(e):
             dict(code="GÇ", name="Güçlü", vals={k: clamp(strong)}, keys={}, cols={}, at="start", auto=True),
             dict(code="AN", name="Animasyonlu", vals={}, keys={k: [[0, clamp(nz)], [0.5, clamp(strong)], [1, clamp(d if d != nz else light)]]}, cols={}, at="start", auto=True)]
 
+exec(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "fxdefs.py")).read())
+import re as _re
+_OFS = _re.compile(r"(ofset|kayma|yer değiştirme|ızgara konumu)", _re.I)
 LEGACY = {}
 _byname = {e["name"].lower(): e for e in E if not e.get("hidden")}
 for n, s in _SP.items():
@@ -67,6 +70,9 @@ for n, s in _SP.items():
     LEGACY[e["type"]] = dict(params=copy.deepcopy(e["params"]), presets=copy.deepcopy(e["presets"]))
     e["n"] = n
     e["params"] = copy.deepcopy(s["params"])
+    for p in e["params"]:
+        # Kaydırma/ofset türü X/Y ayarları konum değil, kutunun yüzdesi olarak vektördür (0,0 = kayma yok)
+        if p.get("two") and p.get("unit") == "box%" and _OFS.search(p["l"]): p["unit"] = "%v"
     if s.get("desc") and n <= 400 and len(s["desc"]) > len(e["desc"]): e["desc"] = s["desc"]
     if s.get("teach"): e["teach"] = s["teach"]
     if s.get("notes"): e["notes"] = s["notes"]
@@ -78,6 +84,10 @@ for n, s in _SP.items():
         if set(pr["vals"]) | set(pr["keys"]) | set(pr["cols"]) <= keys and (pr["vals"] or pr["keys"] or pr["cols"]): keep.append(pr)
     e["presets"] = auto_presets(e) + keep
     e["ready"] = e["type"] in READY
+    if e["ready"]:
+        d = FXDEF.get(e["type"], {})
+        e["pad"] = d.get("pad"); e["passes"] = d.get("passes")
+        if "heavy" in d: e["heavy"] = d["heavy"]
 
 # Gizli (birleşmiş) efektlerin eski ayarları lab için saklanır
 for e in E:

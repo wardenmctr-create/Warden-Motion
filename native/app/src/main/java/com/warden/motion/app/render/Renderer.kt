@@ -207,8 +207,9 @@ class Renderer(private val ctx: Context, maxSide: Int = 2048, private val sync: 
     }
 
     /** Efektin katman çevresinde istediği boşluk (katman birimi) */
-    private fun padOf(e: Effect, m: com.warden.motion.app.model.FxMeta, t: Double): Double {
+    private fun padOf(e: Effect, m: com.warden.motion.app.model.FxMeta, t: Double, l: Layer): Double {
         val pd = m.pad ?: return 0.0
+        if (pd.box > 0) return pd.box * max(l.w, l.h) + pd.add
         if (pd.max != null) return pd.max.maxOf { k -> max(0.0, e.value(k, t)) }
         return max(0.0, pd.add + (pd.k?.let { e.value(it, t) } ?: 0.0) * pd.mul)
     }
@@ -223,7 +224,7 @@ class Renderer(private val ctx: Context, maxSide: Int = 2048, private val sync: 
         var q = curQ.toDouble() * max(0.05, world)
         if (!exporting && playing) q *= 0.7
         var pad = 2.0
-        for (e in gpu) pad += padOf(e, fxMeta(e.type), t)
+        for (e in gpu) pad += padOf(e, fxMeta(e.type), t, l)
         val maxSide = if (exporting) 4096.0 else 1600.0
         q = min(q, maxSide / max(l.w + 2 * pad, l.h + 2 * pad))
         val bw = kotlin.math.ceil((l.w + 2 * pad) * q).toInt(); val bh = kotlin.math.ceil((l.h + 2 * pad) * q).toInt()

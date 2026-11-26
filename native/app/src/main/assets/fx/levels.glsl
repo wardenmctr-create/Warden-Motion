@@ -1,8 +1,8 @@
 // levels
-uniform float p_lo; uniform float p_hi; uniform float p_mid;
+uniform float p_kanal, p_girisSiya, p_girisBeya, p_gama, p_cikisSiya, p_cikisBeya;
+float lv(float x) { float a = p_girisSiya / 100.0, b = max(a + 0.001, p_girisBeya / 100.0); x = clamp((x - a) / (b - a), 0.0, 1.0); x = pow(x, 1.0 / max(p_gama, 0.01)); return mix(p_cikisSiya / 100.0, p_cikisBeya / 100.0, x); }
 void main() {
-  vec4 s = texture(u_tex, v_uv); if (s.a <= 0.0) { o = s; return; }
-  vec3 c = unpre(s);
-  c = clamp((c - p_lo / 255.0) / max(0.004, (p_hi - p_lo) / 255.0), 0.0, 1.0); c = pow(c, vec3(1.0 / max(0.01, p_mid)));
-  o = pre(clamp(c, 0.0, 1.0), s.a);
+  vec4 s = texture(u_tex, v_uv); vec3 c = unpre(s); float a = s.a;
+  if (p_kanal < 0.5) c = vec3(lv(c.r), lv(c.g), lv(c.b)); else if (p_kanal < 1.5) c.r = lv(c.r); else if (p_kanal < 2.5) c.g = lv(c.g); else if (p_kanal < 3.5) c.b = lv(c.b); else a = lv(a);
+  o = pre(c, a);
 }

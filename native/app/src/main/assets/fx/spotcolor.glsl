@@ -1,10 +1,10 @@
 // spotcolor
-uniform vec3 c_keep; uniform float p_tol; uniform float p_soft;
+uniform vec3 c_korunacaRenk; uniform float p_tolerans, p_gecis, p_disDoyg, p_secimiTersCevi;
 void main() {
   vec4 s = texture(u_tex, v_uv); if (s.a <= 0.0) { o = s; return; }
-  vec3 c = unpre(s); vec3 a = rgb2hsv(c), f = rgb2hsv(c_keep);
-  float dh = abs(a.x - f.x); dh = min(dh, 1.0 - dh); float d = dh * 2.0 + max(0.0, f.y - a.y) * 0.6;
-  float tol = p_tol / 100.0 * 0.6, sf = max(0.001, p_soft / 100.0 * 0.4);
-  float k = 1.0 - smoothstep(tol, tol + sf, d);
-  o = pre(mix(vec3(luma(c)), c, k), s.a);
+  vec3 c = unpre(s); vec3 h = rgb2hsv(c), k = rgb2hsv(c_korunacaRenk);
+  float d = min(abs(h.x - k.x), 1.0 - abs(h.x - k.x)) * 2.0 + (1.0 - smoothstep(0.08, 0.3, h.y)) * 0.6;
+  float tol = p_tolerans / 100.0 * 0.5; float m = 1.0 - smoothstep(tol, tol + p_gecis / 100.0 * 0.3 + 0.001, d);
+  if (p_secimiTersCevi > 0.5) m = 1.0 - m;
+  o = pre(mix(satAdj(c, p_disDoyg / 100.0), c, m), s.a);
 }

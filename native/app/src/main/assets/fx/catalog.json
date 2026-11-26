@@ -310,7 +310,7 @@
 ],
 "n": 1,
 "inner": "Parlaklık, Kontrast",
-"ready": false
+"ready": true
 },
 {
 "type": "exposure",
@@ -430,7 +430,7 @@
 "info": null,
 "heavy": false,
 "n": 2,
-"ready": false
+"ready": true
 },
 {
 "type": "saturate",
@@ -603,7 +603,7 @@
 ],
 "n": 3,
 "inner": "Doygunluk",
-"ready": false
+"ready": true
 },
 {
 "type": "hue",
@@ -717,7 +717,7 @@
 "info": null,
 "heavy": false,
 "n": 4,
-"ready": false
+"ready": true
 },
 {
 "type": "colortune",
@@ -838,7 +838,7 @@
 "notes": [
 "**Referans ayrımı:** Alight Motion Color Tune resmi rehberinde Lift, Gamma, Gain ve Offset grupları bulunur. Buradaki RGB düzeni kaynak katalog açıklamasına uygun sade Warden Motion tasarımıdır; isteğe bağlı gelişmiş modda dört renk çarkı eklenebilir."
 ],
-"ready": false
+"ready": true
 },
 {
 "type": "temperature",
@@ -945,7 +945,7 @@
 "info": null,
 "heavy": false,
 "n": 6,
-"ready": false
+"ready": true
 },
 {
 "type": "colorize",
@@ -1062,7 +1062,7 @@
 "info": null,
 "heavy": false,
 "n": 7,
-"ready": false
+"ready": true
 },
 {
 "type": "duotone",
@@ -1247,7 +1247,7 @@
 "info": null,
 "heavy": false,
 "n": 8,
-"ready": false
+"ready": true
 },
 {
 "type": "sepia",
@@ -1366,7 +1366,7 @@
 "info": null,
 "heavy": false,
 "n": 9,
-"ready": false
+"ready": true
 },
 {
 "type": "invert",
@@ -1477,7 +1477,7 @@
 "info": null,
 "heavy": false,
 "n": 10,
-"ready": false
+"ready": true
 },
 {
 "type": "threshold",
@@ -1607,7 +1607,7 @@
 "info": null,
 "heavy": false,
 "n": 11,
-"ready": false
+"ready": true
 },
 {
 "type": "posterize",
@@ -1731,7 +1731,7 @@
 "info": null,
 "heavy": false,
 "n": 12,
-"ready": false
+"ready": true
 },
 {
 "type": "levels",
@@ -1896,7 +1896,7 @@
 "info": null,
 "heavy": false,
 "n": 13,
-"ready": false
+"ready": true
 },
 {
 "type": "gradmap",
@@ -2039,7 +2039,7 @@
 ],
 "n": 14,
 "inner": "İki Ton",
-"ready": false
+"ready": true
 },
 {
 "type": "palettemap",
@@ -2175,7 +2175,7 @@
 "info": null,
 "heavy": false,
 "n": 15,
-"ready": false
+"ready": true
 },
 {
 "type": "hotcolor",
@@ -2310,7 +2310,7 @@
 "info": null,
 "heavy": false,
 "n": 16,
-"ready": false
+"ready": true
 },
 {
 "type": "spectral",
@@ -2544,7 +2544,7 @@
 "info": null,
 "heavy": false,
 "n": 17,
-"ready": false
+"ready": true
 },
 {
 "type": "gradoverlay",
@@ -2753,7 +2753,7 @@
 ],
 "n": 18,
 "inner": "Geçiş Dolgusu",
-"ready": false
+"ready": true
 },
 {
 "type": "highshadow",
@@ -2895,11 +2895,26 @@
 }
 ],
 "pad": null,
-"passes": null,
+"passes": [
+{
+"blur": "src",
+"r": {
+"k": "yaricap",
+"mul": 0.5
+},
+"out": "B"
+},
+{
+"fs": "highshadow_c",
+"aux": {
+"u_aux": "B"
+}
+}
+],
 "info": null,
 "heavy": false,
 "n": 19,
-"ready": false
+"ready": true
 },
 {
 "type": "replacecolor",
@@ -3057,7 +3072,7 @@
 ],
 "n": 20,
 "inner": "Rengi Ayarla",
-"ready": false
+"ready": true
 },
 {
 "type": "spotcolor",
@@ -3187,7 +3202,7 @@
 "info": null,
 "heavy": false,
 "n": 21,
-"ready": false
+"ready": true
 },
 {
 "type": "solidcolor",
@@ -3291,7 +3306,7 @@
 "info": null,
 "heavy": false,
 "n": 22,
-"ready": false
+"ready": true
 },
 {
 "type": "longshadow",
@@ -3431,15 +3446,15 @@
 }
 ],
 "pad": {
-"k": "len",
+"k": "uzunluk",
 "mul": 1,
-"add": 4
+"add": 2
 },
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 23,
-"ready": false
+"ready": true
 },
 {
 "type": "radialshadow",
@@ -3581,15 +3596,34 @@
 }
 ],
 "pad": {
-"k": "dist",
-"mul": 2,
-"add": 40
+"k": "golgeMesa",
+"mul": 1,
+"add": 30
 },
-"passes": null,
+"passes": [
+{
+"fs": "radialshadow_a",
+"out": "A"
+},
+{
+"blur": "A",
+"r": {
+"k": "yumusakl",
+"mul": 0.5
+},
+"out": "B"
+},
+{
+"fs": "radialshadow_c",
+"aux": {
+"u_aux": "B"
+}
+}
+],
 "info": null,
 "heavy": false,
 "n": 24,
-"ready": false
+"ready": true
 },
 {
 "type": "lightrays",
@@ -3754,7 +3788,8 @@
 }
 ],
 "pad": {
-"add": 60
+"k": "uzunluk",
+"mul": 0.5
 },
 "passes": null,
 "info": null,
@@ -3768,7 +3803,7 @@
 ],
 "n": 25,
 "inner": "Işık Patlaması",
-"ready": false
+"ready": true
 },
 {
 "type": "vignette",
@@ -7801,14 +7836,15 @@
 }
 ],
 "pad": {
-"k": "mag",
-"mul": 260
+"k": "bukmeMikt",
+"mul": 1,
+"add": 2
 },
 "passes": null,
 "info": null,
 "heavy": true,
 "n": 134,
-"ready": false
+"ready": true
 },
 {
 "type": "mirror",
@@ -7867,7 +7903,7 @@
 "info": null,
 "heavy": false,
 "n": 135,
-"ready": false
+"ready": true
 },
 {
 "type": "reflect",
@@ -8006,7 +8042,7 @@
 "info": null,
 "heavy": false,
 "n": 136,
-"ready": false
+"ready": true
 },
 {
 "type": "wave",
@@ -8191,14 +8227,15 @@
 }
 ],
 "pad": {
-"k": "amp",
-"mul": 1
+"k": "dalgaYuks",
+"mul": 1,
+"add": 2
 },
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 137,
-"ready": false
+"ready": true
 },
 {
 "type": "swirl",
@@ -8332,7 +8369,7 @@
 "info": null,
 "heavy": false,
 "n": 138,
-"ready": false
+"ready": true
 },
 {
 "type": "bulge",
@@ -8483,7 +8520,7 @@
 ],
 "n": 139,
 "inner": "Küreleştir",
-"ready": false
+"ready": true
 },
 {
 "type": "ripple",
@@ -8653,12 +8690,16 @@
 "auto": true
 }
 ],
-"pad": null,
+"pad": {
+"k": "genlik",
+"mul": 1,
+"add": 2
+},
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 140,
-"ready": false
+"ready": true
 },
 {
 "type": "polar",
@@ -8795,7 +8836,7 @@
 "info": null,
 "heavy": false,
 "n": 141,
-"ready": false
+"ready": true
 },
 {
 "type": "stretchseg",
@@ -8937,15 +8978,12 @@
 "auto": true
 }
 ],
-"pad": {
-"k": "amount",
-"mul": 0.5
-},
+"pad": null,
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 142,
-"ready": false
+"ready": true
 },
 {
 "type": "magnify",
@@ -9104,7 +9142,7 @@
 "info": null,
 "heavy": false,
 "n": 143,
-"ready": false
+"ready": true
 },
 {
 "type": "tiles",
@@ -9219,7 +9257,7 @@
 "defY": 0.0,
 "step": 0.1,
 "jog": 0.1,
-"unit": "box%",
+"unit": "%v",
 "src": "X/Y nokta + tuval",
 "def": 0.0
 }
@@ -9272,12 +9310,14 @@
 "auto": true
 }
 ],
-"pad": null,
+"pad": {
+"box": 1.0
+},
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 144,
-"ready": false
+"ready": true
 },
 {
 "type": "hextile",
@@ -9342,7 +9382,7 @@
 "defY": 0.0,
 "step": 0.1,
 "jog": 0.1,
-"unit": "box%",
+"unit": "%v",
 "src": "X/Y nokta + tuval",
 "def": 0.0
 },
@@ -9419,12 +9459,14 @@
 "auto": true
 }
 ],
-"pad": null,
+"pad": {
+"box": 1.0
+},
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 145,
-"ready": false
+"ready": true
 },
 {
 "type": "hexrotate",
@@ -9572,7 +9614,7 @@
 "info": null,
 "heavy": false,
 "n": 146,
-"ready": false
+"ready": true
 },
 {
 "type": "hexshift",
@@ -9720,7 +9762,7 @@
 "info": null,
 "heavy": false,
 "n": 147,
-"ready": false
+"ready": true
 },
 {
 "type": "tilerotate",
@@ -9867,7 +9909,7 @@
 "info": null,
 "heavy": false,
 "n": 148,
-"ready": false
+"ready": true
 },
 {
 "type": "tileshift",
@@ -10027,7 +10069,7 @@
 "info": null,
 "heavy": false,
 "n": 149,
-"ready": false
+"ready": true
 },
 {
 "type": "kaleido",
@@ -10176,7 +10218,7 @@
 "info": null,
 "heavy": false,
 "n": 150,
-"ready": false
+"ready": true
 },
 {
 "type": "offset",
@@ -10303,7 +10345,7 @@
 "info": null,
 "heavy": false,
 "n": 151,
-"ready": false
+"ready": true
 },
 {
 "type": "fisheye",
@@ -10414,7 +10456,7 @@
 "defY": 0.0,
 "step": 0.1,
 "jog": 0.1,
-"unit": "box%",
+"unit": "%v",
 "src": "X/Y nokta + tuval",
 "def": 0.0
 }
@@ -10472,7 +10514,7 @@
 "info": null,
 "heavy": false,
 "n": 152,
-"ready": false
+"ready": true
 },
 {
 "type": "mosaic",
@@ -10619,7 +10661,7 @@
 "info": null,
 "heavy": false,
 "n": 153,
-"ready": false
+"ready": true
 },
 {
 "type": "rgbsplit",
@@ -10644,7 +10686,7 @@
 "defY": 0.0,
 "step": 0.1,
 "jog": 0.1,
-"unit": "box%",
+"unit": "%v",
 "src": "X/Y nokta + tuval",
 "def": -1.0
 },
@@ -10659,7 +10701,7 @@
 "defY": 0.0,
 "step": 0.1,
 "jog": 0.1,
-"unit": "box%",
+"unit": "%v",
 "src": "X/Y nokta + tuval",
 "def": 0.0
 },
@@ -10674,7 +10716,7 @@
 "defY": 0.0,
 "step": 0.1,
 "jog": 0.1,
-"unit": "box%",
+"unit": "%v",
 "src": "X/Y nokta + tuval",
 "def": 1.0
 },
@@ -10783,14 +10825,15 @@
 }
 ],
 "pad": {
-"k": "amount",
-"mul": 1
+"k": "ayrim",
+"mul": 1.5,
+"add": 2
 },
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 154,
-"ready": false
+"ready": true
 },
 {
 "type": "glitch",
@@ -10958,13 +11001,15 @@
 }
 ],
 "pad": {
-"add": 30
+"k": "kayma",
+"mul": 1.2,
+"add": 2
 },
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 155,
-"ready": false
+"ready": true
 },
 {
 "type": "displace",
@@ -11043,7 +11088,7 @@
 "defY": 0.0,
 "step": 0.1,
 "jog": 0.1,
-"unit": "box%",
+"unit": "%v",
 "src": "X/Y nokta + tuval",
 "def": 0.0
 },
@@ -11160,8 +11205,9 @@
 }
 ],
 "pad": {
-"k": "amount",
-"mul": 1
+"k": "miktar",
+"mul": 1,
+"add": 2
 },
 "passes": null,
 "info": null,
@@ -11175,7 +11221,7 @@
 ],
 "n": 156,
 "inner": "Isı Dalgası",
-"ready": false
+"ready": true
 },
 {
 "type": "shear",
@@ -11291,13 +11337,13 @@
 }
 ],
 "pad": {
-"add": 0
+"box": 0.6
 },
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 157,
-"ready": false
+"ready": true
 },
 {
 "type": "slices",
@@ -11439,15 +11485,12 @@
 "auto": true
 }
 ],
-"pad": {
-"k": "amount",
-"mul": 1
-},
+"pad": null,
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 158,
-"ready": false
+"ready": true
 },
 {
 "type": "squeeze",
@@ -11603,13 +11646,15 @@
 }
 ],
 "pad": {
-"add": 0
+"k": "esneme",
+"mul": 1,
+"add": 2
 },
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 159,
-"ready": false
+"ready": true
 },
 {
 "type": "checker",
@@ -11671,7 +11716,7 @@
 "defY": 0.0,
 "step": 0.1,
 "jog": 0.1,
-"unit": "box%",
+"unit": "%v",
 "src": "X/Y nokta + tuval",
 "def": 0.0
 },
@@ -12012,7 +12057,7 @@
 "defY": 0.0,
 "step": 0.1,
 "jog": 0.1,
-"unit": "box%",
+"unit": "%v",
 "src": "X/Y nokta + tuval",
 "def": 0.0
 },
@@ -12171,7 +12216,7 @@
 "defY": 0.0,
 "step": 0.1,
 "jog": 0.1,
-"unit": "box%",
+"unit": "%v",
 "src": "X/Y nokta + tuval",
 "def": 0.0
 },
@@ -12529,7 +12574,7 @@
 "defY": 0.0,
 "step": 0.1,
 "jog": 0.1,
-"unit": "box%",
+"unit": "%v",
 "src": "X/Y nokta + tuval",
 "def": 0.0
 },
@@ -13021,7 +13066,7 @@
 "defY": 0.0,
 "step": 0.1,
 "jog": 0.1,
-"unit": "box%",
+"unit": "%v",
 "src": "X/Y nokta + tuval",
 "def": 0.0
 },
@@ -27659,7 +27704,7 @@
 "info": null,
 "heavy": false,
 "n": 26,
-"ready": false
+"ready": true
 },
 {
 "type": "chanmix",
@@ -27808,7 +27853,7 @@
 "info": null,
 "heavy": false,
 "n": 27,
-"ready": false
+"ready": true
 },
 {
 "type": "tritone",
@@ -27938,7 +27983,7 @@
 "info": null,
 "heavy": false,
 "n": 28,
-"ready": false
+"ready": true
 },
 {
 "type": "photofilter",
@@ -28043,7 +28088,7 @@
 "info": null,
 "heavy": false,
 "n": 29,
-"ready": false
+"ready": true
 },
 {
 "type": "selcolor",
@@ -28201,7 +28246,7 @@
 "info": null,
 "heavy": false,
 "n": 30,
-"ready": false
+"ready": true
 },
 {
 "type": "colorbal",
@@ -28337,7 +28382,7 @@
 "info": null,
 "heavy": false,
 "n": 31,
-"ready": false
+"ready": true
 },
 {
 "type": "autolevels",
@@ -28470,7 +28515,7 @@
 "info": null,
 "heavy": false,
 "n": 32,
-"ready": false
+"ready": true
 },
 {
 "type": "colorama",
@@ -28654,7 +28699,7 @@
 ],
 "n": 33,
 "inner": "Spektrum Haritası",
-"ready": false
+"ready": true
 },
 {
 "type": "chanshift",
@@ -28759,7 +28804,7 @@
 "info": null,
 "heavy": false,
 "n": 34,
-"ready": false
+"ready": true
 },
 {
 "type": "equalize",
@@ -28883,7 +28928,7 @@
 "info": null,
 "heavy": false,
 "n": 35,
-"ready": false
+"ready": true
 },
 {
 "type": "nightvision",
@@ -29028,7 +29073,7 @@
 "info": null,
 "heavy": false,
 "n": 36,
-"ready": false
+"ready": true
 },
 {
 "type": "xray",
@@ -29159,7 +29204,7 @@
 "info": null,
 "heavy": false,
 "n": 37,
-"ready": false
+"ready": true
 },
 {
 "type": "underwater",
@@ -29304,7 +29349,7 @@
 "info": null,
 "heavy": false,
 "n": 38,
-"ready": false
+"ready": true
 },
 {
 "type": "bleach",
@@ -29437,7 +29482,7 @@
 "info": null,
 "heavy": false,
 "n": 39,
-"ready": false
+"ready": true
 },
 {
 "type": "crossprocess",
@@ -29575,7 +29620,7 @@
 "info": null,
 "heavy": false,
 "n": 40,
-"ready": false
+"ready": true
 },
 {
 "type": "lomo",
@@ -29724,7 +29769,7 @@
 "info": null,
 "heavy": false,
 "n": 41,
-"ready": false
+"ready": true
 },
 {
 "type": "cinematic",
@@ -29867,7 +29912,7 @@
 "info": null,
 "heavy": false,
 "n": 42,
-"ready": false
+"ready": true
 },
 {
 "type": "infrared",
@@ -30012,7 +30057,7 @@
 "info": null,
 "heavy": false,
 "n": 43,
-"ready": false
+"ready": true
 },
 {
 "type": "brushstrokes",
@@ -33729,14 +33774,12 @@
 }
 ],
 "presets": [],
-"pad": {
-"add": 80
-},
+"pad": null,
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 160,
-"ready": false
+"ready": true
 },
 {
 "type": "cornerpin",
@@ -33841,13 +33884,13 @@
 ],
 "presets": [],
 "pad": {
-"add": 120
+"box": 1.0
 },
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 161,
-"ready": false
+"ready": true
 },
 {
 "type": "bendit",
@@ -33978,13 +34021,13 @@
 }
 ],
 "pad": {
-"add": 60
+"box": 0.9
 },
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 162,
-"ready": false
+"ready": true
 },
 {
 "type": "blobby",
@@ -34125,13 +34168,30 @@
 }
 ],
 "pad": {
-"add": 20
+"k": "damlalas",
+"mul": 1.2,
+"add": 2
 },
-"passes": null,
+"passes": [
+{
+"blur": "src",
+"r": {
+"k": "damlalas",
+"mul": 0.5
+},
+"out": "B"
+},
+{
+"fs": "blobby_c",
+"aux": {
+"u_aux": "B"
+}
+}
+],
 "info": null,
 "heavy": false,
 "n": 163,
-"ready": false
+"ready": true
 },
 {
 "type": "flomotion",
@@ -34292,7 +34352,7 @@
 "info": null,
 "heavy": false,
 "n": 164,
-"ready": false
+"ready": true
 },
 {
 "type": "griddler",
@@ -34450,12 +34510,16 @@
 "auto": true
 }
 ],
-"pad": null,
+"pad": {
+"k": "parcaKaym",
+"mul": 1,
+"add": 2
+},
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 165,
-"ready": false
+"ready": true
 },
 {
 "type": "lens",
@@ -34603,7 +34667,7 @@
 "info": null,
 "heavy": false,
 "n": 166,
-"ready": false
+"ready": true
 },
 {
 "type": "pageturn",
@@ -34759,13 +34823,14 @@
 }
 ],
 "pad": {
-"add": 40
+"k": "yaricap",
+"mul": 1.0
 },
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 167,
-"ready": false
+"ready": true
 },
 {
 "type": "ripplepulse",
@@ -34920,12 +34985,16 @@
 "auto": true
 }
 ],
-"pad": null,
+"pad": {
+"k": "genlik",
+"mul": 1,
+"add": 2
+},
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 168,
-"ready": false
+"ready": true
 },
 {
 "type": "slant",
@@ -35070,13 +35139,13 @@
 }
 ],
 "pad": {
-"add": 80
+"box": 0.45
 },
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 169,
-"ready": false
+"ready": true
 },
 {
 "type": "smear",
@@ -35224,14 +35293,12 @@
 "auto": true
 }
 ],
-"pad": {
-"add": 40
-},
+"pad": null,
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 170,
-"ready": false
+"ready": true
 },
 {
 "type": "split",
@@ -35375,12 +35442,16 @@
 "auto": true
 }
 ],
-"pad": null,
+"pad": {
+"k": "ayrilma",
+"mul": 0.6,
+"add": 6
+},
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 171,
-"ready": false
+"ready": true
 },
 {
 "type": "tiler",
@@ -35418,7 +35489,7 @@
 "defY": 0.0,
 "step": 0.1,
 "jog": 0.1,
-"unit": "box%",
+"unit": "%v",
 "src": "X/Y nokta + tuval",
 "def": 0.0
 },
@@ -35521,12 +35592,14 @@
 "auto": true
 }
 ],
-"pad": null,
+"pad": {
+"box": 1.0
+},
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 172,
-"ready": false
+"ready": true
 },
 {
 "type": "dispmap",
@@ -35696,9 +35769,7 @@
 "auto": true
 }
 ],
-"pad": {
-"add": 30
-},
+"pad": null,
 "passes": null,
 "info": null,
 "heavy": false,
@@ -35706,7 +35777,7 @@
 "notes": [
 "**Referans ayrımı:** Alight Motion Displacement Map arkadaki katmanları bir harita katmanıyla büker. Warden Motion panelinde hem kendi katmanını hem arka planı hedefleyen modlar bulunabilir; harita X/Y kanalları ayrı seçilir."
 ],
-"ready": false
+"ready": true
 },
 {
 "type": "spherize",
@@ -35914,13 +35985,13 @@
 }
 ],
 "pad": {
-"add": 80
+"box": 0.35
 },
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 174,
-"ready": false
+"ready": true
 },
 {
 "type": "heatwave",
@@ -46423,7 +46494,7 @@
 "info": null,
 "heavy": false,
 "n": 44,
-"ready": false
+"ready": true
 },
 {
 "type": "huesat",
@@ -46588,7 +46659,7 @@
 "info": null,
 "heavy": false,
 "n": 45,
-"ready": false
+"ready": true
 },
 {
 "type": "gammagain",
@@ -46725,7 +46796,7 @@
 "info": null,
 "heavy": false,
 "n": 46,
-"ready": false
+"ready": true
 },
 {
 "type": "lumetri",
@@ -47032,7 +47103,7 @@
 "info": null,
 "heavy": false,
 "n": 47,
-"ready": false
+"ready": true
 },
 {
 "type": "lut",
@@ -47174,7 +47245,7 @@
 "info": null,
 "heavy": false,
 "n": 48,
-"ready": false
+"ready": true
 },
 {
 "type": "bwmix",
@@ -47345,7 +47416,7 @@
 "info": null,
 "heavy": false,
 "n": 49,
-"ready": false
+"ready": true
 },
 {
 "type": "changecolor",
@@ -47579,7 +47650,7 @@
 ],
 "n": 175,
 "inner": "Balık Gözü",
-"ready": false
+"ready": true
 },
 {
 "type": "bender",
@@ -47710,13 +47781,13 @@
 }
 ],
 "pad": {
-"add": 60
+"box": 0.9
 },
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 176,
-"ready": false
+"ready": true
 },
 {
 "type": "fractalset",
@@ -53106,7 +53177,7 @@
 "info": null,
 "heavy": false,
 "n": 50,
-"ready": false
+"ready": true
 },
 {
 "type": "logconv",
@@ -53250,7 +53321,7 @@
 "info": null,
 "heavy": false,
 "n": 51,
-"ready": false
+"ready": true
 },
 {
 "type": "colorprofile",
@@ -53337,7 +53408,7 @@
 "info": null,
 "heavy": false,
 "n": 52,
-"ready": false
+"ready": true
 },
 {
 "type": "broadcast",
@@ -53417,7 +53488,7 @@
 "info": null,
 "heavy": false,
 "n": 53,
-"ready": false
+"ready": true
 },
 {
 "type": "colorstab",
@@ -53566,7 +53637,7 @@
 "info": null,
 "heavy": false,
 "n": 54,
-"ready": false
+"ready": true
 },
 {
 "type": "deblur",
@@ -54013,12 +54084,15 @@
 "auto": true
 }
 ],
-"pad": null,
+"pad": {
+"k": "fircaBoyu",
+"mul": 0.6
+},
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 177,
-"ready": false
+"ready": true
 },
 {
 "type": "paintbucket",
@@ -57327,7 +57401,10 @@
 "auto": true
 }
 ],
-"pad": null,
+"pad": {
+"k": "yayilma",
+"mul": 1
+},
 "passes": [
 {
 "fs": "darkglow_a",
@@ -57336,8 +57413,8 @@
 {
 "blur": "A",
 "r": {
-"k": "amount",
-"mul": 1
+"k": "yayilma",
+"mul": 0.5
 },
 "out": "B"
 },
@@ -57351,7 +57428,7 @@
 "info": null,
 "heavy": false,
 "n": 55,
-"ready": false
+"ready": true
 },
 {
 "type": "lightglow",
@@ -57494,8 +57571,8 @@
 }
 ],
 "pad": {
-"k": "amount",
-"mul": 2
+"k": "yayilma",
+"mul": 1
 },
 "passes": [
 {
@@ -57505,8 +57582,8 @@
 {
 "blur": "A",
 "r": {
-"k": "amount",
-"mul": 1
+"k": "yayilma",
+"mul": 0.5
 },
 "out": "B"
 },
@@ -57520,7 +57597,7 @@
 "info": null,
 "heavy": false,
 "n": 56,
-"ready": false
+"ready": true
 },
 {
 "type": "softglow",
@@ -57647,18 +57724,21 @@
 "auto": true
 }
 ],
-"pad": null,
+"pad": {
+"k": "yumusakl",
+"mul": 0.8
+},
 "passes": [
 {
 "blur": "src",
 "r": {
-"k": "amount",
-"mul": 1
+"k": "yumusakl",
+"mul": 0.5
 },
 "out": "B"
 },
 {
-"fs": "softglow",
+"fs": "softglow_c",
 "aux": {
 "u_aux": "B"
 }
@@ -57667,7 +57747,7 @@
 "info": null,
 "heavy": false,
 "n": 57,
-"ready": false
+"ready": true
 },
 {
 "type": "viewer360",
@@ -57815,7 +57895,7 @@
 "info": null,
 "heavy": false,
 "n": 178,
-"ready": false
+"ready": true
 },
 {
 "type": "curl",
@@ -57973,13 +58053,14 @@
 }
 ],
 "pad": {
-"add": 30
+"k": "kivrimYari",
+"mul": 1.0
 },
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 179,
-"ready": false
+"ready": true
 },
 {
 "type": "graddisp",
@@ -58033,7 +58114,7 @@
 "defY": 5.0,
 "step": 0.1,
 "jog": 0.1,
-"unit": "box%",
+"unit": "%v",
 "src": "X/Y nokta + tuval",
 "def": 0.0
 },
@@ -58089,14 +58170,12 @@
 }
 ],
 "presets": [],
-"pad": {
-"add": 60
-},
+"pad": null,
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 180,
-"ready": false
+"ready": true
 },
 {
 "type": "innerbulge",
@@ -58243,7 +58322,7 @@
 "info": null,
 "heavy": false,
 "n": 181,
-"ready": false
+"ready": true
 },
 {
 "type": "ominoglass",
@@ -58403,7 +58482,7 @@
 "info": null,
 "heavy": false,
 "n": 182,
-"ready": false
+"ready": true
 },
 {
 "type": "polardisp",
@@ -58567,14 +58646,12 @@
 "auto": true
 }
 ],
-"pad": {
-"add": 40
-},
+"pad": null,
 "passes": null,
 "info": null,
 "heavy": false,
 "n": 183,
-"ready": false
+"ready": true
 },
 {
 "type": "vrcombined",
@@ -58735,7 +58812,7 @@
 "info": null,
 "heavy": false,
 "n": 184,
-"ready": false
+"ready": true
 },
 {
 "type": "contourstrips",
