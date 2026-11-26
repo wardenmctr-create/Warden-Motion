@@ -117226,6 +117226,3355 @@
 "teach": "Sesle ağız değişimini ve elle düzeltmeyi göster.",
 "ready": true,
 "hidden": false
+},
+{
+"type": "localcontrast",
+"name": "Yerel Kontrast",
+"en": "",
+"cat": 0,
+"kind": "pixel",
+"desc": "Geniş bir çevrenin parlaklığına göre küçük detayların kontrastını artırır; genel kontrasttan farklıdır.",
+"tags": [
+"Kontrast",
+"Ayrıntı"
+],
+"params": [
+{
+"k": "yaricap",
+"l": "Yarıçap",
+"g": null,
+"anim": "yes",
+"hint": "çevresel tabanın genişliği",
+"kind": "jog",
+"min": 1.0,
+"max": 300.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 24.0
+},
+{
+"k": "guc",
+"l": "Güç",
+"g": null,
+"anim": "yes",
+"hint": "yerel detay kazancı",
+"kind": "jog",
+"min": 0.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 40.0
+},
+{
+"k": "kenarKoru",
+"l": "Kenar koruma",
+"g": null,
+"anim": "yes",
+"hint": "güçlü kenarların çevresindeki haleyi azaltır",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 70.0
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Yumuşak ayrıntı",
+"vals": {
+"guc": 20.0,
+"yaricap": 16.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Güçlü yerel kontrast",
+"vals": {
+"guc": 90.0,
+"kenarKoru": 85.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 551,
+"ready": true
+},
+{
+"type": "clahe",
+"name": "Adaptif Histogram",
+"en": "",
+"cat": 0,
+"kind": "pixel",
+"desc": "Görüntüyü bölgelere ayırarak her bölgenin tonlarını dengeler; düz Eşitle efektinden farklı olarak yerel hesaplar.",
+"tags": [
+"Histogram",
+"Ton"
+],
+"params": [
+{
+"k": "bolgeSayi",
+"l": "Bölge sayısı",
+"g": null,
+"anim": "yes",
+"hint": "histogram ızgarası (her eksen)",
+"kind": "jog",
+"min": 2.0,
+"max": 32.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 8.0
+},
+{
+"k": "kontrastSini",
+"l": "Kontrast sınırı",
+"g": null,
+"anim": "yes",
+"hint": "histogram yığılma sınırı",
+"kind": "jog",
+"min": 1.0,
+"max": 10.0,
+"step": 0.01,
+"jog": 0.01,
+"unit": "",
+"def": 2.0
+},
+{
+"k": "karisim",
+"l": "Karışım",
+"g": null,
+"anim": "yes",
+"hint": "eşitlenmiş görüntünün payı",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 70.0
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Hafif ton dengeleme",
+"vals": {
+"karisim": 35.0,
+"kontrastSini": 1.5
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 552,
+"ready": true
+},
+{
+"type": "satlimit",
+"name": "Renk Doygunluğu Sınırlandırıcı",
+"en": "",
+"cat": 0,
+"kind": "pixel",
+"desc": "Renklerin doygunluğunu parlaklığa göre güvenli aralıkta tutar; genel renk uzayı dönüşümü değildir.",
+"tags": [
+"Doygunluk",
+"Sınır"
+],
+"params": [
+{
+"k": "doygunluTava",
+"l": "Doygunluk tavanı",
+"g": null,
+"anim": "yes",
+"hint": "azami doygunluk",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 80.0
+},
+{
+"k": "parlakliEgri",
+"l": "Parlaklık eğrisi",
+"g": null,
+"anim": "no",
+"hint": "0→60%, 50→100%, 100→60%",
+"kind": "curve",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"hideUi": true,
+"def": [
+[
+0,
+0
+],
+[
+1,
+1
+]
+]
+},
+{
+"k": "yumusakSini",
+"l": "Yumuşak sınır",
+"g": null,
+"anim": "step",
+"hint": "sınır yaklaşımında sert kırpmayı önler",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Pastel sınır",
+"vals": {
+"doygunluTava": 55.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Canlı renk koruması",
+"vals": {
+"yumusakSini": 1
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 553,
+"ready": true
+},
+{
+"type": "chromasharpen",
+"name": "Renk Detayı Keskinleştirme",
+"en": "",
+"cat": 1,
+"kind": "pixel",
+"desc": "Yalnız renk farklarını keskinleştirir; parlaklık dokusuna dokunmaz.",
+"tags": [
+"Keskinlik",
+"Renk"
+],
+"params": [
+{
+"k": "yaricap",
+"l": "Yarıçap",
+"g": null,
+"anim": "yes",
+"hint": "renk detay ölçeği",
+"kind": "jog",
+"min": 0.0,
+"max": 30.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 2.0
+},
+{
+"k": "guc",
+"l": "Güç",
+"g": null,
+"anim": "yes",
+"hint": "keskinleştirme miktarı",
+"kind": "jog",
+"min": 0.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 50.0
+},
+{
+"k": "esik",
+"l": "Eşik",
+"g": null,
+"anim": "yes",
+"hint": "küçük renk farklarını hariç tutar",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 5.0
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Hafif",
+"vals": {
+"yaricap": 1.0,
+"guc": 25.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Logo kenarı",
+"vals": {
+"yaricap": 3.0,
+"guc": 90.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 554,
+"ready": true
+},
+{
+"type": "chromadenoise",
+"name": "Renk Gürültüsü Yumuşatma",
+"en": "",
+"cat": 0,
+"kind": "pixel",
+"desc": "Parlaklık detayları korunurken yalnız renk bileşenindeki benekleri temizler.",
+"tags": [
+"Gürültü",
+"Renk"
+],
+"params": [
+{
+"k": "kromaYari",
+"l": "Kroma yarıçapı",
+"g": null,
+"anim": "yes",
+"hint": "komşu renk örneklerinin yarıçapı",
+"kind": "jog",
+"min": 0.0,
+"max": 50.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 3.0
+},
+{
+"k": "renkEsig",
+"l": "Renk eşiği",
+"g": null,
+"anim": "yes",
+"hint": "farklı renkleri karıştırma sınırı",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 10.0
+},
+{
+"k": "parlakliKoru",
+"l": "Parlaklığı koru",
+"g": null,
+"anim": "step",
+"hint": "luma ayrıntılarını değiştirmez",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Hafif benek",
+"vals": {
+"kromaYari": 2.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 555,
+"ready": true
+},
+{
+"type": "gamutwarn",
+"name": "Renk Taşması Uyarısı",
+"en": "",
+"cat": 11,
+"kind": "pixel",
+"desc": "Hedef renk uzayının dışında kalan pikselleri işaretler; renkleri otomatik değiştirmez.",
+"tags": [
+"Ölçer",
+"Renk",
+"Uyarı"
+],
+"params": [
+{
+"k": "hedefProf",
+"l": "Hedef profil",
+"g": null,
+"anim": "step",
+"hint": "sınanacak renk uzayı",
+"kind": "choice",
+"min": 0,
+"max": 3,
+"step": 1,
+"jog": 1,
+"opts": [
+"sRGB",
+"Display P3",
+"Rec.709",
+"Rec.2020"
+],
+"def": 0
+},
+{
+"k": "uyariReng",
+"l": "Uyarı rengi",
+"g": null,
+"anim": "yes",
+"hint": "sınır dışı piksel işareti",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#FF00FF"
+},
+{
+"k": "opaklik",
+"l": "Opaklık",
+"g": null,
+"anim": "yes",
+"hint": "ikaz örtüsünün görünürlüğü",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 70.0
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 556,
+"ready": true
+},
+{
+"type": "exposurezones",
+"name": "Pozlama Bölgeleri",
+"en": "",
+"cat": 11,
+"kind": "pixel",
+"desc": "Parlaklık aralıklarını sahte renk veya zebra çizgileriyle işaretler; çekim ışığını denetlemeye yarar.",
+"tags": [
+"Ölçer",
+"Pozlama"
+],
+"params": [
+{
+"k": "altEsik",
+"l": "Alt eşik",
+"g": null,
+"anim": "yes",
+"hint": "düşük pozlama sınırı",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 10.0
+},
+{
+"k": "ustEsik",
+"l": "Üst eşik",
+"g": null,
+"anim": "yes",
+"hint": "yüksek pozlama sınırı",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 90.0
+},
+{
+"k": "gosterim",
+"l": "Gösterim",
+"g": null,
+"anim": "step",
+"hint": "işaret sunumu",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Zebra",
+"Sahte renk",
+"Düz maske"
+],
+"def": 0
+},
+{
+"k": "isaretRenk",
+"l": "İşaret renkleri",
+"g": null,
+"anim": "yes",
+"hint": "düşük ve yüksek bölge renkleri",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#2468FF"
+},
+{
+"k": "yalnizAnalOniz",
+"l": "Yalnız analiz önizlemesi",
+"g": "Gelişmiş",
+"anim": "step",
+"hint": "işaretler normal dışa aktarmaya girmez",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 557,
+"ready": true
+},
+{
+"type": "histogram2",
+"name": "Renk Dağılımı Grafiği",
+"en": "",
+"cat": 11,
+"kind": "pixel",
+"desc": "Görüntü parlaklığının ve renk kanallarının histogramını görüntü katmanı olarak üretir.",
+"tags": [
+"Ölçer",
+"Histogram"
+],
+"params": [
+{
+"k": "kanal",
+"l": "Kanal",
+"g": null,
+"anim": "step",
+"hint": "sayılacak kanal",
+"kind": "choice",
+"min": 0,
+"max": 5,
+"step": 1,
+"jog": 1,
+"opts": [
+"RGB",
+"Parlaklık",
+"R",
+"G",
+"B",
+"Alfa"
+],
+"def": 0
+},
+{
+"k": "kutuSayi",
+"l": "Kutu sayısı",
+"g": null,
+"anim": "yes",
+"hint": "histogram kutuları",
+"kind": "jog",
+"min": 16.0,
+"max": 1024.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 256.0
+},
+{
+"k": "logaritm",
+"l": "Logaritmik",
+"g": null,
+"anim": "step",
+"hint": "küçük dağılımları logaritmik büyütür",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 0
+}
+],
+"presets": [
+{
+"code": "S2",
+"name": "Kanal denetimi",
+"vals": {
+"logaritm": 1
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 558,
+"ready": true
+},
+{
+"type": "waveform",
+"name": "Dalga Biçimi Görüntü Ölçeri",
+"en": "",
+"cat": 11,
+"kind": "pixel",
+"desc": "Piksel parlaklığını yatay konuma göre ölçüm grafiğinde gösterir.",
+"tags": [
+"Ölçer",
+"Dalga"
+],
+"params": [
+{
+"k": "parlakliRgb",
+"l": "Parlaklık/RGB",
+"g": null,
+"anim": "step",
+"hint": "gösterilen sinyal",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Parlaklık",
+"RGB üst üste",
+"RGB ayrı"
+],
+"def": 0
+},
+{
+"k": "cizgiGucu",
+"l": "Çizgi gücü",
+"g": null,
+"anim": "yes",
+"hint": "nokta birikiminin parlaklığı",
+"kind": "jog",
+"min": 0.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 60.0
+},
+{
+"k": "referansCizg",
+"l": "Referans çizgileri",
+"g": null,
+"anim": "step",
+"hint": "0/50/100% referansını çizer",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+}
+],
+"presets": [
+{
+"code": "S2",
+"name": "RGB parade",
+"vals": {
+"cizgiGucu": 80.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 559,
+"ready": true
+},
+{
+"type": "vectorscope",
+"name": "Renk Vektör Ölçeri",
+"en": "",
+"cat": 11,
+"kind": "pixel",
+"desc": "Renk tonu ve doygunluğu noktasal bir düzlemde gösterir; renk düzeltme denetimi sağlar.",
+"tags": [
+"Ölçer",
+"Renk"
+],
+"params": [
+{
+"k": "renkUzay",
+"l": "Renk uzayı",
+"g": null,
+"anim": "step",
+"hint": "kroma koordinatları",
+"kind": "choice",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"opts": [
+"YCbCr",
+"UV"
+],
+"def": 0
+},
+{
+"k": "olcek",
+"l": "Ölçek",
+"g": null,
+"anim": "yes",
+"hint": "grafiğin yakınlaştırması",
+"kind": "jog",
+"min": 25.0,
+"max": 400.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 100.0
+},
+{
+"k": "referansHede",
+"l": "Referans hedefleri",
+"g": null,
+"anim": "step",
+"hint": "renk hedef işaretlerini gösterir",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Standart renk ölçer",
+"vals": {
+"olcek": 100.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Yakın kroma",
+"vals": {
+"olcek": 200.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 560,
+"ready": true
+},
+{
+"type": "avgcolor",
+"name": "Kare Renk Ortalaması",
+"en": "",
+"cat": 0,
+"kind": "pixel",
+"desc": "Katmanın veya seçilmiş bölgenin ortalama rengini sürekli örnekler ve renk kartı üretir.",
+"tags": [
+"Renk",
+"Ortalama",
+"Örnek"
+],
+"params": [
+{
+"k": "kaynak",
+"l": "Kaynak",
+"g": null,
+"anim": "no",
+"hint": "örneklenecek görüntü",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": ""
+},
+{
+"k": "ornekAlan",
+"l": "Örnek alanı",
+"g": null,
+"anim": "yes",
+"hint": "örnek alanı merkezi (alan boyutu ayrıca)",
+"kind": "jog",
+"two": true,
+"three": false,
+"min": 0.0,
+"max": 100.0,
+"defY": 50.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 50.0
+},
+{
+"k": "ortalamaOrta",
+"l": "Ortalama/ortanca",
+"g": null,
+"anim": "step",
+"hint": "örnek birleştirme",
+"kind": "choice",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"opts": [
+"Ortalama",
+"Ortanca"
+],
+"def": 0
+},
+{
+"k": "yumusatm",
+"l": "Yumuşatma",
+"g": null,
+"anim": "yes",
+"hint": "renk değişiminin gecikmeli yumuşatılması",
+"kind": "jog",
+"min": 0.0,
+"max": 5.0,
+"step": 0.01,
+"jog": 0.01,
+"unit": "sn",
+"hideUi": true,
+"def": 0.15
+},
+{
+"k": "ornekAlanBoyu",
+"l": "Örnek alanı boyutu",
+"g": "Gelişmiş",
+"anim": "yes",
+"hint": "merkez çevresindeki örnekleme dikdörtgeni",
+"kind": "jog",
+"two": true,
+"three": false,
+"min": 1.0,
+"max": 100.0,
+"defY": 20.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 20.0
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Hızlı örnek",
+"vals": {
+"yumusatm": 0.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Kararlı örnek",
+"vals": {
+"yumusatm": 0.5
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 561,
+"ready": true
+},
+{
+"type": "channelalign",
+"name": "Kanal Hizalama",
+"en": "",
+"cat": 0,
+"kind": "pixel",
+"desc": "Renk kanalları birbirine kaymış arşiv görüntülerini elle veya korelasyonla hizalar.",
+"tags": [
+"Kanal",
+"Hizalama"
+],
+"params": [
+{
+"k": "kirmiziKaym",
+"l": "Kırmızı kayması",
+"g": null,
+"anim": "yes",
+"hint": "kırmızı kanal kayması",
+"kind": "jog",
+"two": true,
+"three": false,
+"min": -200.0,
+"max": 200.0,
+"defY": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 0.0
+},
+{
+"k": "maviKaym",
+"l": "Mavi kayması",
+"g": null,
+"anim": "yes",
+"hint": "mavi kanal kayması",
+"kind": "jog",
+"two": true,
+"three": false,
+"min": -200.0,
+"max": 200.0,
+"defY": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 0.0
+},
+{
+"k": "otomatikHiza",
+"l": "Otomatik hizala",
+"g": null,
+"anim": "no",
+"hint": "korelasyon tepe noktasını bulup iki değeri doldurur",
+"kind": "button",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"hideUi": true,
+"def": 0
+}
+],
+"presets": [],
+"pad": {
+"max": [
+"kirmiziKaymX",
+"maviKaymX",
+"kirmiziKaymY",
+"maviKaymY"
+]
+},
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 562,
+"ready": true
+},
+{
+"type": "localwb",
+"name": "Yerel Beyaz Dengesi",
+"en": "",
+"cat": 0,
+"kind": "pixel",
+"desc": "Kullanıcı tarafından çizilen farklı bölgelerde farklı beyaz dengeleri uygular; tüm kareye tek renk kayması vermez.",
+"tags": [
+"Beyaz dengesi",
+"Maske"
+],
+"params": [
+{
+"k": "bolgeMask",
+"l": "Bölge maskesi",
+"g": null,
+"anim": "no",
+"hint": "düzeltilecek bölgenin alfa maskesi",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": ""
+},
+{
+"k": "notrOrne",
+"l": "Nötr örnek",
+"g": null,
+"anim": "yes",
+"hint": "nötr olması beklenen örnek (damlalık)",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#B0A090"
+},
+{
+"k": "gecis",
+"l": "Geçiş",
+"g": null,
+"anim": "yes",
+"hint": "maske sınırındaki yumuşak karışım",
+"kind": "jog",
+"min": 0.0,
+"max": 300.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 20.0
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Sınır temiz",
+"vals": {
+"gecis": 3.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Yumuşak ışık bölgesi",
+"vals": {
+"gecis": 60.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 563,
+"ready": true
+},
+{
+"type": "highlightrecover",
+"name": "Aydınlık Nokta Kurtarma",
+"en": "",
+"cat": 0,
+"kind": "pixel",
+"desc": "Kırpılmamış renk kanallarından aşırı pozlanmış alanlarda yaklaşık renk üretir; kaybolmuş veriyi kesin geri getirmez.",
+"tags": [
+"Onarım",
+"Parlak"
+],
+"params": [
+{
+"k": "kirpilmaEsig",
+"l": "Kırpılma eşiği",
+"g": null,
+"anim": "yes",
+"hint": "kurtarma adayının kod değeri",
+"kind": "jog",
+"min": 50.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 95.0
+},
+{
+"k": "karisim",
+"l": "Karışım",
+"g": null,
+"anim": "yes",
+"hint": "tahminin kaynakla karışımı",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 65.0
+},
+{
+"k": "renkGeci",
+"l": "Renk geçişi",
+"g": null,
+"anim": "step",
+"hint": "tahmin edilen renk sınırını yumuşatır",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Hafif kurtarma",
+"vals": {
+"karisim": 35.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Güçlü geçiş",
+"vals": {
+"karisim": 85.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 564,
+"ready": true
+},
+{
+"type": "darkframe",
+"name": "Karanlık Çerçeve Kalibrasyonu",
+"en": "",
+"cat": 11,
+"kind": "pixel",
+"desc": "Kullanıcının karanlık referans görüntüsünü çıkararak sabit sensör izlerini azaltır.",
+"tags": [
+"Kalibrasyon",
+"Onarım"
+],
+"params": [
+{
+"k": "karanlik",
+"l": "Karanlık",
+"g": null,
+"anim": "no",
+"hint": "aynı çekim koşullarındaki karanlık referans",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": ""
+},
+{
+"k": "cikarmaMikt",
+"l": "Çıkarma miktarı",
+"g": null,
+"anim": "yes",
+"hint": "çıkarılan sinyal oranı",
+"kind": "jog",
+"min": 0.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 100.0
+},
+{
+"k": "negatiflSini",
+"l": "Negatifleri sınırla",
+"g": null,
+"anim": "step",
+"hint": "negatif renk değerlerini sıfıra sınırlar",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 565,
+"ready": true
+},
+{
+"type": "flatfield",
+"name": "Düz Alan Kalibrasyonu",
+"en": "",
+"cat": 11,
+"kind": "pixel",
+"desc": "Referans düz görüntüyle sabit aydınlatma düzensizliğini ve sensör lekelerini dengeler.",
+"tags": [
+"Kalibrasyon",
+"Onarım"
+],
+"params": [
+{
+"k": "duzAlan",
+"l": "Düz alan",
+"g": null,
+"anim": "no",
+"hint": "homojen aydınlatmalı referans",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": ""
+},
+{
+"k": "normaliz",
+"l": "Normalizasyon",
+"g": null,
+"anim": "yes",
+"hint": "kazanç haritasının hedef ortalaması",
+"kind": "jog",
+"min": 10.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 100.0
+},
+{
+"k": "guc",
+"l": "Güç",
+"g": null,
+"anim": "yes",
+"hint": "düzeltmenin karışımı",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 100.0
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Tam düz alan",
+"vals": {
+"normaliz": 100.0,
+"guc": 100.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Yumuşak",
+"vals": {
+"guc": 50.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 566,
+"ready": true
+},
+{
+"type": "bandclean",
+"name": "Bant Gürültüsü Temizleme",
+"en": "",
+"cat": 11,
+"kind": "pixel",
+"desc": "Yatay veya dikey sabit sensör şeritlerini satır/sütun profiline göre düzeltir.",
+"tags": [
+"Onarım",
+"Şerit"
+],
+"params": [
+{
+"k": "yon",
+"l": "Yön",
+"g": null,
+"anim": "step",
+"hint": "aranan şerit yönü",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Yatay",
+"Dikey",
+"İkisi"
+],
+"def": 0
+},
+{
+"k": "seritEsig",
+"l": "Şerit eşiği",
+"g": null,
+"anim": "yes",
+"hint": "bant kabul eşiği",
+"kind": "jog",
+"min": 0.0,
+"max": 50.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 5.0
+},
+{
+"k": "koruma",
+"l": "Koruma",
+"g": null,
+"anim": "yes",
+"hint": "gerçek kenarları koruma",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 75.0
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Yatay tarama",
+"vals": {
+"koruma": 85.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 567,
+"ready": true
+},
+{
+"type": "fftnotch",
+"name": "Frekans Çentik Filtresi",
+"en": "",
+"cat": 11,
+"kind": "pixel",
+"desc": "Fourier düzleminde seçilen periyodik desen frekanslarını bastırır; Moiré dışında tarayıcı paraziti için de kullanılır.",
+"tags": [
+"Onarım",
+"Desen",
+"Frekans"
+],
+"params": [
+{
+"k": "frekansMerk",
+"l": "Frekans merkezi",
+"g": null,
+"anim": "yes",
+"hint": "çentik merkezi",
+"kind": "jog",
+"two": true,
+"three": false,
+"min": -0.5,
+"max": 0.5,
+"defY": 15.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 0.0
+},
+{
+"k": "yaricap",
+"l": "Yarıçap",
+"g": null,
+"anim": "yes",
+"hint": "çentik genişliği",
+"kind": "jog",
+"min": 0.001,
+"max": 0.25,
+"step": 0.01,
+"jog": 0.01,
+"unit": "px",
+"def": 0.02
+},
+{
+"k": "azaltma",
+"l": "Azaltma",
+"g": null,
+"anim": "yes",
+"hint": "o frekanstaki azaltma",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 80.0
+},
+{
+"k": "simetrikCent",
+"l": "Simetrik çentik",
+"g": null,
+"anim": "step",
+"hint": "eşlenik frekansı da işleyerek gerçek çıktı sağlar",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Dar çentik",
+"vals": {
+"yaricap": 0.005,
+"azaltma": 80.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Geniş yumuşak",
+"vals": {
+"yaricap": 0.04,
+"azaltma": 40.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 568,
+"ready": true
+},
+{
+"type": "anisodiff",
+"name": "Anizotropik Yayınım",
+"en": "",
+"cat": 2,
+"kind": "pixel",
+"desc": "Kenar yönlerine göre gürültüyü iteratif azaltır; çift taraflı bulanıklıktan farklı difüzyon çözümü kullanır.",
+"tags": [
+"Yumuşatma",
+"Kenar"
+],
+"params": [
+{
+"k": "yineleme",
+"l": "Yineleme",
+"g": null,
+"anim": "yes",
+"hint": "yineleme sayısı",
+"kind": "jog",
+"min": 1.0,
+"max": 100.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 10.0
+},
+{
+"k": "kenarIlet",
+"l": "Kenar iletkenliği",
+"g": null,
+"anim": "yes",
+"hint": "kenardan geçiş hassasiyeti",
+"kind": "jog",
+"min": 1.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 15.0
+},
+{
+"k": "adim",
+"l": "Adım",
+"g": null,
+"anim": "yes",
+"hint": "açık 2B dört komşulu şema için adım",
+"kind": "jog",
+"min": 0.01,
+"max": 0.24,
+"step": 0.01,
+"jog": 0.01,
+"unit": "",
+"def": 0.15
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "İnce detay",
+"vals": {
+"yineleme": 5.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Düz yüzey",
+"vals": {
+"yineleme": 25.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 569,
+"ready": true
+},
+{
+"type": "nlmeans",
+"name": "Yerel Olmayan Gürültü Temizleme",
+"en": "",
+"cat": 2,
+"kind": "pixel",
+"desc": "Yakındaki benzer doku bloklarını eşleştirerek ayrıntıyı koruyarak gürültüyü azaltır.",
+"tags": [
+"Gürültü",
+"Onarım"
+],
+"params": [
+{
+"k": "yamaBoyu",
+"l": "Yama boyutu",
+"g": null,
+"anim": "yes",
+"hint": "karşılaştırma yaması",
+"kind": "jog",
+"min": 3.0,
+"max": 15.0,
+"step": 1,
+"jog": 1,
+"unit": "px",
+"int": true,
+"def": 7.0
+},
+{
+"k": "aramaBoyu",
+"l": "Arama boyutu",
+"g": null,
+"anim": "yes",
+"hint": "arama penceresi",
+"kind": "jog",
+"min": 7.0,
+"max": 61.0,
+"step": 1,
+"jog": 1,
+"unit": "px",
+"int": true,
+"def": 21.0
+},
+{
+"k": "guc",
+"l": "Güç",
+"g": null,
+"anim": "yes",
+"hint": "benzerlik ağırlığının gevşekliği",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 10.0
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Hafif gürültü",
+"vals": {
+"guc": 5.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Yoğun benek",
+"vals": {
+"guc": 25.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 570,
+"ready": true
+},
+{
+"type": "multiscale",
+"name": "Çok Ölçekli Ayrıntı",
+"en": "",
+"cat": 1,
+"kind": "pixel",
+"desc": "Dalgacık benzeri ölçek bantlarını ayrı ayrı güçlendirir; iki bantlı frekans ayırmadan daha ince kontrol sağlar.",
+"tags": [
+"Ayrıntı",
+"Frekans"
+],
+"params": [
+{
+"k": "olcekSayi",
+"l": "Ölçek sayısı",
+"g": null,
+"anim": "yes",
+"hint": "ölçek bandı sayısı",
+"kind": "jog",
+"min": 1.0,
+"max": 8.0,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 4.0
+},
+{
+"k": "herBantKaza",
+"l": "Her bant kazancı",
+"g": null,
+"anim": "yes",
+"hint": "seçili detay bandı kazancı",
+"kind": "jog",
+"min": 0.0,
+"max": 300.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 100.0
+},
+{
+"k": "kenarKoru",
+"l": "Kenar koruma",
+"g": null,
+"anim": "step",
+"hint": "sert kenarlarda halo sınırlar",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 572,
+"ready": true
+},
+{
+"type": "texsimilar",
+"name": "Doku Benzerliği Haritası",
+"en": "",
+"cat": 11,
+"kind": "pixel",
+"desc": "Bir referans dokunun bulunduğu bölgeleri eşleştirip görsel maske üretir.",
+"tags": [
+"Analiz",
+"Doku"
+],
+"params": [
+{
+"k": "ornekDoku",
+"l": "Örnek doku",
+"g": null,
+"anim": "no",
+"hint": "aranacak örnek doku",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": ""
+},
+{
+"k": "benzerli",
+"l": "Benzerlik",
+"g": null,
+"anim": "yes",
+"hint": "kabul edilen eşleşme skoru",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 80.0
+},
+{
+"k": "olcekTole",
+"l": "Ölçek toleransı",
+"g": null,
+"anim": "yes",
+"hint": "örnek ölçek değişimine tolerans",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 20.0
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Kesin eşleşme",
+"vals": {
+"benzerli": 95.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Esnek arama",
+"vals": {
+"benzerli": 70.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 573,
+"ready": true
+},
+{
+"type": "vignettefix",
+"name": "Mercek Vinyet Düzeltme",
+"en": "",
+"cat": 0,
+"kind": "pixel",
+"desc": "Objektifin kenarlarda oluşturduğu ışık kaybını telafi eder; karartma efekti değildir.",
+"tags": [
+"Mercek",
+"Vinyet"
+],
+"params": [
+{
+"k": "optikMerk",
+"l": "Optik merkez",
+"g": null,
+"anim": "yes",
+"hint": "mercek merkezi",
+"kind": "jog",
+"two": true,
+"three": false,
+"min": -100,
+"max": 200,
+"defY": 50.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "box%",
+"def": 50.0
+},
+{
+"k": "guc",
+"l": "Güç",
+"g": null,
+"anim": "yes",
+"hint": "kenar kazancı",
+"kind": "jog",
+"min": -100.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 30.0
+},
+{
+"k": "yaricap",
+"l": "Yarıçap",
+"g": null,
+"anim": "yes",
+"hint": "etki yarıçapı",
+"kind": "jog",
+"min": 1.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 70.0
+},
+{
+"k": "renkDeng",
+"l": "Renk dengesi",
+"g": null,
+"anim": "yes",
+"hint": "kanallar arasındaki düzeltme farkı",
+"kind": "jog",
+"min": -100.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 0.0
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Hafif mercek",
+"vals": {
+"guc": 15.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Koyu köşeler",
+"vals": {
+"guc": 70.0,
+"yaricap": 85.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 574,
+"ready": true
+},
+{
+"type": "focusmap",
+"name": "Odak Kalitesi Haritası",
+"en": "",
+"cat": 11,
+"kind": "pixel",
+"desc": "Yerel keskinlik ölçüsünden odaklı ve odak dışı alanları renkli haritada gösterir; gerçek derinlik değildir.",
+"tags": [
+"Ölçer",
+"Odak"
+],
+"params": [
+{
+"k": "pencere",
+"l": "Pencere",
+"g": null,
+"anim": "yes",
+"hint": "ölçüm penceresi",
+"kind": "jog",
+"min": 3.0,
+"max": 101.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 15.0
+},
+{
+"k": "esik",
+"l": "Eşik",
+"g": null,
+"anim": "yes",
+"hint": "göreli keskinlik sınırı",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 20.0
+},
+{
+"k": "odakReng",
+"l": "Odak rengi",
+"g": null,
+"anim": "yes",
+"hint": "odaklı bölge rengi",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#00D080"
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "İnce odak",
+"vals": {
+"pencere": 7.0,
+"esik": 25.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Geniş odak",
+"vals": {
+"pencere": 31.0,
+"esik": 15.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 575,
+"ready": true
+},
+{
+"type": "alphadist",
+"name": "Alfa Mesafe Haritası",
+"en": "",
+"cat": 8,
+"kind": "pixel",
+"desc": "Siluetin her noktasının en yakın kenara uzaklığını gri veya renkli haritaya çevirir.",
+"tags": [
+"Alfa",
+"Mesafe"
+],
+"params": [
+{
+"k": "azamiMesa",
+"l": "Azami mesafe",
+"g": null,
+"anim": "yes",
+"hint": "haritada gösterilen azami mesafe",
+"kind": "jog",
+"min": 1.0,
+"max": 2000.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 100.0
+},
+{
+"k": "isaretliMesa",
+"l": "İşaretli mesafe",
+"g": null,
+"anim": "step",
+"hint": "iç ve dış uzaklığı farklı işaretle",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+},
+{
+"k": "gorunum",
+"l": "Görünüm",
+"g": null,
+"anim": "step",
+"hint": "çıktı kodlaması",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Gri",
+"Renkli",
+"Alfa"
+],
+"def": 0
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 576,
+"ready": true
+},
+{
+"type": "alphaskel",
+"name": "Alfa İskeleti",
+"en": "",
+"cat": 8,
+"kind": "pixel",
+"desc": "Dolu şeklin ortasından ince dallanan merkez çizgileri çıkarır.",
+"tags": [
+"Alfa",
+"İskelet"
+],
+"params": [
+{
+"k": "dalBuda",
+"l": "Dal budama",
+"g": null,
+"anim": "yes",
+"hint": "kaldırılan kısa dal uzunluğu",
+"kind": "jog",
+"min": 0.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 8.0
+},
+{
+"k": "cizgiKali",
+"l": "Çizgi kalınlığı",
+"g": null,
+"anim": "yes",
+"hint": "çıktı çizgisi genişliği",
+"kind": "jog",
+"min": 0.5,
+"max": 50.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 2.0
+},
+{
+"k": "renk",
+"l": "Renk",
+"g": null,
+"anim": "yes",
+"hint": "çizgi rengi",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#FFFFFF"
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 577,
+"ready": true
+},
+{
+"type": "maskcombine",
+"name": "Maske Birleştirme",
+"en": "",
+"cat": 8,
+"kind": "pixel",
+"desc": "Birden çok katmanın alfalarını birleşim, kesişim, fark veya XOR ile birleştirir.",
+"tags": [
+"Maske",
+"Birleştirme"
+],
+"params": [
+{
+"k": "ikinciMask",
+"l": "İkinci maske",
+"g": null,
+"anim": "no",
+"hint": "ikinci maskenin kaynağı",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": ""
+},
+{
+"k": "islem",
+"l": "İşlem",
+"g": null,
+"anim": "step",
+"hint": "alfa işlemi",
+"kind": "choice",
+"min": 0,
+"max": 3,
+"step": 1,
+"jog": 1,
+"opts": [
+"Birleşim",
+"Kesişim",
+"A−B",
+"XOR"
+],
+"def": 0
+},
+{
+"k": "tersCevi",
+"l": "Ters çevir",
+"g": null,
+"anim": "step",
+"hint": "son maskenin tersini alır",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 0
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 578,
+"ready": true
+},
+{
+"type": "condblend",
+"name": "Katman Koşullu Birleştirme",
+"en": "",
+"cat": 8,
+"kind": "pixel",
+"desc": "Seçilen kaynak kanalın koşuluna göre iki görüntüden birini gösterir; tek renk anahtarı değildir.",
+"tags": [
+"Birleştirme",
+"Koşul"
+],
+"params": [
+{
+"k": "aB",
+"l": "A/B",
+"g": null,
+"anim": "no",
+"hint": "iki görüntü",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": ""
+},
+{
+"k": "kanal",
+"l": "Kanal",
+"g": null,
+"anim": "step",
+"hint": "koşul kanalı",
+"kind": "choice",
+"min": 0,
+"max": 4,
+"step": 1,
+"jog": 1,
+"opts": [
+"Parlaklık",
+"R",
+"G",
+"B",
+"Alfa"
+],
+"def": 0
+},
+{
+"k": "esik",
+"l": "Eşik",
+"g": null,
+"anim": "yes",
+"hint": "A/B geçiş merkezi",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 50.0
+},
+{
+"k": "yumusatm",
+"l": "Yumuşatma",
+"g": null,
+"anim": "yes",
+"hint": "eşik çevresi geçiş genişliği",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 10.0
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Sert anahtar",
+"vals": {
+"esik": 50.0,
+"yumusatm": 0.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Yumuşak birleştirme",
+"vals": {
+"esik": 50.0,
+"yumusatm": 30.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 579,
+"ready": true
+},
+{
+"type": "colorselect",
+"name": "Renk Alanı Seçimi",
+"en": "",
+"cat": 8,
+"kind": "pixel",
+"desc": "Referans renkleri maske olarak kaydeder; renk anahtarı gibi silmek yerine seçimi başka efektlere aktarır.",
+"tags": [
+"Renk",
+"Seçim"
+],
+"params": [
+{
+"k": "ornekRenk",
+"l": "Örnek renkler",
+"g": null,
+"anim": "yes",
+"hint": "seçilecek renkler",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#00FF00"
+},
+{
+"k": "tolerans",
+"l": "Tolerans",
+"g": null,
+"anim": "yes",
+"hint": "renk farkı kabul aralığı",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 15.0
+},
+{
+"k": "renkUzay",
+"l": "Renk uzayı",
+"g": null,
+"anim": "step",
+"hint": "benzerlik metriği",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Lab",
+"HSV",
+"RGB"
+],
+"def": 0
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Kesin renk",
+"vals": {
+"tolerans": 5.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Geniş renk seçimi",
+"vals": {
+"tolerans": 30.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 580,
+"ready": true
+},
+{
+"type": "edgedirmatte",
+"name": "Kenar Yönü Matı",
+"en": "",
+"cat": 8,
+"kind": "pixel",
+"desc": "Belirli açıya yakın kenarları alfa maskesi yapar; normal kenar bulma tüm yönleri işler.",
+"tags": [
+"Kenar",
+"Yön",
+"Maske"
+],
+"params": [
+{
+"k": "aci",
+"l": "Açı",
+"g": null,
+"anim": "yes",
+"hint": "kenar çizgisinin yönü",
+"kind": "jog",
+"min": 0.0,
+"max": 180.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"def": 0.0
+},
+{
+"k": "tolerans",
+"l": "Tolerans",
+"g": null,
+"anim": "yes",
+"hint": "açı toleransı",
+"kind": "jog",
+"min": 0.0,
+"max": 90.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"def": 15.0
+},
+{
+"k": "kenarEsig",
+"l": "Kenar eşiği",
+"g": null,
+"anim": "yes",
+"hint": "gradyan eşiği",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 10.0
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Yatay çizgiler",
+"vals": {
+"aci": 0.0,
+"tolerans": 10.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Dikey çizgiler",
+"vals": {
+"aci": 90.0,
+"tolerans": 20.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 585,
+"ready": true
+},
+{
+"type": "alphaholes",
+"name": "Alfa Delik Haritası",
+"en": "",
+"cat": 8,
+"kind": "pixel",
+"desc": "Siluetin içindeki kapalı saydam boşlukları ayrı maske yapar; dış boşluğu içermez.",
+"tags": [
+"Alfa",
+"Delik"
+],
+"params": [
+{
+"k": "enKucuDeli",
+"l": "En küçük delik alanı",
+"g": null,
+"anim": "yes",
+"hint": "kabul edilen en küçük delik",
+"kind": "jog",
+"min": 1.0,
+"max": 100000.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 16.0
+},
+{
+"k": "disBoslDisl",
+"l": "Dış boşluğu dışla",
+"g": null,
+"anim": "step",
+"hint": "görüntü sınırına bağlı boşluğu dışarıda bırakır",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+},
+{
+"k": "renk",
+"l": "Renk",
+"g": null,
+"anim": "yes",
+"hint": "delik haritasının rengi",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#FFFFFF"
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 588,
+"ready": true
+},
+{
+"type": "compisolate",
+"name": "Alfa Bileşen Ayırıcı",
+"en": "",
+"cat": 8,
+"kind": "pixel",
+"desc": "Bir PNG içindeki bağlantısız şekilleri otomatik numaralandırıp seçili parçayı çıkarır.",
+"tags": [
+"Alfa",
+"Parça"
+],
+"params": [
+{
+"k": "parcaNo",
+"l": "Parça no",
+"g": null,
+"anim": "yes",
+"hint": "görünür bırakılacak bileşen",
+"kind": "jog",
+"min": 1.0,
+"max": 100,
+"step": 1,
+"jog": 1,
+"unit": "",
+"int": true,
+"def": 1.0
+},
+{
+"k": "enKucuAlan",
+"l": "En küçük alan",
+"g": null,
+"anim": "yes",
+"hint": "küçük bileşenleri yok sayma sınırı",
+"kind": "jog",
+"min": 1.0,
+"max": 100000.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 8.0
+},
+{
+"k": "siralama",
+"l": "Sıralama",
+"g": null,
+"anim": "step",
+"hint": "indeks sırası",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Büyükten küçüğe",
+"Soldan sağa",
+"Üstten alta"
+],
+"def": 0
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 589,
+"ready": true
+},
+{
+"type": "edgeband",
+"name": "Alfa Kenar Kuşağı",
+"en": "",
+"cat": 8,
+"kind": "pixel",
+"desc": "Yalnız siluetin iç/dış kenar bandını maske olarak verir, diğer efektler bu bandı kaynak alabilir.",
+"tags": [
+"Kenar",
+"Kuşak"
+],
+"params": [
+{
+"k": "icGeni",
+"l": "İç genişlik",
+"g": null,
+"anim": "yes",
+"hint": "siluet içindeki şerit",
+"kind": "jog",
+"min": 0.0,
+"max": 500.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 5.0
+},
+{
+"k": "disGeni",
+"l": "Dış genişlik",
+"g": null,
+"anim": "yes",
+"hint": "siluet dışındaki şerit",
+"kind": "jog",
+"min": 0.0,
+"max": 500.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 5.0
+},
+{
+"k": "yumusatm",
+"l": "Yumuşatma",
+"g": null,
+"anim": "yes",
+"hint": "şerit sınır geçişi",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 1.0
+}
+],
+"presets": [],
+"pad": {
+"max": [
+"disGeni"
+]
+},
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 590,
+"ready": true
+},
+{
+"type": "edgeextend",
+"name": "Saydam Kenar Renk Uzatma",
+"en": "",
+"cat": 8,
+"kind": "pixel",
+"desc": "Tam saydam piksellerde görünmez renkleri en yakın dolu pikselden doldurur; yeniden örneklemede saçakları önler.",
+"tags": [
+"Kenar",
+"Renk"
+],
+"params": [
+{
+"k": "uzatma",
+"l": "Uzatma",
+"g": null,
+"anim": "yes",
+"hint": "doldurulacak saydam kenar uzaklığı",
+"kind": "jog",
+"min": 0.0,
+"max": 300.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 8.0
+},
+{
+"k": "alfayiDegi",
+"l": "Alfayı değiştirme",
+"g": null,
+"anim": "step",
+"hint": "mevcut alfa aynen kalır",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 1
+},
+{
+"k": "yontem",
+"l": "Yöntem",
+"g": null,
+"anim": "step",
+"hint": "renk uzatma algoritması",
+"kind": "choice",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"opts": [
+"En yakın",
+"Ağırlıklı komşu"
+],
+"def": 0
+},
+{
+"k": "onizlemeUzatRgb",
+"l": "Önizlemede uzatılan RGB",
+"g": "Gelişmiş",
+"anim": "step",
+"hint": "saydam piksellerin gizli renklerini denetlemek için gösterir",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 0
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "İnce saçak",
+"vals": {
+"uzatma": 2.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": {
+"k": "uzatma"
+},
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 591,
+"ready": true
+},
+{
+"type": "matte2img",
+"name": "Matı Görüntüye Dönüştür",
+"en": "",
+"cat": 8,
+"kind": "pixel",
+"desc": "Alfa kanalını bağımsız gri görüntüye çevirir; Luma Damgası'nın ters yönüdür.",
+"tags": [
+"Mat",
+"Alfa"
+],
+"params": [
+{
+"k": "tersCevi",
+"l": "Ters çevir",
+"g": null,
+"anim": "step",
+"hint": "alfa değerini 1−a yapar",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 0
+},
+{
+"k": "rgbVeyaAlfa",
+"l": "RGB veya alfa çıktı",
+"g": null,
+"anim": "step",
+"hint": "görünür mat veya saydam mat",
+"kind": "choice",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"opts": [
+"RGB",
+"Alfa"
+],
+"def": 0
+},
+{
+"k": "renk",
+"l": "Renk",
+"g": null,
+"anim": "yes",
+"hint": "matın üst rengi",
+"kind": "color",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": "#FFFFFF"
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 592,
+"ready": true
+},
+{
+"type": "depthpriority",
+"name": "Görünürlük Önceliği",
+"en": "",
+"cat": 8,
+"kind": "pixel",
+"desc": "Derinlik haritalarıyla örtüşen iki görüntünün hangisinin önde kalacağını piksel bazında çözer.",
+"tags": [
+"Derinlik",
+"Birleştirme"
+],
+"params": [
+{
+"k": "onArkaDeri",
+"l": "Ön/arka derinlik",
+"g": null,
+"anim": "no",
+"hint": "iki kaynak derinliği",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": ""
+},
+{
+"k": "tolerans",
+"l": "Tolerans",
+"g": null,
+"anim": "yes",
+"hint": "eş derinlik kabul sınırı",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 1.0
+},
+{
+"k": "gecis",
+"l": "Geçiş",
+"g": null,
+"anim": "yes",
+"hint": "örtüşme geçişi",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 2.0
+},
+{
+"k": "ikinciGoru",
+"l": "İkinci görüntü",
+"g": "Gelişmiş",
+"anim": "no",
+"hint": "iki derinlik kaynağına karşılık gelen ikinci RGBA katmanı",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": ""
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Sert derinlik",
+"vals": {
+"tolerans": 0.0,
+"gecis": 0.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Yumuşak kenar",
+"vals": {
+"tolerans": 2.0,
+"gecis": 5.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 593,
+"ready": true
+},
+{
+"type": "colorbounce",
+"name": "Yüzeyden Renk Sıçraması",
+"en": "",
+"cat": 0,
+"kind": "pixel",
+"desc": "Yakındaki nesnenin rengini diğer nesnenin iç yüzeyine geniş ve yönlü bir yansıyan ışık olarak taşır; yalnız kenar ışık sarma değildir.",
+"tags": [
+"Işık",
+"Yansıma"
+],
+"params": [
+{
+"k": "kaynak",
+"l": "Kaynak",
+"g": null,
+"anim": "no",
+"hint": "yansıyan renk kaynağı",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": ""
+},
+{
+"k": "yon",
+"l": "Yön",
+"g": null,
+"anim": "yes",
+"hint": "ışık alanının yön vektörü",
+"kind": "jog",
+"two": true,
+"three": false,
+"min": -1.0,
+"max": 1.0,
+"defY": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "",
+"def": 1.0
+},
+{
+"k": "mesafe",
+"l": "Mesafe",
+"g": null,
+"anim": "yes",
+"hint": "yayılım uzaklığı",
+"kind": "jog",
+"min": 0.0,
+"max": 1000.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "px",
+"def": 80.0
+},
+{
+"k": "guc",
+"l": "Güç",
+"g": null,
+"anim": "yes",
+"hint": "dolaylı renk ışığı gücü",
+"kind": "jog",
+"min": 0.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 30.0
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Yakın renk ışığı",
+"vals": {
+"mesafe": 30.0,
+"guc": 25.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Geniş renk ışığı",
+"vals": {
+"mesafe": 150.0,
+"guc": 50.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 594,
+"ready": true
+},
+{
+"type": "depthview",
+"name": "Derinlik Haritası Görünümü",
+"en": "",
+"cat": 8,
+"kind": "pixel",
+"desc": "Gerçek 3B sahne derinliğini gri harita olarak çıkarır; diğer efektler maske olarak kullanır.",
+"tags": [
+"Derinlik",
+"Harita"
+],
+"params": [
+{
+"k": "yakinUzakSini",
+"l": "Yakın/uzak sınır",
+"g": null,
+"anim": "yes",
+"hint": "derinlik aralığı",
+"kind": "jog",
+"min": 0.01,
+"max": 100000.0,
+"step": 0.01,
+"jog": 0.01,
+"unit": "",
+"def": 10.0
+},
+{
+"k": "tersCevi",
+"l": "Ters çevir",
+"g": null,
+"anim": "step",
+"hint": "yakın ve uzak tonlarını değiştirir",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 0
+},
+{
+"k": "dogrusal",
+"l": "Doğrusal",
+"g": null,
+"anim": "step",
+"hint": "derinlik kodlama eğrisi",
+"kind": "choice",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"opts": [
+"Doğrusal",
+"Logaritmik"
+],
+"def": 0
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Yakın alan",
+"vals": {
+"dogrusal": 0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 596,
+"ready": true
+},
+{
+"type": "normalselect",
+"name": "Yüzey Yönü Seçimi",
+"en": "",
+"cat": 8,
+"kind": "pixel",
+"desc": "3B modelin kameraya veya ışığa dönük yüzlerini normal vektörlerine göre maskeler.",
+"tags": [
+"Normal",
+"Yön",
+"Maske"
+],
+"params": [
+{
+"k": "yon",
+"l": "Yön",
+"g": null,
+"anim": "yes",
+"hint": "referans normal yönü",
+"kind": "jog",
+"two": false,
+"three": true,
+"min": -1.0,
+"max": 1.0,
+"defY": 0.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "",
+"defZ": 1.0,
+"def": 0.0
+},
+{
+"k": "aciAral",
+"l": "Açı aralığı",
+"g": null,
+"anim": "yes",
+"hint": "seçilen yüzlerin açı aralığı",
+"kind": "jog",
+"min": 0.0,
+"max": 180.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"def": 45.0
+},
+{
+"k": "yumusatm",
+"l": "Yumuşatma",
+"g": null,
+"anim": "yes",
+"hint": "eşik kenarı geçişi",
+"kind": "jog",
+"min": 0.0,
+"max": 90.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "°",
+"def": 10.0
+}
+],
+"presets": [],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 597,
+"ready": true
+},
+{
+"type": "fresnelmatte",
+"name": "Yansıma Matı",
+"en": "",
+"cat": 8,
+"kind": "pixel",
+"desc": "3B yüzeyin bakış açısına göre yansıma ağırlığı üretir; Fresnel tabanlı maske olarak çalışır.",
+"tags": [
+"Yansıma",
+"Fresnel"
+],
+"params": [
+{
+"k": "kirilmaIndi",
+"l": "Kırılma indisi",
+"g": null,
+"anim": "yes",
+"hint": "kırılma indisi",
+"kind": "jog",
+"min": 1.0,
+"max": 3.0,
+"step": 0.01,
+"jog": 0.01,
+"unit": "",
+"def": 1.45
+},
+{
+"k": "guc",
+"l": "Güç",
+"g": null,
+"anim": "yes",
+"hint": "yansıma maske kazancı",
+"kind": "jog",
+"min": 0.0,
+"max": 200.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 100.0
+},
+{
+"k": "ters",
+"l": "Ters",
+"g": null,
+"anim": "step",
+"hint": "maskeyi tersine çevirir",
+"kind": "toggle",
+"min": 0,
+"max": 1,
+"step": 1,
+"jog": 1,
+"def": 0
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Hafif kenar",
+"vals": {
+"guc": 60.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Cam kenarı",
+"vals": {
+"guc": 100.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 599,
+"ready": true
+},
+{
+"type": "diffmap",
+"name": "Katman Renk Farkı Haritası",
+"en": "",
+"cat": 11,
+"kind": "pixel",
+"desc": "İki farklı katmanın aynı konumdaki renk farkını görsel ısı haritası şeklinde gösterir; zamansal fark değildir.",
+"tags": [
+"Fark",
+"Analiz"
+],
+"params": [
+{
+"k": "karsilas",
+"l": "Karşılaştırma",
+"g": null,
+"anim": "no",
+"hint": "karşılaştırma görüntüsü",
+"kind": "source",
+"min": 0,
+"max": 0,
+"step": 1,
+"jog": 1,
+"def": ""
+},
+{
+"k": "renkMetr",
+"l": "Renk metriği",
+"g": null,
+"anim": "step",
+"hint": "fark ölçütü",
+"kind": "choice",
+"min": 0,
+"max": 2,
+"step": 1,
+"jog": 1,
+"opts": [
+"Lab ΔE",
+"RGB uzaklığı",
+"Luma"
+],
+"def": 0
+},
+{
+"k": "esik",
+"l": "Eşik",
+"g": null,
+"anim": "yes",
+"hint": "görselleştirilecek minimum fark",
+"kind": "jog",
+"min": 0.0,
+"max": 100.0,
+"step": 0.1,
+"jog": 0.1,
+"unit": "%",
+"def": 5.0
+}
+],
+"presets": [
+{
+"code": "S1",
+"name": "Küçük renk farkı",
+"vals": {
+"esik": 1.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+},
+{
+"code": "S2",
+"name": "Belirgin fark",
+"vals": {
+"esik": 15.0
+},
+"keys": {},
+"cols": {},
+"at": "start"
+}
+],
+"pad": null,
+"passes": null,
+"info": null,
+"heavy": false,
+"n": 600,
+"ready": true
 }
 ],
 "featured": [

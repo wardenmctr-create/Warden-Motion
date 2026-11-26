@@ -302,7 +302,7 @@ class Renderer(private val ctx: Context, maxSide: Int = 2048, private val sync: 
         drawLayer(bc, l)
         if (gpu.isNotEmpty()) {
             val box = floatArrayOf((pad * q).toFloat(), (pad * q).toFloat(), (l.w * q).toFloat(), (l.h * q).toFloat())
-            val job = GlFx.Job(gpu.map { it to fxMeta(it.type) }, t, t - l.start, l.end - l.start, box, q.toFloat(), sourcesFor(p, l, gpu, t, q), tr.rot.toFloat())
+            val job = GlFx.Job(gpu.map { it to fxMeta(it.type) }, t, t - l.start, l.end - l.start, box, q.toFloat(), sourcesFor(p, l, gpu, t, q) + Analysis.sources(gpu, buf, t), tr.rot.toFloat(), exporting)
             GlFx.apply(buf, job)?.let { buf.recycle(); buf = it }
         }
         val rect = RectF((-bw / q / 2).toFloat(), (-bh / q / 2).toFloat(), (bw / q / 2).toFloat(), (bh / q / 2).toFloat())

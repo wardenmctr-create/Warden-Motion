@@ -110,5 +110,6 @@ exec(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "catalog_extr
 exec(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "catalog_upd.py")).read())
 exec(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "catalog_new.py")).read())
 exec(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "presets_new.py")).read())
+exec(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "catalog_800.py")).read())
 for _e in E:
     if _e["type"] in ("cutback", "cardpuppet", "texturize"): _e["ready"] = _e["type"] in READY

@@ -8,6 +8,7 @@ uniform vec4 u_box;        // katman kutusu ara resim içinde: x, y, genişlik, 
 uniform float u_t;         // katman başlangıcından beri geçen süre (sn)
 uniform float u_s;         // katman biriminde 1 = kaç px
 uniform float u_dur;       // katmanın süresi (sn)
+uniform float u_export;    // 1 = dışa aktarma (yalnız önizlemede görünen ölçerler için)
 in vec2 v_uv;
 out vec4 o;
 

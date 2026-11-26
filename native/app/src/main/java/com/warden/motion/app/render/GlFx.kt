@@ -160,7 +160,7 @@ vec3 palc_$k(int i) { vec3 c[32] = vec3[32]($c); return c[clamp(i, 0, 31)]; }"""
     }
 
     data class Job(val effects: List<Pair<Effect, FxMeta>>, val t: Double, val lt: Double, val dur: Double, val box: FloatArray, val s: Float,
-                   val sources: Map<String, Bitmap> = emptyMap(), val rot: Float = 0f)
+                   val sources: Map<String, Bitmap> = emptyMap(), val rot: Float = 0f, val export: Boolean = false)
 
     /** Efekt zincirini uygular; sonuç yeni bir Bitmap (aynı boyut) ya da GPU yoksa null */
     fun apply(bmp: Bitmap, job: Job): Bitmap? = try { exec.submit<Bitmap?> { run(bmp, job) }.get() } catch (e: Throwable) { Log.w("GlFx", "uygulanamadı", e); null }
@@ -176,7 +176,7 @@ vec3 palc_$k(int i) { vec3 c[32] = vec3[32]($c); return c[clamp(i, 0, 31)]; }"""
         var cur = base
         for ((e, m) in job.effects) {
             val uni = HashMap<String, Any>()
-            uni["u_res"] = floatArrayOf(w.toFloat(), h.toFloat()); uni["u_box"] = job.box; uni["u_t"] = job.lt.toFloat(); uni["u_s"] = job.s; uni["u_dur"] = job.dur.toFloat(); uni["u_rot"] = job.rot
+            uni["u_res"] = floatArrayOf(w.toFloat(), h.toFloat()); uni["u_box"] = job.box; uni["u_t"] = job.lt.toFloat(); uni["u_s"] = job.s; uni["u_dur"] = job.dur.toFloat(); uni["u_rot"] = job.rot; uni["u_export"] = if (job.export) 1f else 0f
             uniforms(e, m, job.t, job.box, job.s, uni); uni.putAll(srcOn)
             val bufs = HashMap<String, Tex>(); bufs["src"] = cur
             val passes = m.passes ?: listOf(FxPass(m.type, null, null, 1.0, 0.0, null, null, emptyMap(), emptyMap()))
@@ -240,6 +240,8 @@ vec3 palc_$k(int i) { vec3 c[32] = vec3[32]($c); return c[clamp(i, 0, 31)]; }"""
                 pr.kind == "source" -> u["p_" + pr.key + "On"] = if (e.c?.get(pr.key).isNullOrEmpty()) 0f else 1f
             }
         }
+        // Motorun yazdığı veri dizisi (grafik/ölçer verisi): v["dv0".."dvN"] → p_dv[i], dvN sayısı p_dvN
+        e.v?.let { vv -> var n = 0; for ((k, a) in vv) if (k.startsWith("dv") && k.length > 2 && k[2].isDigit()) { u["p_dv[" + k.substring(2) + "]"] = a.v.toFloat(); n++ }; if (n > 0) u["p_dvN"] = n.toFloat() }
     }
 
     /** Geçiş durakları: "[[\"#RRGGBB\",konum%],...]" → p_kN, c_k0..7, p_kP0..7 */
